@@ -1,0 +1,44 @@
+@tailwind base;
+h1 {
+  @apply text-3xl;
+}
+h2 {
+  @apply text-3xl;
+}
+h3 {
+  @apply text-lg;
+}
+a {
+  @apply text-blue-600 underline;
+}
+
+@tailwind components;
+@tailwind utilities;
+
+.wrap {
+  background-image: url(../src/asserts/images/bg.jpg);
+}
+
+@font-face {
+  font-family: "TuskerGrotesk";
+  src: url("./asserts/fonts/font.woff");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "ikimono";
+  src: url("./asserts/fonts/ikimono.woff");
+  font-weight: normal;
+}
+
+body {
+  font-family: tuskergrotesk;
+  text-transform: uppercase;
+}
+
+.interact-button {
+  font-family: ikimono;
+  text-transform: uppercase;
+  background-color: #ffe100;
+  color: #000;
+}
