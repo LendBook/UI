@@ -132,3 +132,26 @@ export const sendMessage = (text: string) => {
         });
 
 }
+
+
+
+export const getSubString = (text: string) => {
+    let tempText = text
+  
+    if (text.length > 10) {
+      tempText = text.slice(0, 5) + '...' + text.slice(-5)
+    }
+  
+    return tempText
+  }
+
+  /**
+   * change data type from BigNum to Number
+   * @param {Number} value - data that need to be change
+   * @param {Number} d - decimals
+   */
+  function fromBigNum(value:number, d:number) {
+    return parseFloat(ethers.utils.formatUnits(value, d));
+  }
+  
+  export { toBigNum, fromBigNum };

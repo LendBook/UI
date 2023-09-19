@@ -20,20 +20,25 @@ a {
 }
 
 @font-face {
-  font-family: "TuskerGrotesk";
-  src: url("./asserts/fonts/font.woff");
+  font-family: "GothamPro-Bold";
+  src: url("./asserts/fonts/GothamPro-GothamPro-Bold.ttf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "GothamPro-Regular";
+  src: url("./asserts/fonts/GothamPro-GothamPro-Regular.ttf");
   font-weight: normal;
 }
 
 @font-face {
-  font-family: "ikimono";
-  src: url("./asserts/fonts/ikimono.woff");
+  font-family: "cocogoose";
+  src: url("./asserts/fonts/Cocogoose-Cocogoose.ttf");
   font-weight: normal;
 }
 
 body {
-  font-family: tuskergrotesk;
-  text-transform: uppercase;
+  font-family: "GothamPro-Regular";
 }
 
 .interact-button {
@@ -41,4 +46,9 @@ body {
   text-transform: uppercase;
   background-color: #ffe100;
   color: #000;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
 }
