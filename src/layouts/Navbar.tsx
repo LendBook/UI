@@ -26,7 +26,7 @@ interface INavLink {
 const NAV_LINKS: Array<INavLink> = [
   {
     id: 1,
-    label: "ABOUT US",
+    label: "BUY",
     to: "#about",
   },
   {
@@ -40,10 +40,15 @@ const NAV_LINKS: Array<INavLink> = [
     to: "#how-to-buy",
   },
   {
+    id: 3,
+    label: "WHITEPAPER",
+    to: "https://jumanji.gitbook.io/jumanji-whitepaper/",
+  },
+  /*{
     id: 4,
     label: "FAQS",
     to: "#faqs",
-  },
+  },*/
 ];
 
 export default function Navbar() {
@@ -67,7 +72,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 bg-[#0C2349] border-b border-gray-800 z-[99]">
+    <nav className="sticky top-0 bg-[#22361B] border-b border-gray-800 z-[99]">
       <Container className="justify-between p-4 hidden lg:flex">
         <div className="flex items-center gap-8">
           <a href="/#" className="w-[180px] h-[76px]">

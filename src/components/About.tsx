@@ -24,40 +24,40 @@ import "../asserts/scss/swiper.scss";
 import { FreeMode, Pagination } from "swiper/modules";
 
 const aboutUsStr =
-  "Shiba Memu is a show off. It can do the work of 100 marketing agencies. Shiba Memu watches everything, all the time. When you’re sleeping Shiba Memu is working. All day, all night, finding the best work going on in creative advertising, eating it up and spitting it back out, but better.\n\nThis is a  completely new and revolutionary meme token. Its self-sufficient marketing capabilities, powered by AI technology, make it a unique and attractive investment.\n\nUnlike other meme tokens, which require significant marketing efforts from human teams to gain traction, Shiba Memu will create its own marketing strategies, write its own PR, and promote itself in relevant forums and social networks.\n\nShiba Memu is a warrior that cuts through the fluff. Why have teams of sleepy people writing parodies of each others’ work, when a kick ass dog robot meme genius can do it instead?\n\n";
+  "JUMANJI is a show off. It can do the work of 100 marketing agencies. JUMANJI watches everything, all the time. When you’re sleeping JUMANJI is working. All day, all night, finding the best work going on in creative advertising, eating it up and spitting it back out, but better.\n\nThis is a  completely new and revolutionary meme token. Its self-sufficient marketing capabilities, powered by AI technology, make it a unique and attractive investment.\n\nUnlike other meme tokens, which require significant marketing efforts from human teams to gain traction, JUMANJI will create its own marketing strategies, write its own PR, and promote itself in relevant forums and social networks.\n\nJUMANJI is a warrior that cuts through the fluff. Why have teams of sleepy people writing parodies of each others’ work, when a kick ass dog robot meme genius can do it instead?\n\n";
 const howItWorkStr =
-  "Shiba Memu will generate more content than a tabloid newspaper vying for attention. Imagine gazillions of bites of data feeding into press releases and marketing materials. Content will be published all over forums and social media. It’ll also monitor and analyze the performance of its own marketing efforts, adjusting strategies to optimize results like a page out of the Art of War.\n\nShiba Memu’s AI technology lets it engage with users directly. There will be a robotastic dashboard to interact with the AI, provide feedback, make suggestions, and ask questions. Oh yes, you can talk to a robot meme dog marketing genius";
+  "JUMANJI will generate more content than a tabloid newspaper vying for attention. Imagine gazillions of bites of data feeding into press releases and marketing materials. Content will be published all over forums and social media. It’ll also monitor and analyze the performance of its own marketing efforts, adjusting strategies to optimize results like a page out of the Art of War.\n\nJUMANJI’s AI technology lets it engage with users directly. There will be a robotastic dashboard to interact with the AI, provide feedback, make suggestions, and ask questions. Oh yes, you can talk to a robot meme dog marketing genius";
 
 const ourToolsList = [
   {
     id: 1,
     image: tool2,
     title: "Sentiment Analysis",
-    text: "By analyzing the sentiment of social media posts, forums, and other online communities related to Shiba Memu, AI can help identify positive or negative sentiment towards the token. Shiba Memu will suss the vibe and make sure everyone is happy.",
+    text: "By analyzing the sentiment of social media posts, forums, and other online communities related to JUMANJI, AI can help identify positive or negative sentiment towards the token. JUMANJI will suss the vibe and make sure everyone is happy.",
   },
   {
     id: 2,
     image: tool4,
     title: "Predictive Analytics",
-    text: "By analyzing historical data and market trends, AI can help predict future market trends and user behavior. This can help Shiba Memu identify potential market opportunities and adjust its marketing strategies accordingly.",
+    text: "By analyzing historical data and market trends, AI can help predict future market trends and user behavior. This can help JUMANJI identify potential market opportunities and adjust its marketing strategies accordingly.",
   },
   {
     id: 3,
     image: tool5,
     title: "Personalization",
-    text: "AI-personalized marketing messages based on user behavior, preferences, and other data – massively increasing engagement. You know when you speak to your friends about something then suddenly get an ad? Like they’re watching you? That’s Shiba Memu.\nErm..cough…Shiba Memu is right there. A fly on the wall. Yours and everyone else’s walls.",
+    text: "AI-personalized marketing messages based on user behavior, preferences, and other data – massively increasing engagement. You know when you speak to your friends about something then suddenly get an ad? Like they’re watching you? That’s JUMANJI.\nErm..cough…JUMANJI is right there. A fly on the wall. Yours and everyone else’s walls.",
   },
   {
     id: 4,
     image: tool1,
     title: "Natural Language Processing (NLP)",
-    text: "AI-powered NLP algorithms will analyze social media posts, forums, and other online communities to identify relevant discussions and topics related to Shiba Memu. This information will be digested and turned into eye-catching marketing campaigns drawing in hungry investors.",
+    text: "AI-powered NLP algorithms will analyze social media posts, forums, and other online communities to identify relevant discussions and topics related to JUMANJI. This information will be digested and turned into eye-catching marketing campaigns drawing in hungry investors.",
   },
   {
     id: 5,
     image: tool3,
     title: "Image and Video Recognition",
-    text: "AI-powered image and video recognition technology will help identify and track Shiba Memu’s logo and other branding elements across social media platforms and other online communities, helping track its marketing efforts more effectively.",
+    text: "AI-powered image and video recognition technology will help identify and track JUMANJI’s logo and other branding elements across social media platforms and other online communities, helping track its marketing efforts more effectively.",
   },
 ];
 
@@ -84,7 +84,7 @@ export default function About() {
     else setToolRow(3);
   }, [isMobile]);
   return (
-    <div className="bg-[#affff5] py-[28px]" id="about">
+    <div className="bg-[#e8b67e] py-[28px]" id="about">
       <Container className="container">
         <div className="flex flex-col gap-[30px] ">
           <h2 className="about__title section-title">ABOUT US</h2>
@@ -98,7 +98,7 @@ export default function About() {
               </p>
               <div className="flex justify-center sm:justify-start">
                 <a
-                  className="font-[24px] px-[40px] py-[19px] bg-[#0c2349] border-[2px] border-[#0c2349] text-white font-[GothamPro-Bold] rounded-[15px] no-underline hover:bg-white hover:text-black"
+                  className="font-[24px] px-[40px] py-[19px] bg-[#22361B] border-[2px] border-[#22361B] text-white font-[GothamPro-Bold] rounded-[15px] no-underline hover:bg-white hover:text-black"
                   href="https://shibamemu.com/whitepaper.pdf"
                   target="_blank"
                   rel="noreferrer"
@@ -117,7 +117,7 @@ export default function About() {
               <p className="text-[18px] whitespace-pre-wrap text-center sm:text-right font-[GothamPro-Regular]">
                 {howItWorkStr}
               </p>
-              <div className="flex justify-center sm:justify-start shmu-connect-button ">
+              <div className="flex justify-center sm:justify-start JMW-connect-button ">
                 <button className="text-white bg-[#FF7121] border-[#FF7121] px-[30px] py-[11px] font-bold rounded-[16px] buy-btn">
                   Buy Now
                 </button>

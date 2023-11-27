@@ -12,10 +12,10 @@ export default function ShibaBuy() {
           </div>
           <div className="shiba-buy__content">
             <h2 className="shiba-buy__title section-title !text-white">
-              BUY SHIBA MEMU TODAY!
+              BUY JUMANJI TODAY!
             </h2>
             <div className="shiba-buy__text">
-              Shiba Memu offers benefits such as improved ROI, self-sufficiency,
+              JUMANJI offers benefits such as improved ROI, self-sufficiency,
               and transparency, using AI technology to deliver perfect marketing
               campaigns.
             </div>
@@ -28,7 +28,7 @@ export default function ShibaBuy() {
               >
                 Our Whitepaper
               </a>
-              <div className="shmu-connect-button">
+              <div className="JMW-connect-button">
                 <button className="css-pkdr5t">Buy Now</button>
               </div>
             </div>

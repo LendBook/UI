@@ -10,20 +10,23 @@ import How from "./How";
 import ShibaBuy from "./ShibaBuy";
 import FAQ from "./FAQ";
 import Earn from "./Earn";
+import backgroundImage from '../asserts/images/background/8.png';
 export default function Home() {
   return (
-    <div className="bg-[#affff5]">
+      <div
+          style={{ backgroundImage: `url(${backgroundImage})` }}
+      >
       <Hero />
-      <Brand />
-      <About />
+      {/*<Brand />*/}
+      {/*<About />*/}
       <Buy />
-      <Exchange />
+      {/*<Exchange />*/}
       {/* <Earn/> */}
       <Roadmap />
-      <Daashboard />
+      {/*<Daashboard />*/}
       <How />
-      <ShibaBuy />
-      <FAQ />
+      {/*<ShibaBuy />*/}
+      {/*<FAQ />*/}
     </div>
   );
 }

@@ -11,23 +11,23 @@ import buy8 from "../asserts/images/claim.svg";
 
 export default function How() {
   return (
-    <section className="how" id="how-to-buy">
+    <section className="how bg-[#e8b67e]" id="how-to-buy">
       <div className="how__container">
         <div className="how__wrap">
-          <h2 className="how__title section-title">How to Buy Shiba Memu</h2>
-          <div className="how__info">
+          <h2 className="how__title section-title">How to Buy JUMANJI on ETH</h2>
+          {/* <div className="how__info">
             <p>
-              To buy and store Shiba Memu tokens, you must have a top-rated,
+              To buy and store JUMANJI tokens, you must have a top-rated,
               secured wallet that can connect to the Ethereum network.
             </p>
             <p>
-              If you are buying SHMU on your smartphone, we recommend using
+              If you are buying JMW on your smartphone, we recommend using
               Trust Wallet as it has a simple interface that is easy to
               navigate, secure and offers direct access to decentralized
-              exchanges like Uniswap. If you are buying SHMU on your desktop, we
+              exchanges like Uniswap. If you are buying JMW on your desktop, we
               recommend using MetaMask.
             </p>
-          </div>
+          </div> */}
           <div className="how__list">
             <div className="how__item">
               <div className="how__wrapper">
@@ -42,15 +42,15 @@ export default function How() {
               </div>
               <div className="how__content">
                 <h3 className="how__head section-title">
-                  How to Set Up Trust Wallet
+                  Connect Your Wallet
                 </h3>
-                <div className="how__text">
+                {/* <div className="how__text">
                   <p>
                     Here’s a snapshot overview of how to set up Trust Wallet on
-                    your phone so that you can safely buy and store Shiba Memu
+                    your phone so that you can safely buy and store JUMANJI
                     tokens.
                   </p>
-                </div>
+                </div> */}
                 <div className="steps">
                   <div className="steps__wrap">
                     <div className="steps__list">
@@ -118,11 +118,11 @@ export default function How() {
                       </div>
                       <div className="steps__item">
                         <p className="steps__title">Step 4</p>
-                        <p className="steps__subtitle">Add Shiba Memu Token</p>
+                        <p className="steps__subtitle">Add JUMANJI Token</p>
                         <div className="steps__text">
                           <p>
                             Now that Trust Wallet is set up on your mobile
-                            device, you can add Shiba Memu tokens. Do this by
+                            device, you can add JUMANJI tokens. Do this by
                             clicking the “+” icon on top-right of the screen,
                             followed by ‘Add Custom Token’ at the very bottom of
                             the list. Your network will be selected as
@@ -133,27 +133,27 @@ export default function How() {
                       <div className="steps__item">
                         <p className="steps__title">Step 5</p>
                         <p className="steps__subtitle">
-                          Paste Shiba Memu Contract Address
+                          Paste JUMANJI Contract Address
                         </p>
                         <div className="steps__text">
                           <p>
-                            Paste Shiba Memu Contract Address: Paste your SHMU
-                            token contract address found on your Shiba Memu
+                            Paste JUMANJI Contract Address: Paste your JUM
+                            token contract address found on your JUMANJI
                             deposit page so that the Trust Wallet can locate
                             your account. Double-check the contract address
-                            pasted. We recommend verifying your SHMU contract
-                            address using the official Shiba Memu Telegram
+                            pasted. We recommend verifying your JMW contract
+                            address using the official JUMANJI Telegram
                             group.
                           </p>
                           <p>
                             The blank fields will now populate with the correct
-                            contract specifics for Shiba Memu – such as the
+                            contract specifics for JUMANJI – such as the
                             name, symbol, and number of decimals.
                           </p>
                           <p>
                             That’s it. You have now successfully set up a Trust
                             Wallet. You can connect your Trust Wallet directly
-                            to Uniswap and buy/store your Shiba Memu tokens
+                            to Uniswap and buy/store your JUMANJI tokens
                             through a single app.
                           </p>
                         </div>
@@ -161,9 +161,9 @@ export default function How() {
                     </div>
                   </div>
                 </div>
-                <button className="how__btn btn big" type="button">
+                {/* <button className="how__btn btn big" type="button">
                   Read More
-                </button>
+                </button> */}
               </div>
             </div>
             <div className="how__item">
@@ -179,7 +179,7 @@ export default function How() {
               </div>
               <div className="how__content">
                 <h3 className="how__head section-title">
-                  How to Set Up MetaMask Wallet
+                  BUY WITH ETH OR USDT
                 </h3>
                 <div className="steps">
                   <div className="steps__wrap">
@@ -252,22 +252,22 @@ export default function How() {
                             By default, MetaMask only allows you to transact
                             with the Ethereum network. So there is no need to
                             change the network within MetaMask to engage with
-                            the Shiba Memu token.
+                            the JUMANJI token.
                           </p>
                         </div>
                       </div>
                       <div className="steps__item">
                         <p className="steps__title">Step 6</p>
                         <p className="steps__subtitle">
-                          Import Shiba Memu Token
+                          Import JUMANJI Token
                         </p>
                         <div className="steps__text">
                           <p>
-                            You will now need to import SHMU to your MetaMask
+                            You will now need to import JUM to your MetaMask
                             wallet. You can do this by clicking on ‘Import
-                            Tokens’ and submitting the Shiba Memu contract
+                            Tokens’ and submitting the JUMANJI contract
                             address when announced. We recommend verifying the
-                            SHMU contract address using the official Shiba Memu
+                            JUM contract address using the official JUMANJI
                             Telegram group.
                           </p>
                           <p>
@@ -280,9 +280,9 @@ export default function How() {
                     </div>
                   </div>
                 </div>
-                <button className="how__btn btn big" type="button">
+                {/* <button className="how__btn btn big" type="button">
                   Read More
-                </button>
+                </button> */}
               </div>
             </div>
             <div className="how__item">
@@ -297,7 +297,7 @@ export default function How() {
                 </div>
               </div>
               <div className="how__content">
-                <h3 className="how__head section-title">How to Buy with ETH</h3>
+                <h3 className="how__head section-title">CLAIM YOUR TOKEN</h3>
                 <div className="steps">
                   <div className="steps__wrap">
                     <div className="steps__list">
@@ -315,14 +315,14 @@ export default function How() {
                         <div className="steps__text">
                           <p>
                             You will now be directed to the exchange window,
-                            where you input how much SHMU you wish to buy. Below
+                            where you input how much JMW you wish to buy. Below
                             is the amount of ETH you will be ‘Selling’ to carry
                             out the purchase. Once you have input your ‘Buying’
                             amount, CONVERT ETH
                           </p>
                           <p>
                             <strong>Please note:</strong> the minimum purchase
-                            amount is 1000 SHMU.
+                            amount is 1000 JMW.
                           </p>
                         </div>
                       </div>
@@ -355,17 +355,17 @@ export default function How() {
                             purchase, or FINISH.
                           </p>
                           <p>
-                            Your SHMU tokens will be available to claim once the
-                            Shiba Memu presale period ends.
+                            Your JMW tokens will be available to claim once the
+                            JUMANJI presale period ends.
                           </p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <button className="how__btn btn big" type="button">
+                {/* <button className="how__btn btn big" type="button">
                   Read More
-                </button>
+                </button> */}
               </div>
             </div>
             <div className="how__item">
@@ -377,7 +377,7 @@ export default function How() {
               </div>
               <div className="how__content">
                 <h3 className="how__head section-title">
-                  How to buy with USDT
+                  JOIN THE JUMANJI WORLD
                 </h3>
                 <div className="steps">
                   <div className="steps__wrap">
@@ -386,10 +386,10 @@ export default function How() {
                         <p className="steps__title">Step 1</p>
                         <div className="steps__text">
                           <p>
-                            To purchase the Shiba Memu token with USDT you must
+                            To purchase the JUMANJI token with USDT you must
                             have at least $30 USDT in your wallet to make the
                             transaction. First, ensure your wallet is connected
-                            to the Shiba Memu exchange and then click BUY WITH
+                            to the JUMANJI exchange and then click BUY WITH
                             USDT.
                           </p>
                         </div>
@@ -406,7 +406,7 @@ export default function How() {
                           </p>
                           <p>
                             Please note: the minimum purchase amount is 1000
-                            SHMU.
+                            JMW.
                           </p>
                         </div>
                       </div>
@@ -437,7 +437,7 @@ export default function How() {
                           </p>
                         </div>
                       </div>
-                      <div className="steps__item">
+                      {/*<div className="steps__item">
                         <p className="steps__title">Step 5</p>
                         <div className="steps__text">
                           <p>
@@ -456,20 +456,20 @@ export default function How() {
                             purchase, or FINISH.
                           </p>
                           <p>
-                            Your SHMU tokens will be available to claim once the
-                            Shiba Memu presale period ends.
+                            Your JMW tokens will be available to claim once the
+                            JUMANJI presale period ends.
                           </p>
                         </div>
-                      </div>
+                      </div>*/}
                     </div>
                   </div>
                 </div>
-                <button className="how__btn btn big" type="button">
+               {/* <button className="how__btn btn big" type="button">
                   Read More
-                </button>
+                </button>*/}
               </div>
             </div>
-            <div className="how__item">
+           {/* <div className="how__item">
               <div className="how__wrapper">
                 <p className="how__count">5.</p>
                 <div className="how__image">
@@ -494,7 +494,7 @@ export default function How() {
                             recommend Trust Wallet, and on desktop through
                             MetaMask.
                           </p>
-                          <p>Click BUY SHMU WITH BNB.</p>
+                          <p>Click BUY JMW WITH BNB.</p>
                         </div>
                       </div>
                       <div className="steps__item">
@@ -502,10 +502,10 @@ export default function How() {
                         <div className="steps__text">
                           <p>
                             You will now be directed to the exchange window,
-                            where you can input how much SHMU you wish to buy.
+                            where you can input how much JMW you wish to buy.
                             Below is the amount of BNB you will be paying to
                             carry out the purchase. Once you have input your
-                            SHMU amount, BUY NOW.
+                            JMW amount, BUY NOW.
                           </p>
                         </div>
                       </div>
@@ -548,8 +548,8 @@ export default function How() {
                             Bscscan’.
                           </p>
                           <p>
-                            Your SHMU tokens will be available to claim once the
-                            Shiba Memu presale period ends.
+                            Your JMW tokens will be available to claim once the
+                            JUMANJI presale period ends.
                           </p>
                         </div>
                       </div>
@@ -588,7 +588,7 @@ export default function How() {
                             recommend Trust Wallet, and on desktop through
                             MetaMask.
                           </p>
-                          <p>Click BUY SHMU WITH BUSD.</p>
+                          <p>Click BUY JMW WITH BUSD.</p>
                         </div>
                       </div>
                       <div className="steps__item">
@@ -596,7 +596,7 @@ export default function How() {
                         <div className="steps__text">
                           <p>
                             You will now be directed to the exchange window,
-                            where you can input how much SHMU you wish to buy.
+                            where you can input how much JMW you wish to buy.
                             You will first have to enter the amount of BUSD you
                             wish to APPROVE with the presale contract. You will
                             be asked to confirm this inside your wallet.
@@ -607,7 +607,7 @@ export default function How() {
                         <p className="steps__title">Step 3</p>
                         <div className="steps__text">
                           <p>
-                            Once approved you can enter the amount of SHMU you
+                            Once approved you can enter the amount of JMW you
                             wish to buy. Your BUSD will not be approved if the
                             approval amount is less than the purchase amount.
                             Once approved, BUY NOW to finalise your transaction.
@@ -653,8 +653,8 @@ export default function How() {
                             Bscscan’.
                           </p>
                           <p>
-                            Your SHMU tokens will be available to claim once the
-                            Shiba Memu presale period ends.
+                            Your JMW tokens will be available to claim once the
+                            JUMANJI presale period ends.
                           </p>
                         </div>
                       </div>
@@ -684,10 +684,10 @@ export default function How() {
                         <p className="steps__title">Step 1</p>
                         <div className="steps__text">
                           <p>
-                            To buy SHMU with BNB or BUSD you will need to have
+                            To buy JMW with BNB or BUSD you will need to have
                             enough BNB in your wallet to make a purchase and
                             cover small gas fees. To top your wallet up with
-                            BNB, connect your wallet and head to BUY SHMU WITH
+                            BNB, connect your wallet and head to BUY JMW WITH
                             BNB, click BUY IT HERE.
                           </p>
                         </div>
@@ -749,25 +749,25 @@ export default function How() {
                   Read More
                 </button>
               </div>
-            </div>
+            </div>*/}
           </div>
-          <div className="claim">
+          {/*<div className="claim">
             <div className="claim__img">
               <img src={buy8} alt="" />
             </div>
             <h3 className="claim__head section-title">
-              How to Claim SHiba Memu
+              How to Claim JUMANJI
             </h3>
             <div className="claim__info how__info">
               <p>
-                You can claim your SHMU tokens at the end of the presale.
+                You can claim your JMW tokens at the end of the presale.
                 Details will be released closer to the time. Once the presale
                 period has concluded, you must visit the main site and click the
                 “Claim” button. Take extreme care to ensure you’re claiming on
                 the official site as it is impossible to claim elsewhere.
               </p>
             </div>
-          </div>
+          </div>*/}
         </div>
       </div>
     </section>

@@ -39,13 +39,13 @@ const companyList = [
     key: 1,
     team: 1,
     image: comCointelegraph,
-    text: "Shiba Memu is a fresh coin utilizing AI to promote itself. Their technology is poised to gain traction within the blockchain industry in the coming years, establishing Shiba Memu as an industry innovator...",
+    text: "JUMANJI is a fresh coin utilizing AI to promote itself. Their technology is poised to gain traction within the blockchain industry in the coming years, establishing JUMANJI as an industry innovator...",
   },
   {
     key: 2,
     team: 2,
     image: amb,
-    text: "With plenty of people inside and outside of crypto becoming more excited about the rich potential of AI, Shiba Memu could become the next leader in an industry already valued at almost $20 billion...",
+    text: "With plenty of people inside and outside of crypto becoming more excited about the rich potential of AI, JUMANJI could become the next leader in an industry already valued at almost $20 billion...",
   },
 ];
 
@@ -57,7 +57,7 @@ export default function Brand() {
     },
   };
   return (
-    <div className="bg-[#0c2349] py-[28px]">
+    <div className="bg-[#22361B] py-[28px]">
       <Container>
         <div className="flex flex-col gap-[10px]">
           <div className="flex justify-center items-center">

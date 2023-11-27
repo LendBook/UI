@@ -8,7 +8,7 @@ export default function Buy() {
   const isMobile = useMediaQuery({ maxWidth: 480 });
 
   return (
-    <div className="bg-[#0C2349] py-[28px]">
+    <div className="bg-[#e8b67e] py-[28px]">
       <Container>
         <div className="flex flex-col gap-[30px]">
           <div className="grid sm:grid-cols-2 gap-[10px]">
@@ -16,26 +16,35 @@ export default function Buy() {
               <img src={buyCat} alt="buy cat" className="w-[490px]" />
             </div>
             <div className="flex  flex-col justify-center text-white text-center sm:text-right gap-[20px] py-[70px] font-[GothamPro-Regular]">
-              <div className="uppercase flex justify-center font-bold text-white font-[Cocogoose] text-[48px] leading-[60px]">
-                <span>Buy Shiba Memu (SHMU) Right Now!</span>
+              <div className="uppercase flex justify-center font-bold text-[#22361B] font-[Cocogoose] text-[48px] leading-[60px]">
+                <span>Buy JUMANJI (JUM) Right Now!</span>
               </div>
-              <p className="text-[18px] text-white">
-                Ready to take a leap from the precipice of today into a rather
-                cute dog-focused future? Shiba Memu aims to grow. Not slowly
-                like a cactus. Think viral content, off-the-scale charts,
-                moments where you wished you’d bought at yesterday’s price…
+              <p className="text-[18px] text-[#22361B]">
+                Ready to dive from the edge of the present into a future centered around an adorable dog-themed universe? JUMANJI is set to expand, and not at a snail's pace like a cactus. Picture viral trends, skyrocketing graphs, and those times you'll wish you had invested when the price was lower...
+
+
               </p>
-              <p className="text0-[18px] text-white">
-                The project aims to deliver long-term investment potential for
-                hodlers, and delicious returns for the savvy day trader. In
-                short, don’t miss out on this one, like you missed out on that
-                last opportunity.
+              <p className="text0-[18px] text-[#22361B]">
+                This project is designed to offer substantial long-term investment prospects for hodlers, as well as attractive profits for the astute day trader. In essence, don't let this opportunity slip by, like you did with the last one.
               </p>
-              <div className="flex justify-center sm:justify-start shmu-connect-button ">
-                <button className="text-white bg-[#FF7121] border-[#FF7121] px-[30px] py-[11px] font-bold rounded-[16px] buy-btn">
+              <div className="shiba-buy__btns">
+                <a
+                    className="shiba-buy__btn btn white-btn big"
+                    href="/#about"
+                    rel="noreferrer"
+                >
                   Buy Now
-                </button>
+                </a>
+                <a
+                    className="shiba-buy__btn btn white-btn big"
+                    href="https://t.me/jumanjicommunity"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                  Join us !
+                </a>
               </div>
+
             </div>
           </div>
         </div>
