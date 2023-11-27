@@ -12,6 +12,7 @@ import {
 } from "@web3modal/ethereum";
 import { NotificationContainer } from "react-notifications";
 import "react-notifications/lib/notifications.css";
+import { Analytics } from '@vercel/analytics/react';
 
 import Routes from "./routes";
 
@@ -31,6 +32,7 @@ function App() {
       <Suspense fallback={<Loading />}>
         <WagmiConfig config={wagmiConfig}>
           <Routes />
+          <Analytics />
           <ToastContainer className="!z-[99999]" />
         </WagmiConfig>
         <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
