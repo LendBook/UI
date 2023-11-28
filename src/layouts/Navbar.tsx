@@ -117,7 +117,7 @@ export default function Navbar() {
               className="font-[GothamPro-Bold] flex items-center gap-1"
               onClick={() => open()}
             >
-              <Icon icon="mdi:wallet-outline" className="text-xl" />
+              <Icon id="connect-wallet" icon="mdi:wallet-outline" className="text-xl" />
               Connect Wallet
             </FilledButton>
           )}
@@ -189,7 +189,7 @@ export default function Navbar() {
                 className="gap-4 text-gray-100 font-[GothamPro-Bold]"
                 onClick={() => open()}
               >
-                <Icon icon="mdi:wallet-outline" className="text-xl" />
+                <Icon id="connect-wallet" icon="mdi:wallet-outline" className="text-xl" />
                 Connect Wallet
               </ListItem>
             )}

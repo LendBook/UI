@@ -461,7 +461,7 @@ export default function Hero() {
                       onClick={toggleOpen}
                       className="w-[70%] py-[10px] bg-bgBtn text-center rounded-full cursor-pointer hover:opacity-75 select-none"
                     >
-                      <span className="text-white text-[15px]">
+                      <span id="connect-wallet" className="text-white text-[15px]">
                         Connect Wallet
                       </span>
                     </div>
