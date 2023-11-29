@@ -208,7 +208,10 @@ export default function Navbar() {
             ) : (
               <ListItem
                 className="gap-4 text-gray-100 font-[GothamPro-Bold]"
-                onClick={() => open()}
+                onClick={() => {
+                  open();
+                  pushToDataLayer();
+                }}
               >
                 <Icon id="connect-wallet" icon="mdi:wallet-outline" className="text-xl" />
                 Connect Wallet

@@ -24,6 +24,13 @@ import stakeIcon from "../asserts/images/coins/stake.svg";
 import claimIcon from "../asserts/images/coins/claim.png";
 import usdtIcon from "../asserts/images/coins/usdt.svg";
 import slideLogo from "../asserts/images/preview/logo.svg";
+import TagManager from "react-gtm-module";
+
+const tagManagerArgs = {
+  gtmId: 'GTM-TVWJ4GKQ'
+}
+
+TagManager.initialize(tagManagerArgs)
 
 export function walletClientToSigner(walletClient: WalletClient) {
   const { account, chain, transport } = walletClient;
@@ -214,7 +221,14 @@ export default function Hero() {
     }
   };
 
-
+  const pushToDataLayer = () => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'connect_wallet_clicked',
+      date: new Date().toISOString(),
+      // Autres propriétés si nécessaire
+    });
+  };
 
   return (
     <div className="pt-[30px] px-0 pb-[60px] hero-container">
@@ -472,7 +486,10 @@ export default function Hero() {
                 {!address && (
                   <div className="flex flex-row justify-center items-center">
                     <div
-                      onClick={toggleOpen}
+                      onClick={() => {
+                        toggleOpen();
+                        pushToDataLayer();
+                      }}
                       className="w-[70%] py-[10px] bg-bgBtn text-center rounded-full cursor-pointer hover:opacity-75 select-none"
                     >
                       <span id="connect-wallet" className="text-white text-[15px]">
