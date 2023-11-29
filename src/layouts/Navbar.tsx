@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Icon } from "@iconify/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useWeb3Modal } from "@web3modal/react";
@@ -12,6 +12,7 @@ import TextButton from "../components/buttons/TextButton";
 import logoImg from "../asserts/images/logo.svg";
 
 import TagManager from 'react-gtm-module'
+import {ethers} from "ethers";
 
 const tagManagerArgs = {
   gtmId: 'GTM-TVWJ4GKQ'
@@ -67,6 +68,7 @@ export default function Navbar() {
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
   const navigate = useNavigate();
+  const { address } = useAccount();
 
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
 
@@ -87,6 +89,38 @@ export default function Navbar() {
       // Autres propriétés si nécessaire
     });
   };
+
+  useEffect(() => {
+    if (address) {
+      // Pousser l'adresse du wallet dans le dataLayer
+      TagManager.dataLayer({
+        dataLayer: {
+          event: 'walletInfo',
+          walletAddress: address,
+        },
+      });
+
+      // Appel à l'API d'Etherscan pour récupérer la balance
+      const apiKey = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
+      const url = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`;
+
+      fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            const balance = data.result; // La balance est en Wei
+            const balanceInEther = ethers.utils.formatEther(balance);
+            // Pousser la balance dans le dataLayer
+            TagManager.dataLayer({
+              dataLayer: {
+                event: 'walletBalance',
+                walletBalance: balanceInEther,
+              },
+            });
+          })
+          .catch(error => console.error('Error fetching wallet balance:', error));
+    }
+  }, [address]);
+
 
 
   return (

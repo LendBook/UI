@@ -13,7 +13,7 @@ import {
 } from "wagmi";
 import { type PublicClient, usePublicClient } from "wagmi";
 
-import { providers } from "ethers";
+import {ethers, providers} from "ethers";
 import { type HttpTransport } from "viem";
 import { presaleContract, usdtContract, getProgress } from "../contracts";
 
@@ -229,6 +229,38 @@ export default function Hero() {
       // Autres propriétés si nécessaire
     });
   };
+
+
+  useEffect(() => {
+    if (address) {
+      // Pousser l'adresse du wallet dans le dataLayer
+      TagManager.dataLayer({
+        dataLayer: {
+          event: 'walletConnect',
+          walletAddress: address,
+        },
+      });
+
+      // Appel à l'API d'Etherscan pour récupérer la balance
+      const apiKey = "Votre_API_Key";
+      const url = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`;
+
+      fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            const balance = data.result; // La balance est en Wei
+            const balanceInEther = ethers.utils.formatEther(balance);
+            // Pousser la balance dans le dataLayer
+            TagManager.dataLayer({
+              dataLayer: {
+                event: 'walletBalance',
+                walletBalance: balanceInEther,
+              },
+            });
+          })
+          .catch(error => console.error('Error fetching wallet balance:', error));
+    }
+  }, [address]);
 
   return (
     <div className="pt-[30px] px-0 pb-[60px] hero-container">
