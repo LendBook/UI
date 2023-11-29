@@ -1,27 +1,15 @@
-import { useState, useEffect, useMemo } from "react";
-import { getSubString, toBigNum } from "../utils";
-import { useWeb3Modal } from "@web3modal/react";
-import { NotificationManager } from "react-notifications";
-import { ProgressBar } from "react-rainbow-components";
-import { Container, Divider } from "@mui/material";
-import Countdown, {CountdownRenderProps } from 'react-countdown';
-import {
-  type WalletClient,
-  useWalletClient,
-  useAccount,
-  useContractWrite,
-} from "wagmi";
-import { type PublicClient, usePublicClient } from "wagmi";
-
+import {useEffect, useMemo, useState} from "react";
+import {getSubString, toBigNum} from "../utils";
+import {useWeb3Modal} from "@web3modal/react";
+import {NotificationManager} from "react-notifications";
+import {ProgressBar} from "react-rainbow-components";
+import {Divider} from "@mui/material";
+import Countdown, {CountdownRenderProps} from 'react-countdown';
+import {useAccount, useWalletClient, type WalletClient,} from "wagmi";
 import {ethers, providers} from "ethers";
-import { type HttpTransport } from "viem";
-import { presaleContract, usdtContract, getProgress } from "../contracts";
-
+import {presaleContract, usdtContract} from "../contracts";
 import "../asserts/scss/custom.scss";
-
 import ethIcon from "../asserts/images/coins/eth.svg";
-import stakeIcon from "../asserts/images/coins/stake.svg";
-import claimIcon from "../asserts/images/coins/claim.png";
 import usdtIcon from "../asserts/images/coins/usdt.svg";
 import slideLogo from "../asserts/images/preview/logo.svg";
 import TagManager from "react-gtm-module";
@@ -65,16 +53,12 @@ export default function Hero() {
   const [payAmount, setPayAmount] = useState(0);
   const [tokenAmount, setTokenAmount] = useState(0);
   const [tokenUsdtAmount, setTokenUsdtAmount] = useState(0);
-
   const [claimTokenAmount, setClaimTokenAmount] = useState(0);
-
   const [isClaim, setClaim] = useState(false);
-
   const [tapState, setTapState] = useState(1);
   const [progressStatus, setProgressStatus] = useState(0);
   const [totalSaled, setTotalSaled] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
-
 
 
   const toggleOpen = () => {
@@ -102,30 +86,17 @@ export default function Hero() {
 
   useEffect(() => {
     if (address) {
-      // Pousser l'adresse du wallet dans le dataLayer
-      TagManager.dataLayer({
-        dataLayer: {
-          event: 'walletInfo',
-          walletAddress: address,
-        },
-      });
 
-      // Appel à l'API d'Etherscan pour récupérer la balance en Ether
       const apiKey = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
       const urlETH = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`;
+      let balanceInEther: string = "";
+      let balanceInUSDT: string = "";
 
       fetch(urlETH)
           .then(response => response.json())
           .then(data => {
             const balanceETH = data.result; // La balance est en Wei
-            const balanceInEther = ethers.utils.formatEther(balanceETH);
-            // Pousser la balance en Ether dans le dataLayer
-            TagManager.dataLayer({
-              dataLayer: {
-                event: 'walletBalanceETH',
-                walletBalanceETH: balanceInEther,
-              },
-            });
+            balanceInEther = ethers.utils.formatEther(balanceETH);
           })
           .catch(error => console.error('Error fetching wallet balance in ETH:', error));
 
@@ -137,18 +108,30 @@ export default function Hero() {
           .then(response => response.json())
           .then(data => {
             const balanceUSDT = data.result; // La balance est en unités minimales du token
-            const balanceInUSDT = ethers.utils.formatUnits(balanceUSDT, 6); // USDT a 6 décimales
-            // Pousser la balance en USDT dans le dataLayer
-            TagManager.dataLayer({
-              dataLayer: {
-                event: 'walletBalanceUSDT',
-                walletBalanceUSDT: balanceInUSDT,
-              },
-            });
+            balanceInUSDT = ethers.utils.formatUnits(balanceUSDT, 6); // USDT a 6 décimales
+
           })
           .catch(error => console.error('Error fetching wallet balance in USDT:', error));
+
+      TagManager.dataLayer({
+        dataLayer: {
+          event: 'walletInfo',
+          walletAddress: address,
+          walletBalanceETH: balanceInEther,
+          walletBalanceUSDT: balanceInUSDT,
+        },
+      });
     }
   }, [address]);
+
+  const pushToDataLayer = () => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'connect_wallet_clicked',
+      date: new Date().toISOString(),
+      // Autres propriétés si nécessaire
+    });
+  };
 
   const getClaimTokenAmount = async (address: string) => {
     if (address) {
@@ -261,46 +244,6 @@ export default function Hero() {
     }
   };
 
-  const pushToDataLayer = () => {
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: 'connect_wallet_clicked',
-      date: new Date().toISOString(),
-      // Autres propriétés si nécessaire
-    });
-  };
-
-
-  useEffect(() => {
-    if (address) {
-      // Pousser l'adresse du wallet dans le dataLayer
-      TagManager.dataLayer({
-        dataLayer: {
-          event: 'walletConnect',
-          walletAddress: address,
-        },
-      });
-
-      // Appel à l'API d'Etherscan pour récupérer la balance
-      const apiKey = "Votre_API_Key";
-      const url = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`;
-
-      fetch(url)
-          .then(response => response.json())
-          .then(data => {
-            const balance = data.result; // La balance est en Wei
-            const balanceInEther = ethers.utils.formatEther(balance);
-            // Pousser la balance dans le dataLayer
-            TagManager.dataLayer({
-              dataLayer: {
-                event: 'walletBalance',
-                walletBalance: balanceInEther,
-              },
-            });
-          })
-          .catch(error => console.error('Error fetching wallet balance:', error));
-    }
-  }, [address]);
 
   return (
     <div className="pt-[30px] px-0 pb-[60px] hero-container">

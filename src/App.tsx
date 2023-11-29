@@ -13,16 +13,7 @@ import {
 import { NotificationContainer } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 import { Analytics } from '@vercel/analytics/react';
-
 import Routes from "./routes";
-
-import TagManager from 'react-gtm-module'
-
-const tagManagerArgs = {
-  gtmId: 'GTM-TVWJ4GKQ'
-}
-
-TagManager.initialize(tagManagerArgs)
 
 const projectId = process.env.REACT_APP_CONNECT_PROJECT_ID || "";
 const chains = [mainnet, bsc];
