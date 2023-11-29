@@ -204,7 +204,7 @@ export default function Hero() {
       return <span>Countdown completed!</span>;
     } else {
       return (
-          <div className="flex justify-center items-center space-x-2 text-[beige]">
+          <div className="flex justify-center items-center space-x-2 text-[beige] text-[18px]">
             <span className="stone-block">{days}d</span>:
             <span className="stone-block">{hours}h</span>:
             <span className="stone-block">{minutes}m</span>:
@@ -222,7 +222,7 @@ export default function Hero() {
         <div className="hero__wrap">
           <div className="buy-box max-w-[500px] w-full flex flex-col gap-[50px] text-[#e8b67e] h-[100%]">
             <div className="flex flex-col gap-[30px] p-[5px] bg-[#22361B] rounded-lg border-[2px] border-solid boder-[#d4dadf]">
-              <div className="hero-header rounded-lg p-[25px] font-semibold text-center text-[#22361B] text-[30px]">
+              <div className="hero-header rounded-lg p-[25px] font-semibold text-center text-[#22361B] text-[20px]">
                 NEXT PRICE INCREASE IN
                 <Countdown
                     date={deadline}
@@ -236,7 +236,7 @@ export default function Hero() {
                   /1,000,000,000*/}
                   Total Sold : 0/1,000,000,000
                 </div>
-                <ProgressBar value={progressStatus} assistiveText="test" />
+                <ProgressBar value={progressStatus} assistiveText="test"/>
                 <div className="relative">
                   <div className="px-[30px] text-[15px] font-semibold text-center">
                     {/*1 $JUM = $0.00001*/}
