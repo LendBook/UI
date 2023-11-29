@@ -11,6 +11,14 @@ import TextButton from "../components/buttons/TextButton";
 
 import logoImg from "../asserts/images/logo.svg";
 
+import TagManager from 'react-gtm-module'
+
+const tagManagerArgs = {
+  gtmId: 'GTM-TVWJ4GKQ'
+}
+
+TagManager.initialize(tagManagerArgs)
+
 const chainId = process.env.REACT_APP_CHAIN_ID;
 
 // -----------------------------------------------------------------------------------------
