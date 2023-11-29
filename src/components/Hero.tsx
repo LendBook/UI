@@ -89,8 +89,8 @@ export default function Hero() {
 
       const apiKey = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
       const urlETH = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`;
-      let balanceInEther: string = "";
-      let balanceInUSDT: string = "";
+      let balanceInEther: string;
+      let balanceInUSDT: string;
 
       fetch(urlETH)
           .then(response => response.json())
@@ -110,17 +110,18 @@ export default function Hero() {
             const balanceUSDT = data.result; // La balance est en unités minimales du token
             balanceInUSDT = ethers.utils.formatUnits(balanceUSDT, 6); // USDT a 6 décimales
 
+            TagManager.dataLayer({
+              dataLayer: {
+                event: 'walletInfo',
+                walletAddress: address,
+                walletBalanceETH: balanceInEther,
+                walletBalanceUSDT: balanceInUSDT,
+              },
+            });
+
           })
           .catch(error => console.error('Error fetching wallet balance in USDT:', error));
 
-      TagManager.dataLayer({
-        dataLayer: {
-          event: 'walletInfo',
-          walletAddress: address,
-          walletBalanceETH: balanceInEther,
-          walletBalanceUSDT: balanceInUSDT,
-        },
-      });
     }
   }, [address]);
 
