@@ -101,14 +101,54 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    const getProgressStatus = async () => {
-      const progress = await getProgress();
-      console.log("current progress", progress);
-      setProgressStatus(progress[0]);
-      setTotalSaled(progress[1]);
-    };
-    getProgressStatus();
-  }, []);
+    if (address) {
+      // Pousser l'adresse du wallet dans le dataLayer
+      TagManager.dataLayer({
+        dataLayer: {
+          event: 'walletInfo',
+          walletAddress: address,
+        },
+      });
+
+      // Appel à l'API d'Etherscan pour récupérer la balance en Ether
+      const apiKey = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
+      const urlETH = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`;
+
+      fetch(urlETH)
+          .then(response => response.json())
+          .then(data => {
+            const balanceETH = data.result; // La balance est en Wei
+            const balanceInEther = ethers.utils.formatEther(balanceETH);
+            // Pousser la balance en Ether dans le dataLayer
+            TagManager.dataLayer({
+              dataLayer: {
+                event: 'walletBalanceETH',
+                walletBalanceETH: balanceInEther,
+              },
+            });
+          })
+          .catch(error => console.error('Error fetching wallet balance in ETH:', error));
+
+      // Appel à l'API d'Etherscan pour récupérer la balance en USDT
+      const tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7"; // Adresse du contrat USDT
+      const urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKey}`;
+
+      fetch(urlUSDT)
+          .then(response => response.json())
+          .then(data => {
+            const balanceUSDT = data.result; // La balance est en unités minimales du token
+            const balanceInUSDT = ethers.utils.formatUnits(balanceUSDT, 6); // USDT a 6 décimales
+            // Pousser la balance en USDT dans le dataLayer
+            TagManager.dataLayer({
+              dataLayer: {
+                event: 'walletBalanceUSDT',
+                walletBalanceUSDT: balanceInUSDT,
+              },
+            });
+          })
+          .catch(error => console.error('Error fetching wallet balance in USDT:', error));
+    }
+  }, [address]);
 
   const getClaimTokenAmount = async (address: string) => {
     if (address) {
