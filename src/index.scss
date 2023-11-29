@@ -52,3 +52,18 @@ body {
   max-width: 1160px;
   margin: 0 auto;
 }
+
+.stone-block {
+  background: beige;
+  background-size: cover;
+  color: #22361B;
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 5px;
+  width: 100px;
+  border-radius: 10px; /* Pour des coins arrondis */
+}
+
+.hero-header {
+  background: linear-gradient(180deg, #988e65 -4.32%, #c4c874 91.56%);
+}

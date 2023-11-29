@@ -4,7 +4,7 @@ import { useWeb3Modal } from "@web3modal/react";
 import { NotificationManager } from "react-notifications";
 import { ProgressBar } from "react-rainbow-components";
 import { Container, Divider } from "@mui/material";
-import Countdown from "react-countdown";
+import Countdown, {CountdownRenderProps } from 'react-countdown';
 import {
   type WalletClient,
   useWalletClient,
@@ -46,11 +46,13 @@ export function useEthersSigner({ chainId }: { chainId?: number } = {}) {
   );
 }
 
+
+
 export default function Hero() {
   const { address } = useAccount();
   const { open } = useWeb3Modal();
 
-  const [deadline, setDeadline] = useState(new Date("2024-1-15T00:00:00"));
+  const [deadline, setDeadline] = useState(new Date("2024-01-15T00:00:00"));
   const [tokenPrice, setTokePrice] = useState(0);
   const [tokenUsdtPrice, setTokeUsdtPrice] = useState(0);
   const [payAmount, setPayAmount] = useState(0);
@@ -64,14 +66,16 @@ export default function Hero() {
   const [tapState, setTapState] = useState(1);
   const [progressStatus, setProgressStatus] = useState(0);
   const [totalSaled, setTotalSaled] = useState(0);
-  const [isFinished, setIsFinished] = useState(true);
+  const [isFinished, setIsFinished] = useState(false);
+
+
 
   const toggleOpen = () => {
     open();
   };
 
   const countdownComplete = () => {
-    setIsFinished(true);
+    setIsFinished(false);
   };
 
   useEffect(() => {
@@ -195,27 +199,37 @@ export default function Hero() {
     }
   };
 
+  const renderer = ({ days, hours, minutes, seconds, completed }: CountdownRenderProps) => {
+    if (completed) {
+      return <span>Countdown completed!</span>;
+    } else {
+      return (
+          <div className="flex justify-center items-center space-x-2 text-[beige]">
+            <span className="stone-block">{days}d</span>:
+            <span className="stone-block">{hours}h</span>:
+            <span className="stone-block">{minutes}m</span>:
+            <span className="stone-block">{seconds}s</span>
+          </div>
+      );
+    }
+  };
+
+
+
   return (
     <div className="pt-[30px] px-0 pb-[60px] hero-container">
       <div className="hero" id="about">
         <div className="hero__wrap">
-
           <div className="buy-box max-w-[500px] w-full flex flex-col gap-[50px] text-[#e8b67e] h-[100%]">
             <div className="flex flex-col gap-[30px] p-[5px] bg-[#22361B] rounded-lg border-[2px] border-solid boder-[#d4dadf]">
-              <div className="hero-header rounded-lg p-[25px] font-semibold text-center text-white text-[30px]">
-                {!setIsFinished ? (
-                  <p className="flex flex-row gap-[5px]">
-                    Price increase in
-                    <Countdown date={deadline} onComplete={countdownComplete} />
-                  </p>
-                ) : (
-                  <div className="rounded-lg p-25 text-20 font-semibold text-center text-[#22361B]">
-                     {/* Stage 1 price: $0.0000125*/}
-                      Presale start soon !
-                  </div>
-                )}
+              <div className="hero-header rounded-lg p-[25px] font-semibold text-center text-[#22361B] text-[30px]">
+                NEXT PRICE INCREASE IN
+                <Countdown
+                    date={deadline}
+                    renderer={renderer}
+                    onComplete={countdownComplete}
+                />
               </div>
-
               <div className="flex flex-col gap-[20px] px-[20px]">
                 <div className="font-semibold text-center text-[#e8b67e]">
                   {/*Total Sold: {Math.floor(totalSaled).toLocaleString()}
@@ -233,37 +247,37 @@ export default function Hero() {
                 </div>
                 <div className="grid grid-cols-2 gap-[10px]">
                   <div
-                    onClick={() => {
-                      setTapState(1);
-                    }}
-                    className={`cursor-pointer bg-bgLight h-[44px] flex flex-row gap-[5px] items-center p-[5px] rounded-md hover:opacity-75 ${
-                      tapState === 1 ? "border-[2px] border-[#3980B9]" : ""
-                    }`}
+                      onClick={() => {
+                        setTapState(1);
+                      }}
+                      className={`cursor-pointer bg-[#22361B] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75 ${
+                          tapState === 1 ? "border-[2px] border-[#e8b67e]" : ""
+                      }`}
                   >
                     <img
                       alt=""
                       src={ethIcon}
                       className="h-[15px] w-[15px] sm:h-[25px] sm:w-[25px]  rounded-full"
                     />
-                    <span className="sm:text-[18px] text-[15px] font-bold text-black">
+                    <span className="sm:text-[18px] text-[15px] font-bold text-[#e8b67e]">
                       ETH
                     </span>
                   </div>
 
                   <div
-                    onClick={() => {
-                      setTapState(2);
-                    }}
-                    className={`cursor-pointer bg-bgLight h-[44px] flex flex-row gap-[5px] items-center p-[5px] rounded-md hover:opacity-75 ${
-                      tapState === 2 ? "border-[2px] border-[#3980B9]" : ""
-                    }`}
+                      onClick={() => {
+                        setTapState(2);
+                      }}
+                      className={`cursor-pointer bg-[#22361B] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75 ${
+                          tapState === 2 ? "border-[2px] border-[#e8b67e]" : ""
+                      }`}
                   >
                     <img
                       alt=""
                       src={usdtIcon}
                       className="h-[15px] w-[15px] sm:h-[25px] sm:w-[25px]  rounded-full"
                     />
-                    <span className="sm:text-[18px] text-[15px] font-bold text-black">
+                    <span className="sm:text-[18px] text-[15px] font-bold text-[#e8b67e]">
                       USDT
                     </span>
                   </div>

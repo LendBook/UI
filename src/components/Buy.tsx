@@ -33,10 +33,10 @@ export default function Buy() {
                     href="/#about"
                     rel="noreferrer"
                 >
-                  Buy Now
+                  Buy Now !
                 </a>
                 <a
-                    className="shiba-buy__btn btn white-btn big"
+                    className="shiba-buy__btn btn white-btn2 big"
                     href="https://t.me/jumanjicommunity"
                     target="_blank"
                     rel="noreferrer"

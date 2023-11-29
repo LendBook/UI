@@ -2945,6 +2945,18 @@
   background-color: #e8b67e;
   border: 2px solid #fff;
 }
+
+.btn.white-btn2 {
+  color: #22361B;
+  background-color: #e8b67e;
+  border: 2px solid #22361B;
+}
+.btn.white-btn2:hover {
+  color: #fff;
+  background-color: #e8b67e;
+  border: 2px solid #fff;
+}
+
 .btn:hover {
   background-color: #fff;
   color: #ff7121;
@@ -3563,6 +3575,6 @@ main {
   text-align: center;
   margin-bottom: 32px;
 }
-.hero-header {
-  background: linear-gradient(180deg, #988e65 -4.32%, #c4c874 91.56%);
-}
+
+
+
