@@ -12,4 +12,10 @@ interface IPropsOfComponent {
     [key: string]: any;
 }
 
+// global.d.ts
+interface Window {
+    dataLayer: any[];
+}
+
+
 declare module 'react-notifications';

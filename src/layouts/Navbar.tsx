@@ -71,6 +71,16 @@ export default function Navbar() {
     closeDrawer();
   };
 
+  const pushToDataLayer = () => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'connect_wallet_clicked',
+      date: new Date().toISOString(),
+      // Autres propriétés si nécessaire
+    });
+  };
+
+
   return (
     <nav className="sticky top-0 bg-[#22361B] border-b border-gray-800 z-[99]">
       <Container className="justify-between p-4 hidden lg:flex">
@@ -115,7 +125,10 @@ export default function Navbar() {
           ) : (
             <FilledButton
               className="font-[GothamPro-Bold] flex items-center gap-1"
-              onClick={() => open()}
+              onClick={() => {
+                open();
+                pushToDataLayer();
+              }}
             >
               <Icon id="connect-wallet" icon="mdi:wallet-outline" className="text-xl" />
               Connect Wallet
