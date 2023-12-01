@@ -148,7 +148,7 @@ interface Aggregator {
 }
 
 
-contract presale is Claimable {
+contract JumanjiPresale is Claimable {
     event Buy(address to, uint256 amount);
     event Claim(address to, uint256 amount);
     address public tokenAddress;

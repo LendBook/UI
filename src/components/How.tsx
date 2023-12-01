@@ -179,7 +179,7 @@ export default function How() {
               </div>
               <div className="how__content">
                 <h3 className="how__head section-title">
-                  BUY WITH ETH OR USDT
+                  BUY WITH ETH/BNB or USDT
                 </h3>
                 <div className="steps">
                   <div className="steps__wrap">
@@ -457,7 +457,7 @@ export default function How() {
                           </p>
                           <p>
                             Your JMW tokens will be available to claim once the
-                            JUMANJI presale period ends.
+                            JUMANJI JumanjiPresale.sol period ends.
                           </p>
                         </div>
                       </div>*/}
@@ -549,7 +549,7 @@ export default function How() {
                           </p>
                           <p>
                             Your JMW tokens will be available to claim once the
-                            JUMANJI presale period ends.
+                            JUMANJI JumanjiPresale.sol period ends.
                           </p>
                         </div>
                       </div>
@@ -598,7 +598,7 @@ export default function How() {
                             You will now be directed to the exchange window,
                             where you can input how much JMW you wish to buy.
                             You will first have to enter the amount of BUSD you
-                            wish to APPROVE with the presale contract. You will
+                            wish to APPROVE with the JumanjiPresale.sol contract. You will
                             be asked to confirm this inside your wallet.
                           </p>
                         </div>
@@ -654,7 +654,7 @@ export default function How() {
                           </p>
                           <p>
                             Your JMW tokens will be available to claim once the
-                            JUMANJI presale period ends.
+                            JUMANJI JumanjiPresale.sol period ends.
                           </p>
                         </div>
                       </div>
@@ -760,8 +760,8 @@ export default function How() {
             </h3>
             <div className="claim__info how__info">
               <p>
-                You can claim your JMW tokens at the end of the presale.
-                Details will be released closer to the time. Once the presale
+                You can claim your JMW tokens at the end of the JumanjiPresale.sol.
+                Details will be released closer to the time. Once the JumanjiPresale.sol
                 period has concluded, you must visit the main site and click the
                 “Claim” button. Take extreme care to ensure you’re claiming on
                 the official site as it is impossible to claim elsewhere.

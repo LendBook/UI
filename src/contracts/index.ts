@@ -5,16 +5,18 @@ import { ethers } from "ethers";
 import Contrats from "./contracts/1.json";
 import { fromBigNum } from "../utils";
 const supportChainId = 1;
-const TOTALPRESALETOKENAMOUNT = 650000000000;
+const TOTALPRESALETOKENAMOUNT = 400000000;
 
 const RPCS = {
     1: "https://mainnet.infura.io/v3/49a547b1f17a417f8b7fe8dc8d33308e",
     56: "https://bsc-dataseed.binance.org/",
+    97: "https://bsc-testnet.publicnode.com",
 }
 
 const providers = {
     1: new ethers.providers.JsonRpcProvider(RPCS[1]),
-    56: new ethers.providers.JsonRpcProvider(RPCS[56])
+    56: new ethers.providers.JsonRpcProvider(RPCS[56]),
+    97: new ethers.providers.JsonRpcProvider(RPCS[97])
 }
 
 const presaleContract = new ethers.Contract(Contrats.presale.address, Contrats.presale.abi, providers[supportChainId]);

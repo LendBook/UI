@@ -128,7 +128,7 @@ export default function Navbar() {
                 onClick={() => switchNetwork?.(Number(chainId))}
               >
                 <Icon icon="mdi:wallet-outline" className="text-xl" />
-                Switch network
+                Switch mainnet
               </FilledButton>
             )
           ) : (

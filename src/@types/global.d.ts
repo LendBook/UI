@@ -17,5 +17,9 @@ interface Window {
     dataLayer: any[];
 }
 
+interface Window {
+    ethereum?: any;
+}
+
 
 declare module 'react-notifications';

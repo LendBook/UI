@@ -11,8 +11,12 @@ import {presaleContract, usdtContract} from "../contracts";
 import "../asserts/scss/custom.scss";
 import ethIcon from "../asserts/images/coins/eth.svg";
 import usdtIcon from "../asserts/images/coins/usdt.svg";
+import bnbIcon from "../asserts/images/coins/bnb.svg";
+import claimIcon from "../asserts/images/coins/claim.png";
+import stakeIcon from "../asserts/images/coins/stake.svg";
 import slideLogo from "../asserts/images/preview/logo.svg";
 import TagManager from "react-gtm-module";
+
 
 const tagManagerArgs = {
   gtmId: 'GTM-TVWJ4GKQ'
@@ -47,6 +51,10 @@ export default function Hero() {
   const { address } = useAccount();
   const { open } = useWeb3Modal();
 
+  const [chainId, setChainId] = useState<number | null>(null);
+  const [ethBalance, setEthBalance] = useState('');
+  const [usdtBalance, setUsdtBalance] = useState('');
+
   const [deadline, setDeadline] = useState(new Date("2024-01-15T00:00:00"));
   const [tokenPrice, setTokePrice] = useState(0);
   const [tokenUsdtPrice, setTokeUsdtPrice] = useState(0);
@@ -59,7 +67,6 @@ export default function Hero() {
   const [progressStatus, setProgressStatus] = useState(0);
   const [totalSaled, setTotalSaled] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
-
 
   const toggleOpen = () => {
     open();
@@ -86,44 +93,76 @@ export default function Hero() {
 
   useEffect(() => {
     if (address) {
+      const apiKeyETH = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
+      const apiKeyBSC = "HKDUN68PC45B9SK7XI1CW8VNQCG127HMY9";
+      let urlETH, urlUSDT, tokenAddressUSDT;
 
-      const apiKey = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
-      const urlETH = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`;
-      let balanceInEther: string;
-      let balanceInUSDT: string;
+      if (chainId === 1) { // Ethereum
+        urlETH = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyETH}`;
+        tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+        urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyETH}`;
+      } else if (chainId === 56) { // Binance Smart Chain
+        urlETH = `https://api.bscscan.com/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
+        tokenAddressUSDT = "0x55d398326f99059fF775485246999027B3197955";
+        urlUSDT = `https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
+      } else {
+        // Gérer les autres chaînes ou les erreurs ici
+        return;
+      }
 
+      // Récupérer la balance en ETH
       fetch(urlETH)
           .then(response => response.json())
           .then(data => {
-            const balanceETH = data.result; // La balance est en Wei
-            balanceInEther = ethers.utils.formatEther(balanceETH);
+            const balanceETH = data.result;
+            const balanceInEther = ethers.utils.formatEther(balanceETH);
+            // Traitement de la balance ETH
           })
           .catch(error => console.error('Error fetching wallet balance in ETH:', error));
 
-      // Appel à l'API d'Etherscan pour récupérer la balance en USDT
-      const tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7"; // Adresse du contrat USDT
-      const urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKey}`;
-
+      // Récupérer la balance en USDT
       fetch(urlUSDT)
           .then(response => response.json())
           .then(data => {
-            const balanceUSDT = data.result; // La balance est en unités minimales du token
-            balanceInUSDT = ethers.utils.formatUnits(balanceUSDT, 6); // USDT a 6 décimales
-
-            TagManager.dataLayer({
-              dataLayer: {
-                event: 'walletInfo',
-                walletAddress: address,
-                walletBalanceETH: balanceInEther,
-                walletBalanceUSDT: balanceInUSDT,
-              },
-            });
-
+            const balanceUSDT = data.result;
+            const balanceInUSDT = ethers.utils.formatUnits(balanceUSDT, 6); // 6 décimales pour USDT
+            // Traitement de la balance USDT
           })
           .catch(error => console.error('Error fetching wallet balance in USDT:', error));
-
     }
-  }, [address]);
+  }, [address, chainId]);
+
+  useEffect(() => {
+    if (address && chainId) {
+      const apiKeyETH = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
+      const apiKeyBSC = "HKDUN68PC45B9SK7XI1CW8VNQCG127HMY9";
+      let urlUSDT, tokenAddressUSDT;
+
+      if (chainId === 1) {
+        tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+        urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyETH}`;
+      } else if (chainId === 56) {
+        tokenAddressUSDT = "0x55d398326f99059fF775485246999027B3197955";
+        urlUSDT = `https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
+      } else {
+        // Logique pour gérer le cas où chainId n'est ni 1 ni 56
+        console.error('Unsupported network');
+        return;
+      }
+
+      if (urlUSDT) {
+        fetch(urlUSDT)
+            .then(response => response.json())
+            .then(data => {
+              const balanceUSDT = data.result;
+              const balanceInUSDT = ethers.utils.formatUnits(balanceUSDT, 6);
+              setUsdtBalance(balanceInUSDT);
+            })
+            .catch(error => console.error('Error fetching wallet balance in USDT:', error));
+      }
+    }
+  }, [address, chainId]);
+
 
   const pushToDataLayer = () => {
     window.dataLayer = window.dataLayer || [];
@@ -151,6 +190,36 @@ export default function Hero() {
 
     getClaimTokenAmount(address || "");
     getClaimstatus();
+  }, [address]);
+
+  useEffect(() => {
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+      // Écouter les changements de chaîne
+      window.ethereum.on('chainChanged', (_chainId: string) => {
+        setChainId(parseInt(_chainId, 16));
+      });
+
+      // Récupérer le chainId initial
+      provider.getNetwork().then(network => {
+        setChainId(network.chainId);
+      });
+
+      // Récupérer le solde en ETH
+      if (address) {
+        provider.getBalance(address).then(balance => {
+          setEthBalance(ethers.utils.formatEther(balance));
+        });
+      }
+    }
+
+    // Nettoyage de l'écouteur d'événements
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener('chainChanged', () => {});
+      }
+    };
   }, [address]);
 
   const onPayAmountChange = (e: any) => {
@@ -245,6 +314,100 @@ export default function Hero() {
     }
   };
 
+  const renderButton = () => {
+    if (chainId === 56) { // Chain ID de Binance Smart Chain
+      return <><img
+          alt=""
+          src={bnbIcon}
+          className="h-[15px] w-[15px] sm:h-[25px] sm:w-[25px]  rounded-full"/><span
+          className="sm:text-[18px] text-[15px] font-bold text-[#e8b67e]">
+              BNB
+          </span></>;
+    } else {
+      return <><img
+          alt=""
+          src={ethIcon}
+          className="h-[15px] w-[15px] sm:h-[25px] sm:w-[25px]  rounded-full"/><span
+          className="sm:text-[18px] text-[15px] font-bold text-[#e8b67e]">
+              ETH
+          </span></>;
+    }
+  };
+
+  const renderLabel = () => {
+    if (chainId === 56) { // Chain ID de Binance Smart Chain
+      return <> <span className="font-semibold">BNB</span></>;
+    } else {
+      return <> <span className="font-semibold">ETH</span></>;
+    }
+  };
+
+  const renderBalance = () => {
+    if (tapState === 1) {
+      return chainId === 56 ? <>BNB Balance: {ethBalance}</> : <>ETH Balance: {ethBalance}</>;
+    } else if (tapState === 2) {
+      return <>USDT Balance: {usdtBalance}</>;
+    }
+  };
+
+  const renderTokenImage = () => {
+    if (chainId === 56) { // Chain ID de Binance Smart Chain
+      return <img
+          alt=""
+          src={bnbIcon}
+          className="w-full h-full"
+      />;
+    } else {
+      return <img
+          alt=""
+          src={ethIcon}
+          className="w-full h-full"
+      />;
+    }
+  };
+
+
+  const renderButtonSwitchNetwork = () => {
+    if (chainId === 1) { // Chain ID de Binance Smart Chain
+      return <><img
+          alt=""
+          src={bnbIcon}
+          className="h-[15px] w-[15px] sm:h-[25px] sm:w-[25px]  rounded-full"/><span
+          className="sm:text-[18px] text-[15px] font-bold text-[#22361B]">
+              Buy on BSC
+          </span></>;
+    } else {
+      return <><img
+          alt=""
+          src={ethIcon}
+          className="h-[15px] w-[15px] sm:h-[25px] sm:w-[25px]  rounded-full"/><span
+          className="sm:text-[18px] text-[15px] font-bold text-[#22361B]">
+              Buy on ETH
+          </span></>;
+    }
+  };
+
+  const switchNetwork = async () => {
+    if (window.ethereum) {
+      try {
+        if (chainId === 1) { // Si sur Ethereum, passer à BSC
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x38' }], // 0x38 est l'ID de chaîne hexadécimal pour BSC
+          });
+        } else if (chainId === 56) { // Si sur BSC, passer à Ethereum
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x1' }], // 0x1 est l'ID de chaîne hexadécimal pour Ethereum
+          });
+        }
+      } catch (switchError) {
+        // Gérer l'erreur ici (par exemple, l'utilisateur refuse de changer de réseau)
+        console.error('Network switch error:', switchError);
+      }
+    }
+  };
+
 
   return (
     <div className="pt-[30px] px-0 pb-[60px] hero-container">
@@ -269,10 +432,8 @@ export default function Hero() {
                 <ProgressBar value={progressStatus} assistiveText="test"/>
                 <div className="relative">
                   <div className="px-[30px] text-[15px] font-semibold text-center">
-                    {/*1 $JUM = $0.00001*/}
-                    1 $JUM = $0.01
+                    {renderBalance()}
                   </div>
-
                   <Divider className="absolute w-full top-[50%]" />
                 </div>
                 <div className="grid grid-cols-2 gap-[10px]">
@@ -284,14 +445,7 @@ export default function Hero() {
                           tapState === 1 ? "border-[2px] border-[#e8b67e]" : ""
                       }`}
                   >
-                    <img
-                      alt=""
-                      src={ethIcon}
-                      className="h-[15px] w-[15px] sm:h-[25px] sm:w-[25px]  rounded-full"
-                    />
-                    <span className="sm:text-[18px] text-[15px] font-bold text-[#e8b67e]">
-                      ETH
-                    </span>
+                    {renderButton()}
                   </div>
 
                   <div
@@ -312,26 +466,10 @@ export default function Hero() {
                     </span>
                   </div>
 
-                  {/*<div
-                    onClick={() => {
-                      setTapState(3);
-                    }}
-                    className={`cursor-pointer bg-bgLight h-[44px] flex flex-row gap-[5px] items-center p-[5px] rounded-md hover:opacity-75 ${
-                      tapState === 3 ? "border-[2px] border-[#3980B9]" : ""
-                    }`}
-                  >
-                    <img
-                      alt=""
-                      src={claimIcon}
-                      className="h-[15px] w-[15px] sm:h-[25px] sm:w-[25px]  rounded-full"
-                    />
-                    <span className="sm:text-[18px] text-[15px] font-bold">
-                      Claim
-                    </span>
-                  </div>*/}
+
 
                  {/* <div
-                    className={`cursor-pointer bg-bgLight h-[44px] flex flex-row gap-[5px] items-center p-[5px] rounded-md hover:opacity-75`}
+                      className={`cursor-pointer bg-[#22361B] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75`}
                   >
                     <a
                       href="https://freelancer.com"
@@ -349,16 +487,59 @@ export default function Hero() {
                     </a>
                   </div>*/}
                 </div>
-                <Divider />
+
+                <div className="grid grid-cols-1 gap-[10px]">
+                  <div
+                      onClick={() => {
+                        setTapState(3);
+                      }}
+                      className={`cursor-pointer bg-[#e8b67e] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75 ${
+                          tapState === 3 ? "border-[2px] border-[#3980B9]" : ""
+                      }`}
+                  >
+                    <img
+                        alt=""
+                        src={claimIcon}
+                        className="h-[15px] w-[15px] sm:h-[25px] sm:w-[25px]  rounded-full"
+                    />
+                    <span className="sm:text-[18px] text-[15px] font-bold text-[#22361B]">
+                      Claim
+                    </span>
+                  </div>
+                  <div className="px-[30px] text-[15px] font-semibold text-center">
+                    {/*1 $JUM = $0.00001*/}
+                    1 $JUM = $0.01
+                  </div>
+
+                  {/* <div
+                      className={`cursor-pointer bg-[#22361B] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75`}
+                  >
+                    <a
+                      href="https://freelancer.com"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img
+                        alt=""
+                        src={stakeIcon}
+                        className="h-[15px] w-[15px] sm:h-[25px] sm:w-[25px]  rounded-full"
+                      />
+                      <span className="sm:text-[18px] text-[15px] font-bold">
+                        Stake
+                      </span>
+                    </a>
+                  </div>*/}
+                </div>
+
                 {tapState < 3 && (
                   <>
-                    {/*<div className="grid grid-cols-1 md:grid-cols-2 gap-[20px]">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px]">
                       <div className="flex flex-col">
                         <div className="flex flex-row justify-between">
                           <span className="text-[15px] opacity-80">
                             Amount in{" "}
                             {tapState === 1 ? (
-                              <span className="font-semibold">ETH</span>
+                              <span className="font-semibold">{renderLabel()}</span>
                             ) : (
                               <span className="font-semibold">USDT</span>
                             )}{" "}
@@ -374,12 +555,8 @@ export default function Hero() {
                           />
 
                           <div className="absolute right-[10px] w-[30px] h-[30px]">
-                            {tapState === 1 ? (
-                              <img
-                                alt=""
-                                src={ethIcon}
-                                className="w-full h-full"
-                              />
+                            {tapState === 1 ? (renderTokenImage()
+
                             ) : (
                               <img
                                 alt=""
@@ -422,21 +599,33 @@ export default function Hero() {
                           </div>
                         </div>
                       </div>
-                    </div>*/}
+                    </div>
 
                     <div className="text-[15px] text-center">
                       0.015 ETH is reserved for gas.
                     </div>
 
                     {address && (
-                      <div className="flex flex-row justify-center items-center">
-                        <div
-                          className="w-[70%] py-[10px] bg-[#e8b67e] text-center rounded-full cursor-pointer hover:opacity-75 select-none"
-                          onClick={onBuy}
-                        >
-                          <span className="text-[#22361B] text-[15px]"><b>Buy</b></span>
-                        </div>
-                      </div>
+                        <>
+                          <div className="flex flex-row justify-center items-center">
+                            <div
+                                className="w-[70%] py-[10px] bg-[#e8b67e] text-center rounded-full cursor-pointer hover:opacity-75 select-none"
+                                onClick={onBuy}
+                            >
+                              <span className="text-[#22361B] text-[18px] sm:text-[18px]"><b>Buy</b></span>
+                            </div>
+
+                          </div>
+                          <div className="flex flex-row justify-center items-center">
+                          <div
+                              onClick={switchNetwork}
+                              className={`w-[70%] py-[10px] rounded-full cursor-pointer bg-[#e8b67e]  flex justify-center items-center select-none p-[5px] hover:opacity-75 text-["#22361B"]
+                              }`}
+                          >
+                            {renderButtonSwitchNetwork()}
+                          </div>
+                          </div>
+                        </>
                     )}
                   </>
                 )}
@@ -468,20 +657,20 @@ export default function Hero() {
                     </div>
 
                     {!isClaim && (
-                      <div className="text-[13px] text-center text-red-500">
-                        Claim is not available before the presale ended
+                      <div className="text-[13px] text-center text-yellow-300-500">
+                        🛈 Stake will be available soon !
                       </div>
                     )}
 
                     {address && (
-                      <div className="flex flex-row justify-center items-center">
+                      <div className="flex flex-row justify-center  items-center">
                         <div
                           onClick={onClaim}
-                          className={`w-[70%] py-[10px] text-center rounded-full cursor-pointer hover:opacity-75 select-none ${
-                            isClaim ? "bg-bgBtn" : "bg-bgBtn/70"
+                          className={`w-[70%] py-[10px] bg-[#e8b67e] text-center rounded-full cursor-pointer hover:opacity-75 select-none ${
+                            isClaim ? "bg-[#e8b67e]" : "bg-[#e8b67e]"
                           }`}
                         >
-                          <span className="text-white text-[15px]">Claim</span>
+                          <span className="text-[#22361B] text-[15px]"><b>Claim</b></span>
                         </div>
                       </div>
                     )}
