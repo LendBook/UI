@@ -412,7 +412,7 @@
       ]
   },
   "presale": {
-      "address": "0xBb50cd0ad4fe470416beBeF3577A53440F51699f",
+      "address": "0x182F08981772aBB40A91aC08af7cf4fC441fE206",
       "abi": [
           {
               "inputs": [
@@ -795,5 +795,5 @@
           }
       ]
   },
-  "usdt": "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+  "usdt": "0x6437C179C727Aa670c2700ae45C36526e103A40c"
 }

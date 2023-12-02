@@ -3576,5 +3576,33 @@ main {
   margin-bottom: 32px;
 }
 
+/* Dans votre fichier CSS ou balise <style> */
+@keyframes moveBackground {
+  0% { background-position: 0 0; }
+  100% { background-position: 100px 0; }
+}
+
+.progressBarBackground {
+  background-color: #e8b67e; /* Couleur de fond (beige) */
+  border-radius: 16px;
+}
+
+.progressBarForeground {
+  transition: width 1s ease-in-out;
+  background-image: linear-gradient(
+                  45deg,
+                  #d0a371 25%,  /* Vert */
+                  #e8b67e 25%,  /* Vert foncé */
+                  #e8b67e 50%,
+                  #d0a371 50%,
+                  #d0a371 75%,
+                  #e8b67e 75%,
+                  #e8b67e
+  );
+  background-size: 28px 28px; /* Taille du hachurage */
+  border-radius: 16px;
+  animation: moveBackground 2s linear infinite;
+}
+
 
 

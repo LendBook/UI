@@ -7,7 +7,7 @@ import {Divider} from "@mui/material";
 import Countdown, {CountdownRenderProps} from 'react-countdown';
 import {useAccount, useWalletClient, type WalletClient,} from "wagmi";
 import {ethers, providers} from "ethers";
-import {presaleContract, usdtContract} from "../contracts";
+import {getProgress, presaleContract, usdtContract} from "../contracts";
 import "../asserts/scss/custom.scss";
 import ethIcon from "../asserts/images/coins/eth.svg";
 import usdtIcon from "../asserts/images/coins/usdt.svg";
@@ -441,6 +441,9 @@ export default function Hero() {
     }
   };
 
+  const totalGoal = 1000000; // L'objectif total, par exemple 1 000 000 000 $
+  const progress = (totalSaled / totalGoal) * 100; // Calcul de la progression en pourcentage
+
 
   return (
     <div className="pt-[30px] px-0 pb-[60px] hero-container">
@@ -457,11 +460,21 @@ export default function Hero() {
                 />
               </div>
               <div className="flex flex-col gap-[20px] px-[20px]">
-                <div className="font-semibold text-center text-[#e8b67e]">
+                {/* <div className="font-semibold text-center text-[#e8b67e]">
                   Total Sold: {Math.floor(totalSaled).toLocaleString()}
                   /1,000,000,000
+                </div> */}
+                <div className="relative mt-2 h-8 mb-4 text-xs flex rounded-[16px] bg-[beige]">
+                  <div style={{ width: `${progress}%` }}
+                       className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center progressBarForeground">
+                  </div>
+                  {/* Étiquette avec la progression en $ */}
+                  <div className="absolute w-full top-0 flex justify-center items-center h-full">
+        <span className="font-semibold text-[#22361B] text-[15px]">
+          USDT Raised: ${Math.floor(totalSaled).toLocaleString('en-US')}/${totalGoal.toLocaleString('en-US')}
+        </span>
+                  </div>
                 </div>
-                <ProgressBar value={progressStatus} assistiveText="test"/>
                 <div className="relative">
                   <div className="px-[30px] text-[15px] font-semibold text-center">
                     {renderBalance()}
