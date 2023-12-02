@@ -118,7 +118,6 @@ export default function Hero() {
     setBalanceUSDT_ETH(null);
     setBalanceUSDT_BNB(null);
 
-
     if (address) {
       const apiKeyETH = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
       const apiKeyBSC = "HKDUN68PC45B9SK7XI1CW8VNQCG127HMY9";
@@ -149,7 +148,12 @@ export default function Hero() {
         } else {
           // Gérer les autres chaînes ou les erreurs ici
         }
+      };
 
+  }, [address, chainId]);
+
+  useEffect(() => {
+    if (balanceETH || balanceBNB || balanceUSDT_ETH || balanceUSDT_BNB) {
       TagManager.dataLayer({
         dataLayer: {
           event: 'walletInfo',
@@ -160,10 +164,8 @@ export default function Hero() {
           walletBalanceUSDT_BNB: balanceUSDT_BNB,
         },
       });
-      }
-
-  }, [address, chainId]);
-
+    }
+  }, [balanceETH, balanceBNB, balanceUSDT_ETH, balanceUSDT_BNB]);
 
   useEffect(() => {
     if (address && chainId) {
