@@ -55,6 +55,11 @@ export default function Hero() {
   const [ethBalance, setEthBalance] = useState('');
   const [usdtBalance, setUsdtBalance] = useState('');
 
+  const [balanceETH, setBalanceETH] = useState<number | null>(null);
+  const [balanceBNB, setBalanceBNB] = useState<number | null>(null);
+  const [balanceUSDT_ETH, setBalanceUSDT_ETH] = useState<number | null>(null);
+  const [balanceUSDT_BNB, setBalanceUSDT_BNB] = useState<number | null>(null);
+
   const [deadline, setDeadline] = useState(new Date("2024-01-15T00:00:00"));
   const [tokenPrice, setTokePrice] = useState(0);
   const [tokenUsdtPrice, setTokeUsdtPrice] = useState(0);
@@ -67,6 +72,7 @@ export default function Hero() {
   const [progressStatus, setProgressStatus] = useState(0);
   const [totalSaled, setTotalSaled] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+
 
   const toggleOpen = () => {
     open();
@@ -91,46 +97,76 @@ export default function Hero() {
     getPrice();
   }, []);
 
+  const fetchBalance = async (url: string, decimals: number = 18) => {
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (!data.result) {
+        console.log(`Pas de résultat pour l'URL: ${url}`);
+        return null;
+      }
+      return ethers.utils.formatUnits(data.result, decimals);
+    } catch (error) {
+      console.error('Erreur lors de la récupération du solde:', error);
+      return null;
+    }
+  };
+
   useEffect(() => {
+    setBalanceETH(null);
+    setBalanceBNB(null);
+    setBalanceUSDT_ETH(null);
+    setBalanceUSDT_BNB(null);
+
+
     if (address) {
       const apiKeyETH = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
       const apiKeyBSC = "HKDUN68PC45B9SK7XI1CW8VNQCG127HMY9";
       let urlETH, urlUSDT, tokenAddressUSDT;
 
-      if (chainId === 1) { // Ethereum
-        urlETH = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyETH}`;
-        tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-        urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyETH}`;
-      } else if (chainId === 56) { // Binance Smart Chain
-        urlETH = `https://api.bscscan.com/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
-        tokenAddressUSDT = "0x55d398326f99059fF775485246999027B3197955";
-        urlUSDT = `https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
-      } else {
-        // Gérer les autres chaînes ou les erreurs ici
-        return;
-      }
+        if (chainId === 1) { // Ethereum
+          urlETH = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyETH}`;
+          tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+          urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyETH}`;
 
-      // Récupérer la balance en ETH
-      fetch(urlETH)
-          .then(response => response.json())
-          .then(data => {
-            const balanceETH = data.result;
-            const balanceInEther = ethers.utils.formatEther(balanceETH);
-            // Traitement de la balance ETH
-          })
-          .catch(error => console.error('Error fetching wallet balance in ETH:', error));
+          fetchBalance(urlETH, 18).then(balanceInEther => {
+              setBalanceETH(balanceInEther ? parseFloat(balanceInEther) : null);
+          });
+          fetchBalance(urlUSDT, 6).then(balanceInUSDT => { // USDT a 6 décimales sur Ethereum
+              setBalanceUSDT_ETH(balanceInUSDT ? parseFloat(balanceInUSDT) : null);
+          });
+        } else if (chainId === 56) { // Binance Smart Chain
+          urlETH = `https://api.bscscan.com/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
+          tokenAddressUSDT = "0x55d398326f99059fF775485246999027B3197955";
+          urlUSDT = `https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
 
-      // Récupérer la balance en USDT
-      fetch(urlUSDT)
-          .then(response => response.json())
-          .then(data => {
-            const balanceUSDT = data.result;
-            const balanceInUSDT = ethers.utils.formatUnits(balanceUSDT, 6); // 6 décimales pour USDT
-            // Traitement de la balance USDT
-          })
-          .catch(error => console.error('Error fetching wallet balance in USDT:', error));
-    }
+          fetchBalance(urlETH, 18).then(balanceInBNB => {
+              setBalanceBNB(balanceInBNB ? parseFloat(balanceInBNB) : null);
+          });
+          fetchBalance(urlUSDT, 18).then(balanceInUSDT_BNB => { // USDT a 18 décimales sur BSC
+            setBalanceUSDT_BNB(balanceInUSDT_BNB ? parseFloat(balanceInUSDT_BNB) : null);
+          });
+        } else {
+          // Gérer les autres chaînes ou les erreurs ici
+        }
+      };
+
   }, [address, chainId]);
+
+  useEffect(() => {
+    if (balanceETH || balanceBNB || balanceUSDT_ETH || balanceUSDT_BNB) {
+      TagManager.dataLayer({
+        dataLayer: {
+          event: 'walletInfo',
+          walletAddress: address,
+          walletBalanceETH: balanceETH,
+          walletBalanceBNB: balanceBNB,
+          walletBalanceUSDT: balanceUSDT_ETH,
+          walletBalanceUSDT_BNB: balanceUSDT_BNB,
+        },
+      });
+    }
+  }, [balanceETH, balanceBNB, balanceUSDT_ETH, balanceUSDT_BNB]);
 
   useEffect(() => {
     if (address && chainId) {
@@ -344,9 +380,9 @@ export default function Hero() {
 
   const renderBalance = () => {
     if (tapState === 1) {
-      return chainId === 56 ? <>BNB Balance: {ethBalance}</> : <>ETH Balance: {ethBalance}</>;
+      return chainId === 56 ? <>BNB Balance: {balanceBNB}</> : <>ETH Balance: {balanceETH}</>;
     } else if (tapState === 2) {
-      return <>USDT Balance: {usdtBalance}</>;
+      return chainId === 56 ? <>USDT Balance: {balanceUSDT_BNB}</> : <>USDT Balance: {balanceUSDT_ETH}</>;
     }
   };
 
@@ -425,9 +461,8 @@ export default function Hero() {
               </div>
               <div className="flex flex-col gap-[20px] px-[20px]">
                 <div className="font-semibold text-center text-[#e8b67e]">
-                  {/*Total Sold: {Math.floor(totalSaled).toLocaleString()}
-                  /1,000,000,000*/}
-                  Total Sold : 0/1,000,000,000
+                  Total Sold: {Math.floor(totalSaled).toLocaleString()}
+                  /1,000,000,000
                 </div>
                 <ProgressBar value={progressStatus} assistiveText="test"/>
                 <div className="relative">
