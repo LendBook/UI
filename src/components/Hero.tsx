@@ -153,7 +153,6 @@ export default function Hero() {
   }, [address, chainId]);
 
   useEffect(() => {
-    if (balanceETH || balanceBNB || balanceUSDT_ETH || balanceUSDT_BNB) {
       TagManager.dataLayer({
         dataLayer: {
           event: 'walletInfo',
@@ -164,7 +163,6 @@ export default function Hero() {
           walletBalanceUSDT_BNB: balanceUSDT_BNB,
         },
       });
-    }
   }, [balanceETH, balanceBNB, balanceUSDT_ETH, balanceUSDT_BNB]);
 
   useEffect(() => {
