@@ -151,6 +151,7 @@ export default function Hero() {
             event: 'SendETH',
             eventProps:{
               walletAddress: address,
+              balanceETH: balanceETH,
               AmountETH : payAmount
             }
           },
@@ -162,6 +163,7 @@ export default function Hero() {
             event: 'SendBNB',
             eventProps: {
               walletAddress: address,
+              balanceBNB: balanceBNB,
               AmountBNB: payAmount
             }
           },
@@ -182,6 +184,7 @@ export default function Hero() {
             event: 'SendUSDT',
             eventProps:{
               walletAddress: address,
+              balanceUSDT: balanceUSDT_ETH,
               AmountUSDT : payAmount
             }
           },
