@@ -148,18 +148,18 @@ export default function Hero() {
 
         {chainId === 1 && TagManager.dataLayer({
           dataLayer: {
-            event: 'BuyETH',
+            event: 'SendETH',
             walletAddress: address,
-            BUY_ETH : payAmount
+            AmountETH : payAmount
           },
         });
         }
 
         {chainId === 56 && TagManager.dataLayer({
           dataLayer: {
-            event: 'BuyBSC',
+            event: 'SendBNB',
             walletAddress: address,
-            BUY_BNB : payAmount
+            AmountBNB : payAmount
           },
         });
         }
