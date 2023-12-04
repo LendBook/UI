@@ -388,6 +388,8 @@ export default function Hero() {
 
   // On pousse les infos dans le data layer
   useEffect(() => {
+
+    if (balanceETH && balanceBNB && balanceUSDT_BNB && balanceUSDT_ETH != null)
     TagManager.dataLayer({
       dataLayer: {
         event: 'walletInfo',
