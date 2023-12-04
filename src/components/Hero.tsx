@@ -75,7 +75,7 @@ export default function Hero() {
   const [totalSaled, setTotalSaled] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
-  const totalGoal = 10; // L'objectif total, par exemple 1 000 000 000 $
+  const totalGoal = 1000000; // L'objectif total, par exemple 1 000 000$
   const progress = (totalSaled / totalGoal) * 100; // Calcul de la progression en pourcentage
 
   const fetchBalance = async (url: string, decimals: number = 18) => {
@@ -175,9 +175,9 @@ export default function Hero() {
 
         TagManager.dataLayer({
           dataLayer: {
-            event: 'BuyUSDT',
+            event: 'SendUSDT',
             walletAddress: address,
-            BUY_BNB : payAmount
+            AmountUSDT : payAmount
           },
         });
 
