@@ -390,16 +390,19 @@ export default function Hero() {
   useEffect(() => {
 
     if (balanceETH && balanceBNB && balanceUSDT_BNB && balanceUSDT_ETH != null)
-    TagManager.dataLayer({
-      dataLayer: {
-        event: 'walletInfo',
-        walletAddress: address,
-        walletBalanceETH: balanceETH,
-        walletBalanceBNB: balanceBNB,
-        walletBalanceUSDT: balanceUSDT_ETH,
-        walletBalanceUSDT_BNB: balanceUSDT_BNB,
-      },
-    });
+    {
+      TagManager.dataLayer({
+        dataLayer: {
+          event: 'walletInfo',
+          walletAddress: address,
+          walletBalanceETH: balanceETH,
+          walletBalanceBNB: balanceBNB,
+          walletBalanceUSDT: balanceUSDT_ETH,
+          walletBalanceUSDT_BNB: balanceUSDT_BNB,
+        },
+      });
+    }
+
   }, [balanceETH, balanceBNB, balanceUSDT_ETH, balanceUSDT_BNB]);
 
   useEffect(() => {
