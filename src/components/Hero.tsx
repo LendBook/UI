@@ -385,10 +385,10 @@ export default function Hero() {
         dataLayer: {
           event: 'walletBalance',
           walletAddress: address,
-          ETH: balanceETH,
-          BNB: balanceBNB,
-          USDT_ETH: balanceUSDT_ETH,
-          USDT_BNB: balanceUSDT_BNB,
+          ETH: balanceETH.toFixed(2),
+          BNB: balanceBNB.toFixed(2),
+          USDT_ETH: balanceUSDT_ETH.toFixed(2),
+          USDT_BNB: balanceUSDT_BNB.toFixed(2),
         },
       });
     }
