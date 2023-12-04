@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 import Loading from "./components/Loading";
 import { Web3Modal } from "@web3modal/react";
-import {mainnet, bsc, bscTestnet} from "wagmi/chains";
+import {mainnet, bsc, bscTestnet, fantomTestnet} from "wagmi/chains";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { ToastContainer } from "react-toastify";
 import {
@@ -16,7 +16,7 @@ import { Analytics } from '@vercel/analytics/react';
 import Routes from "./routes";
 
 const projectId = process.env.REACT_APP_CONNECT_PROJECT_ID || "";
-const chains = [mainnet, bsc, bscTestnet];
+const chains = [mainnet, bsc, bscTestnet, fantomTestnet];
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 const wagmiConfig = createConfig({
   autoConnect: true,

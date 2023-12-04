@@ -13,6 +13,7 @@ import logoImg from "../asserts/images/logo.svg";
 
 import TagManager from 'react-gtm-module'
 import {ethers} from "ethers";
+import GoogleTranslate from "../GoogleTranslate";
 
 const tagManagerArgs = {
   gtmId: 'GTM-TVWJ4GKQ'
@@ -186,7 +187,6 @@ export default function Navbar() {
               </a>
             ))}
           </List>
-
           <List>
             {isConnected ? (
               chain?.id === Number(chainId) ? (
@@ -217,8 +217,12 @@ export default function Navbar() {
                 <Icon id="connect-wallet" icon="mdi:wallet-outline" className="text-xl" />
                 Connect Wallet
               </ListItem>
+
             )}
           </List>
+          <div>
+           {/* <GoogleTranslate />*/}
+          </div>
         </div>
       </Drawer>
     </nav>

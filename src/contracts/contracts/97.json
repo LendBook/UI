@@ -421,11 +421,7 @@
                       "name": "_tokenAddress",
                       "type": "address"
                   },
-                  {
-                      "internalType": "uint256",
-                      "name": "_price",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "_price", "type": "uint256" }
               ],
               "stateMutability": "nonpayable",
               "type": "constructor"
@@ -487,19 +483,12 @@
               "name": "OwnershipTransferred",
               "type": "event"
           },
-          {
-              "stateMutability": "payable",
-              "type": "fallback"
-          },
+          { "stateMutability": "payable", "type": "fallback" },
           {
               "inputs": [],
               "name": "baseDecimal",
               "outputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "", "type": "uint256" }
               ],
               "stateMutability": "view",
               "type": "function"
@@ -513,30 +502,16 @@
           },
           {
               "inputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "usdtPrice",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "usdtPrice", "type": "uint256" }
               ],
               "name": "buyWithUSDT",
-              "outputs": [
-                  {
-                      "internalType": "bool",
-                      "name": "",
-                      "type": "bool"
-                  }
-              ],
+              "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
               "stateMutability": "nonpayable",
               "type": "function"
           },
           {
               "inputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "amount",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "amount", "type": "uint256" }
               ],
               "name": "claimETH",
               "outputs": [],
@@ -550,11 +525,7 @@
                       "name": "tokenAddress",
                       "type": "address"
                   },
-                  {
-                      "internalType": "uint256",
-                      "name": "amount",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "amount", "type": "uint256" }
               ],
               "name": "claimToken",
               "outputs": [],
@@ -570,19 +541,11 @@
           },
           {
               "inputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "ethAmount",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "ethAmount", "type": "uint256" }
               ],
               "name": "ethBuyHelper",
               "outputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "amount",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "amount", "type": "uint256" }
               ],
               "stateMutability": "view",
               "type": "function"
@@ -609,13 +572,7 @@
           {
               "inputs": [],
               "name": "getClaimStatus",
-              "outputs": [
-                  {
-                      "internalType": "bool",
-                      "name": "",
-                      "type": "bool"
-                  }
-              ],
+              "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
               "stateMutability": "view",
               "type": "function"
           },
@@ -623,11 +580,7 @@
               "inputs": [],
               "name": "getLatestPrice",
               "outputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "", "type": "uint256" }
               ],
               "stateMutability": "view",
               "type": "function"
@@ -636,11 +589,7 @@
               "inputs": [],
               "name": "getPrice",
               "outputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "tokenPrice",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "tokenPrice", "type": "uint256" }
               ],
               "stateMutability": "view",
               "type": "function"
@@ -649,11 +598,7 @@
               "inputs": [],
               "name": "owner",
               "outputs": [
-                  {
-                      "internalType": "address",
-                      "name": "",
-                      "type": "address"
-                  }
+                  { "internalType": "address", "name": "", "type": "address" }
               ],
               "stateMutability": "view",
               "type": "function"
@@ -667,11 +612,7 @@
           },
           {
               "inputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "_price",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "_price", "type": "uint256" }
               ],
               "name": "resetPrice",
               "outputs": [],
@@ -696,11 +637,7 @@
               "inputs": [],
               "name": "startTime",
               "outputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "", "type": "uint256" }
               ],
               "stateMutability": "view",
               "type": "function"
@@ -716,11 +653,7 @@
               "inputs": [],
               "name": "tokenAddress",
               "outputs": [
-                  {
-                      "internalType": "address",
-                      "name": "",
-                      "type": "address"
-                  }
+                  { "internalType": "address", "name": "", "type": "address" }
               ],
               "stateMutability": "view",
               "type": "function"
@@ -729,22 +662,14 @@
               "inputs": [],
               "name": "totalSaled",
               "outputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "", "type": "uint256" }
               ],
               "stateMutability": "view",
               "type": "function"
           },
           {
               "inputs": [
-                  {
-                      "internalType": "address",
-                      "name": "newOwner",
-                      "type": "address"
-                  }
+                  { "internalType": "address", "name": "newOwner", "type": "address" }
               ],
               "name": "transferOwnership",
               "outputs": [],
@@ -753,46 +678,27 @@
           },
           {
               "inputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "usdPrice",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "usdPrice", "type": "uint256" }
               ],
               "name": "usdtBuyHelper",
               "outputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "amount",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "amount", "type": "uint256" }
               ],
               "stateMutability": "view",
               "type": "function"
           },
           {
               "inputs": [
-                  {
-                      "internalType": "address",
-                      "name": "",
-                      "type": "address"
-                  }
+                  { "internalType": "address", "name": "", "type": "address" }
               ],
               "name": "userDeposits",
               "outputs": [
-                  {
-                      "internalType": "uint256",
-                      "name": "",
-                      "type": "uint256"
-                  }
+                  { "internalType": "uint256", "name": "", "type": "uint256" }
               ],
               "stateMutability": "view",
               "type": "function"
           },
-          {
-              "stateMutability": "payable",
-              "type": "receive"
-          }
+          { "stateMutability": "payable", "type": "receive" }
       ]
   },
   "usdt": "0x6437C179C727Aa670c2700ae45C36526e103A40c"

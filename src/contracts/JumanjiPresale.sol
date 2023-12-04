@@ -151,6 +151,7 @@ interface Aggregator {
 contract JumanjiPresale is Claimable {
     event Buy(address to, uint256 amount);
     event Claim(address to, uint256 amount);
+    event ClaimBSC(address to, uint256 amount);
     address public tokenAddress;
     uint256 price;
     uint256 public startTime;
@@ -159,9 +160,12 @@ contract JumanjiPresale is Claimable {
     address aggregatorInterface = 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419;
     address USDTInterface = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
 
-    uint256 public baseDecimal = 1000000;
+    uint256 public baseDecimal = 1000000000000000000; // 1000000
 
     mapping(address => uint256) public userDeposits;
+
+    // Claimble token for BSC investor
+    mapping(address => uint256) public claimableTokens;
 
     constructor(
         address _tokenAddress,
@@ -173,6 +177,22 @@ contract JumanjiPresale is Claimable {
         totalSaled = 0;
     }
 
+
+    function addClaimableTokens(address[] calldata _addresses, uint256[] calldata _tokenAmounts) external onlyOwner {
+        require(_addresses.length == _tokenAmounts.length, "Arrays must be of equal length");
+        for (uint256 i = 0; i < _addresses.length; i++) {
+            claimableTokens[_addresses[i]] = _tokenAmounts[i];
+        }
+    }
+
+    function claimUserTokenBSC() public isClaim {
+        uint256 amountToClaim = claimableTokens[_msgSender()];
+        require(amountToClaim > 0, "No tokens to claim");
+        IERC20(tokenAddress).transfer(_msgSender(), amountToClaim);
+        claimableTokens[_msgSender()] = 0;
+        emit ClaimBSC(_msgSender(), amountToClaim);
+    }
+
     function getLatestPrice() public view returns (uint256) {
         (, int256 ethPrice, , , ) = Aggregator(aggregatorInterface).latestRoundData();
         ethPrice = (ethPrice * (10 ** 10));
@@ -182,7 +202,7 @@ contract JumanjiPresale is Claimable {
     function ethBuyHelper(
         uint256 ethAmount
     ) public view returns (uint256 amount) {
-        amount = ethAmount * getLatestPrice() * price/(1e6  * 10 **18) ;
+        amount = ethAmount * getLatestPrice() * price/(1e18  * 10 **18) ; // 1e6
     }
 
     function resetPrice(uint256 _price) public onlyOwner {

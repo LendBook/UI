@@ -16,7 +16,7 @@ import claimIcon from "../asserts/images/coins/claim.png";
 import stakeIcon from "../asserts/images/coins/stake.svg";
 import slideLogo from "../asserts/images/preview/logo.svg";
 import TagManager from "react-gtm-module";
-
+import Contrats from "../contracts/contracts/4002.json";
 
 const tagManagerArgs = {
   gtmId: 'GTM-TVWJ4GKQ'
@@ -48,6 +48,7 @@ export function useEthersSigner({ chainId }: { chainId?: number } = {}) {
 
 
 export default function Hero() {
+  const signer = useEthersSigner();
   const { address } = useAccount();
   const { open } = useWeb3Modal();
 
@@ -73,29 +74,8 @@ export default function Hero() {
   const [totalSaled, setTotalSaled] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
-
-  const toggleOpen = () => {
-    open();
-  };
-
-  const countdownComplete = () => {
-    setIsFinished(false);
-  };
-
-  useEffect(() => {
-    const getPrice = async () => {
-      let tokenPrice = Number(await presaleContract.ethBuyHelper(1e10)) / 1e10;
-      setTokePrice(tokenPrice);
-
-      let tokenUsdtPrice =
-        Number(await presaleContract.usdtBuyHelper(1e10)) / 1e10;
-      setTokeUsdtPrice(tokenUsdtPrice);
-
-      console.log("token price", tokenPrice);
-      console.log("token usdt price", tokenUsdtPrice);
-    };
-    getPrice();
-  }, []);
+  const totalGoal = 1000000; // L'objectif total, par exemple 1 000 000 000 $
+  const progress = (totalSaled / totalGoal) * 100; // Calcul de la progression en pourcentage
 
   const fetchBalance = async (url: string, decimals: number = 18) => {
     try {
@@ -112,90 +92,13 @@ export default function Hero() {
     }
   };
 
-  useEffect(() => {
-    setBalanceETH(null);
-    setBalanceBNB(null);
-    setBalanceUSDT_ETH(null);
-    setBalanceUSDT_BNB(null);
+  const toggleOpen = () => {
+    open();
+  };
 
-    if (address) {
-      const apiKeyETH = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
-      const apiKeyBSC = "HKDUN68PC45B9SK7XI1CW8VNQCG127HMY9";
-      let urlETH, urlUSDT, tokenAddressUSDT;
-
-        if (chainId === 1) { // Ethereum
-          urlETH = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyETH}`;
-          tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-          urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyETH}`;
-
-          fetchBalance(urlETH, 18).then(balanceInEther => {
-              setBalanceETH(balanceInEther ? parseFloat(balanceInEther) : null);
-          });
-          fetchBalance(urlUSDT, 6).then(balanceInUSDT => { // USDT a 6 décimales sur Ethereum
-              setBalanceUSDT_ETH(balanceInUSDT ? parseFloat(balanceInUSDT) : null);
-          });
-        } else if (chainId === 56) { // Binance Smart Chain
-          urlETH = `https://api.bscscan.com/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
-          tokenAddressUSDT = "0x55d398326f99059fF775485246999027B3197955";
-          urlUSDT = `https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
-
-          fetchBalance(urlETH, 18).then(balanceInBNB => {
-              setBalanceBNB(balanceInBNB ? parseFloat(balanceInBNB) : null);
-          });
-          fetchBalance(urlUSDT, 18).then(balanceInUSDT_BNB => { // USDT a 18 décimales sur BSC
-            setBalanceUSDT_BNB(balanceInUSDT_BNB ? parseFloat(balanceInUSDT_BNB) : null);
-          });
-        } else {
-          // Gérer les autres chaînes ou les erreurs ici
-        }
-      };
-
-  }, [address, chainId]);
-
-  useEffect(() => {
-      TagManager.dataLayer({
-        dataLayer: {
-          event: 'walletInfo',
-          walletAddress: address,
-          walletBalanceETH: balanceETH,
-          walletBalanceBNB: balanceBNB,
-          walletBalanceUSDT: balanceUSDT_ETH,
-          walletBalanceUSDT_BNB: balanceUSDT_BNB,
-        },
-      });
-  }, [balanceETH, balanceBNB, balanceUSDT_ETH, balanceUSDT_BNB]);
-
-  useEffect(() => {
-    if (address && chainId) {
-      const apiKeyETH = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
-      const apiKeyBSC = "HKDUN68PC45B9SK7XI1CW8VNQCG127HMY9";
-      let urlUSDT, tokenAddressUSDT;
-
-      if (chainId === 1) {
-        tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-        urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyETH}`;
-      } else if (chainId === 56) {
-        tokenAddressUSDT = "0x55d398326f99059fF775485246999027B3197955";
-        urlUSDT = `https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
-      } else {
-        // Logique pour gérer le cas où chainId n'est ni 1 ni 56
-        console.error('Unsupported network');
-        return;
-      }
-
-      if (urlUSDT) {
-        fetch(urlUSDT)
-            .then(response => response.json())
-            .then(data => {
-              const balanceUSDT = data.result;
-              const balanceInUSDT = ethers.utils.formatUnits(balanceUSDT, 6);
-              setUsdtBalance(balanceInUSDT);
-            })
-            .catch(error => console.error('Error fetching wallet balance in USDT:', error));
-      }
-    }
-  }, [address, chainId]);
-
+  const countdownComplete = () => {
+    setIsFinished(false);
+  };
 
   const pushToDataLayer = () => {
     window.dataLayer = window.dataLayer || [];
@@ -214,46 +117,6 @@ export default function Hero() {
       setClaimTokenAmount(tokenAmount);
     }
   };
-
-  useEffect(() => {
-    const getClaimstatus = async () => {
-      let status = await presaleContract.getClaimStatus();
-      setClaim(status);
-    };
-
-    getClaimTokenAmount(address || "");
-    getClaimstatus();
-  }, [address]);
-
-  useEffect(() => {
-    if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-      // Écouter les changements de chaîne
-      window.ethereum.on('chainChanged', (_chainId: string) => {
-        setChainId(parseInt(_chainId, 16));
-      });
-
-      // Récupérer le chainId initial
-      provider.getNetwork().then(network => {
-        setChainId(network.chainId);
-      });
-
-      // Récupérer le solde en ETH
-      if (address) {
-        provider.getBalance(address).then(balance => {
-          setEthBalance(ethers.utils.formatEther(balance));
-        });
-      }
-    }
-
-    // Nettoyage de l'écouteur d'événements
-    return () => {
-      if (window.ethereum) {
-        window.ethereum.removeListener('chainChanged', () => {});
-      }
-    };
-  }, [address]);
 
   const onPayAmountChange = (e: any) => {
     try {
@@ -274,8 +137,6 @@ export default function Hero() {
     }
   };
 
-  const signer = useEthersSigner();
-  console.log("signer", signer);
   const onBuy = async () => {
     try {
       if (payAmount <= 0) {
@@ -298,7 +159,8 @@ export default function Hero() {
           presaleContract.address,
           payAmount * 1e6
         );
-        await presaleContract.buyWithUSDT(payAmount * 1e6);
+        {chainId === 1 && await presaleContract.buyWithUSDT(payAmount * 1e6);}
+        {chainId === 56 && await presaleContract.buyWithUSDT(payAmount * 1e18);}
       }
       NotificationManager.success("Buy Success");
     } catch (error: any) {
@@ -347,6 +209,9 @@ export default function Hero() {
     }
   };
 
+  console.log("Address presale : ");
+  console.log(Contrats.presale.address);
+
   const renderButton = () => {
     if (chainId === 56) { // Chain ID de Binance Smart Chain
       return <><img
@@ -377,7 +242,7 @@ export default function Hero() {
 
   const renderBalance = () => {
     if (tapState === 1) {
-      return chainId === 56 ? <>BNB Balance: {balanceBNB}</> : <>ETH Balance: {balanceETH}</>;
+      return chainId === 56 ? <>BNB Balance: {ethBalance}</> : <>ETH Balance: {ethBalance}</>;
     } else if (tapState === 2) {
       return chainId === 56 ? <>USDT Balance: {balanceUSDT_BNB}</> : <>USDT Balance: {balanceUSDT_ETH}</>;
     }
@@ -398,7 +263,6 @@ export default function Hero() {
       />;
     }
   };
-
 
   const renderButtonSwitchNetwork = () => {
     if (chainId === 1) { // Chain ID de Binance Smart Chain
@@ -441,9 +305,156 @@ export default function Hero() {
     }
   };
 
-  const totalGoal = 1000000; // L'objectif total, par exemple 1 000 000 000 $
-  const progress = (totalSaled / totalGoal) * 100; // Calcul de la progression en pourcentage
+  // Pour récuperer le prix de la presale
+  useEffect(() => {
+    const getPrice = async () => {
+      let tokenPrice = Number(await presaleContract.ethBuyHelper(1e10)) / 1e10;
+      setTokePrice(tokenPrice);
 
+      let tokenUsdtPrice =
+          Number(await presaleContract.usdtBuyHelper(1e10)) / 1e10;
+      setTokeUsdtPrice(tokenUsdtPrice);
+
+      console.log("token price", tokenPrice);
+      console.log("token usdt price", tokenUsdtPrice);
+    };
+    getPrice();
+  }, []);
+
+  // Pour check les infos des wallets qui se connectent à la dapp
+  useEffect(() => {
+    setBalanceETH(null);
+    setBalanceBNB(null);
+    setBalanceUSDT_ETH(null);
+    setBalanceUSDT_BNB(null);
+
+    if (address) {
+      const apiKeyETH = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
+      const apiKeyBSC = "HKDUN68PC45B9SK7XI1CW8VNQCG127HMY9";
+      let urlETH, urlUSDT, tokenAddressUSDT;
+
+      if (chainId === 1) { // Ethereum
+        urlETH = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyETH}`;
+        tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+        urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyETH}`;
+
+        fetchBalance(urlETH, 18).then(balanceInEther => {
+          setBalanceETH(balanceInEther ? parseFloat(balanceInEther) : null);
+        });
+        fetchBalance(urlUSDT, 6).then(balanceInUSDT => { // USDT a 6 décimales sur Ethereum
+          setBalanceUSDT_ETH(balanceInUSDT ? parseFloat(balanceInUSDT) : null);
+        });
+      } else if (chainId === 56) { // Binance Smart Chain
+        urlETH = `https://api.bscscan.com/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
+        tokenAddressUSDT = "0x55d398326f99059fF775485246999027B3197955";
+        urlUSDT = `https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
+
+        fetchBalance(urlETH, 18).then(balanceInBNB => {
+          setBalanceBNB(balanceInBNB ? parseFloat(balanceInBNB) : null);
+        });
+        fetchBalance(urlUSDT, 18).then(balanceInUSDT_BNB => { // USDT a 18 décimales sur BSC
+          setBalanceUSDT_BNB(balanceInUSDT_BNB ? parseFloat(balanceInUSDT_BNB) : null);
+        });
+      } else {
+        // Gérer les autres chaînes ou les erreurs ici
+      }
+    };
+
+  }, [address, chainId]);
+
+  // Pour check les infos des wallets qui se connectent à la dapp
+  useEffect(() => {
+    if (address && chainId) {
+      const apiKeyETH = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
+      const apiKeyBSC = "HKDUN68PC45B9SK7XI1CW8VNQCG127HMY9";
+      let urlUSDT, tokenAddressUSDT;
+
+      if (chainId === 1) {
+        tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+        urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyETH}`;
+      } else if (chainId === 56) {
+        tokenAddressUSDT = "0x55d398326f99059fF775485246999027B3197955";
+        urlUSDT = `https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
+      } else {
+        // Logique pour gérer le cas où chainId n'est ni 1 ni 56
+        console.error('Unsupported network');
+        return;
+      }
+
+      if (urlUSDT) {
+        fetch(urlUSDT)
+            .then(response => response.json())
+            .then(data => {
+              const balanceUSDT = data.result;
+              const balanceInUSDT = ethers.utils.formatUnits(balanceUSDT, 6);
+              setUsdtBalance(balanceInUSDT);
+            })
+            .catch(error => console.error('Error fetching wallet balance in USDT:', error));
+      }
+    }
+  }, [address, chainId]);
+
+  // On pousse les infos dans le data layer
+  useEffect(() => {
+    TagManager.dataLayer({
+      dataLayer: {
+        event: 'walletInfo',
+        walletAddress: address,
+        walletBalanceETH: balanceETH,
+        walletBalanceBNB: balanceBNB,
+        walletBalanceUSDT: balanceUSDT_ETH,
+        walletBalanceUSDT_BNB: balanceUSDT_BNB,
+      },
+    });
+  }, [balanceETH, balanceBNB, balanceUSDT_ETH, balanceUSDT_BNB]);
+
+  useEffect(() => {
+    const getClaimstatus = async () => {
+      let status = await presaleContract.getClaimStatus();
+      setClaim(status);
+    };
+
+    getClaimTokenAmount(address || "");
+    getClaimstatus();
+  }, [address]);
+
+  useEffect(() => {
+    const handleChainChanged = (_chainId: string) => {
+      const newChainId = parseInt(_chainId, 16);
+      setChainId(newChainId);
+
+      // Recréer le provider avec le nouveau réseau
+      const newProvider = new ethers.providers.Web3Provider(window.ethereum);
+      if (address) {
+        newProvider.getBalance(address).then(balance => {
+          setEthBalance(ethers.utils.formatEther(balance));
+        });
+      }
+    };
+
+    if (window.ethereum) {
+      // Écouter les changements de chaîne
+      window.ethereum.on('chainChanged', handleChainChanged);
+
+      // Créer le provider initial
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      provider.getNetwork().then(network => {
+        setChainId(network.chainId);
+        if (address) {
+          provider.getBalance(address).then(balance => {
+            setEthBalance(ethers.utils.formatEther(balance));
+          });
+        }
+      });
+    }
+
+    // Nettoyage de l'écouteur d'événements
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener('chainChanged', handleChainChanged);
+      }
+    };
+  }, [address]); // Dépendances du useEffect
 
   return (
     <div className="pt-[30px] px-0 pb-[60px] hero-container">
@@ -470,9 +481,9 @@ export default function Hero() {
                   </div>
                   {/* Étiquette avec la progression en $ */}
                   <div className="absolute w-full top-0 flex justify-center items-center h-full">
-        <span className="font-semibold text-[#22361B] text-[15px]">
-          USDT Raised: ${Math.floor(totalSaled).toLocaleString('en-US')}/${totalGoal.toLocaleString('en-US')}
-        </span>
+                    <span className="font-semibold text-[#22361B] text-[15px]">
+                      USDT Raised: ${Math.floor(totalSaled).toLocaleString('en-US')}/${totalGoal.toLocaleString('en-US')}
+                    </span>
                   </div>
                 </div>
                 <div className="relative">
@@ -683,7 +694,7 @@ export default function Hero() {
                         </span>
                       </div>
 
-                      <div className="relative h-[50px] flex flex-row items-center px-[5px] bg-bgLight rounded-md">
+                      <div className="relative h-[50px] flex flex-row items-center px-[5px] bg-bgLight rounded-md text-[#22361B]">
                         <input
                           type="number"
                           value={claimTokenAmount}
@@ -701,23 +712,24 @@ export default function Hero() {
                       </div>
                     </div>
 
-                    {!isClaim && (
-                      <div className="text-[13px] text-center text-yellow-300-500">
-                        🛈 Stake will be available soon !
-                      </div>
+                    {isClaim && (
+                        <div className="text-[13px] text-center text-yellow-300-500">
+                          {chainId === 1 && "🛈 Stake will be available soon !"}
+                          {chainId === 56 && "🛈 Claim on ETH & Stake will be available soon !"}
+                        </div>
                     )}
 
-                    {address && (
-                      <div className="flex flex-row justify-center  items-center">
-                        <div
-                          onClick={onClaim}
-                          className={`w-[70%] py-[10px] bg-[#e8b67e] text-center rounded-full cursor-pointer hover:opacity-75 select-none ${
-                            isClaim ? "bg-[#e8b67e]" : "bg-[#e8b67e]"
-                          }`}
-                        >
-                          <span className="text-[#22361B] text-[15px]"><b>Claim</b></span>
+                    {address && chainId === 1 && (
+                        <div className="flex flex-row justify-center items-center">
+                          <div
+                              onClick={onClaim}
+                              className={`w-[70%] py-[10px] bg-[#e8b67e] text-center rounded-full cursor-pointer hover:opacity-75 select-none ${
+                                  isClaim ? "bg-[#e8b67e]" : "bg-[#e8b67e]"
+                              }`}
+                          >
+                            <span className="text-[#22361B] text-[15px]"><b>Claim</b></span>
+                          </div>
                         </div>
-                      </div>
                     )}
                   </>
                 )}

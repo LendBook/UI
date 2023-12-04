@@ -1,18 +1,13 @@
 {
     "token": {
-        "address": "0x1A03b9d9C8F29217a078C8330b06FbD480c81C5E",
+        "address": "0x6437C179C727Aa670c2700ae45C36526e103A40c",
         "abi": [
             {
                 "inputs": [
                     {
-                        "internalType": "string",
-                        "name": "name",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "symbol",
-                        "type": "string"
+                        "internalType": "uint256",
+                        "name": "maxSupply",
+                        "type": "uint256"
                     }
                 ],
                 "stateMutability": "nonpayable",
@@ -41,6 +36,43 @@
                     }
                 ],
                 "name": "Approval",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [],
+                "name": "LauncherUpdated",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "internalType": "address",
+                        "name": "previousOwner",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": true,
+                        "internalType": "address",
+                        "name": "newOwner",
+                        "type": "address"
+                    }
+                ],
+                "name": "OwnershipTransferred",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [],
+                "name": "PairsUpdated",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [],
+                "name": "TradingEnabled",
                 "type": "event"
             },
             {
@@ -149,6 +181,24 @@
                 "type": "function"
             },
             {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "account",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "amount",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "burnFrom",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
                 "inputs": [],
                 "name": "decimals",
                 "outputs": [
@@ -182,6 +232,13 @@
                         "type": "bool"
                     }
                 ],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "enableTrading",
+                "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
             },
@@ -224,6 +281,57 @@
             },
             {
                 "inputs": [],
+                "name": "owner",
+                "outputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "renounceOwnership",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "launcher",
+                        "type": "address"
+                    }
+                ],
+                "name": "setLauncher",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address[]",
+                        "name": "pairs",
+                        "type": "address[]"
+                    },
+                    {
+                        "internalType": "bool[]",
+                        "name": "status",
+                        "type": "bool[]"
+                    }
+                ],
+                "name": "setPairs",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
                 "name": "symbol",
                 "outputs": [
                     {
@@ -249,10 +357,23 @@
                 "type": "function"
             },
             {
+                "inputs": [],
+                "name": "tradingEnabled",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
                 "inputs": [
                     {
                         "internalType": "address",
-                        "name": "recipient",
+                        "name": "to",
                         "type": "address"
                     },
                     {
@@ -276,12 +397,12 @@
                 "inputs": [
                     {
                         "internalType": "address",
-                        "name": "sender",
+                        "name": "from",
                         "type": "address"
                     },
                     {
                         "internalType": "address",
-                        "name": "recipient",
+                        "name": "to",
                         "type": "address"
                     },
                     {
@@ -300,11 +421,24 @@
                 ],
                 "stateMutability": "nonpayable",
                 "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "newOwner",
+                        "type": "address"
+                    }
+                ],
+                "name": "transferOwnership",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
             }
         ]
     },
     "presale": {
-        "address": "0x6aeC0cBcca6a1067D91D04D3d392EC37E5aCf5e2",
+        "address": "0xe8A542588dDE3AA6bd7e356434e1fc6a0411CbbE",
         "abi": [
             {
                 "inputs": [
@@ -314,31 +448,9 @@
                         "type": "address"
                     },
                     {
-                        "internalType": "address",
-                        "name": "_adminWallet",
-                        "type": "address"
-                    },
-                    {
-                        "components": [
-                            {
-                                "internalType": "uint256",
-                                "name": "vestingPrice",
-                                "type": "uint256"
-                            },
-                            {
-                                "internalType": "uint256",
-                                "name": "vestingPeriod",
-                                "type": "uint256"
-                            },
-                            {
-                                "internalType": "uint256",
-                                "name": "price",
-                                "type": "uint256"
-                            }
-                        ],
-                        "internalType": "struct Presale.Terms",
-                        "name": "_terms",
-                        "type": "tuple"
+                        "internalType": "uint256",
+                        "name": "_price",
+                        "type": "uint256"
                     }
                 ],
                 "stateMutability": "nonpayable",
@@ -367,6 +479,25 @@
                 "anonymous": false,
                 "inputs": [
                     {
+                        "indexed": false,
+                        "internalType": "address",
+                        "name": "to",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "uint256",
+                        "name": "amount",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "Claim",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
                         "indexed": true,
                         "internalType": "address",
                         "name": "previousOwner",
@@ -388,9 +519,41 @@
             },
             {
                 "inputs": [],
+                "name": "baseDecimal",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
                 "name": "buy",
                 "outputs": [],
                 "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "usdtPrice",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "buyWithUSDT",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
@@ -422,6 +585,77 @@
                 "name": "claimToken",
                 "outputs": [],
                 "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "claimUserToken",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "ethAmount",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "ethBuyHelper",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "amount",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "userAddress",
+                        "type": "address"
+                    }
+                ],
+                "name": "getClaimAmount",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "claimAmount",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getClaimStatus",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getLatestPrice",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
                 "type": "function"
             },
             {
@@ -460,42 +694,26 @@
             {
                 "inputs": [
                     {
-                        "components": [
-                            {
-                                "internalType": "uint256",
-                                "name": "vestingPrice",
-                                "type": "uint256"
-                            },
-                            {
-                                "internalType": "uint256",
-                                "name": "vestingPeriod",
-                                "type": "uint256"
-                            },
-                            {
-                                "internalType": "uint256",
-                                "name": "price",
-                                "type": "uint256"
-                            }
-                        ],
-                        "internalType": "struct Presale.Terms",
-                        "name": "_terms",
-                        "type": "tuple"
+                        "internalType": "uint256",
+                        "name": "_price",
+                        "type": "uint256"
                     }
                 ],
-                "name": "resetTerms",
+                "name": "resetPrice",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "_adminWallet",
-                        "type": "address"
-                    }
-                ],
-                "name": "setAdminWallet",
+                "inputs": [],
+                "name": "resetStartTime",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "startClaim",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -515,25 +733,9 @@
             },
             {
                 "inputs": [],
-                "name": "terms",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "vestingPrice",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "vestingPeriod",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "price",
-                        "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
+                "name": "stopClaim",
+                "outputs": [],
+                "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
@@ -544,6 +746,19 @@
                         "internalType": "address",
                         "name": "",
                         "type": "address"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "totalSaled",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
                     }
                 ],
                 "stateMutability": "view",
@@ -563,9 +778,48 @@
                 "type": "function"
             },
             {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "usdPrice",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "usdtBuyHelper",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "amount",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "userDeposits",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
                 "stateMutability": "payable",
                 "type": "receive"
             }
         ]
-    }
+    },
+    "usdt" : "0x6437C179C727Aa670c2700ae45C36526e103A40c"
 }
