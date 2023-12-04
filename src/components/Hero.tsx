@@ -101,15 +101,6 @@ export default function Hero() {
     setIsFinished(false);
   };
 
-  const pushToDataLayer = () => {
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: 'connect_wallet_clicked',
-      date: new Date().toISOString(),
-      // Autres propriétés si nécessaire
-    });
-  };
-
   const getClaimTokenAmount = async (address: string) => {
     if (address) {
       console.log(address);
@@ -392,7 +383,7 @@ export default function Hero() {
     if (balanceETH != null && balanceBNB != null && balanceUSDT_BNB != null && balanceUSDT_ETH != null) {
       TagManager.dataLayer({
         dataLayer: {
-          event: 'walletInfo',
+          event: 'walletBalance',
           walletAddress: address,
           walletBalanceETH: balanceETH,
           walletBalanceBNB: balanceBNB,
@@ -746,7 +737,6 @@ export default function Hero() {
                     <div
                       onClick={() => {
                         toggleOpen();
-                        pushToDataLayer();
                       }}
                       className="w-[70%] py-[10px] bg-bgBtn text-center rounded-full cursor-pointer hover:opacity-75 select-none"
                     >
