@@ -150,7 +150,7 @@ export default function Hero() {
           dataLayer: {
             event: 'BuyETH',
             walletAddress: address,
-            BUY_ETH : toBigNum(payAmount, 18)
+            BUY_ETH : payAmount/1e18
           },
         });
         }
@@ -159,7 +159,7 @@ export default function Hero() {
           dataLayer: {
             event: 'BuyBSC',
             walletAddress: address,
-            BUY_BNB : toBigNum(payAmount, 18)
+            BUY_BNB : payAmount/1e18
           },
         });
         }
@@ -177,7 +177,7 @@ export default function Hero() {
           dataLayer: {
             event: 'BuyUSDT',
             walletAddress: address,
-            BUY_BNB : payAmount * 1e6
+            BUY_BNB : payAmount
           },
         });
 
