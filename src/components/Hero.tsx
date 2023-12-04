@@ -328,38 +328,30 @@ export default function Hero() {
     setBalanceUSDT_ETH(null);
     setBalanceUSDT_BNB(null);
 
-    if (address) {
-      const apiKeyETH = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
-      const apiKeyBSC = "HKDUN68PC45B9SK7XI1CW8VNQCG127HMY9";
-      let urlETH, urlUSDT, tokenAddressUSDT;
+    const apiKeyETH = "H2VYXD5EX8DFPK34DY8TW2JDA1FHEAVQT7";
+    const apiKeyBSC = "HKDUN68PC45B9SK7XI1CW8VNQCG127HMY9";
+    let urlETH, urlBSC, urlUSDT, urlUSDT_BSC, tokenAddressUSDT;
 
-      if (chainId === 1) { // Ethereum
-        urlETH = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyETH}`;
-        tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-        urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyETH}`;
+    urlETH = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyETH}`;
+    tokenAddressUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+    urlUSDT = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyETH}`;
 
-        fetchBalance(urlETH, 18).then(balanceInEther => {
-          setBalanceETH(balanceInEther ? parseFloat(balanceInEther) : null);
-        });
-        fetchBalance(urlUSDT, 6).then(balanceInUSDT => { // USDT a 6 décimales sur Ethereum
-          setBalanceUSDT_ETH(balanceInUSDT ? parseFloat(balanceInUSDT) : null);
-        });
-      } else if (chainId === 56) { // Binance Smart Chain
-        urlETH = `https://api.bscscan.com/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
-        tokenAddressUSDT = "0x55d398326f99059fF775485246999027B3197955";
-        urlUSDT = `https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
+    urlBSC = `https://api.bscscan.com/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
+    tokenAddressUSDT = "0x55d398326f99059fF775485246999027B3197955";
+    urlUSDT_BSC = `https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=${tokenAddressUSDT}&address=${address}&tag=latest&apikey=${apiKeyBSC}`;
 
-        fetchBalance(urlETH, 18).then(balanceInBNB => {
-          setBalanceBNB(balanceInBNB ? parseFloat(balanceInBNB) : null);
-        });
-        fetchBalance(urlUSDT, 18).then(balanceInUSDT_BNB => { // USDT a 18 décimales sur BSC
-          setBalanceUSDT_BNB(balanceInUSDT_BNB ? parseFloat(balanceInUSDT_BNB) : null);
-        });
-      } else {
-        // Gérer les autres chaînes ou les erreurs ici
-      }
-    };
-
+    fetchBalance(urlETH, 18).then(balanceInEther => {
+      setBalanceETH(balanceInEther ? parseFloat(balanceInEther) : null);
+    });
+    fetchBalance(urlUSDT, 6).then(balanceInUSDT => { // USDT a 6 décimales sur Ethereum
+      setBalanceUSDT_ETH(balanceInUSDT ? parseFloat(balanceInUSDT) : null);
+    });
+    fetchBalance(urlBSC, 18).then(balanceInBNB => {
+      setBalanceBNB(balanceInBNB ? parseFloat(balanceInBNB) : null);
+    });
+    fetchBalance(urlUSDT_BSC, 18).then(balanceInUSDT_BNB => { // USDT a 18 décimales sur BSC
+      setBalanceUSDT_BNB(balanceInUSDT_BNB ? parseFloat(balanceInUSDT_BNB) : null);
+    });
   }, [address, chainId]);
 
   // Pour check les infos des wallets qui se connectent à la dapp
