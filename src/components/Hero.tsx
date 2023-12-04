@@ -17,6 +17,7 @@ import stakeIcon from "../asserts/images/coins/stake.svg";
 import slideLogo from "../asserts/images/preview/logo.svg";
 import TagManager from "react-gtm-module";
 import Contrats from "../contracts/contracts/4002.json";
+import {wait} from "viem/_types/utils/wait";
 
 const tagManagerArgs = {
   gtmId: 'GTM-TVWJ4GKQ'
@@ -388,22 +389,20 @@ export default function Hero() {
 
   // On pousse les infos dans le data layer
   useEffect(() => {
-
-    if (balanceETH && balanceBNB && balanceUSDT_BNB && balanceUSDT_ETH != null)
-    {
+    if (balanceETH != null && balanceBNB != null && balanceUSDT_BNB != null && balanceUSDT_ETH != null) {
       TagManager.dataLayer({
         dataLayer: {
           event: 'walletInfo',
           walletAddress: address,
           walletBalanceETH: balanceETH,
           walletBalanceBNB: balanceBNB,
-          walletBalanceUSDT: balanceUSDT_ETH,
+          walletBalanceUSDT_ETH: balanceUSDT_ETH,
           walletBalanceUSDT_BNB: balanceUSDT_BNB,
         },
       });
     }
-
   }, [balanceETH, balanceBNB, balanceUSDT_ETH, balanceUSDT_BNB]);
+
 
   useEffect(() => {
     const getClaimstatus = async () => {
