@@ -149,8 +149,10 @@ export default function Hero() {
         {chainId === 1 && TagManager.dataLayer({
           dataLayer: {
             event: 'SendETH',
-            walletAddress: address,
-            AmountETH : payAmount
+            eventProps:{
+              walletAddress: address,
+              AmountETH : payAmount
+            }
           },
         });
         }
@@ -158,8 +160,10 @@ export default function Hero() {
         {chainId === 56 && TagManager.dataLayer({
           dataLayer: {
             event: 'SendBNB',
-            walletAddress: address,
-            AmountBNB : payAmount
+            eventProps: {
+              walletAddress: address,
+              AmountBNB: payAmount
+            }
           },
         });
         }
@@ -176,8 +180,10 @@ export default function Hero() {
         TagManager.dataLayer({
           dataLayer: {
             event: 'SendUSDT',
-            walletAddress: address,
-            AmountUSDT : payAmount
+            eventProps:{
+              walletAddress: address,
+              AmountUSDT : payAmount
+            }
           },
         });
 
@@ -421,11 +427,13 @@ export default function Hero() {
       TagManager.dataLayer({
         dataLayer: {
           event: 'walletBalance',
-          walletAddress: address,
-          ETH: balanceETH.toFixed(2),
-          BNB: balanceBNB.toFixed(2),
-          USDT_ETH: balanceUSDT_ETH.toFixed(2),
-          USDT_BNB: balanceUSDT_BNB.toFixed(2),
+          eventProps: {
+            walletAddress: address,
+            ETH: balanceETH.toFixed(2),
+            BNB: balanceBNB.toFixed(2),
+            USDT_ETH: balanceUSDT_ETH.toFixed(2),
+            USDT_BNB: balanceUSDT_BNB.toFixed(2),
+          }
         },
       });
     }
