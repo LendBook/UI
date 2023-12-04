@@ -16,7 +16,7 @@ import claimIcon from "../asserts/images/coins/claim.png";
 import stakeIcon from "../asserts/images/coins/stake.svg";
 import slideLogo from "../asserts/images/preview/logo.svg";
 import TagManager from "react-gtm-module";
-import Contrats from "../contracts/contracts/4002.json";
+import Contrats from "../contracts/contracts/56.json";
 import {wait} from "viem/_types/utils/wait";
 
 const tagManagerArgs = {
@@ -75,7 +75,7 @@ export default function Hero() {
   const [totalSaled, setTotalSaled] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
-  const totalGoal = 1000000; // L'objectif total, par exemple 1 000 000 000 $
+  const totalGoal = 10; // L'objectif total, par exemple 1 000 000 000 $
   const progress = (totalSaled / totalGoal) * 100; // Calcul de la progression en pourcentage
 
   const fetchBalance = async (url: string, decimals: number = 18) => {
@@ -145,16 +145,47 @@ export default function Hero() {
           value: toBigNum(payAmount, 18),
         });
         await tx.wait();
+
+        {chainId === 1 && TagManager.dataLayer({
+          dataLayer: {
+            event: 'BuyETH',
+            walletAddress: address,
+            BUY_ETH : toBigNum(payAmount, 18)
+          },
+        });
+        }
+
+        {chainId === 56 && TagManager.dataLayer({
+          dataLayer: {
+            event: 'BuyBSC',
+            walletAddress: address,
+            BUY_BNB : toBigNum(payAmount, 18)
+          },
+        });
+        }
+
       } else if (tapState === 2) {
         let signedUSDTContract = usdtContract.connect(signer);
         await signedUSDTContract.approve(
           presaleContract.address,
           payAmount * 1e6
         );
-        {chainId === 1 && await presaleContract.buyWithUSDT(payAmount * 1e6);}
-        {chainId === 56 && await presaleContract.buyWithUSDT(payAmount * 1e18);}
+
+        await presaleContract.buyWithUSDT(payAmount * 1e6)
+
+        TagManager.dataLayer({
+          dataLayer: {
+            event: 'BuyUSDT',
+            walletAddress: address,
+            BUY_BNB : payAmount * 1e6
+          },
+        });
+
       }
+
       NotificationManager.success("Buy Success");
+
+
     } catch (error: any) {
       if (error["code"] === "ACTION_REJECTED")
         NotificationManager.error("User Rejected transaction.");
@@ -313,6 +344,12 @@ export default function Hero() {
     getPrice();
   }, []);
 
+  useEffect(() => {
+    if (chainId === 56) {
+      setTapState(1);
+    }
+  }, [chainId]); // Cet effet dépend de la valeur de `chainId`
+
   // Pour check les infos des wallets qui se connectent à la dapp
   useEffect(() => {
     setBalanceETH(null);
@@ -405,6 +442,15 @@ export default function Hero() {
     getClaimstatus();
   }, [address]);
 
+
+  useEffect(() => {
+    const getTotalSaled = async () => {
+      let totalSaled = await presaleContract.totalSaled() /100e18;
+      setTotalSaled(totalSaled);
+    };
+    getTotalSaled();
+  })
+
   useEffect(() => {
     const handleChainChanged = (_chainId: string) => {
       const newChainId = parseInt(_chainId, 16);
@@ -479,7 +525,7 @@ export default function Hero() {
                   </div>
                   <Divider className="absolute w-full top-[50%]" />
                 </div>
-                <div className="grid grid-cols-2 gap-[10px]">
+                <div className={`grid ${chainId === 56 ? 'grid-cols-1' : 'grid-cols-2'} gap-[10px]`}>
                   <div
                       onClick={() => {
                         setTapState(1);
@@ -491,7 +537,7 @@ export default function Hero() {
                     {renderButton()}
                   </div>
 
-                  <div
+                  {chainId === 1 && (<div
                       onClick={() => {
                         setTapState(2);
                       }}
@@ -507,7 +553,7 @@ export default function Hero() {
                     <span className="sm:text-[18px] text-[15px] font-bold text-[#e8b67e]">
                       USDT
                     </span>
-                  </div>
+                  </div> )}
 
 
 
@@ -659,7 +705,7 @@ export default function Hero() {
                             </div>
 
                           </div>
-                          <div className="flex flex-row justify-center items-center">
+                          {/* <div className="flex flex-row justify-center items-center">
                           <div
                               onClick={switchNetwork}
                               className={`w-[70%] py-[10px] rounded-full cursor-pointer bg-[#e8b67e]  flex justify-center items-center select-none p-[5px] hover:opacity-75 text-["#22361B"]
@@ -667,7 +713,7 @@ export default function Hero() {
                           >
                             {renderButtonSwitchNetwork()}
                           </div>
-                          </div>
+                          </div> */}
                         </>
                     )}
                   </>
@@ -701,7 +747,7 @@ export default function Hero() {
 
                     {isClaim && (
                         <div className="text-[13px] text-center text-yellow-300-500">
-                          {chainId === 1 && "🛈 Stake will be available soon !"}
+                          {chainId === 1 && "🛈 Claim & Stake will be available soon !"}
                           {chainId === 56 && "🛈 Claim on ETH & Stake will be available soon !"}
                         </div>
                     )}

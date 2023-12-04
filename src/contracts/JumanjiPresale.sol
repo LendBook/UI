@@ -160,7 +160,7 @@ contract JumanjiPresale is Claimable {
     address aggregatorInterface = 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419;
     address USDTInterface = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
 
-    uint256 public baseDecimal = 1000000000000000000; // 1000000
+    uint256 public baseDecimal = 1000000; // 1000000
 
     mapping(address => uint256) public userDeposits;
 
@@ -202,7 +202,7 @@ contract JumanjiPresale is Claimable {
     function ethBuyHelper(
         uint256 ethAmount
     ) public view returns (uint256 amount) {
-        amount = ethAmount * getLatestPrice() * price/(1e18  * 10 **18) ; // 1e6
+        amount = ethAmount * getLatestPrice() * price/(1e6  * 10 **18) ; // 1e6
     }
 
     function resetPrice(uint256 _price) public onlyOwner {
