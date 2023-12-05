@@ -14,7 +14,7 @@ export default function How() {
     <section className="how bg-[#e8b67e]" id="how-to-buy">
       <div className="how__container">
         <div className="how__wrap">
-          <h2 className="how__title section-title">How to Buy JUMANJI on ETH</h2>
+          <h2 className="how__title section-title">How to Buy JUMANJI</h2>
           {/* <div className="how__info">
             <p>
               To buy and store JUMANJI tokens, you must have a top-rated,
