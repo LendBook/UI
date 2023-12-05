@@ -548,7 +548,7 @@ export default function Hero() {
                     {renderButton()}
                   </div>
 
-                  {chainId === 1 && (<div
+                  {chainId !== 56 && (<div
                       onClick={() => {
                         setTapState(2);
                       }}
