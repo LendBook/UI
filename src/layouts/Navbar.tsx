@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import { Icon } from "@iconify/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useWeb3Modal } from "@web3modal/react";
@@ -8,7 +8,6 @@ import Container from "../components/Containerr";
 import FilledButton from "../components/buttons/FilledButton";
 import TextIconButton from "../components/buttons/TextIconButton";
 import TextButton from "../components/buttons/TextButton";
-
 import logoImg from "../asserts/images/logo.svg";
 
 import TagManager from 'react-gtm-module'
@@ -221,7 +220,6 @@ export default function Navbar() {
             )}
           </List>
           <div>
-           {/* <GoogleTranslate />*/}
           </div>
         </div>
       </Drawer>

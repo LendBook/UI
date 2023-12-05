@@ -14,6 +14,7 @@ import { NotificationContainer } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 import { Analytics } from '@vercel/analytics/react';
 import Routes from "./routes";
+import ReactAudioPlayer from 'react-audio-player';
 
 const projectId = process.env.REACT_APP_CONNECT_PROJECT_ID || "";
 const chains = [mainnet, bsc, bscTestnet, fantomTestnet];
@@ -35,6 +36,11 @@ function App() {
           <ToastContainer className="!z-[99999]" />
         </WagmiConfig>
         <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+        <ReactAudioPlayer
+            src="./song.mp3"
+            autoPlay
+            controls
+        />
       </Suspense>
       <NotificationContainer />
     </BrowserRouter>
