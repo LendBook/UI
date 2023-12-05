@@ -37,9 +37,9 @@ function App() {
         </WagmiConfig>
         <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
         <ReactAudioPlayer
-            src="./song.mp3"
+            src="song.mp3"
             autoPlay
-            controls
+            loop
         />
       </Suspense>
       <NotificationContainer />

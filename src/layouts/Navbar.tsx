@@ -13,6 +13,7 @@ import logoImg from "../asserts/images/logo.svg";
 import TagManager from 'react-gtm-module'
 import {ethers} from "ethers";
 import GoogleTranslate from "../GoogleTranslate";
+import ReactAudioPlayer from "react-audio-player";
 
 const tagManagerArgs = {
   gtmId: 'GTM-TVWJ4GKQ'
