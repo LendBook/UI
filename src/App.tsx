@@ -39,7 +39,6 @@ function App() {
         <ReactAudioPlayer
             src="song.mp3"
             autoPlay
-            loop
         />
       </Suspense>
       <NotificationContainer />
