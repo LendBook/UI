@@ -536,7 +536,7 @@ export default function Hero() {
                   </div>
                   <Divider className="absolute w-full top-[50%]" />
                 </div>
-                <div className={`grid ${chainId === 56 ? 'grid-cols-1' : 'grid-cols-2'} gap-[10px]`}>
+                <div className={`grid grid-cols-2 gap-[10px]`}>
                   <div
                       onClick={() => {
                         setTapState(1);
@@ -548,11 +548,11 @@ export default function Hero() {
                     {renderButton()}
                   </div>
 
-                  {chainId !== 56 && (<div
+                  {chainId === 1 && (<div
                       onClick={() => {
                         setTapState(2);
                       }}
-                      className={`cursor-pointer bg-[#22361B] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75 ${
+                      className={`cursor-pointer disabled bg-[#22361B] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75 ${
                           tapState === 2 ? "border-[2px] border-[#e8b67e]" : ""
                       }`}
                   >
@@ -564,7 +564,22 @@ export default function Hero() {
                     <span className="sm:text-[18px] text-[15px] font-bold text-[#e8b67e]">
                       USDT
                     </span>
-                  </div> )}
+                  </div>)}
+
+                  {chainId === 56 && (<div
+                      className={`bg-[#22361B] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75 ${
+                          tapState === 2 ? "border-[2px] border-[#e8b67e]" : ""
+                      }`}
+                  >
+                    <img
+                        alt=""
+                        src={usdtIcon}
+                        className="h-[15px] w-[15px] sm:h-[25px] sm:w-[25px]  rounded-full"
+                    />
+                    <span className="sm:text-[18px] text-[15px] font-bold text-[#e8b67e]">
+                      USDT
+                    </span>
+                  </div>)}
 
 
 
