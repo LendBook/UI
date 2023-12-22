@@ -36,7 +36,6 @@ jQuery(document).ready(function ($) {
         .querySelectorAll(selector)
         .forEach((element) => (element.style.transform = transform));
     }
-    moveParallax(".hero__shiba", !1, 0.3, "left");
     moveParallax(".move-right", !0, 0.5, "right");
     moveParallax(".move-left", !0, 0.5, "left");
     moveParallax(".reddit", !1, 0.7, "left");

@@ -36,10 +36,6 @@ function App() {
           <ToastContainer className="!z-[99999]" />
         </WagmiConfig>
         <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
-        <ReactAudioPlayer
-            src="song.mp3"
-            autoPlay
-        />
       </Suspense>
       <NotificationContainer />
     </BrowserRouter>
