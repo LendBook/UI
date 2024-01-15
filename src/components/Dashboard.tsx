@@ -14,6 +14,16 @@ import useIncreaseSize from "../hooks/useIncreaseSize";
 import useChangeLimitPrice from "../hooks/useChangeLimitPrice";
 import useChangePairedPrice from "../hooks/useChangePairedPrice";
 
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import useIncreaseSizeBorrow from "../hooks/useIncreaseSizeBorrow";
+
+
 interface Order {
   id: number;
   order: string;
@@ -42,21 +52,117 @@ export default function Dashboard() {
   const [userOrders, setUserOrders] = useState<Order[]>([]);
   const [userBorrows, setUserBorrows] = useState<Borrow[]>([]);
 
-  const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
+  const [open, setOpen] = useState(false);
+  const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
+
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [openIncreaseSizeDialog, setOpenIncreaseSizeDialog] = useState(false);
+  const [openChangePairedPriceDialog, setOpenChangePairedPriceDialog] = useState(false);
+  const [openChangeLimitPriceDialog, setOpenChangeLimitPriceDialog] = useState(false);
+
   const [expandedBorrow, setExpandedBorrow] = useState<number | null>(null);
-  const [borrowableStates, setBorrowableStates] = useState(userOrders.map(() => true));
 
   const [newLimitPrice, setNewLimitPrice] = useState(0);
   const [newPairedPrice, setNewPairedPrice] = useState(0);
   const [newSize, setNewSize] = useState(0);
+
+  const totalDepositsETH = userOrders.filter(order => order.asset === 'ETH').reduce((sum, order) => sum + parseFloat(order.size), 0);
+  const totalBorrowsETH = userBorrows.filter(borrow => borrow.asset === 'ETH').reduce((sum, borrow) => sum + parseFloat(borrow.size), 0);
+
+  const totalDepositsUSDC = userOrders.filter(order => order.asset === 'USDC').reduce((sum, order) => sum + parseFloat(order.size), 0);
+  const totalBorrowsUSDC = userBorrows.filter(borrow => borrow.asset === 'USDC').reduce((sum, borrow) => sum + parseFloat(borrow.size), 0);
+
 
   // Actions
   const withdraw = useWithdraw();
   const repay = useRepay();
   const changeBorrowable = useChangeBorrowable();
   const increaseSize = useIncreaseSize();
+  const increaseSizeBorrow = useIncreaseSizeBorrow();
   const changeLimitPrice = useChangeLimitPrice();
   const changePairedPrice = useChangePairedPrice();
+
+  const [currentEditingOrderId, setCurrentEditingOrderId] = useState<number | null>(null);
+
+  const [openIncreaseSizeBorrowDialog, setOpenIncreaseSizeBorrowDialog] = useState(false);
+  const [openRepayDialog, setOpenRepayDialog] = useState(false);
+  const [repaySize, setRepaySize] = useState('');
+  const [increaseBorrowSize, setIncreaseBorrowSize] = useState('');
+
+
+  const handleOpenIncreaseSizeBorrowDialog = () => {
+    setOpenIncreaseSizeBorrowDialog(true);
+  };
+
+  const handleCloseIncreaseSizeBorrowDialog = () => {
+    setOpenIncreaseSizeBorrowDialog(false);
+  };
+
+  const handleOpenRepayDialog = () => {
+    setOpenRepayDialog(true);
+  };
+
+  const handleCloseRepayDialog = () => {
+    setOpenRepayDialog(false);
+  };
+
+  const handleSubmitRepay = async () => {
+    // Logique pour soumettre l'action "Repay"
+    handleCloseRepayDialog();
+  };
+
+  const handleSubmitIncreaseSizeBorrow = async () => {
+    // Logique pour soumettre l'action "Increase Size"
+    handleCloseIncreaseSizeBorrowDialog();
+  };
+
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>, order: Order) => {
+    setMenuAnchorEl(event.currentTarget);
+    setCurrentOrder(order); // Assurez-vous que cette fonction est définie
+    setCurrentEditingOrderId(order.id);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
+
+  // Fonctions pour ouvrir et fermer les dialogues
+  const handleOpenIncreaseSizeDialog = () => {
+    setOpenIncreaseSizeDialog(true);
+    handleMenuClose();
+  };
+
+  const handleCloseIncreaseSizeDialog = () => {
+    setOpenIncreaseSizeDialog(false);
+  };
+
+  const handleOpenChangePairedPriceDialog = () => {
+    setOpenChangePairedPriceDialog(true);
+    handleMenuClose();
+  };
+
+  const handleCloseChangePairedPriceDialog = () => {
+    setOpenChangePairedPriceDialog(false);
+  };
+
+  const handleOpenChangeLimitPriceDialog = () => {
+    setOpenChangeLimitPriceDialog(true);
+    handleMenuClose();
+  };
+
+  const handleCloseChangeLimitPriceDialog = () => {
+    setOpenChangeLimitPriceDialog(false);
+  };
+  const handleClickOpen = (order: Order) => {
+    setCurrentOrder(order);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
 
   const handleLimitPriceChange = (e: any) => {
     try {
@@ -106,15 +212,15 @@ export default function Dashboard() {
     }
   };
 
-  const handleAccordionChange = (orderId: number) => {
-    setExpandedOrder((prev) => (prev !== orderId ? orderId : null));
-  };
-
-  const handleAccordionChangeBorrow = (orderId: number) => {
-    setExpandedBorrow((prev) => (prev !== orderId ? orderId : null));
-  };
-
   const handleRepay = async (positionId: number, repaidQuantity: string) => {
+    try {
+      await repay(positionId, repaidQuantity);
+    } catch (error) {
+      console.error("Error : ", error);
+    }
+  };
+
+  const handleInceaseSizeBorrow = async (positionId: number, repaidQuantity: string) => {
     try {
       await repay(positionId, repaidQuantity);
     } catch (error) {
@@ -158,23 +264,23 @@ export default function Dashboard() {
     }
   };
 
-  const handleSubmitChangeLimitPrice = async (orderId: number, price: string) => {
-    try {
-      console.log(orderId);
-      console.log(price);
-      await changeLimitPrice(orderId, price);
-    } catch (error) {
-      console.error("Error : ", error);
+  const handleSubmitChangeLimitPrice = async () => {
+    if (currentEditingOrderId !== null) {
+      try {
+        await changeLimitPrice(currentEditingOrderId, String(newLimitPrice));
+      } catch (error) {
+        console.error("Error : ", error);
+      }
     }
   };
 
-  const handleSubmitChangePairedPrice = async (orderId: number, price: string) => {
-    try {
-      console.log(orderId);
-      console.log(price);
-      await changePairedPrice(orderId, price);
-    } catch (error) {
-      console.error("Error : ", error);
+  const handleSubmitChangePairedPrice = async () => {
+    if (currentEditingOrderId !== null) {
+      try {
+        await changePairedPrice(currentEditingOrderId, String(newPairedPrice));
+      } catch (error) {
+        console.error("Error : ", error);
+      }
     }
   };
 
@@ -191,10 +297,10 @@ export default function Dashboard() {
               const formattedOrder = {
                 id: id,
                 order: order.isBuyOrder ? 'BUY' : 'SELL',
-                size: ethers.utils.formatUnits(order.quantity, 18),
+                size: Number(ethers.utils.formatUnits(order.quantity, 18)).toFixed(2),
                 asset: order.isBuyOrder ? 'USDC' : 'ETH',
-                nextLimitPrice: ethers.utils.formatUnits(order.price, 18),
-                pairedPrice: ethers.utils.formatUnits(order.pairedPrice, 18),
+                nextLimitPrice: Number(ethers.utils.formatUnits(order.price, 18)).toFixed(2),
+                pairedPrice: Number(ethers.utils.formatUnits(order.pairedPrice, 18)).toFixed(2),
                 isBorrowable: order.isBorrowable,
                 lendRatio: 0,
                 apy: 0
@@ -212,8 +318,8 @@ export default function Dashboard() {
               const formattedBorrow = {
                 id: id,
                 asset: 'ETH',
-                size: ethers.utils.formatUnits(borrow.borrowedAssets, 18),
-                closingPrice: ethers.utils.formatUnits(0, 18),
+                size: Number(ethers.utils.formatUnits(borrow.borrowedAssets, 18)).toFixed(2),
+                closingPrice: Number(ethers.utils.formatUnits(0, 18)).toFixed(2),
                 apy: 0
               };
               borrowsDetails.push(formattedBorrow);
@@ -284,90 +390,117 @@ export default function Dashboard() {
                         >
                           Withdraw
                         </button>
-                        <Button
+                        {/*<Button
                             onClick={() => handleAccordionChange(order.id)}
                         >
                           <ExpandMoreIcon />
+                        </Button>*/}
+                        <Button
+                            aria-controls="simple-menu"
+                            aria-haspopup="true"
+                            onClick={(e) => handleMenuClick(e, order)}
+                        >
+                          •••
                         </Button>
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={menuAnchorEl}
+                            keepMounted
+                            open={Boolean(menuAnchorEl)}
+                            onClose={handleMenuClose}
+                            MenuListProps={{
+                              style: {
+                                backgroundColor: '#161617',
+                                color: 'white',
+                              },
+                            }}
+                        >
+                          <MenuItem onClick={handleOpenIncreaseSizeDialog}>Increase Size</MenuItem>
+                          <MenuItem onClick={handleOpenChangePairedPriceDialog}>Change Paired Price</MenuItem>
+                          <MenuItem onClick={handleOpenChangeLimitPriceDialog}>Change Limit Price</MenuItem>
+                        </Menu>
+                        <Dialog open={openIncreaseSizeDialog} onClose={handleCloseIncreaseSizeDialog}>
+                          <DialogTitle style={{ backgroundColor: '#161617', color: 'white' }}>Increase Size</DialogTitle>
+                          <DialogContent style={{ backgroundColor: '#161617', color: 'white' }}>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                label="Increse Size"
+                                type="number"
+                                fullWidth
+                                variant="outlined"
+                                value={increaseSize}
+                                onChange={handleSizeChange}
+                                InputLabelProps={{
+                                  style: { color: 'white' }
+                                }}
+                                InputProps={{
+                                  style: { color: 'white' },
+                                }}
+
+                            />
+                          </DialogContent>
+                          <DialogActions style={{ backgroundColor: '#161617', color: 'white' }}>
+                            <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={handleCloseIncreaseSizeDialog}>Cancel</Button>
+                            {/* <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={() => handleSubmitIncreaseSize()}>Increase</Button> */}
+                          </DialogActions>
+                        </Dialog>
+
+                        <Dialog open={openChangeLimitPriceDialog} onClose={handleCloseChangeLimitPriceDialog}>
+                          <DialogTitle style={{ backgroundColor: '#161617', color: 'white' }}>Change Limit Price</DialogTitle>
+                          <DialogContent style={{ backgroundColor: '#161617', color: 'white' }}>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                label="Change Limit Price"
+                                type="number"
+                                fullWidth
+                                variant="outlined"
+                                value={newLimitPrice}
+                                onChange={handleLimitPriceChange}
+                                InputLabelProps={{
+                                  style: { color: 'white' }
+                                }}
+                                InputProps={{
+                                  style: { color: 'white' },
+                                }}
+
+                            />
+                          </DialogContent>
+                          <DialogActions style={{ backgroundColor: '#161617', color: 'white' }}>
+                            <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={handleCloseChangeLimitPriceDialog}>Cancel</Button>
+                            <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={() => handleSubmitChangeLimitPrice()}>Change Price</Button>
+                          </DialogActions>
+                        </Dialog>
+
+                        <Dialog open={openChangePairedPriceDialog} onClose={handleCloseChangePairedPriceDialog}>
+                          <DialogTitle style={{ backgroundColor: '#161617', color: 'white' }}>Change Paired Price</DialogTitle>
+                          <DialogContent style={{ backgroundColor: '#161617', color: 'white' }}>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                label="Change Paired Price "
+                                type="number"
+                                fullWidth
+                                variant="outlined"
+                                value={newPairedPrice}
+                                onChange={handlePairedPriceChange}
+                                InputLabelProps={{
+                                  style: { color: 'white' }
+                                }}
+                                InputProps={{
+                                  style: { color: 'white' },
+                                }}
+                            />
+                          </DialogContent>
+                          <DialogActions style={{ backgroundColor: '#161617', color: 'white' }}>
+                            <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={handleCloseChangePairedPriceDialog}>Cancel</Button>
+                            <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={() => handleSubmitChangePairedPrice()}>Change Price</Button>
+                          </DialogActions>
+                        </Dialog>
                       </div>
                     </td>
                   </tr>
-                    {expandedOrder === order.id && (
-                        <tr style={{ backgroundColor: '#161617' }}>
-                          <td colSpan={8}>
-                            <Accordion expanded>
-                              <AccordionDetails style={{ display: 'flex', flexDirection: 'row', gap: '10px', backgroundColor: '#161617'}}>
-                                <div style={{ flex: 1 }}>
-                                  <TextField
-                                      label="Increase Size"
-                                      variant="outlined"
-                                      margin="normal"
-                                      type="number"
-                                      value={newSize}
-                                      onChange={handleSizeChange}
-                                      InputLabelProps={{ style: { color: 'white' }}}
-                                      InputProps={{ style: { color: 'white' }}}
-                                      style={{ backgroundColor: '#2a2a2a'}}
-                                  />
-                                  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-                                    <button
-                                        className="btn btn-primary btn-sm bg-[#050b4d]"
-                                        onClick={() => handleSubmitIncreaseSize(String(newSize), order.nextLimitPrice, order.pairedPrice, order.order, order.isBorrowable)}
-                                    >
-                                      Submit
-                                    </button>
-                                  </div>
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                  <TextField
-                                      label="Change Limit Price"
-                                      variant="outlined"
-                                      margin="normal"
-                                      type="number"
-                                      value={newLimitPrice}
-                                      onChange={handleLimitPriceChange}
-                                      InputLabelProps={{ style: { color: 'white' }}}
-                                      InputProps={{ style: { color: 'white' }}}
-                                      style={{ backgroundColor: '#2a2a2a' }}
-                                  />
-                                  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-                                    <button
-                                        className="btn btn-primary btn-sm bg-[#050b4d]"
-                                        onClick={() => handleSubmitChangeLimitPrice(order.id, String(newLimitPrice))}
-                                    >
-                                      Submit
-                                    </button>
-                                  </div>
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                  <TextField
-                                      label="Change Paired Price"
-                                      variant="outlined"
-                                      margin="normal"
-                                      type="number"
-                                      value={newPairedPrice}
-                                      onChange={handlePairedPriceChange}
-                                      InputLabelProps={{ style: { color: 'white' }}}
-                                      InputProps={{ style: { color: 'white' }}}
-                                      style={{ backgroundColor: '#2a2a2a'}}
-                                  />
-                                  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-                                    <button
-                                        className="btn btn-primary btn-sm bg-[#050b4d]"
-                                        onClick={() => handleSubmitChangePairedPrice(order.id, String(newPairedPrice))}
-                                    >
-                                      Submit
-                                    </button>
-                                  </div>
-                                </div>
-                              </AccordionDetails>
-                            </Accordion>
-                          </td>
-                        </tr>
-                    )}
-
-
-
                   </React.Fragment>
               ))}
               </tbody>
@@ -400,18 +533,59 @@ export default function Dashboard() {
                           <td>{borrow.apy}</td>
                           <td>
                             <div style={{display: 'flex', alignItems: 'center'}}>
-                              <button
-                                  className="btn btn-primary btn-sm bg-[#050b4d]"
-                                  onClick={() => handleRepay(borrow.id, borrow.size.toString())}
-                              >
-                                Repay
-                              </button>
-                              <Button
-                                  onClick={() => handleAccordionChangeBorrow(borrow.id)}
-                              >
-                                <ExpandMoreIcon/>
-                              </Button>
+                              <button className="btn btn-primary btn-sm bg-[#050b4d] mr-2" onClick={handleOpenIncreaseSizeBorrowDialog}>Increase Size</button>
+                              <button className="btn btn-primary btn-sm bg-[#050b4d]" onClick={handleOpenRepayDialog}>Repay</button>
                             </div>
+                            <Dialog open={openIncreaseSizeBorrowDialog} onClose={handleCloseIncreaseSizeBorrowDialog}>
+                              <DialogTitle style={{ backgroundColor: '#161617', color: 'white' }}>Increase Size</DialogTitle>
+                              <DialogContent style={{ backgroundColor: '#161617', color: 'white' }}>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    label="Increase Size"
+                                    type="number"
+                                    fullWidth
+                                    variant="outlined"
+                                    value={newLimitPrice}
+                                    onChange={handleSubmitChangeLimitPrice}
+                                    InputLabelProps={{
+                                      style: { color: 'white' }
+                                    }}
+                                    InputProps={{
+                                      style: { color: 'white' },
+                                    }}
+                                />
+                              </DialogContent>
+                              <DialogActions style={{ backgroundColor: '#161617', color: 'white' }}>
+                                <Button style={{ backgroundColor: '#161617', color: 'white' }}>Cancel</Button>
+                                <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={() => handleSubmitIncreaseSizeBorrow()}>Increase Size</Button>
+                              </DialogActions>
+                            </Dialog>
+                            <Dialog open={openRepayDialog} onClose={handleCloseRepayDialog}>
+                              <DialogTitle style={{ backgroundColor: '#161617', color: 'white' }}>Repay</DialogTitle>
+                              <DialogContent style={{ backgroundColor: '#161617', color: 'white' }}>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    label="Repay"
+                                    type="number"
+                                    fullWidth
+                                    variant="outlined"
+                                    value={newLimitPrice}
+                                    onChange={handleLimitPriceChange}
+                                    InputLabelProps={{
+                                      style: { color: 'white' }
+                                    }}
+                                    InputProps={{
+                                      style: { color: 'white' },
+                                    }}
+                                />
+                              </DialogContent>
+                              <DialogActions style={{ backgroundColor: '#161617', color: 'white' }}>
+                                <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={handleCloseChangeLimitPriceDialog}>Cancel</Button>
+                                <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={() => handleSubmitRepay()}>Repay</Button>
+                              </DialogActions>
+                            </Dialog>
                           </td>
                         </>
                     ) : (
@@ -462,13 +636,31 @@ export default function Dashboard() {
             <thead>
             <tr>
               <th>Assets</th>
-              <th>Deposits</th>
-              <th>Lent</th>
+              <th>Total Deposits</th>
+              <th>Total Lent</th>
               <th>Used as Colateral</th>
               <th>Available assets</th>
               <th>Safety Margin</th>
             </tr>
             </thead>
+            <tbody>
+            <tr>
+              <td>ETH</td>
+              <td>{totalDepositsETH.toFixed(2)} ETH</td>
+              <td>{totalBorrowsETH.toFixed(2)} ETH</td>
+              <td>5000</td>
+              <td>Deposits</td>
+              <td>5%</td>
+            </tr>
+            <tr>
+              <td>USDC</td>
+              <td>{totalDepositsUSDC.toFixed(2)} USDC</td>
+              <td>{totalBorrowsUSDC.toFixed(2)} USDC</td>
+              <td>5000</td>
+              <td>Deposits</td>
+              <td>5%</td>
+            </tr>
+            </tbody>
           </table>
         </div>
       </div>

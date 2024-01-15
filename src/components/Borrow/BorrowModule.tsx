@@ -1,25 +1,23 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {toBigNum} from "../utils";
 import {useWeb3Modal} from "@web3modal/react";
-import {NotificationManager} from "react-notifications";
-import {Switch, TextField} from "@mui/material";
-import {CountdownRenderProps} from 'react-countdown';
+import {TextField} from "@mui/material";
 import {useAccount, useWalletClient, type WalletClient,} from "wagmi";
 import {ethers, providers} from "ethers";
-import {getEthPrice, getUSDCPrice, presaleContract, orderbookContract} from "../contracts";
-import "../asserts/scss/custom.scss";
-import ethIcon from "../asserts/images/coins/eth.svg";
-import usdcIcon from "../asserts/images/coins/usdc.svg";
-import bnbIcon from "../asserts/images/coins/bnb.svg";
-import Contrats from "../contracts/contracts/56.json";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import {useDeposit} from "../hooks/useDeposit";
-import {useBorrow} from "../hooks/useBorrow";
+import {getEthPrice, getUSDCPrice, orderbookContract} from "../../contracts";
+import "../../asserts/scss/custom.scss";
+import ethIcon from "../../asserts/images/coins/eth.svg";
+import usdcIcon from "../../asserts/images/coins/usdc.svg";
+import Contrats from "../../contracts/contracts/97.json";
+import {useBorrow} from "../../hooks/useBorrow";
+import {useOrderContext} from "./Ordercontext";
 
+interface OrderDetails {
+    id: number;
+    liquidationPrice: string;
+    LTV: string;
+    APY: string;
+    maxBorrow: string;
+}
 
 export function walletClientToSigner(walletClient: WalletClient) {
     const {account, chain, transport} = walletClient;
@@ -43,12 +41,14 @@ export function useEthersSigner({chainId}: { chainId?: number } = {}) {
 }
 
 
-export default function Borrow() {
+export default function BorrowModule() {
     const signer = useEthersSigner();
     const {address} = useAccount();
     const {open} = useWeb3Modal();
 
     const [chainId, setChainId] = useState<number | null>(null);
+
+    const { orderId } = useOrderContext();
 
     // BALANCE
     const [ethBalance, setEthBalance] = useState('');
@@ -70,9 +70,37 @@ export default function Borrow() {
     const [quantity, setQuantity] = useState('');
     const [orderID, setOrderID] = useState('');
 
+    const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
+
     const [tapStateButton, setTapStateButton] = useState(1);
 
     const borrow = useBorrow();
+
+    const fetchOrderDetails = async (orderId: number): Promise<OrderDetails> => {
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        return {
+            id: orderId,
+            liquidationPrice: "1,900",
+            LTV: "95",
+            APY: "4.2",
+            maxBorrow: "40k"
+        };
+    };
+
+
+    useEffect(() => {
+        if (orderId !== null) {
+            fetchOrderDetails(orderId).then(details => {
+                setOrderDetails(details);
+            });
+        }
+    }, [orderId]);
+
+    const orderDetailsText = orderDetails
+        ? `ID: ${orderDetails.id}\nLiquidation Price: ${orderDetails.liquidationPrice} USDC\nLTV: ${orderDetails.LTV}%\nAPY: ${orderDetails.APY}%\nMax. to borrow: ${orderDetails.maxBorrow} USDC`
+        : 'Select an order to see details';
+
 
     const currencyPrice = activeCurrency === 'USDC' ? priceUSDCUSD : priceETHUSD;
 
@@ -334,12 +362,7 @@ export default function Borrow() {
                                                 }`}
                                             >
                                                 <span className="flex items-center text-[15px] font-bold text-[white]">
-                                                    BORROW ETH with
-                                                    <img
-                                                        alt="USDC"
-                                                        src={usdcIcon}
-                                                        className="w-[20px] h-[20px] ml-1"
-                                                    />
+                                                    BORROW ETH
                                                 </span>
                                             </div>
 
@@ -353,12 +376,7 @@ export default function Borrow() {
                                                 }`}
                                             >
                                             <span className="flex items-center text-[15px] font-bold text-[white]">
-                                                    BORROW USDC WITH
-                                                    <img
-                                                        alt="ETH"
-                                                        src={ethIcon}
-                                                        className="w-[20px] h-[20px] ml-1"
-                                                    />
+                                                    BORROW USDC
                                                 </span>
                                             </div>
 
@@ -367,15 +385,17 @@ export default function Borrow() {
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-[20px] mb-[20px]  ">
                                                     <div className="flex flex-col">
                                                         <TextField
-                                                            label="ID"
+                                                            label="Lend Order to use"
                                                             variant="outlined"
                                                             margin="normal"
-                                                            type="number"
-                                                            onChange={onOrderChange}
+                                                            multiline
+                                                            rows={5}
+                                                            value={orderDetailsText}
                                                             InputLabelProps={{ style: { color: 'white' }}}
-                                                            InputProps={{ style: { color: 'white' }}}
+                                                            InputProps={{ style: { color: 'white', fontFamily: 'monospace' }}}
                                                             style={{ backgroundColor: '#161617'}}
                                                         />
+
                                                     </div>
                                                     <div className="flex flex-col">
                                                         <TextField

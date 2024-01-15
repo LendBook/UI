@@ -27,16 +27,11 @@ interface INavLink {
 const NAV_LINKS: Array<INavLink> = [
   {
     id: 1,
-    label: "ORDER BOOK",
-    to: "/orderbook",
-  },
-  {
-    id: 2,
     label: "MY DASHBOARD",
     to: "/dashboard",
   },
   {
-    id: 3,
+    id: 2,
     label: "TRADE",
     to: "/trade",
   },

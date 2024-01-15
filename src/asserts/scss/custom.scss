@@ -3817,7 +3817,6 @@ thead th {
   color: white;
   background-color:#161617;
   border: 1px solid white;
-  width: 30%;
   margin: 0 auto;
 }
 
@@ -3842,6 +3841,7 @@ thead th {
   color: white;
   background-color:#161617;
   border: 1px solid white;
+  text-align: left;
 }
 
 .sell-button, .buy-button {
@@ -3862,6 +3862,15 @@ thead th {
 .buy-button:hover {
   background-color: #005f2d;
 }
+
+.orderbook-table tr:hover {
+  background-color: #2a2a2a;
+}
+
+.orderbook-table tr.selected-row {
+  background-color: #2a2a2a;
+}
+
 
 
 

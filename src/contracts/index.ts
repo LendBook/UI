@@ -19,7 +19,6 @@ const providers = {
     4002: new ethers.providers.JsonRpcProvider(RPCS[4002])
 }
 
-const presaleContract = new ethers.Contract(Contrats.presale.address, Contrats.presale.abi, providers[supportChainId]);
 
 const ethPriceFeedContract = new ethers.Contract(Contrats.ethPriceFeed.address, Contrats.ethPriceFeed.abi, providers[supportChainId]);
 
@@ -52,5 +51,5 @@ const getUSDCPrice = async () => {
 };
 
 export {
-    providers, presaleContract, usdcContract, orderbookContract, getEthPrice, getUSDCPrice
+    providers, usdcContract, orderbookContract, getEthPrice, getUSDCPrice
 }

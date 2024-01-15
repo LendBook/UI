@@ -15,7 +15,7 @@ export const useBorrow = () => {
                 ethers.utils.parseUnits(quantity, 18),
             );
             await tx.wait();
-            NotificationManager.success("Borrow successful!");
+            NotificationManager.success("BorrowModule successful!");
         } catch (error: any) {
             if (error["code"] === "ACTION_REJECTED")
                 NotificationManager.error("User rejected the transaction.");

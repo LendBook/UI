@@ -1,23 +1,18 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {toBigNum} from "../utils";
 import {useWeb3Modal} from "@web3modal/react";
-import {NotificationManager} from "react-notifications";
 import {Switch, TextField} from "@mui/material";
-import {CountdownRenderProps} from 'react-countdown';
 import {useAccount, useWalletClient, type WalletClient,} from "wagmi";
 import {ethers, providers} from "ethers";
-import {getEthPrice, getUSDCPrice, presaleContract, orderbookContract} from "../contracts";
+import {getEthPrice, getUSDCPrice, orderbookContract} from "../contracts";
 import "../asserts/scss/custom.scss";
 import ethIcon from "../asserts/images/coins/eth.svg";
-import usdcIcon from "../asserts/images/coins/usdc.svg";
-import bnbIcon from "../asserts/images/coins/bnb.svg";
-import Contrats from "../contracts/contracts/56.json";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import {useDeposit} from "../hooks/useDeposit";
+import Contrats from "../contracts/contracts/97.json";
 
 
 export function walletClientToSigner(walletClient: WalletClient) {
@@ -302,7 +297,6 @@ export default function Trade() {
         };
 
         if (window.ethereum) {
-            // Écouter les changements de chaîne
             window.ethereum.on('chainChanged', handleChainChanged);
 
             const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -376,12 +370,12 @@ export default function Trade() {
                                                 }`}
                                             >
                                                 <span className="flex items-center text-[15px] font-bold text-[white]">
-                                                    BUY ETH WITH
-                                                    <img
+                                                    BUY ETH
+                                                    {/*<img
                                                         alt="USDC"
                                                         src={usdcIcon}
                                                         className="w-[20px] h-[20px] ml-1"
-                                                    />
+                                                    /> */}
                                                 </span>
                                             </div>
 
@@ -395,12 +389,12 @@ export default function Trade() {
                                                 }`}
                                             >
                                             <span className="flex items-center text-[15px] font-bold text-[white]">
-                                                    SELL ETH WITH
-                                                    <img
+                                                    SELL ETH
+                                                    {/*<img
                                                         alt="USDC"
                                                         src={usdcIcon}
                                                         className="w-[20px] h-[20px] ml-1"
-                                                    />
+                                                    /> */}
                                                 </span>
                                             </div>
 
