@@ -238,7 +238,7 @@ export default function BorrowModule() {
                         className={`w-[70%] py-[10px] text-center rounded-full cursor-pointer hover:opacity-75 select-none bg-green-500`}
                         onClick={handleUsdcApprove}
                     >
-                        <span className="text-[#050b4d] text-[18px] sm:text-[18px]"><b><span className="font-semibold">APPROVE</span></b></span>
+                        <span className="text-[#000000] text-[18px] sm:text-[18px]"><b><span className="font-semibold">APPROVE</span></b></span>
                     </div>
                 )}
                 {parseFloat(usdcAllowance) >= parseFloat(quantity) && (
@@ -249,7 +249,7 @@ export default function BorrowModule() {
                             handleBorrowUSDCClick();
                         }}
                     >
-                        <span className="flex items-center justify-center text-[#050b4d] text-[18px] sm:text-[18px] font-semibold">
+                        <span className="flex items-center justify-center text-[#000000] text-[18px] sm:text-[18px] font-semibold">
                             BORROW USDC
                             <img
                                 alt="USDC"
@@ -269,7 +269,7 @@ export default function BorrowModule() {
                         className={`w-[70%] py-[10px] text-center rounded-full cursor-pointer hover:opacity-75 select-none bg-red-500`}
                         onClick={handleWethApprove}
                     >
-                        <span className="text-[#050b4d] text-[18px] sm:text-[18px]"><b><span className="font-semibold">APPROVE</span></b></span>
+                        <span className="text-[#000000] text-[18px] sm:text-[18px]"><b><span className="font-semibold">APPROVE</span></b></span>
                     </div>
                 )}
                 {parseFloat(wethAllowance) >= parseFloat(quantity) && (
@@ -280,7 +280,7 @@ export default function BorrowModule() {
                             handleBorrowWETHClick();
                         }}
                     >
-                        <span className="flex items-center justify-center text-[#050b4d] text-[18px] sm:text-[18px] font-semibold">
+                        <span className="flex items-center justify-center text-[#000000] text-[18px] sm:text-[18px] font-semibold">
                             BORROW ETH
                             <img
                                 alt="ETH"
@@ -357,8 +357,8 @@ export default function BorrowModule() {
                                                     setTapStateButton(1);
                                                     setActiveCurrency("USDC");
                                                 }}
-                                                className={`cursor-pointer bg-[#161617] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75 ${
-                                                    tapStateButton === 1 ? "border-[5px] border-[#FFFFFF] bg-[#050b4d] " : ""
+                                                className={`cursor-pointer bg-[#191b1f] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75 ${
+                                                    tapStateButton === 1 ? "border-[5px] border-[#FFFFFF] bg-[#000000] " : ""
                                                 }`}
                                             >
                                                 <span className="flex items-center text-[15px] font-bold text-[white]">
@@ -371,8 +371,8 @@ export default function BorrowModule() {
                                                     setTapStateButton(2);
                                                     setActiveCurrency("WETH")
                                                 }}
-                                                className={`cursor-pointer bg-[#161617] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75 ${
-                                                    tapStateButton === 2 ? "border-[5px] border-[#FFFFFF] bg-[#050b4d] " : ""
+                                                className={`cursor-pointer bg-[#191b1f] h-[44px] flex justify-center items-center p-[5px] rounded-md hover:opacity-75 ${
+                                                    tapStateButton === 2 ? "border-[5px] border-[#FFFFFF] bg-[#000000] " : ""
                                                 }`}
                                             >
                                             <span className="flex items-center text-[15px] font-bold text-[white]">
@@ -393,7 +393,7 @@ export default function BorrowModule() {
                                                             value={orderDetailsText}
                                                             InputLabelProps={{ style: { color: 'white' }}}
                                                             InputProps={{ style: { color: 'white', fontFamily: 'monospace' }}}
-                                                            style={{ backgroundColor: '#161617'}}
+                                                            style={{ backgroundColor: '#191b1f'}}
                                                         />
 
                                                     </div>
@@ -406,7 +406,7 @@ export default function BorrowModule() {
                                                             onChange={onSizeChange}
                                                             InputLabelProps={{ style: { color: 'white' }}}
                                                             InputProps={{ style: { color: 'white' }}}
-                                                            style={{ backgroundColor: '#161617'}}
+                                                            style={{ backgroundColor: '#191b1f'}}
                                                         />
                                                         <div className="flex justify-between items-center">
                                                             <span className="text-white text-[12px]">

@@ -18,7 +18,7 @@ export default function LandingLayout() {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col bg-[#050b4d]">
+      <div className="min-h-screen flex flex-col bg-[#000000]">
         <Navbar />
         <div>
           <Outlet />

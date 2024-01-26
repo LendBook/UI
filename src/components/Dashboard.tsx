@@ -1,5 +1,15 @@
 import "../asserts/scss/custom.scss";
-import {Accordion, AccordionSummary, Switch, TextField} from "@mui/material";
+import {
+  Accordion,
+  AccordionSummary,
+  Box, Card,
+  CardContent,
+  Grid, Stack,
+  Switch, Tab,
+  Table, TableBody, TableCell,
+  TableContainer, TableHead, TableRow, Tabs,
+  TextField
+} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {orderbookContract} from "../contracts";
 import {useAccount} from "wagmi";
@@ -22,6 +32,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import useIncreaseSizeBorrow from "../hooks/useIncreaseSizeBorrow";
+import Typography from "@mui/material/Typography";
+import SizableTableCell from "./Markets/SizableTableCell";
+import ethIcon from "../asserts/images/coins/eth.svg";
+import usdcIcon from "../asserts/images/coins/usdc.svg";
+import BlastIcon from "../asserts/images/networks/Blast.svg";
 
 
 interface Order {
@@ -88,6 +103,13 @@ export default function Dashboard() {
   const [openRepayDialog, setOpenRepayDialog] = useState(false);
   const [repaySize, setRepaySize] = useState('');
   const [increaseBorrowSize, setIncreaseBorrowSize] = useState('');
+
+  const [activeTab, setActiveTab] = useState('orders');
+
+  const handleChangeTab = (event: any, newValue: React.SetStateAction<string>) => {
+    setActiveTab(newValue);
+  };
+
 
 
   const handleOpenIncreaseSizeBorrowDialog = () => {
@@ -342,330 +364,618 @@ export default function Dashboard() {
 
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard">
-        <div className="my-orders">
-          <h2>My Orders</h2>
-          <div className="border-b border-white mt-2 "></div>
-          <br/>
-            <table>
-              <thead>
-              <tr>
-                <th>Orders</th>
-                <th>Size</th>
-                <th>Limit Price</th>
-                <th>Paired Price</th>
-                <th>Lend ratio</th>
-                <th>APY</th>
-                <th>Borrowable</th>
-                <th></th>
-              </tr>
-              </thead>
-              <tbody>
-              {userOrders.map((order, index) => (
-                  <React.Fragment key={index}>
-                  <tr key={index}>
-                    {userOrders.length > 0 ? (
-                        <>
-                          <td>{order.order}</td>
-                          <td>{order.size} {order.asset}</td>
-                          <td>{order.nextLimitPrice}</td>
-                          <td>{order.pairedPrice}</td>
-                          <td>{order.lendRatio}</td>
-                          <td>{order.apy}</td>
-                          <td><Switch
-                              checked={order.isBorrowable}
-                              onChange={() => toggleBorrowable(index)}
-                          /></td>
-                        </>
-              ) : (
-                        <p className="text-[white]">No orders</p>
+      <>
+        <Card sx={{maxWidth: '1500px', margin: 'auto', backgroundColor: '#000000'}}>
+          <CardContent
+              sx={{
+                width: '100%',
+                p: '1.5rem 2rem 1.5rem 2rem',
+                mb: '2rem',
+              }}
+          >
+            <Box>
+              <Typography variant="h4" style={{color: 'white'}}>My Positions</Typography>
+              <Grid
+                  container
+                  mt="2.5rem"
+                  mb="1rem"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  wrap="wrap"
+              >
+                <TableContainer
+                    sx={{mt: '0.75rem', borderRadius: '14px', overflow: 'hidden', border: '2px solid #34363e'}}>
+                  <Table
+                      aria-label="Markets table"
+                      sx={{borderCollapse: 'initial', backgroundColor: '#131518'}}
+                  >
+                    <TableHead>
+                      <TableRow sx={{height: '2.625rem'}}>
+                        <SizableTableCell  width="200px" style={{color: 'white'}}>
+                          Assets
+                        </SizableTableCell>
+                        <SizableTableCell  width="200px" style={{color: 'white'}}>
+                          Network
+                        </SizableTableCell>
+                        <SizableTableCell  width="200px" style={{color: 'white'}}>
+                          Total Deposits
+                        </SizableTableCell>
+                        <SizableTableCell width="200px"  style={{color: 'white'}}>
+                          Total Lent
+                        </SizableTableCell>
+                        <SizableTableCell width="200px"  style={{color: 'white'}}>
+                          Used as Colateral
+                        </SizableTableCell>
+                        <SizableTableCell width="200px"  style={{color: 'white'}}>
+                          Available assets
+                        </SizableTableCell>
+                        <SizableTableCell width="200px"  style={{color: 'white'}}>
+                          Safety Margin
+                        </SizableTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody >
+                      <TableRow
+                          sx={{
+                            '&:hover': {
+                              backgroundColor: '#34363e',
+                              cursor: 'pointer',
+                            },
+                            '& > td': {
+                              borderBottom: 'none',
+                            },
+                          }}
+                      >
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center', width:'200px'}}>
+                            <img src={ethIcon} alt="ETH" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>ETH</Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center' , width:'230px'}}>
+                            <img src={BlastIcon} alt="BLAST"
+                                 style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>BLAST</Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'210px'}}>
+                            {totalDepositsUSDC.toFixed(2)} USDC
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'180px'}}>
+                            {totalBorrowsUSDC.toFixed(2)} USDC
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'230px'}}>
+                            5000
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
+                            Deposits
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
+                            5%
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+
+
+
+
+
+
+
+                  </Table>
+                </TableContainer>
+
+              </Grid>
+            </Box>
+          </CardContent>
+        </Card>
+
+        <Card sx={{maxWidth: '1500px', margin: 'auto', backgroundColor: '#000000'}}>
+          <CardContent
+              sx={{
+                width: '100%',
+                p: '1.5rem 2rem 0rem 2rem',
+                mb: '2rem',
+              }}
+          >
+             <Tabs
+                  value={activeTab}
+                  onChange={handleChangeTab}
+                  aria-label="SwitchTabs"
+                  sx={{
+                    width: '300px',
+                    borderRadius: '10px',
+                    border: '5px solid #131518',
+                    '.MuiTabs-flexContainer': {
+                      backgroundColor: '#131518',
+                    },
+                    '.MuiTab-root': {
+                      color: 'white',
+                      flexGrow: 1,
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                      },
+                      '&.Mui-selected': {
+                        backgroundColor: '#35353b',
+                        color: 'white',
+                      },
+                    },
+                    '.MuiTabs-indicator': {
+                      backgroundColor: 'transparent',
+                    },
+                  }}
+              >
+                <Tab label="Orders" value="orders" style={{ borderRadius: '8px' }} />
+                <Tab label="Borrowing" value="borrows" style={{ borderRadius: '8px' }} />
+              </Tabs>
+          </CardContent>
+
+              {activeTab === 'orders' && (
+                  <Card sx={{maxWidth: '1500px', margin: 'auto', backgroundColor: '#000000'}}>
+                    <CardContent
+                        sx={{
+                          width: '100%',
+                          p: '1.5rem 2rem 1.5rem 2rem',
+                          mb: '2rem',
+                        }}
+                    >
+                      <Box>
+                        {/*<Typography variant="h4" style={{color: 'white'}}>My Orders</Typography> */}
+                        <Grid
+                            container
+                            mt="2.5rem"
+                            mb="1rem"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            wrap="wrap"
+                        >
+                          <TableContainer
+                              sx={{mt: '0.75rem', borderRadius: '14px', overflow: 'hidden', border: '2px solid #34363e'}}>
+                            <Table
+                                aria-label="Markets table"
+                                sx={{borderCollapse: 'initial', backgroundColor: '#131518'}}
+                            >
+                              <TableHead>
+                                <TableRow sx={{height: '2.625rem'}}>
+                                  <SizableTableCell  width="100px" style={{color: 'white'}}>
+                                    Assets
+                                  </SizableTableCell>
+                                  <SizableTableCell  width="100px" style={{color: 'white'}}>
+                                    Collateral
+                                  </SizableTableCell>
+                                  <SizableTableCell width="100px"  style={{color: 'white'}}>
+                                    Network
+                                  </SizableTableCell>
+                                  <SizableTableCell  width="80px" style={{color: 'white'}}>
+                                    Size
+                                  </SizableTableCell>
+                                  <SizableTableCell width="100px"  style={{color: 'white'}}>
+                                    Limit Price
+                                  </SizableTableCell>
+                                  <SizableTableCell width="100px" style={{color: 'white'}}>
+                                    Paired Price
+                                  </SizableTableCell>
+                                  <SizableTableCell width="100px"  style={{color: 'white'}}>
+                                    Lend ratio
+                                  </SizableTableCell>
+                                  <SizableTableCell width="80px"  style={{color: 'white'}}>
+                                    APY
+                                  </SizableTableCell>
+                                  <SizableTableCell width="100px"  style={{color: 'white'}}>
+                                    Borrowable
+                                  </SizableTableCell>
+                                  <SizableTableCell width="150px"  style={{color: 'white'}}>
+
+                                  </SizableTableCell>
+                                </TableRow>
+                              </TableHead>
+                              {userOrders.map((order, index) => (
+                                  <React.Fragment key={index}>
+                                    <tr key={index}>
+                                      {userOrders.length > 0 ? (
+                                          <>
+                                            <TableBody >
+                                              <TableRow
+                                                  sx={{
+                                                    '&:hover': {
+                                                      backgroundColor: '#34363e',
+                                                      cursor: 'pointer',
+                                                    },
+                                                    '& > td': {
+                                                      borderBottom: 'none',
+                                                    },
+                                                  }}
+                                              >
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center', width:'100px'}}>
+                                                    <img src={ethIcon} alt="ETH" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                                                    <Typography variant="body2" style={{color: 'white', display: 'inline'}}>ETH</Typography>
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center' , width:'100px'}}>
+                                                    <img src={usdcIcon} alt="USDC" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                                                    <Typography variant="body2" style={{color: 'white', display: 'inline'}}>USDC</Typography>
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center' , width:'120px'}}>
+                                                    <img src={BlastIcon} alt="BLAST"
+                                                         style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                                                    <Typography variant="body2" style={{color: 'white', display: 'inline'}}>BLAST</Typography>
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center', color: 'white' , width:'100px'}}>
+                                                    {order.size} {order.asset}
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'120px'}}>
+                                                    {order.nextLimitPrice}
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'120px'}}>
+                                                    {order.pairedPrice}
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'100px'}}>
+                                                    {order.lendRatio}
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center' , color: 'white' , width:'100px'}}>
+                                                    {order.apy}
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center' , color: 'white' , width:'100px'}}>
+                                                    <Switch
+                                                        checked={order.isBorrowable}
+                                                        onChange={() => toggleBorrowable(index)}/>
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center' }}>
+                                                    <button
+                                                        className="btn btn-primary btn-sm bg-[#000000]"
+                                                        onClick={() => handleWithdraw(order.id, order.size)}
+                                                    >
+                                                      Withdraw
+                                                    </button>
+                                                    <Button
+                                                        aria-controls="simple-menu"
+                                                        aria-haspopup="true"
+                                                        onClick={(e) => handleMenuClick(e, order)}
+                                                    >
+                                                      •••
+                                                    </Button>
+                                                    <Menu
+                                                        id="simple-menu"
+                                                        anchorEl={menuAnchorEl}
+                                                        keepMounted
+                                                        open={Boolean(menuAnchorEl)}
+                                                        onClose={handleMenuClose}
+                                                        MenuListProps={{
+                                                          style: {
+                                                            backgroundColor: '#191b1f',
+                                                            color: 'white',
+                                                          },
+                                                        }}
+                                                    >
+                                                      <MenuItem onClick={handleOpenIncreaseSizeDialog}>Increase Size</MenuItem>
+                                                      <MenuItem onClick={handleOpenChangePairedPriceDialog}>Change Paired Price</MenuItem>
+                                                      <MenuItem onClick={handleOpenChangeLimitPriceDialog}>Change Limit Price</MenuItem>
+                                                    </Menu>
+                                                    <Dialog open={openIncreaseSizeDialog} onClose={handleCloseIncreaseSizeDialog}>
+                                                      <DialogTitle style={{backgroundColor: '#191b1f', color: 'white'}}>Increase
+                                                        Size</DialogTitle>
+                                                      <DialogContent style={{backgroundColor: '#191b1f', color: 'white'}}>
+                                                        <TextField
+                                                            autoFocus
+                                                            margin="dense"
+                                                            label="Increse Size"
+                                                            type="number"
+                                                            fullWidth
+                                                            variant="outlined"
+                                                            value={increaseSize}
+                                                            onChange={handleSizeChange}
+                                                            InputLabelProps={{
+                                                              style: {color: 'white'}
+                                                            }}
+                                                            InputProps={{
+                                                              style: {color: 'white'},
+                                                            }}/>
+                                                      </DialogContent>
+                                                      <DialogActions style={{backgroundColor: '#191b1f', color: 'white'}}>
+                                                        <Button style={{backgroundColor: '#191b1f', color: 'white'}}
+                                                                onClick={handleCloseIncreaseSizeDialog}>Cancel</Button>
+                                                        {/* <Button style={{ backgroundColor: '#191b1f', color: 'white' }} onClick={() => handleSubmitIncreaseSize()}>Increase</Button> */}
+                                                      </DialogActions>
+                                                    </Dialog>
+
+                                                    <Dialog open={openChangeLimitPriceDialog} onClose={handleCloseChangeLimitPriceDialog}>
+                                                      <DialogTitle style={{backgroundColor: '#191b1f', color: 'white'}}>Change Limit
+                                                        Price</DialogTitle>
+                                                      <DialogContent style={{backgroundColor: '#191b1f', color: 'white'}}>
+                                                        <TextField
+                                                            autoFocus
+                                                            margin="dense"
+                                                            label="Change Limit Price"
+                                                            type="number"
+                                                            fullWidth
+                                                            variant="outlined"
+                                                            value={newLimitPrice}
+                                                            onChange={handleLimitPriceChange}
+                                                            InputLabelProps={{
+                                                              style: {color: 'white'}
+                                                            }}
+                                                            InputProps={{
+                                                              style: {color: 'white'},
+                                                            }}/>
+                                                      </DialogContent>
+                                                      <DialogActions style={{backgroundColor: '#191b1f', color: 'white'}}>
+                                                        <Button style={{backgroundColor: '#191b1f', color: 'white'}}
+                                                                onClick={handleCloseChangeLimitPriceDialog}>Cancel</Button>
+                                                        <Button style={{backgroundColor: '#191b1f', color: 'white'}}
+                                                                onClick={() => handleSubmitChangeLimitPrice()}>Change Price</Button>
+                                                      </DialogActions>
+                                                    </Dialog>
+
+                                                    <Dialog open={openChangePairedPriceDialog} onClose={handleCloseChangePairedPriceDialog}>
+                                                      <DialogTitle style={{backgroundColor: '#191b1f', color: 'white'}}>Change Paired
+                                                        Price</DialogTitle>
+                                                      <DialogContent style={{backgroundColor: '#191b1f', color: 'white'}}>
+                                                        <TextField
+                                                            autoFocus
+                                                            margin="dense"
+                                                            label="Change Paired Price "
+                                                            type="number"
+                                                            fullWidth
+                                                            variant="outlined"
+                                                            value={newPairedPrice}
+                                                            onChange={handlePairedPriceChange}
+                                                            InputLabelProps={{
+                                                              style: {color: 'white'}
+                                                            }}
+                                                            InputProps={{
+                                                              style: {color: 'white'},
+                                                            }}/>
+                                                      </DialogContent>
+                                                      <DialogActions style={{backgroundColor: '#191b1f', color: 'white'}}>
+                                                        <Button style={{backgroundColor: '#191b1f', color: 'white'}}
+                                                                onClick={handleCloseChangePairedPriceDialog}>Cancel</Button>
+                                                        <Button style={{backgroundColor: '#191b1f', color: 'white'}}
+                                                                onClick={() => handleSubmitChangePairedPrice()}>Change Price</Button>
+                                                      </DialogActions>
+                                                    </Dialog>
+                                                  </Box>
+                                                </TableCell>
+                                              </TableRow>
+                                            </TableBody>
+                                          </>
+                                      ) : (
+                                          <p className="text-[white]">No orders</p>
+                                      )}
+
+
+                                    </tr>
+                                  </React.Fragment>
+
+                              ))}
+
+                            </Table>
+                          </TableContainer>
+
+                        </Grid>
+                      </Box>
+                    </CardContent>
+                  </Card>
               )}
-
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <button
-                            className="btn btn-primary btn-sm bg-[#050b4d]"
-                            onClick={() => handleWithdraw(order.id, order.size)}
+              {activeTab === 'borrows' && (
+                  <Card sx={{maxWidth: '1500px', margin: 'auto', backgroundColor: '#000000'}}>
+                    <CardContent
+                        sx={{
+                          width: '100%',
+                          p: '1.5rem 2rem 1.5rem 2rem',
+                          mb: '2rem',
+                        }}
+                    >
+                      <Box>
+                        {/*<Typography variant="h4" style={{color: 'white'}}>My Borrows</Typography> */}
+                        <Grid
+                            container
+                            mt="2.5rem"
+                            mb="1rem"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            wrap="wrap"
                         >
-                          Withdraw
-                        </button>
-                        {/*<Button
-                            onClick={() => handleAccordionChange(order.id)}
-                        >
-                          <ExpandMoreIcon />
-                        </Button>*/}
-                        <Button
-                            aria-controls="simple-menu"
-                            aria-haspopup="true"
-                            onClick={(e) => handleMenuClick(e, order)}
-                        >
-                          •••
-                        </Button>
-                        <Menu
-                            id="simple-menu"
-                            anchorEl={menuAnchorEl}
-                            keepMounted
-                            open={Boolean(menuAnchorEl)}
-                            onClose={handleMenuClose}
-                            MenuListProps={{
-                              style: {
-                                backgroundColor: '#161617',
-                                color: 'white',
-                              },
-                            }}
-                        >
-                          <MenuItem onClick={handleOpenIncreaseSizeDialog}>Increase Size</MenuItem>
-                          <MenuItem onClick={handleOpenChangePairedPriceDialog}>Change Paired Price</MenuItem>
-                          <MenuItem onClick={handleOpenChangeLimitPriceDialog}>Change Limit Price</MenuItem>
-                        </Menu>
-                        <Dialog open={openIncreaseSizeDialog} onClose={handleCloseIncreaseSizeDialog}>
-                          <DialogTitle style={{ backgroundColor: '#161617', color: 'white' }}>Increase Size</DialogTitle>
-                          <DialogContent style={{ backgroundColor: '#161617', color: 'white' }}>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                label="Increse Size"
-                                type="number"
-                                fullWidth
-                                variant="outlined"
-                                value={increaseSize}
-                                onChange={handleSizeChange}
-                                InputLabelProps={{
-                                  style: { color: 'white' }
-                                }}
-                                InputProps={{
-                                  style: { color: 'white' },
-                                }}
+                          <TableContainer
+                              sx={{mt: '0.75rem', borderRadius: '14px', overflow: 'hidden', border: '2px solid #34363e'}}>
+                            <Table
+                                aria-label="Markets table"
+                                sx={{borderCollapse: 'initial', backgroundColor: '#131518'}}
+                            >
+                              <TableHead>
+                                <TableRow sx={{height: '2.625rem'}}>
+                                  <SizableTableCell  width="250px" style={{color: 'white'}}>
+                                    Borrowed assets
+                                  </SizableTableCell>
+                                  <SizableTableCell  width="250px" style={{color: 'white'}}>
+                                    Network
+                                  </SizableTableCell>
+                                  <SizableTableCell  width="250px" style={{color: 'white'}}>
+                                    Size
+                                  </SizableTableCell>
+                                  <SizableTableCell width="250px"  style={{color: 'white'}}>
+                                    Closing Price
+                                  </SizableTableCell>
+                                  <SizableTableCell width="250px"  style={{color: 'white'}}>
+                                    APY
+                                  </SizableTableCell>
+                                  <SizableTableCell width="250px"  style={{color: 'white'}}>
 
-                            />
-                          </DialogContent>
-                          <DialogActions style={{ backgroundColor: '#161617', color: 'white' }}>
-                            <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={handleCloseIncreaseSizeDialog}>Cancel</Button>
-                            {/* <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={() => handleSubmitIncreaseSize()}>Increase</Button> */}
-                          </DialogActions>
-                        </Dialog>
+                                  </SizableTableCell>
+                                </TableRow>
+                              </TableHead>
+                              {userBorrows.map((borrow, index) => (
+                                  <React.Fragment key={index}>
+                                    <tr key={index}>
+                                      {userBorrows.length > 0 ? (
+                                          <>
+                                            <TableBody >
+                                              <TableRow
+                                                  sx={{
+                                                    '&:hover': {
+                                                      backgroundColor: '#34363e',
+                                                      cursor: 'pointer',
+                                                    },
+                                                    '& > td': {
+                                                      borderBottom: 'none',
+                                                    },
+                                                  }}
+                                              >
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center', width:'200px'}}>
+                                                    <img src={ethIcon} alt="ETH" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                                                    <Typography variant="body2" style={{color: 'white', display: 'inline'}}>ETH</Typography>
+                                                  </Box>
+                                                </TableCell>
+                                                {/* <TableCell align="left">
+                                        <Box sx={{display: 'flex', alignItems: 'center' , width:'100px'}}>
+                                          <img src={usdcIcon} alt="USDC" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                                          <Typography variant="body2" style={{color: 'white', display: 'inline'}}>USDC</Typography>
+                                        </Box>
+                                      </TableCell> */}
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center' , width:'230px'}}>
+                                                    <img src={BlastIcon} alt="BLAST"
+                                                         style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                                                    <Typography variant="body2" style={{color: 'white', display: 'inline'}}>BLAST</Typography>
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center', color: 'white' , width:'240px'}}>
+                                                    {borrow.size} {borrow.asset}
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'210px'}}>
+                                                    {borrow.closingPrice}
+                                                  </Box>
+                                                </TableCell>
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'180px'}}>
+                                                    {borrow.apy}
+                                                  </Box>
+                                                </TableCell>
 
-                        <Dialog open={openChangeLimitPriceDialog} onClose={handleCloseChangeLimitPriceDialog}>
-                          <DialogTitle style={{ backgroundColor: '#161617', color: 'white' }}>Change Limit Price</DialogTitle>
-                          <DialogContent style={{ backgroundColor: '#161617', color: 'white' }}>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                label="Change Limit Price"
-                                type="number"
-                                fullWidth
-                                variant="outlined"
-                                value={newLimitPrice}
-                                onChange={handleLimitPriceChange}
-                                InputLabelProps={{
-                                  style: { color: 'white' }
-                                }}
-                                InputProps={{
-                                  style: { color: 'white' },
-                                }}
+                                                <TableCell align="left">
+                                                  <Box sx={{display: 'flex', alignItems: 'center' }}>
+                                                    <div style={{display: 'flex', alignItems: 'center'}}>
+                                                      <button className="btn btn-primary btn-sm bg-[#000000] mr-2"
+                                                              onClick={handleOpenIncreaseSizeBorrowDialog}>Increase
+                                                      </button>
+                                                      <button className="btn btn-primary btn-sm bg-[#000000]"
+                                                              onClick={handleOpenRepayDialog}>Repay
+                                                      </button>
+                                                    </div>
+                                                    <Dialog open={openIncreaseSizeBorrowDialog}
+                                                            onClose={handleCloseIncreaseSizeBorrowDialog}>
+                                                      <DialogTitle style={{backgroundColor: '#191b1f', color: 'white'}}>Increase
+                                                        Size</DialogTitle>
+                                                      <DialogContent style={{backgroundColor: '#191b1f', color: 'white'}}>
+                                                        <TextField
+                                                            autoFocus
+                                                            margin="dense"
+                                                            label="Increase Size"
+                                                            type="number"
+                                                            fullWidth
+                                                            variant="outlined"
+                                                            value={newLimitPrice}
+                                                            onChange={handleSubmitChangeLimitPrice}
+                                                            InputLabelProps={{
+                                                              style: {color: 'white'}
+                                                            }}
+                                                            InputProps={{
+                                                              style: {color: 'white'},
+                                                            }}/>
+                                                      </DialogContent>
+                                                      <DialogActions style={{backgroundColor: '#191b1f', color: 'white'}}>
+                                                        <Button style={{backgroundColor: '#191b1f', color: 'white'}}>Cancel</Button>
+                                                        <Button style={{backgroundColor: '#191b1f', color: 'white'}}
+                                                                onClick={() => handleSubmitIncreaseSizeBorrow()}>Increase Size</Button>
+                                                      </DialogActions>
+                                                    </Dialog>
+                                                    <Dialog open={openRepayDialog} onClose={handleCloseRepayDialog}>
+                                                      <DialogTitle style={{backgroundColor: '#191b1f', color: 'white'}}>Repay</DialogTitle>
+                                                      <DialogContent style={{backgroundColor: '#191b1f', color: 'white'}}>
+                                                        <TextField
+                                                            autoFocus
+                                                            margin="dense"
+                                                            label="Repay"
+                                                            type="number"
+                                                            fullWidth
+                                                            variant="outlined"
+                                                            value={newLimitPrice}
+                                                            onChange={handleLimitPriceChange}
+                                                            InputLabelProps={{
+                                                              style: {color: 'white'}
+                                                            }}
+                                                            InputProps={{
+                                                              style: {color: 'white'},
+                                                            }}/>
+                                                      </DialogContent>
+                                                      <DialogActions style={{backgroundColor: '#191b1f', color: 'white'}}>
+                                                        <Button style={{backgroundColor: '#191b1f', color: 'white'}}
+                                                                onClick={handleCloseChangeLimitPriceDialog}>Cancel</Button>
+                                                        <Button style={{backgroundColor: '#191b1f', color: 'white'}}
+                                                                onClick={() => handleSubmitRepay()}>Repay</Button>
+                                                      </DialogActions>
+                                                    </Dialog>
+                                                  </Box>
+                                                </TableCell>
+                                              </TableRow>
+                                            </TableBody>
+                                          </>
+                                      ) : (
+                                          <p className="text-[white]">No borrow</p>
+                                      )}
 
-                            />
-                          </DialogContent>
-                          <DialogActions style={{ backgroundColor: '#161617', color: 'white' }}>
-                            <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={handleCloseChangeLimitPriceDialog}>Cancel</Button>
-                            <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={() => handleSubmitChangeLimitPrice()}>Change Price</Button>
-                          </DialogActions>
-                        </Dialog>
 
-                        <Dialog open={openChangePairedPriceDialog} onClose={handleCloseChangePairedPriceDialog}>
-                          <DialogTitle style={{ backgroundColor: '#161617', color: 'white' }}>Change Paired Price</DialogTitle>
-                          <DialogContent style={{ backgroundColor: '#161617', color: 'white' }}>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                label="Change Paired Price "
-                                type="number"
-                                fullWidth
-                                variant="outlined"
-                                value={newPairedPrice}
-                                onChange={handlePairedPriceChange}
-                                InputLabelProps={{
-                                  style: { color: 'white' }
-                                }}
-                                InputProps={{
-                                  style: { color: 'white' },
-                                }}
-                            />
-                          </DialogContent>
-                          <DialogActions style={{ backgroundColor: '#161617', color: 'white' }}>
-                            <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={handleCloseChangePairedPriceDialog}>Cancel</Button>
-                            <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={() => handleSubmitChangePairedPrice()}>Change Price</Button>
-                          </DialogActions>
-                        </Dialog>
-                      </div>
-                    </td>
-                  </tr>
-                  </React.Fragment>
-              ))}
-              </tbody>
-            </table>
-        </div>
-        <br/>
-        <div className="my-borrows">
-          <h2>My Borrows</h2>
-          <div className="border-b border-white mt-2 "></div>
-          <br/>
-          <table>
-            <thead>
-            <tr>
-                    <th>Borrowed assets</th>
-                    <th>Size</th>
-                    <th>Closing Price</th>
-                    <th>APY</th>
-                    <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {userBorrows.map((borrow, index) => (
-                <React.Fragment key={index}>
-                  <tr key={index}>
-                    {userBorrows.length > 0 ? (
-                        <>
-                          <td>{borrow.asset}</td>
-                          <td>{borrow.size} {borrow.asset}</td>
-                          <td>{borrow.closingPrice}</td>
-                          <td>{borrow.apy}</td>
-                          <td>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                              <button className="btn btn-primary btn-sm bg-[#050b4d] mr-2" onClick={handleOpenIncreaseSizeBorrowDialog}>Increase Size</button>
-                              <button className="btn btn-primary btn-sm bg-[#050b4d]" onClick={handleOpenRepayDialog}>Repay</button>
-                            </div>
-                            <Dialog open={openIncreaseSizeBorrowDialog} onClose={handleCloseIncreaseSizeBorrowDialog}>
-                              <DialogTitle style={{ backgroundColor: '#161617', color: 'white' }}>Increase Size</DialogTitle>
-                              <DialogContent style={{ backgroundColor: '#161617', color: 'white' }}>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    label="Increase Size"
-                                    type="number"
-                                    fullWidth
-                                    variant="outlined"
-                                    value={newLimitPrice}
-                                    onChange={handleSubmitChangeLimitPrice}
-                                    InputLabelProps={{
-                                      style: { color: 'white' }
-                                    }}
-                                    InputProps={{
-                                      style: { color: 'white' },
-                                    }}
-                                />
-                              </DialogContent>
-                              <DialogActions style={{ backgroundColor: '#161617', color: 'white' }}>
-                                <Button style={{ backgroundColor: '#161617', color: 'white' }}>Cancel</Button>
-                                <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={() => handleSubmitIncreaseSizeBorrow()}>Increase Size</Button>
-                              </DialogActions>
-                            </Dialog>
-                            <Dialog open={openRepayDialog} onClose={handleCloseRepayDialog}>
-                              <DialogTitle style={{ backgroundColor: '#161617', color: 'white' }}>Repay</DialogTitle>
-                              <DialogContent style={{ backgroundColor: '#161617', color: 'white' }}>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    label="Repay"
-                                    type="number"
-                                    fullWidth
-                                    variant="outlined"
-                                    value={newLimitPrice}
-                                    onChange={handleLimitPriceChange}
-                                    InputLabelProps={{
-                                      style: { color: 'white' }
-                                    }}
-                                    InputProps={{
-                                      style: { color: 'white' },
-                                    }}
-                                />
-                              </DialogContent>
-                              <DialogActions style={{ backgroundColor: '#161617', color: 'white' }}>
-                                <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={handleCloseChangeLimitPriceDialog}>Cancel</Button>
-                                <Button style={{ backgroundColor: '#161617', color: 'white' }} onClick={() => handleSubmitRepay()}>Repay</Button>
-                              </DialogActions>
-                            </Dialog>
-                          </td>
-                        </>
-                    ) : (
-                        <p className="text-[white]">No borrows</p>
-                    )}
-                  </tr>
-                  <tr>
-                    {expandedBorrow === borrow.id && (
-                        <tr style={{backgroundColor: '#2a2a2a'}}>
-                          <td colSpan={8}>
-                            <Accordion expanded>
-                              <AccordionDetails style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '10px',
-                                backgroundColor: '#2a2a2a'
-                              }}>
-                                <TextField
-                                    label="Increase Size"
-                                    variant="outlined"
-                                    margin="normal"
-                                    type="number"
-                                    InputLabelProps={{style: {color: 'white'}}}
-                                    InputProps={{style: {color: 'white'}}}
-                                    style={{backgroundColor: '#2a2a2a'}}/>
-                                <div style={{display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
-                                  <button className="btn btn-primary btn-sm bg-[#050b4d]">
-                                    Submit
-                                  </button>
-                                </div>
-                              </AccordionDetails>
-                            </Accordion>
-                          </td>
-                        </tr>
-                    )}
-                  </tr>
-                </React.Fragment>
-            ))}
-            </tbody>
-          </table>
-        </div>
-        <br/>
-        <div className="my-metrics">
-          <h2>My Safety Margins</h2>
-          <div className="border-b border-white mt-2 "></div>
-          <br/>
-          <table>
-            <thead>
-            <tr>
-              <th>Assets</th>
-              <th>Total Deposits</th>
-              <th>Total Lent</th>
-              <th>Used as Colateral</th>
-              <th>Available assets</th>
-              <th>Safety Margin</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>ETH</td>
-              <td>{totalDepositsETH.toFixed(2)} ETH</td>
-              <td>{totalBorrowsETH.toFixed(2)} ETH</td>
-              <td>5000</td>
-              <td>Deposits</td>
-              <td>5%</td>
-            </tr>
-            <tr>
-              <td>USDC</td>
-              <td>{totalDepositsUSDC.toFixed(2)} USDC</td>
-              <td>{totalBorrowsUSDC.toFixed(2)} USDC</td>
-              <td>5000</td>
-              <td>Deposits</td>
-              <td>5%</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+                                    </tr>
+                                  </React.Fragment>
 
-    </div>
+                              ))}
+
+                            </Table>
+                          </TableContainer>
+
+                        </Grid>
+                      </Box>
+                    </CardContent>
+                  </Card>
+              )}
+        </Card>
+
+      </>
+
+
+
   );
 }
 

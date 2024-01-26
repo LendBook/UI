@@ -5,6 +5,7 @@ import LandingLayout from "./layouts";
 // Import components
 const Home = lazy(() => import("./components/Home"));
 const Borrow = lazy(() => import("./components/Borrow/Index"));
+const Markets = lazy(() => import("./components/Markets/Markets"));
 const Dashboard = lazy(() => import("./components/Dashboard"));
 const About = lazy(() => import("./components/About"));
 // ----------------------------------------------------------------------------------
@@ -17,7 +18,11 @@ export default function Routes() {
       children: [
         {
           path: "/",
-          element: <Home/>,
+          element: <Markets/>,
+        },
+        {
+          path: "/markets",
+          element: <Markets />,
         },
         {
           path: "/dashboard",

@@ -27,23 +27,23 @@ interface INavLink {
 const NAV_LINKS: Array<INavLink> = [
   {
     id: 1,
-    label: "MY DASHBOARD",
-    to: "/dashboard",
+    label: "Markets",
+    to: "/markets",
   },
   {
     id: 2,
-    label: "TRADE",
+    label: "Trade",
     to: "/trade",
   },
   {
     id: 3,
-    label: "BORROW",
+    label: "Borrow",
     to: "/borrow",
   },
   {
     id: 4,
-    label: "ABOUT",
-    to: "/about",
+    label: "My Positions",
+    to: "/dashboard",
   },
 ];
 
@@ -69,56 +69,59 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 bg-[#050b4d]  border-gray-800 z-[99]">
+    <nav className="sticky top-0 bg-[#000000]  border-gray-800 z-[99]">
       <Container className="justify-between p-4 hidden lg:flex">
-        <div className="flex items-center gap-8">
+        {/* Logo à gauche */}
+        <div className="flex items-center">
           <a href="/#" className="w-[180px] h-[76px]">
             <img src={logoImg} alt="logo" className="w-full" />
           </a>
         </div>
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-4">
-            {NAV_LINKS.map((linkItem) => (
-                <a key={linkItem.id} href={linkItem.to} className={pathname === linkItem.to ? "active-link" : ""}>
-                  <TextButton
-                      className={`gap-2 font-[GothamPro-Regular] text-[17] ${
-                          pathname === linkItem.to ? "text-gray-100" : "text-white"
-                      }`}
-                  >
-                    {linkItem.label}
-                  </TextButton>
-                </a>
-            ))}
-          </div>
 
+        {/* Liens de navigation au centre */}
+        <div className="flex items-center gap-8">
+          {NAV_LINKS.map((linkItem) => (
+              <a key={linkItem.id} href={linkItem.to} className={pathname === linkItem.to ? "active-link" : ""}>
+                <TextButton
+                    className={`gap-2 font-[GothamPro-Regular] text-[17] ${
+                        pathname === linkItem.to ? "text-gray-100" : "text-white"
+                    }`}
+                >
+                  {linkItem.label}
+                </TextButton>
+              </a>
+          ))}
+        </div>
+
+        <div className="flex items-center">
           {isConnected ? (
-            chain?.id === Number(chainId) ? (
-              <FilledButton
-                className="font-[GothamPro-Bold] flex items-center gap-1"
-                onClick={() => disconnect()}
-              >
-                <Icon icon="mdi:wallet-outline" className="text-xl" />
-                Disconnect
-              </FilledButton>
-            ) : (
-              <FilledButton
-                className="font-[GothamPro-Bold] flex items-center gap-1"
-                onClick={() => switchNetwork?.(Number(chainId))}
-              >
-                <Icon icon="mdi:wallet-outline" className="text-xl" />
-                Switch mainnet
-              </FilledButton>
-            )
+              chain?.id === Number(chainId) ? (
+                  <FilledButton
+                      className="font-[GothamPro-Bold] flex items-center gap-1"
+                      onClick={() => disconnect()}
+                  >
+                    <Icon icon="mdi:wallet-outline" className="text-xl" />
+                    Disconnect
+                  </FilledButton>
+              ) : (
+                  <FilledButton
+                      className="font-[GothamPro-Bold] flex items-center gap-1"
+                      onClick={() => switchNetwork?.(Number(chainId))}
+                  >
+                    <Icon icon="mdi:wallet-outline" className="text-xl" />
+                    Switch mainnet
+                  </FilledButton>
+              )
           ) : (
-            <FilledButton
-              className="font-[GothamPro-Bold] flex items-center gap-1"
-              onClick={() => {
-                open();
-              }}
-            >
-              <Icon id="connect-wallet" icon="mdi:wallet-outline" className="text-xl" />
-              Connect Wallet
-            </FilledButton>
+              <FilledButton
+                  className="font-[GothamPro-Bold] flex items-center gap-1"
+                  onClick={() => {
+                    open();
+                  }}
+              >
+                <Icon id="connect-wallet" icon="mdi:wallet-outline" className="text-xl" />
+                Connect Wallet
+              </FilledButton>
           )}
         </div>
       </Container>

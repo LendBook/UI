@@ -10,13 +10,15 @@ const RPCS = {
     56: "https://bsc-dataseed.binance.org/",
     97: "https://bsc-testnet.publicnode.com",
     4002: "https://fantom-testnet.publicnode.com",
+    168587773: "https://sepolia.blast.io",
 }
 
 const providers = {
     1: new ethers.providers.JsonRpcProvider(RPCS[1]),
     56: new ethers.providers.JsonRpcProvider(RPCS[56]),
     97: new ethers.providers.JsonRpcProvider(RPCS[97]),
-    4002: new ethers.providers.JsonRpcProvider(RPCS[4002])
+    4002: new ethers.providers.JsonRpcProvider(RPCS[4002]),
+    168587773: new ethers.providers.JsonRpcProvider(RPCS[168587773])
 }
 
 
