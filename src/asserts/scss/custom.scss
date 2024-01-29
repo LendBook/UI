@@ -1825,8 +1825,8 @@
     align-items: center;
   }
   .separate-submenu .language-desktop .sub-menu a:hover {
-    color: #33f;
-    text-shadow: 0 0 0.01px #33f;
+    color: white;
+    text-shadow: 0 0 0.01px white;
   }
   .separate-submenu .language-desktop .sub-menu .wpml-ls-flag + span {
     margin-left: 10px;
@@ -2060,13 +2060,13 @@
     top: 7px;
   }
   .header .menu-item-icon .sub-menu-link:hover {
-    color: #33f;
+    color: white;
   }
   .header .menu-item-icon .sub-menu-link:hover .sub-menu-icon {
-    background-color: #33f;
+    background-color: white;
   }
   .header .menu-item-icon .sub-menu-link::after {
-    border-color: #33f;
+    border-color: white;
   }
   .header .sub-menu__text,
   .header .sub-menu-link .sub-menu-link-description {
@@ -2160,7 +2160,7 @@
     margin-left: 15px;
   }
   .header .wpml-ls-menu-item a:hover {
-    color: #33f;
+    color: white;
   }
   .header .language-desktop {
     display: none;
@@ -3017,7 +3017,7 @@ p {
   font-size: 0;
 }
 .custom-pagination ul li.slick-active button {
-  background-color: #33f;
+  background-color: white;
 }
 .content ul li,
 .content ol li {
@@ -3817,7 +3817,6 @@ thead th {
   border-collapse: collapse;
   color: white;
   background-color:#191b1f;
-  border: 1px solid white;
   margin: 0 auto;
 }
 
@@ -3841,7 +3840,6 @@ thead th {
   font-weight: bold;
   color: white;
   background-color:#191b1f;
-  border: 1px solid white;
   text-align: left;
 }
 
@@ -3875,7 +3873,7 @@ thead th {
 .currency-menu {
   background-color: transparent !important;
   color: white;
-  min-width: 200px; // Ajustez la largeur selon vos besoins
+
 }
 
 

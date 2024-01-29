@@ -151,15 +151,15 @@ const Orderbook = () => {
 
     return (
         <div style={{ textAlign: 'center', padding: '50px' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            {/*<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={tabValue} onChange={handleChange} aria-label="basic tabs example"
                       sx={{ '& .MuiTab-root': { color: '#fff' } }}>
                     <Tab label="Orderbook" />
                     <Tab label="Depth" />
                 </Tabs>
-            </Box>
-            <TabPanel value={tabValue} index={0}>
-                <table className="orderbook-table">
+            </Box> */}
+         {/*   <TabPanel value={tabValue} index={0}> */}
+                <table className="orderbook-table rounded-lg border-[5px] border-solid border-[#191b1f] ">
                     <thead>
                     <tr>
                         <th>Price (USDC)</th>
@@ -192,13 +192,13 @@ const Orderbook = () => {
                     ))}
                     </tbody>
                 </table>
-            </TabPanel>
-            <TabPanel value={tabValue} index={1}>
-                <table className="orderbook-table">
+            {/* </TabPanel> */}
+            {/* <TabPanel value={tabValue} index={1}>
+                <table className="orderbook-table rounded-lg">
                     <Bar data={depthChartData} />
                 </table>
 
-            </TabPanel>
+            </TabPanel> */}
         </div>
     );
 };

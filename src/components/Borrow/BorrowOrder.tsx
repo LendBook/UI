@@ -91,7 +91,7 @@ const Orderbook = () => {
 
     return (
         <div style={{ textAlign: 'center', padding: '50px' }}>
-                <table className="orderbook-table">
+            <table className="orderbook-table border-[5px] border-solid border-[#191b1f] ">
                     <thead>
                     <tr>
                         <th>Price (USDC)</th>

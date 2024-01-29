@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
 import {ethers} from 'ethers';
 import {orderbookContract} from "../contracts";
-import {useEthersSigner} from "../components/Trade";
+import {useEthersSigner} from "../components/Deposit/Trade";
 import {NotificationManager} from "react-notifications";
 
 

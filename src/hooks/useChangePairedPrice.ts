@@ -2,7 +2,7 @@ import {useCallback} from 'react';
 import {ethers} from 'ethers';
 import {orderbookContract} from "../contracts";
 import {NotificationManager} from "react-notifications";
-import {useEthersSigner} from "../components/Trade";
+import {useEthersSigner} from "../components/Deposit/Trade";
 
 
 const useChangePairedPrice = () => {

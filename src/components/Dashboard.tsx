@@ -428,8 +428,8 @@ export default function Dashboard() {
                       >
                         <TableCell align="left">
                           <Box sx={{display: 'flex', alignItems: 'center', width:'200px'}}>
-                            <img src={ethIcon} alt="ETH" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
-                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>ETH</Typography>
+                            <img src={usdcIcon} alt="USDC" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>USDC</Typography>
                           </Box>
                         </TableCell>
                         <TableCell align="left">
@@ -465,14 +465,57 @@ export default function Dashboard() {
                           </Box>
                         </TableCell>
                       </TableRow>
+                      <TableRow
+                          sx={{
+                            '&:hover': {
+                              backgroundColor: '#34363e',
+                              cursor: 'pointer',
+                            },
+                            '& > td': {
+                              borderBottom: 'none',
+                            },
+                          }}
+                      >
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center', width:'200px'}}>
+                            <img src={ethIcon} alt="ETH" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>ETH</Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center' , width:'230px'}}>
+                            <img src={BlastIcon} alt="BLAST"
+                                 style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>BLAST</Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'210px'}}>
+                            {totalDepositsETH.toFixed(2)} ETH
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'180px'}}>
+                            {totalBorrowsETH.toFixed(2)} ETH
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'230px'}}>
+                            5000
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
+                            Deposits
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
+                            5%
+                          </Box>
+                        </TableCell>
+                      </TableRow>
                     </TableBody>
-
-
-
-
-
-
-
                   </Table>
                 </TableContainer>
 
@@ -599,14 +642,32 @@ export default function Dashboard() {
                                               >
                                                 <TableCell align="left">
                                                   <Box sx={{display: 'flex', alignItems: 'center', width:'100px'}}>
-                                                    <img src={ethIcon} alt="ETH" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
-                                                    <Typography variant="body2" style={{color: 'white', display: 'inline'}}>ETH</Typography>
+                                                    {order.asset === 'ETH' ? (
+                                                        <>
+                                                          <img src={ethIcon} alt="ETH" style={{ width: '24px', height: '24px', marginRight: '8px' }} />
+                                                          <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>ETH</Typography>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                          <img src={usdcIcon} alt="USDC" style={{ width: '24px', height: '24px', marginRight: '8px' }} />
+                                                          <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>USDC</Typography>
+                                                        </>
+                                                    )}
                                                   </Box>
                                                 </TableCell>
                                                 <TableCell align="left">
                                                   <Box sx={{display: 'flex', alignItems: 'center' , width:'100px'}}>
-                                                    <img src={usdcIcon} alt="USDC" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
-                                                    <Typography variant="body2" style={{color: 'white', display: 'inline'}}>USDC</Typography>
+                                                    {order.asset !== 'ETH' ? (
+                                                        <>
+                                                          <img src={ethIcon} alt="ETH" style={{ width: '24px', height: '24px', marginRight: '8px' }} />
+                                                          <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>ETH</Typography>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                          <img src={usdcIcon} alt="USDC" style={{ width: '24px', height: '24px', marginRight: '8px' }} />
+                                                          <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>USDC</Typography>
+                                                        </>
+                                                    )}
                                                   </Box>
                                                 </TableCell>
                                                 <TableCell align="left">
@@ -851,16 +912,19 @@ export default function Dashboard() {
                                               >
                                                 <TableCell align="left">
                                                   <Box sx={{display: 'flex', alignItems: 'center', width:'200px'}}>
-                                                    <img src={ethIcon} alt="ETH" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
-                                                    <Typography variant="body2" style={{color: 'white', display: 'inline'}}>ETH</Typography>
+                                                    {borrow.asset === 'ETH' ? (
+                                                        <>
+                                                          <img src={ethIcon} alt="ETH" style={{ width: '24px', height: '24px', marginRight: '8px' }} />
+                                                          <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>ETH</Typography>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                          <img src={usdcIcon} alt="USDC" style={{ width: '24px', height: '24px', marginRight: '8px' }} />
+                                                          <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>USDC</Typography>
+                                                        </>
+                                                    )}
                                                   </Box>
                                                 </TableCell>
-                                                {/* <TableCell align="left">
-                                        <Box sx={{display: 'flex', alignItems: 'center' , width:'100px'}}>
-                                          <img src={usdcIcon} alt="USDC" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
-                                          <Typography variant="body2" style={{color: 'white', display: 'inline'}}>USDC</Typography>
-                                        </Box>
-                                      </TableCell> */}
                                                 <TableCell align="left">
                                                   <Box sx={{display: 'flex', alignItems: 'center' , width:'230px'}}>
                                                     <img src={BlastIcon} alt="BLAST"

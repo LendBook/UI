@@ -1,15 +1,19 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {useWeb3Modal} from "@web3modal/react";
-import {TextField} from "@mui/material";
+import {InputAdornment, TextField} from "@mui/material";
 import {useAccount, useWalletClient, type WalletClient,} from "wagmi";
 import {ethers, providers} from "ethers";
 import {getEthPrice, getUSDCPrice, orderbookContract} from "../../contracts";
 import "../../asserts/scss/custom.scss";
-import ethIcon from "../../asserts/images/coins/eth.svg";
-import usdcIcon from "../../asserts/images/coins/usdc.svg";
-import Contrats from "../../contracts/contracts/97.json";
+import Contrats from "../../contracts/contracts/168587773.json";
 import {useBorrow} from "../../hooks/useBorrow";
 import {useOrderContext} from "./Ordercontext";
+import {IconButton} from "@material-tailwind/react";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ethIcon from "../../asserts/images/coins/eth.svg";
+import usdcIcon from "../../asserts/images/coins/usdc.svg";
 
 interface OrderDetails {
     id: number;
@@ -39,6 +43,7 @@ export function useEthersSigner({chainId}: { chainId?: number } = {}) {
         [walletClient]
     );
 }
+
 
 
 export default function BorrowModule() {
@@ -74,7 +79,25 @@ export default function BorrowModule() {
 
     const [tapStateButton, setTapStateButton] = useState(1);
 
+    const [selectedCurrency, setSelectedCurrency] = useState('ETH');
+
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const openMenu = Boolean(anchorEl);
+
     const borrow = useBorrow();
+
+    const handleCurrencyClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
+
+    const handleCurrencyClose = () => {
+        setAnchorEl(null);
+    };
 
     const fetchOrderDetails = async (orderId: number): Promise<OrderDetails> => {
         await new Promise(resolve => setTimeout(resolve, 500));
@@ -112,7 +135,7 @@ export default function BorrowModule() {
     // APPROVE
     const handleUsdcApprove = async () => {
         if (signer) {
-            const usdcContract = new ethers.Contract(Contrats.usdc.address, Contrats.token.abi, signer);
+            const usdcContract = new ethers.Contract(Contrats.usdc.address, Contrats.usdc.abi, signer);
             const tx = await usdcContract.approve(orderbookContract.address, ethers.constants.MaxUint256);
             await tx.wait();
             fetchUsdcBalanceAndAllowance();
@@ -122,7 +145,7 @@ export default function BorrowModule() {
 
     const handleWethApprove = async () => {
         if (signer) {
-            const wethContract = new ethers.Contract(Contrats.weth.address, Contrats.token.abi, signer);
+            const wethContract = new ethers.Contract(Contrats.weth.address, Contrats.weth.abi, signer);
             const tx = await wethContract.approve(orderbookContract.address, ethers.constants.MaxUint256);
             await tx.wait();
             fetchWethBalanceAndAllowance();
@@ -156,7 +179,7 @@ export default function BorrowModule() {
 
     const fetchUsdcBalanceAndAllowance = async () => {
         if (signer && address) {
-            const usdcContract = new ethers.Contract(Contrats.usdc.address, Contrats.token.abi, signer);
+            const usdcContract = new ethers.Contract(Contrats.usdc.address, Contrats.usdc.abi, signer);
             const balance = await usdcContract.balanceOf(address);
             const userAllowance = await usdcContract.allowance(address, orderbookContract.address);
 
@@ -166,7 +189,7 @@ export default function BorrowModule() {
     };
     const fetchWethBalanceAndAllowance = async () => {
         if (signer && address) {
-            const wethContract = new ethers.Contract(Contrats.weth.address, Contrats.token.abi, signer);
+            const wethContract = new ethers.Contract(Contrats.weth.address, Contrats.weth.abi, signer);
             const balance = await wethContract.balanceOf(address);
             const userAllowance = await wethContract.allowance(address, orderbookContract.address);
 
@@ -231,7 +254,7 @@ export default function BorrowModule() {
 
 
     const renderLabelDeposit = () => {
-        if (tapStateButton === 1) {
+        if (selectedCurrency === "USDC") {
             return <>
                 {parseFloat(usdcAllowance) < parseFloat(quantity) && (
                     <div
@@ -262,7 +285,7 @@ export default function BorrowModule() {
                 )}
 
                 </>;
-        } else if (tapStateButton === 2) {
+        } else if (selectedCurrency === "ETH") {
             return <>
                 {parseFloat(wethAllowance) < parseFloat(quantity) && (
                     <div
@@ -348,11 +371,12 @@ export default function BorrowModule() {
         <div className="pt-[30px] px-0 pb-[60px] hero-container">
             <div className="hero" id="about">
                 <div className="hero__wrap">
-                    <div className="buy-box max-w-[500px] w-full flex flex-col gap-[50px] text-white h-[100%] bg-[black]">
-                        <div className="flex flex-col gap-[30px] p-[5px]  rounded-lg border-[2px] border-solid boder-[#d4dadf]">
+                    <div className="buy-box max-w-[500px] w-full flex flex-col gap-[50px] text-white h-[100%] bg-[#131518] rounded-lg border-[5px] border-solid border-[#191b1f]">
+                        <div className="flex flex-col gap-[30px] p-[5px]  ">
                             <div className="flex flex-col gap-[20px] px-[20px]">
-                                        <div className={`grid grid-cols-2 gap-[10px] mb-[20px] mt-[20px]`}>
-                                            <div
+                                            <h2 style={{ marginTop: '20px' }}>Borrow</h2>
+                                            <hr />
+                                           {/* <div
                                                 onClick={() => {
                                                     setTapStateButton(1);
                                                     setActiveCurrency("USDC");
@@ -378,14 +402,12 @@ export default function BorrowModule() {
                                             <span className="flex items-center text-[15px] font-bold text-[white]">
                                                     BORROW USDC
                                                 </span>
-                                            </div>
+                                            </div> */}
 
-                                        </div>
-                                            <>
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-[20px] mb-[20px]  ">
                                                     <div className="flex flex-col">
                                                         <TextField
-                                                            label="Lend Order to use"
+                                                            label="Borrow"
                                                             variant="outlined"
                                                             margin="normal"
                                                             multiline
@@ -399,27 +421,68 @@ export default function BorrowModule() {
                                                     </div>
                                                     <div className="flex flex-col">
                                                         <TextField
-                                                            label={calculatedValueSize}
-                                                            variant="outlined"
+                                                            label={"Collateral"}
                                                             margin="normal"
-                                                            type="number"
                                                             onChange={onSizeChange}
-                                                            InputLabelProps={{ style: { color: 'white' }}}
-                                                            InputProps={{ style: { color: 'white' }}}
-                                                            style={{ backgroundColor: '#191b1f'}}
+                                                            InputLabelProps={{ style: { color: 'white' } }}
+                                                            InputProps={{
+                                                                style: { color: 'white', backgroundColor: 'transparent' },
+                                                                endAdornment: (
+                                                                    <InputAdornment position="end">
+                                                                        <IconButton
+                                                                            aria-label="select currency"
+                                                                            onClick={handleCurrencyClick}
+                                                                            style={{ marginRight: '-12px', width: '80px', display: 'flex', alignItems: 'center' }}
+                                                                        >
+                                                                            {selectedCurrency && (
+                                                                                <>
+                                                                                    {/*<img src={selectedCurrency === 'USDC' ? usdcImage : ethImage} alt={selectedCurrency} style={{ width: '20px', height: '20px' }} /> */}
+                                                                                    <span style={{ marginLeft: '10px', color: 'white' }}>{selectedCurrency}</span>
+                                                                                </>
+                                                                            )}
+                                                                            {!selectedCurrency && <span style={{ color: 'white' }}>Select Currency</span>}
+                                                                            <ArrowDropDownIcon style={{ color: 'white' }} />
+                                                                        </IconButton>
+                                                                        <Menu
+                                                                            id="currency-menu"
+                                                                            anchorEl={anchorEl}
+                                                                            open={openMenu}
+                                                                            onClose={handleCloseMenu}
+                                                                            PaperProps={{
+                                                                                style: {
+                                                                                    backgroundColor: '#191b1f',
+                                                                                    color: 'white',
+                                                                                    minWidth: '100px',
+                                                                                },
+                                                                            }}
+                                                                        >
+                                                                            <MenuItem onClick={() => { setSelectedCurrency('USDC'); handleCloseMenu(); }} style={{ display: 'flex', alignItems: 'center', backgroundColor: 'transparent' }}>
+                                                                                <img src={usdcIcon} alt="USDC" style={{ width: '20px', height: '20px' }} />
+                                                                                <span style={{ marginLeft: '10px', color: 'white' }}>USDC</span>
+                                                                            </MenuItem>
+                                                                            <MenuItem onClick={() => { setSelectedCurrency('ETH'); handleCloseMenu(); }} style={{ display: 'flex', alignItems: 'center', backgroundColor: 'transparent' }}>
+                                                                                <img src={ethIcon} alt="ETH" style={{ width: '20px', height: '20px' }} />
+                                                                                <span style={{ marginLeft: '10px', color: 'white' }}>ETH</span>
+                                                                            </MenuItem>
+                                                                        </Menu>
+                                                                    </InputAdornment>
+                                                                ),
+                                                            }}
+                                                            style={{ backgroundColor: '#191b1f' }}
                                                         />
+
+
                                                         <div className="flex justify-between items-center">
                                                             <span className="text-white text-[12px]">
-                                                                    Balance: {activeCurrency === "USDC" ? usdcBalance : wethBalance} {activeCurrency}
-                                                                </span>
+                                                                Balance: {selectedCurrency === "USDC" ? usdcBalance : ethBalance} {selectedCurrency}
+                                                            </span>
                                                             <button
                                                                 className="text-[12px] text-white underline"
-                                                                onClick={activeCurrency === "USDC" ? () => setQuantity(usdcBalance) : () => setQuantity(wethBalance)}
+                                                                onClick={selectedCurrency === "USDC" ? () => setQuantity(usdcBalance) : () => setQuantity(ethBalance)}
                                                             >
                                                                 Max
                                                             </button>
                                                         </div>
-                                                    </div>
                                                 </div>
 
                                                 {address && (
@@ -429,7 +492,7 @@ export default function BorrowModule() {
                                                         </div>
                                                     </>
                                                 )}
-                                            </>
+                                                </div>
                                     </div>
                             {!address && (
                                 <div className="flex flex-row justify-center items-center">

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Trade from './Trade';
-import Orderbook from './Deposit/Orderbook';
+import Orderbook from './Orderbook';
 
-const Home = () => {
+const Index = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -26,4 +26,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Index;
