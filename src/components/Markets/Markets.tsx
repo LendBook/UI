@@ -29,7 +29,8 @@ export default function Markets() {
     };
 
     return (
-        <Card sx={{ maxWidth: '1000px', margin: 'auto', backgroundColor: '#000000' }}>
+        <Card sx={{ maxWidth: '1300px', margin: 'auto', background: 'transparent', boxShadow: 'none',
+            border: 'none' }}>
             <CardContent
                 sx={{
                     width: '100%',
@@ -47,7 +48,7 @@ export default function Markets() {
                         alignItems="center"
                         wrap="wrap"
                     >
-                        <TableContainer sx={{ mt: '0.75rem', borderRadius: '14px', overflow: 'hidden', border: '2px solid #34363e' }}>
+                        <TableContainer sx={{ mt: '0.75rem', borderRadius: '14px', overflow: 'hidden', border: '3px solid #34363e' }}>
                             <Table
                                 aria-label="Markets table"
                                 sx={{ borderCollapse: 'initial', backgroundColor: '#131518'}}
@@ -86,7 +87,7 @@ export default function Markets() {
 
                                     </TableRow>
                                 </TableHead>
-                                <TableBody>
+                                <TableBody sx={{border: '3px solid #34363e' }} >
                                     <TableRow
                                         sx={{
                                             '&:hover': {

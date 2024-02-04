@@ -13,34 +13,20 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import {useDeposit} from "../../hooks/useDeposit";
-import Contrats from "../../contracts/contracts/168587773.json";
+import {useEthersSigner} from "../../contracts/index";
+import Contrats from "../../contracts/contracts/97.json";
 import {IconButton} from "@material-tailwind/react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import {useOrderContext} from "../Orderbook/OrderContext";
 
-
-
-export function walletClientToSigner(walletClient: WalletClient) {
-    const {account, chain, transport} = walletClient;
-    const network = {
-        chainId: chain.id,
-        name: chain.name,
-        ensAddress: chain.contracts?.ensRegistry?.address,
-    };
-    const provider = new providers.Web3Provider(transport, network);
-    const signer = provider.getSigner(account.address);
-    return signer;
+interface OrderDetails {
+    orderId: number;
+    limitPrice: string;
 }
 
-/** Hook to convert a viem Wallet Client to an ethers.js Signer. */
-export function useEthersSigner({chainId}: { chainId?: number } = {}) {
-    const {data: walletClient} = useWalletClient({chainId});
-    return useMemo(
-        () => (walletClient ? walletClientToSigner(walletClient) : undefined),
-        [walletClient]
-    );
-}
+
 
 
 export default function Trade() {
@@ -84,6 +70,9 @@ export default function Trade() {
 
     const currencyPrice = activeCurrency === 'USDC' ? priceUSDCUSD : priceETHUSD;
 
+    const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
+    const {orderId, limitPrice} = useOrderContext();
+
     const calculatedValueEnterAmount = !isNaN(parseFloat(quantity)) && !isNaN(currencyPrice)
         ? `$ ${(parseFloat(quantity) * currencyPrice).toFixed(2)}`
         : 'Enter Amount';
@@ -92,7 +81,12 @@ export default function Trade() {
         ? `$ ${(parseFloat(buyPrice) * currencyPrice).toFixed(2)}`
         : 'Enter Limit Price';
 
-    const [selectedCurrency, setSelectedCurrency] = useState('ETH');
+    const orderDetailsText = orderDetails
+        ? `${orderDetails.limitPrice}`
+        : '';
+
+
+    const [selectedCurrency, setSelectedCurrency] = useState('USDC');
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const openMenu = Boolean(anchorEl);
 
@@ -235,6 +229,8 @@ export default function Trade() {
         await deposit(quantity, buyPrice, pairedPrice, false, isSwitchOn);
     };
 
+
+
     const onRepostOrderChange = (e: any) => {
         try {
             if (e.target.value === "") {
@@ -250,6 +246,26 @@ export default function Trade() {
             console.log(error);
         }
     };
+
+    const fetchOrderDetails = async (orderId: number, limitPrice: string | null): Promise<OrderDetails> => {
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        return {
+            orderId: orderId,
+            limitPrice: limitPrice ?? "0", // Utilisation d'une valeur par défaut si limitPrice est null
+        };
+    };
+
+    useEffect(() => {
+        if (orderId !== null) {
+            fetchOrderDetails(orderId, limitPrice).then(details => {
+                setOrderDetails(details);
+                if (details) {
+                    setBuyPrice(details.limitPrice);
+                }
+            });
+        }
+    }, [orderId]);
 
 
     const renderLabelDeposit = () => {
@@ -448,10 +464,6 @@ export default function Trade() {
                                                             style={{ backgroundColor: '#191b1f' }}
                                                         />
 
-
-
-
-
                                                         <div className="flex justify-between items-center">
                                                             <span className="text-white text-[12px]">
                                                                 Balance: {selectedCurrency === "USDC" ? usdcBalance : ethBalance} {selectedCurrency}
@@ -471,6 +483,7 @@ export default function Trade() {
                                                             label={"Enter limit price"}
                                                             variant="outlined"
                                                             margin="normal"
+                                                            value={orderDetailsText}
                                                             onChange={onBuyPriceChange}
                                                             InputLabelProps={{ style: { color: 'white' }}}
                                                             InputProps={{ style: { color: 'white' }}}

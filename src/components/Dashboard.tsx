@@ -11,14 +11,11 @@ import {
   TextField
 } from "@mui/material";
 import React, {useEffect, useState} from "react";
-import {orderbookContract} from "../contracts";
 import {useAccount} from "wagmi";
 import {ethers} from "ethers";
 import {useWithdraw} from "../hooks/useWithdraw";
 import {useRepay} from "../hooks/useRepay";
 import {useChangeBorrowable} from "../hooks/useChangeBorrowable";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import AccordionDetails from "@mui/material/AccordionDetails";
 import Button from "@mui/material/Button";
 import useIncreaseSize from "../hooks/useIncreaseSize";
 import useChangeLimitPrice from "../hooks/useChangeLimitPrice";
@@ -37,6 +34,9 @@ import SizableTableCell from "./Markets/SizableTableCell";
 import ethIcon from "../asserts/images/coins/eth.svg";
 import usdcIcon from "../asserts/images/coins/usdc.svg";
 import BlastIcon from "../asserts/images/networks/Blast.svg";
+import {useEthersSigner} from "../contracts/index";
+import Contrats from "../contracts/contracts/97.json";
+import {getEthPrice, getUSDCPrice, orderbookContract} from "../contracts/index";
 
 
 interface Order {
@@ -62,7 +62,24 @@ interface Borrow {
 
 export default function Dashboard() {
 
+  const signer = useEthersSigner();
   const {address} = useAccount();
+
+  const [countTotalBalance, setCountTotalBalance] = useState(0);
+  const [countTotalDeposit, setCountTotalDeposit] = useState(0);
+  const [countTotalLent, setCountTotalLent] = useState(0);
+  const [countTotalOrder, setCountTotalOrder] = useState(0);
+  const [countTotalBorrow, setCountTotalBorrow] = useState(0);
+
+  const [priceETHUSD, setPriceETHUSD] = useState(0);
+  const [priceUSDCUSD, setPriceUSDCUSD] = useState(0);
+  const [borrowBalance, setTotalBorrow] = useState(0);
+
+
+  // BALANCE
+  const [ethBalance, setEthBalance] = useState('0');
+  const [usdcBalance, setUsdcBalance] = useState('0');
+  const [wethBalance, setWethBalance] = useState('0');
 
   const [userOrders, setUserOrders] = useState<Order[]>([]);
   const [userBorrows, setUserBorrows] = useState<Borrow[]>([]);
@@ -106,9 +123,38 @@ export default function Dashboard() {
 
   const [activeTab, setActiveTab] = useState('orders');
 
+
+
+  useEffect(() => {
+    const fetchEthPrice = async () => {
+      const price = await getEthPrice();
+      if (price) setPriceETHUSD(price);
+    };
+
+    const fetchUsdcPrice = async () => {
+      const price = await getUSDCPrice();
+      if (price) setPriceUSDCUSD(price);
+    };
+
+    fetchEthPrice();
+    fetchUsdcPrice();
+  }, []);
+
   const handleChangeTab = (event: any, newValue: React.SetStateAction<string>) => {
     setActiveTab(newValue);
   };
+
+  let totalBalance: number = 0;
+  let totalBorrow: number = 0;
+  let totalDeposit: number = 0;
+
+  if (!isNaN(parseFloat(wethBalance)) && !isNaN(parseFloat(usdcBalance)) && !isNaN(totalBorrowsETH) && !isNaN(totalBorrowsUSDC) && !isNaN(priceETHUSD) && !isNaN(priceUSDCUSD)) {
+    totalBalance = parseFloat((parseFloat(wethBalance) * priceETHUSD + parseFloat(usdcBalance) * priceUSDCUSD).toFixed(2));
+    totalBorrow = parseFloat(((totalBorrowsETH * priceETHUSD) + (totalBorrowsUSDC * priceUSDCUSD)).toFixed(2));
+    totalDeposit = parseFloat(((totalDepositsETH * priceETHUSD) + (totalDepositsUSDC * priceUSDCUSD)).toFixed(2));
+  } else {
+    console.log("Error to fetch value");
+  }
 
 
 
@@ -184,6 +230,123 @@ export default function Dashboard() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const fetchUsdcBalanceAndAllowance = async () => {
+    if (signer && address) {
+      const usdcContract = new ethers.Contract(Contrats.usdc.address, Contrats.usdc.abi, signer);
+      const balance = await usdcContract.balanceOf(address);
+
+      setUsdcBalance(Number(ethers.utils.formatUnits(balance, 18)).toFixed(2));
+    }
+  };
+  const fetchWethBalanceAndAllowance = async () => {
+    if (signer && address) {
+      const wethContract = new ethers.Contract(Contrats.weth.address, Contrats.weth.abi, signer);
+      const balance = await wethContract.balanceOf(address);
+
+      setWethBalance(Number(ethers.utils.formatUnits(balance, 18)).toFixed(2));
+    }
+  };
+
+  useEffect(() => {
+    fetchWethBalanceAndAllowance();
+  }, [signer, address]);
+
+  useEffect(() => {
+    fetchUsdcBalanceAndAllowance();
+  }, [signer, address]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountTotalBalance((prevCount) => {
+        const increment = totalBalance / 100; // Nombre d'incrément pour atteindre la valeur totale
+        const newValue = prevCount + increment;
+        // Arrête l'incrémentation lorsque la valeur atteint totalBalance
+        if (newValue >= totalBalance) {
+          clearInterval(interval);
+          return totalBalance;
+        }
+        return newValue;
+      });
+    }, 50); // Intervalle de mise à jour (ms)
+
+    // Nettoie l'intervalle lorsque le composant est démonté
+    return () => clearInterval(interval);
+  }, [totalBalance]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountTotalDeposit((prevCount) => {
+        const increment = totalDeposit / 100; // Nombre d'incrément pour atteindre la valeur totale
+        const newValue = prevCount + increment;
+        // Arrête l'incrémentation lorsque la valeur atteint totalBalance
+        if (newValue >= totalDeposit) {
+          clearInterval(interval);
+          return totalDeposit;
+        }
+        return newValue;
+      });
+    }, 50); // Intervalle de mise à jour (ms)
+
+    // Nettoie l'intervalle lorsque le composant est démonté
+    return () => clearInterval(interval);
+  }, [totalDeposit]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountTotalBorrow((prevCount) => {
+        const increment = totalBorrow / 100; // Nombre d'incrément pour atteindre la valeur totale
+        const newValue = prevCount + increment;
+        // Arrête l'incrémentation lorsque la valeur atteint totalBalance
+        if (newValue >= totalBorrow) {
+          clearInterval(interval);
+          return totalBorrow;
+        }
+        return newValue;
+      });
+    }, 50); // Intervalle de mise à jour (ms)
+
+    // Nettoie l'intervalle lorsque le composant est démonté
+    return () => clearInterval(interval);
+  }, [totalBorrow]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountTotalOrder((prevCount) => {
+        const nbOrders = userOrders.length;
+        const increment = nbOrders / 100; // Nombre d'incrément pour atteindre la valeur totale
+        const newValue = prevCount + increment;
+        // Arrête l'incrémentation lorsque la valeur atteint totalBalance
+        if (newValue >= nbOrders) {
+          clearInterval(interval);
+          return nbOrders;
+        }
+        return newValue;
+      });
+    }, 50); // Intervalle de mise à jour (ms)
+
+    // Nettoie l'intervalle lorsque le composant est démonté
+    return () => clearInterval(interval);
+  }, [totalBorrow]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountTotalLent((prevCount) => {
+        const nbBorrow = userBorrows.length;
+        const increment = nbBorrow / 100; // Nombre d'incrément pour atteindre la valeur totale
+        const newValue = prevCount + increment;
+        // Arrête l'incrémentation lorsque la valeur atteint totalBalance
+        if (newValue >= nbBorrow) {
+          clearInterval(interval);
+          return nbBorrow;
+        }
+        return newValue;
+      });
+    }, 50); // Intervalle de mise à jour (ms)
+
+    // Nettoie l'intervalle lorsque le composant est démonté
+    return () => clearInterval(interval);
+  }, [totalBorrow]);
 
 
   const handleLimitPriceChange = (e: any) => {
@@ -365,166 +528,8 @@ export default function Dashboard() {
 
   return (
       <>
-        <Card sx={{maxWidth: '1500px', margin: 'auto', backgroundColor: '#000000'}}>
-          <CardContent
-              sx={{
-                width: '100%',
-                p: '1.5rem 2rem 1.5rem 2rem',
-                mb: '2rem',
-              }}
-          >
-            <Box>
-              <Typography variant="h4" style={{color: 'white'}}>My Positions</Typography>
-              <Grid
-                  container
-                  mt="2.5rem"
-                  mb="1rem"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  wrap="wrap"
-              >
-                <TableContainer
-                    sx={{mt: '0.75rem', borderRadius: '14px', overflow: 'hidden', border: '2px solid #34363e'}}>
-                  <Table
-                      aria-label="Markets table"
-                      sx={{borderCollapse: 'initial', backgroundColor: '#131518'}}
-                  >
-                    <TableHead>
-                      <TableRow sx={{height: '2.625rem'}}>
-                        <SizableTableCell  width="200px" style={{color: 'white'}}>
-                          Assets
-                        </SizableTableCell>
-                        <SizableTableCell  width="200px" style={{color: 'white'}}>
-                          Network
-                        </SizableTableCell>
-                        <SizableTableCell  width="200px" style={{color: 'white'}}>
-                          Total Deposits
-                        </SizableTableCell>
-                        <SizableTableCell width="200px"  style={{color: 'white'}}>
-                          Total Lent
-                        </SizableTableCell>
-                        <SizableTableCell width="200px"  style={{color: 'white'}}>
-                          Used as Colateral
-                        </SizableTableCell>
-                        <SizableTableCell width="200px"  style={{color: 'white'}}>
-                          Available assets
-                        </SizableTableCell>
-                        <SizableTableCell width="200px"  style={{color: 'white'}}>
-                          Safety Margin
-                        </SizableTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody >
-                      <TableRow
-                          sx={{
-                            '&:hover': {
-                              backgroundColor: '#34363e',
-                              cursor: 'pointer',
-                            },
-                            '& > td': {
-                              borderBottom: 'none',
-                            },
-                          }}
-                      >
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center', width:'200px'}}>
-                            <img src={usdcIcon} alt="USDC" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
-                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>USDC</Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center' , width:'230px'}}>
-                            <img src={BlastIcon} alt="BLAST"
-                                 style={{width: '24px', height: '24px', marginRight: '8px'}}/>
-                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>BLAST</Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'210px'}}>
-                            {totalDepositsUSDC.toFixed(2)} USDC
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'180px'}}>
-                            {totalBorrowsUSDC.toFixed(2)} USDC
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'230px'}}>
-                            5000
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
-                            Deposits
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
-                            5%
-                          </Box>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow
-                          sx={{
-                            '&:hover': {
-                              backgroundColor: '#34363e',
-                              cursor: 'pointer',
-                            },
-                            '& > td': {
-                              borderBottom: 'none',
-                            },
-                          }}
-                      >
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center', width:'200px'}}>
-                            <img src={ethIcon} alt="ETH" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
-                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>ETH</Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center' , width:'230px'}}>
-                            <img src={BlastIcon} alt="BLAST"
-                                 style={{width: '24px', height: '24px', marginRight: '8px'}}/>
-                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>BLAST</Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'210px'}}>
-                            {totalDepositsETH.toFixed(2)} ETH
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'180px'}}>
-                            {totalBorrowsETH.toFixed(2)} ETH
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'230px'}}>
-                            5000
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
-                            Deposits
-                          </Box>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
-                            5%
-                          </Box>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-
-              </Grid>
-            </Box>
-          </CardContent>
-        </Card>
-
-        <Card sx={{maxWidth: '1500px', margin: 'auto', backgroundColor: '#000000'}}>
+        <Card sx={{maxWidth: '1500px', margin: 'auto', background: 'transparent', boxShadow: 'none',
+          border: 'none'}}>
           <CardContent
               sx={{
                 width: '100%',
@@ -532,14 +537,41 @@ export default function Dashboard() {
                 mb: '2rem',
               }}
           >
-             <Tabs
+            <Box sx={{ display: 'flex', gap: '20px', border: '2px solid #34363e', padding: '10px', borderRadius: '10px', marginBottom: '2rem', background: '#131518' }}>
+              <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
+                <Typography variant="subtitle1">Total Deposit value</Typography>
+                <Typography variant="subtitle1">$ {Math.round(countTotalDeposit).toLocaleString('en-US')}</Typography>
+              </Box>
+              <Box sx={{ width: '2px', background: '#34363e' }} />
+              <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
+                <Typography variant="subtitle1">Total Borrow value</Typography>
+                <Typography variant="subtitle1">$ {Math.round(countTotalBorrow).toLocaleString('en-US')}</Typography>
+              </Box>
+              <Box sx={{ width: '2px', background: '#34363e' }} />
+              <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
+                <Typography variant="subtitle1">Available to lend</Typography>
+                <Typography variant="subtitle1">$ {Math.round(countTotalBalance).toLocaleString('en-US')}</Typography>
+              </Box>
+              <Box sx={{ width: '2px', background: '#34363e' }} />
+              <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
+                <Typography variant="subtitle1">Orders</Typography>
+                <Typography variant="subtitle1">{Math.round(countTotalOrder).toLocaleString('en-US')}/3</Typography>
+              </Box>
+              <Box sx={{ width: '2px', background: '#34363e' }} />
+              <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
+                <Typography variant="subtitle1">Borrow</Typography>
+                <Typography variant="subtitle1">{Math.round(countTotalLent).toLocaleString('en-US')}</Typography>
+              </Box>
+            </Box>
+
+            <Tabs
                   value={activeTab}
                   onChange={handleChangeTab}
                   aria-label="SwitchTabs"
                   sx={{
                     width: '300px',
                     borderRadius: '10px',
-                    border: '5px solid #131518',
+                    border: '2px solid #131518',
                     '.MuiTabs-flexContainer': {
                       backgroundColor: '#131518',
                     },
@@ -565,11 +597,12 @@ export default function Dashboard() {
           </CardContent>
 
               {activeTab === 'orders' && (
-                  <Card sx={{maxWidth: '1500px', margin: 'auto', backgroundColor: '#000000'}}>
+                  <Card sx={{maxWidth: '1500px', margin: 'auto', background: 'transparent', boxShadow: 'none',
+                    border: 'none'}}>
                     <CardContent
                         sx={{
                           width: '100%',
-                          p: '1.5rem 2rem 1.5rem 2rem',
+                          p: '0rem 2rem 1.5rem 2rem',
                           mb: '2rem',
                         }}
                     >
@@ -847,11 +880,12 @@ export default function Dashboard() {
                   </Card>
               )}
               {activeTab === 'borrows' && (
-                  <Card sx={{maxWidth: '1500px', margin: 'auto', backgroundColor: '#000000'}}>
+                  <Card sx={{maxWidth: '1500px', margin: 'auto', background: 'transparent', boxShadow: 'none',
+                    border: 'none'}}>
                     <CardContent
                         sx={{
                           width: '100%',
-                          p: '1.5rem 2rem 1.5rem 2rem',
+                          p: '0rem 2rem 1.5rem 2rem',
                           mb: '2rem',
                         }}
                     >
@@ -1034,6 +1068,166 @@ export default function Dashboard() {
                     </CardContent>
                   </Card>
               )}
+        </Card>
+
+        <Card sx={{maxWidth: '1500px', margin: 'auto', background: 'transparent', boxShadow: 'none',
+          border: 'none'}}>
+          <CardContent
+              sx={{
+                width: '100%',
+                p: '0rem 2rem 1.5rem 2rem',
+                mb: '2rem',
+              }}
+          >
+            <Box>
+              <Typography variant="h4" style={{color: 'white'}}>My Positions</Typography>
+              <Grid
+                  container
+                  mt="2.5rem"
+                  mb="1rem"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  wrap="wrap"
+              >
+                <TableContainer
+                    sx={{mt: '0.75rem', borderRadius: '14px', overflow: 'hidden', border: '2px solid #34363e'}}>
+                  <Table
+                      aria-label="Markets table"
+                      sx={{borderCollapse: 'initial', backgroundColor: '#131518'}}
+                  >
+                    <TableHead>
+                      <TableRow sx={{height: '2.625rem'}}>
+                        <SizableTableCell  width="200px" style={{color: 'white'}}>
+                          Assets
+                        </SizableTableCell>
+                        <SizableTableCell  width="200px" style={{color: 'white'}}>
+                          Network
+                        </SizableTableCell>
+                        <SizableTableCell  width="200px" style={{color: 'white'}}>
+                          Total Deposits
+                        </SizableTableCell>
+                        <SizableTableCell width="200px"  style={{color: 'white'}}>
+                          Total Lent
+                        </SizableTableCell>
+                        <SizableTableCell width="200px"  style={{color: 'white'}}>
+                          Used as Colateral
+                        </SizableTableCell>
+                        <SizableTableCell width="200px"  style={{color: 'white'}}>
+                          Available assets
+                        </SizableTableCell>
+                        <SizableTableCell width="200px"  style={{color: 'white'}}>
+                          Safety Margin
+                        </SizableTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody >
+                      <TableRow
+                          sx={{
+                            '&:hover': {
+                              backgroundColor: '#34363e',
+                              cursor: 'pointer',
+                            },
+                            '& > td': {
+                              borderBottom: 'none',
+                            },
+                          }}
+                      >
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center', width:'200px'}}>
+                            <img src={usdcIcon} alt="USDC" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>USDC</Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center' , width:'230px'}}>
+                            <img src={BlastIcon} alt="BLAST"
+                                 style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>BLAST</Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'210px'}}>
+                            {totalDepositsUSDC.toFixed(2)} USDC
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'180px'}}>
+                            {totalBorrowsUSDC.toFixed(2)} USDC
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'230px'}}>
+                            5000
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
+                            Deposits
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
+                            5%
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow
+                          sx={{
+                            '&:hover': {
+                              backgroundColor: '#34363e',
+                              cursor: 'pointer',
+                            },
+                            '& > td': {
+                              borderBottom: 'none',
+                            },
+                          }}
+                      >
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center', width:'200px'}}>
+                            <img src={ethIcon} alt="ETH" style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>ETH</Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center' , width:'230px'}}>
+                            <img src={BlastIcon} alt="BLAST"
+                                 style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                            <Typography variant="body2" style={{color: 'white', display: 'inline'}}>BLAST</Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'210px'}}>
+                            {totalDepositsETH.toFixed(2)} ETH
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'180px'}}>
+                            {totalBorrowsETH.toFixed(2)} ETH
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'230px'}}>
+                            5000
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
+                            Deposits
+                          </Box>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Box sx={{display: 'flex', alignItems: 'center',  color: 'white' , width:'200px'}}>
+                            5%
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+
+              </Grid>
+            </Box>
+          </CardContent>
         </Card>
 
       </>

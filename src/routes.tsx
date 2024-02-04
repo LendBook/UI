@@ -8,6 +8,7 @@ const Borrow = lazy(() => import("./components/Borrow/Index"));
 const Trade = lazy(() => import("./components/Deposit/Index"));
 const Markets = lazy(() => import("./components/Markets/Markets"));
 const Dashboard = lazy(() => import("./components/Dashboard"));
+const Faucet = lazy(() => import("./components/Faucet/Faucet"));
 const About = lazy(() => import("./components/About"));
 // ----------------------------------------------------------------------------------
 
@@ -40,6 +41,10 @@ export default function Routes() {
         {
           path: "/about",
           element: <About />,
+        },
+        {
+          path: "/faucet",
+          element: <Faucet />,
         },
       ],
     },

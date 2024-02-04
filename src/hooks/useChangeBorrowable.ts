@@ -3,7 +3,7 @@
 import { ethers } from "ethers";
 import { orderbookContract } from "../contracts";
 import { NotificationManager } from "react-notifications";
-import { useEthersSigner } from "../components/Deposit/Trade";
+import {useEthersSigner} from "../contracts/index";
 
 export const useChangeBorrowable = () => {
     const signer = useEthersSigner();

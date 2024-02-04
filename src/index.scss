@@ -36,6 +36,7 @@ a {
 
 body {
   font-family: "GothamPro-Regular";
+  background: url('background.png') center center/cover no-repeat;
 }
 
 .interact-button {
@@ -60,6 +61,5 @@ body {
   border-radius: 10px; /* Pour des coins arrondis */
 }
 
-.hero-header {
-  background: #000000;
-}
+
+

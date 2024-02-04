@@ -45,6 +45,11 @@ const NAV_LINKS: Array<INavLink> = [
     label: "My Positions",
     to: "/dashboard",
   },
+  {
+    id: 5,
+    label: "Faucet",
+    to: "/faucet",
+  },
 ];
 
 export default function Navbar() {
@@ -69,7 +74,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 bg-[#000000]  border-gray-800 z-[99]">
+    <nav className="sticky top-0 border-gray-800 z-[99]">
       <Container className="justify-between p-4 hidden lg:flex">
         {/* Logo à gauche */}
         <div className="flex items-center">

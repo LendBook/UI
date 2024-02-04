@@ -20,30 +20,4 @@
   height: 100%;
 }
 
-.swiper-pagination-bullet {
-    background-color: #1F728C;
-    transform: scale(.7);
-    opacity: 1;
-    font-size: 0;
-    position: relative;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    transition: 0.3s ease;
-    opacity: .5;
-    border: 2px solid #fff;
-}
 
-.swiper-pagination-bullet-active {
-    background-color: white;
-    transform: scale(1);
-    opacity: 1;
-    font-size: 0;
-    position: relative;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    transition: 0.3s ease;
-    opacity: 1;
-    border: 2px solid #fff;
-}
