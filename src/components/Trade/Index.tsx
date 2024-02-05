@@ -27,7 +27,7 @@ const Index = () => {
                         >
                             <div style={{ display: 'flex' }}>
                                 <div style={{minWidth: '60%'}}>
-                                    <Orderbook isTrade={true}/>
+                                    <Orderbook isDeposit={true}/>
                                 </div>
                                 <div style={{minWidth: '40%'}}>
                                     <DepositModule />
