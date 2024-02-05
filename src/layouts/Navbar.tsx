@@ -36,6 +36,11 @@ const NAV_LINKS: Array<INavLink> = [
     to: "/trade",
   },
   {
+    id: 2,
+    label: "Deposit",
+    to: "/deposit",
+  },
+  {
     id: 3,
     label: "Borrow",
     to: "/borrow",

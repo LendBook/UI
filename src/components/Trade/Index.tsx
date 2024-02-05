@@ -1,7 +1,7 @@
 import Orderbook from "../Orderbook/Orderbook";
 import { OrderProvider} from "../Orderbook/OrderContext";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
-import DepositModule from "./DepositModule";
+import DepositModule from "../Deposit/DepositModule";
 
 const Index = () => {
     return (
@@ -16,7 +16,7 @@ const Index = () => {
                     }}
                 >
                     <Box>
-                        <Typography variant="h4" style={{ color: 'white' }}>Deposit</Typography>
+                        <Typography variant="h4" style={{ color: 'white' }}>Trade</Typography>
                         <Grid
                             container
                             mt="2.5rem"

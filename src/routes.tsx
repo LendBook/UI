@@ -5,7 +5,8 @@ import LandingLayout from "./layouts";
 // Import components
 const Home = lazy(() => import("./components/Markets/Markets"));
 const Borrow = lazy(() => import("./components/Borrow/Index"));
-const Trade = lazy(() => import("./components/Deposit/Index"));
+const Trade = lazy(() => import("./components/Trade/Index"));
+const Deposit = lazy(() => import("./components/Deposit/Index"));
 const Markets = lazy(() => import("./components/Markets/Markets"));
 const Dashboard = lazy(() => import("./components/Dashboard"));
 const Faucet = lazy(() => import("./components/Faucet/Faucet"));
@@ -27,20 +28,21 @@ export default function Routes() {
           element: <Markets />,
         },
         {
-          path: "/dashboard",
-          element: <Dashboard />,
-        },
-        {
           path: "/trade",
           element: <Trade />,
+        },
+
+        {
+          path: "/deposit",
+          element: <Deposit />,
         },
         {
           path: "/borrow",
           element: <Borrow />,
         },
         {
-          path: "/about",
-          element: <About />,
+          path: "/dashboard",
+          element: <Dashboard />,
         },
         {
           path: "/faucet",

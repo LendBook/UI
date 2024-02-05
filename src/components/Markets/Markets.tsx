@@ -16,6 +16,9 @@ import Typography from "@mui/material/Typography";
 import SizableTableCell from './SizableTableCell';
 import ethIcon from "../../asserts/images/coins/eth.svg";
 import usdcIcon from "../../asserts/images/coins/usdc.svg";
+import usdtIcon from "../../asserts/images/coins/usdt.svg";
+import wbtcIcon from "../../asserts/images/coins/wbtc.svg";
+import daiIcon from "../../asserts/images/coins/dai.svg";
 import BlastIcon from "../../asserts/images/networks/Blast.svg";
 import {useNavigate} from "react-router-dom";
 
@@ -95,27 +98,164 @@ export default function Markets() {
                                                 cursor: 'pointer',
                                             },
                                             '& > td': {
-                                                borderBottom: 'none', // Supprime la bordure inférieure pour chaque cellule
+                                                borderBottom: 'none',
                                             },
                                         }}
                                         onClick={handleRowClick}
                                     >
                                         <TableCell align="left">
                                             <Box sx={{ display: 'flex', alignItems: 'center'}}>
-                                            <img src={ethIcon} alt="ETH" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
-                                            <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>ETH</Typography>
+                                                <img src={usdcIcon} alt="USDC" style={{ width: '24px', height: '24px' , marginRight: '8px'   }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>USDC</Typography>
                                             </Box>
                                         </TableCell>
                                         <TableCell align="left">
                                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <img src={usdcIcon} alt="USDC" style={{ width: '24px', height: '24px' , marginRight: '8px'   }} />
-                                            <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>USDC</Typography>
+                                                <img src={ethIcon} alt="ETH" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>ETH</Typography>
                                             </Box>
                                         </TableCell>
                                         <TableCell align="left">
                                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <img src={BlastIcon} alt="BLAST" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
-                                            <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>BLAST</Typography>
+                                                <img src={BlastIcon} alt="BLAST" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>BLAST</Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>3%</TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>5%</TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>$10,000</TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{
+                                           /* '&:hover': {
+                                                backgroundColor: '#34363e',
+                                                cursor: 'pointer',
+                                            }, */
+                                            '& > td': {
+                                                borderBottom: 'none',
+                                            },
+                                        }}
+                                       // onClick={handleRowClick}
+                                    >
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center'}}>
+                                                <img src={usdtIcon} alt="USDT" style={{ width: '24px', height: '24px' , marginRight: '8px'   }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>USDT</Typography>
+
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <img src={ethIcon} alt="ETH" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>ETH</Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <img src={BlastIcon} alt="BLAST" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>BLAST</Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>3%</TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>5%</TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>$10,000</TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{
+                                           /* '&:hover': {
+                                                backgroundColor: '#34363e',
+                                                cursor: 'pointer',
+                                            },*/
+                                            '& > td': {
+                                                borderBottom: 'none',
+                                            },
+                                        }}
+                                      //  onClick={handleRowClick}
+                                    >
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <img src={usdcIcon} alt="USDC" style={{ width: '24px', height: '24px' , marginRight: '8px'   }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>USDC</Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center'}}>
+                                                <img src={wbtcIcon} alt="WBTC" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>WBTC</Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <img src={BlastIcon} alt="BLAST" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>BLAST</Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>3%</TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>5%</TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>$10,000</TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{
+                                            /*'&:hover': {
+                                                backgroundColor: '#34363e',
+                                                cursor: 'pointer',
+                                            }, */
+                                            '& > td': {
+                                                borderBottom: 'none',
+                                            },
+                                        }}
+                                     //   onClick={handleRowClick}
+                                    >
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <img src={usdtIcon} alt="USDT" style={{ width: '24px', height: '24px' , marginRight: '8px'   }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>USDT</Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center'}}>
+                                                <img src={wbtcIcon} alt="WBTC" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>WBTC</Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <img src={BlastIcon} alt="BLAST" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>BLAST</Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>3%</TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>5%</TableCell>
+                                        <TableCell align="right" style={{ color: 'white'}}>$10,000</TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{
+                                           /* '&:hover': {
+                                                backgroundColor: '#34363e',
+                                                cursor: 'pointer',
+                                            }, */
+                                            '& > td': {
+                                                borderBottom: 'none',
+                                            },
+                                        }}
+                                     //   onClick={handleRowClick}
+                                    >
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <img src={daiIcon} alt="DAI" style={{ width: '24px', height: '24px' , marginRight: '8px'   }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>DAI</Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center'}}>
+                                                <img src={wbtcIcon} alt="WBTC" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>WBTC</Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <img src={BlastIcon} alt="BLAST" style={{ width: '24px', height: '24px' , marginRight: '8px'  }} />
+                                                <Typography variant="body2" style={{ color: 'white', display: 'inline' }}>BLAST</Typography>
                                             </Box>
                                         </TableCell>
                                         <TableCell align="right" style={{ color: 'white'}}>3%</TableCell>
