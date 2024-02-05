@@ -1,18 +1,42 @@
-import Trade from './Trade';
-import Orderbook from '../Orderbook/Orderbook';
+import Orderbook from "../Orderbook/Orderbook";
 import { OrderProvider} from "../Orderbook/OrderContext";
+import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import DepositModule from "./DepositModule";
 
 const Index = () => {
     return (
         <OrderProvider>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'stretch', height: '100vh' }}>
-                <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'stretch' }}>
-                    <Orderbook isTrade={true} />
-                </div>
-                <div style={{ flex: 1 }}>
-                    <Trade />
-                </div>
-            </div>
+            <Card sx={{ maxWidth: '1300px', margin: 'auto', background: 'transparent', boxShadow: 'none',
+                border: 'none' }}>
+                <CardContent
+                    sx={{
+                        width: '100%',
+                        p: '1.5rem 2rem 1.5rem 2rem',
+                        mb: '2rem',
+                    }}
+                >
+                    <Box>
+                        <Typography variant="h4" style={{ color: 'white' }}>Trade</Typography>
+                        <Grid
+                            container
+                            mt="2.5rem"
+                            mb="1rem"
+                            justifyContent="space-between"
+                            alignItems="stretch"
+                            wrap="wrap"
+                        >
+                            <div style={{ display: 'flex' }}>
+                                <div style={{minWidth: '60%'}}>
+                                    <Orderbook isTrade={true}/>
+                                </div>
+                                <div style={{minWidth: '40%'}}>
+                                    <DepositModule />
+                                </div>
+                            </div>
+                        </Grid>
+                    </Box>
+                </CardContent>
+            </Card>
         </OrderProvider>
     );
 };

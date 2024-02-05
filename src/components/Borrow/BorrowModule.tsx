@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {useWeb3Modal} from "@web3modal/react";
-import {InputAdornment, TextField} from "@mui/material";
+import {Box, Card, CardContent, InputAdornment, TextField} from "@mui/material";
 import {useAccount, useWalletClient, type WalletClient,} from "wagmi";
 import {ethers, providers} from "ethers";
 import {getEthPrice, getUSDCPrice, orderbookContract, useEthersSigner} from "../../contracts";
@@ -319,7 +319,17 @@ export default function BorrowModule() {
 
 
     return (
-        <div className="flex flex-col text-white bg-[#131518] rounded-lg border-[5px] border-solid border-[#191b1f] px-[20px]">
+        <Card sx={{ maxWidth: '1300px', margin: 'auto', background: 'transparent', boxShadow: 'none',
+            border: 'none' }}>
+            <CardContent
+                sx={{
+                    width: '100%',
+                    p: '1.5rem 2rem 1.5rem 2rem',
+                    mb: '2rem',
+                }}
+            >
+                <Box>
+        <div className="flex flex-col text-white bg-[#131518] border-[5px] border-solid border-[#191b1f] px-[20px]">
                 <h2 style={{ marginTop: '20px' }}>Borrow</h2>
                 <hr />
                 <div className="grid grid-cols-1 md:grid-cols-1  mb-[20px">
@@ -394,15 +404,15 @@ export default function BorrowModule() {
                                                 <span style={{marginLeft: '10px', color: 'white'}}>USDC</span>
                                             </MenuItem>
                                             <MenuItem onClick={() => {
-                                                setSelectedCurrency('ETH');
+                                                setSelectedCurrency('WETH');
                                                 handleCloseMenu();
                                             }} style={{
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 backgroundColor: 'transparent'
                                             }}>
-                                                <img src={ethIcon} alt="ETH" style={{width: '20px', height: '20px'}}/>
-                                                <span style={{marginLeft: '10px', color: 'white'}}>ETH</span>
+                                                <img src={ethIcon} alt="WETH" style={{width: '20px', height: '20px'}}/>
+                                                <span style={{marginLeft: '10px', color: 'white'}}>WETH</span>
                                             </MenuItem>
                                         </Menu>
                                     </InputAdornment>
@@ -414,15 +424,17 @@ export default function BorrowModule() {
 
                         <div className="flex justify-between items-center">
                             <span className="text-white text-[12px]">
-                                Balance: {selectedCurrency === "USDC" ? usdcBalance : ethBalance} {selectedCurrency}
+                                Balance: {selectedCurrency === "USDC" ? usdcBalance : wethBalance} {selectedCurrency}
                             </span>
                             <button
                                 className="text-[12px] text-white underline"
-                                onClick={selectedCurrency === "USDC" ? () => setQuantity(usdcBalance) : () => setQuantity(ethBalance)}
+                                onClick={selectedCurrency === "USDC" ? () => setQuantity(usdcBalance) : () => setQuantity(wethBalance)}
                             >
                                 Max
                             </button>
                         </div>
+
+                        <div style={{marginBottom: '20px'}}></div>
 
                     </div>
                             <div className="flex flex-row justify-center items-center ">
@@ -430,5 +442,8 @@ export default function BorrowModule() {
                             </div>
                     </div>
         </div>
+                </Box>
+            </CardContent>
+        </Card>
     );
 }

@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {useWeb3Modal} from "@web3modal/react";
-import {InputAdornment, Switch, TextField} from "@mui/material";
+import {Box, Card, CardContent, InputAdornment, Switch, TextField} from "@mui/material";
 import {useAccount, useWalletClient, type WalletClient,} from "wagmi";
 import {ethers, providers} from "ethers";
 import {getEthPrice, getUSDCPrice, orderbookContract} from "../../contracts";
@@ -27,9 +27,7 @@ interface OrderDetails {
 }
 
 
-
-
-export default function Trade() {
+export default function DepositModule() {
     const signer = useEthersSigner();
     const {address} = useAccount();
     const {open} = useWeb3Modal();
@@ -289,18 +287,13 @@ export default function Trade() {
                     >
                         <span className="flex items-center justify-center text-[#000000] text-[18px] sm:text-[18px] font-semibold">
                             DEPOSIT USDC
-                            {/*<img
-                                alt="ETH"
-                                src={ethIcon}
-                                className="w-[20px] h-[20px] ml-1"
-                            /> */}
                         </span>
                     </div>
 
                 )}
 
                 </>;
-        } else if (selectedCurrency === "ETH") {
+        } else if (selectedCurrency === "WETH") {
             return <>
                 {parseFloat(wethAllowance) < parseFloat(quantity) && (
                     <div
@@ -319,12 +312,7 @@ export default function Trade() {
                         }}
                     >
                         <span className="flex items-center justify-center text-[#000000] text-[18px] sm:text-[18px] font-semibold">
-                            DEPOSIT ETH
-                            {/* <img
-                                alt="ETH"
-                                src={ethIcon}
-                                className="w-[20px] h-[20px] ml-1"
-                            /> */}
+                            DEPOSIT WETH
                         </span>
                     </div>
                 )}
@@ -401,16 +389,21 @@ export default function Trade() {
 
 
     return (
-        <div className="pt-[30px] px-0 pb-[60px] hero-container">
-            <div className="hero">
-                <div className="hero__wrap ">
-                    <div className="buy-box max-w-[500px] w-full flex flex-col gap-[50px] text-white h-[100%] bg-[#131518] rounded-lg border-[5px] border-solid border-[#191b1f]">
+        <Card sx={{ maxWidth: '1300px', margin: 'auto', background: 'transparent', boxShadow: 'none',
+            border: 'none' }}>
+            <CardContent
+                sx={{
+                    width: '100%',
+                    p: '1.5rem 2rem 1.5rem 2rem',
+                    mb: '2rem',
+                }}
+            >
+                <Box>
+                    <div className="buy-box max-w-[500px] w-full flex flex-col gap-[50px] text-white h-[100%] bg-[#131518] border-[5px] border-solid border-[#191b1f]">
                         <div className="flex flex-col gap-[30px] p-[5px] ">
                             <div className="flex flex-col gap-[20px] px-[20px]">
                                 <h2 style={{ marginTop: '20px' }}>Deposit</h2>
                                 <hr />
-                                        {tapStateTabs < 3 && (
-                                            <>
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-[20px] mb-[20px]  ">
                                                     <div className="flex flex-col">
                                                         <TextField
@@ -429,7 +422,6 @@ export default function Trade() {
                                                                         >
                                                                             {selectedCurrency && (
                                                                                 <>
-                                                                                    {/*<img src={selectedCurrency === 'USDC' ? usdcImage : ethImage} alt={selectedCurrency} style={{ width: '20px', height: '20px' }} /> */}
                                                                                     <span style={{ marginLeft: '10px', color: 'white' }}>{selectedCurrency}</span>
                                                                                 </>
                                                                             )}
@@ -453,9 +445,9 @@ export default function Trade() {
                                                                                 <img src={usdcImage} alt="USDC" style={{ width: '20px', height: '20px' }} />
                                                                                 <span style={{ marginLeft: '10px', color: 'white' }}>USDC</span>
                                                                             </MenuItem>
-                                                                            <MenuItem onClick={() => { setSelectedCurrency('ETH'); handleCloseMenu(); }} style={{ display: 'flex', alignItems: 'center', backgroundColor: 'transparent' }}>
-                                                                                <img src={ethImage} alt="ETH" style={{ width: '20px', height: '20px' }} />
-                                                                                <span style={{ marginLeft: '10px', color: 'white' }}>ETH</span>
+                                                                            <MenuItem onClick={() => { setSelectedCurrency('WETH'); handleCloseMenu(); }} style={{ display: 'flex', alignItems: 'center', backgroundColor: 'transparent' }}>
+                                                                                <img src={ethImage} alt="WETH" style={{ width: '20px', height: '20px' }} />
+                                                                                <span style={{ marginLeft: '10px', color: 'white' }}>WETH</span>
                                                                             </MenuItem>
                                                                         </Menu>
                                                                     </InputAdornment>
@@ -466,18 +458,16 @@ export default function Trade() {
 
                                                         <div className="flex justify-between items-center">
                                                             <span className="text-white text-[12px]">
-                                                                Balance: {selectedCurrency === "USDC" ? usdcBalance : ethBalance} {selectedCurrency}
+                                                                Balance: {selectedCurrency === "USDC" ? usdcBalance : wethBalance} {selectedCurrency}
                                                             </span>
                                                             <button
                                                                 className="text-[12px] text-white underline"
-                                                                onClick={selectedCurrency === "USDC" ? () => setQuantity(usdcBalance) : () => setQuantity(ethBalance)}
+                                                                onClick={selectedCurrency === "USDC" ? () => setQuantity(usdcBalance) : () => setQuantity(wethBalance)}
                                                             >
                                                                 Max
                                                             </button>
                                                         </div>
                                                     </div>
-
-
                                                     <div className="flex flex-col">
                                                         <TextField
                                                             label={"Enter limit price"}
@@ -490,7 +480,6 @@ export default function Trade() {
                                                             style={{ backgroundColor: '#191b1f'}}
                                                         />
                                                     </div>
-
                                                     <div className="flex flex-col ">
                                                         <Accordion  className="blue-accordion">
                                                             <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: 'white' }}/>} >
@@ -515,10 +504,6 @@ export default function Trade() {
                                                                             <span className="font-semibold">Is borrowable ?</span>
                                                                               <Switch checked={isSwitchOn} onChange={() => setIsSwitchOn(!isSwitchOn)} />
                                                                           </span>
-                                                                        {/* <div className="info-icon">
-                                                                            <span className="info-tooltip">ON if the order is borrowable</span>
-                                                                            ⓘ
-                                                                        </div> */}
                                                                     </div>
                                                                 </div>
                                                             </AccordionDetails>
@@ -530,34 +515,16 @@ export default function Trade() {
                                                         <div className="flex flex-row justify-center items-center ">
                                                             {renderLabelDeposit()}
                                                         </div>
+
+                                                        <div style={{marginBottom: '20px'}}></div>
                                                     </>
                                                 )}
-                                            </>
-                                        )}
-                            </div>
-
-                            {!address && (
-                                <div className="flex flex-row justify-center items-center">
-                                    <div
-                                        onClick={() => {
-                                            toggleOpen();
-                                        }}
-                                        className="w-[70%] py-[10px] bg-bgBtn text-center rounded-full cursor-pointer hover:opacity-75 select-none"
-                                    >
-                                          <span id="connect-wallet" className="text-white text-[15px]">
-                                            Connect Wallet
-                                          </span>
-                                    </div>
-                                </div>
-                            )}
-                            <div className="text-[15px] text-center pb-[15px]">
-
                             </div>
                         </div>
                     </div>
-                </div>
-                <div id="JMW-claimable-button"></div>
-            </div>
-        </div>
+                </Box>
+            </CardContent>
+        </Card>
+
     );
 }

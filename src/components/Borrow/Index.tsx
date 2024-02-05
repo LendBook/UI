@@ -22,15 +22,15 @@ const Index = () => {
                             mt="2.5rem"
                             mb="1rem"
                             justifyContent="space-between"
-                            alignItems="stretch" // Stretching the items to match height
+                            alignItems="stretch"
                             wrap="wrap"
                         >
-                            <div style={{ display: 'flex', height: '100%' }}>
-                                <div style={{ flex: '2', minWidth: '60%'}}>
-                                    <Orderbook isTrade={false}/> {/* Setting height to 100% */}
+                            <div style={{ display: 'flex' }}>
+                                <div style={{minWidth: '60%'}}>
+                                    <Orderbook isTrade={false}/>
                                 </div>
-                                <div style={{ flex: '1', minWidth: '40%'}}>
-                                    <BorrowModule /> {/* Setting height to 100% */}
+                                <div style={{minWidth: '40%'}}>
+                                    <BorrowModule />
                                 </div>
                             </div>
                         </Grid>

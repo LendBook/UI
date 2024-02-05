@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { getEthPrice, orderbookContract } from '../../contracts';
 import { ethers } from "ethers";
 import "../../asserts/scss/custom.scss";
-import { CircularProgress, Slider } from '@mui/material';
+import {Box, Card, CardContent, CircularProgress, Slider } from '@mui/material';
 import { useTake } from '../../hooks/useTake';
 import { useBorrow } from '../../hooks/useBorrow';
 import { useChangePriceFeed } from '../../hooks/useChangePriceFeed';
@@ -157,71 +157,83 @@ const Orderbook = ({ isTrade }: OrderbookProps) => {
 
 
     return (
-        <div style={{ textAlign: 'center', padding: '50px' }}>
-            <table className="orderbook-table rounded-lg border-[5px] border-solid border-[#191b1f] ">
-                <thead>
-                <tr>
-                    <th>Price (USDC)</th>
-                    <th>Amount (ETH)</th>
-                    <th>IR</th>
-                    <th>ACTION</th>
-                </tr>
-                </thead>
-                <tbody>
-                {sellOrders.slice(0, numVisibleOrders).map(order => (
-                    <tr key={order.id}
-                        className={`sell-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
-                        onClick={() => handleRowClick(order.id, order.limitPrice)}>
-                        <td>{Number(order.limitPrice).toFixed(2)}</td>
-                        <td>{Number(order.size).toFixed(2)}</td>
-                        <td className="text-white">9%</td>
-                        <td>
-                            <button className={isTrade ? "buy-button" : "sell-button"} onClick={() => handleAction(order.id, order.size)}>
-                                {isTrade ? "TAKE" : "BORROW"}
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-                <tr className="eth-price-row">
-                    <td colSpan={4}>
-                        {isEditing ? (
-                            <>
-                                <input
-                                    type="number"
-                                    value={newEthPrice}
-                                    onChange={handleEthPriceChange}
-                                    style={{ backgroundColor: 'transparent', color: 'white', border: 'none', width: '100px' }}
-                                />
-                                <button onClick={handleOkClick}>OK</button>
-                            </>
-                        ) : (
-                            <>
-                                ${ethPrice}
-                                <button onClick={handleEditClick} style={{ marginLeft: '10px' }}>
-                                    Edit
-                                </button>
-                                {showProgress && <CircularProgress size={10} style={{ marginLeft: '10px'}} />}
-                            </>
-                        )}
-                    </td>
-                </tr>
-                {buyOrders.slice(0, numVisibleOrders).map(order => (
-                    <tr key={order.id}
-                        className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
-                        onClick={() => handleRowClick(order.id, order.limitPrice)}>
-                        <td>{Number(order.limitPrice).toFixed(2)}</td>
-                        <td>{Number(order.size).toFixed(2)}</td>
-                        <td className="text-white">7%</td>
-                        <td>
-                            <button className={isTrade ? "sell-button opacity-30 pointer-events-none" : "buy-button"} onClick={() => handleAction(order.id, order.size)}>
-                                {isTrade ? "TAKE" : "BORROW"}
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-        </div>
+        <Card sx={{ maxWidth: '1300px', margin: 'auto', background: 'transparent', boxShadow: 'none',
+            border: 'none' }}>
+            <CardContent
+                sx={{
+                    width: '100%',
+                    p: '1.5rem 2rem 1.5rem 2rem',
+                    mb: '2rem',
+                }}
+            >
+           <Box>
+                    <table className="orderbook-table rounded-lg border-[5px] border-solid border-[#191b1f] ">
+                        <thead>
+                        <tr>
+                            <th>Price (USDC)</th>
+                            <th>Amount (ETH)</th>
+                            <th>IR</th>
+                            <th>ACTION</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {sellOrders.slice(0, numVisibleOrders).map(order => (
+                            <tr key={order.id}
+                                className={`sell-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
+                                onClick={() => handleRowClick(order.id, order.limitPrice)}>
+                                <td>{Number(order.limitPrice).toFixed(2)}</td>
+                                <td>{Number(order.size).toFixed(2)}</td>
+                                <td className="text-white">9%</td>
+                                <td>
+                                    <button className={isTrade ? "buy-button" : "sell-button"} onClick={() => handleAction(order.id, order.size)}>
+                                        {isTrade ? "TAKE" : "BORROW"}
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        <tr className="eth-price-row">
+                            <td colSpan={4}>
+                                {isEditing ? (
+                                    <>
+                                        <input
+                                            type="number"
+                                            value={newEthPrice}
+                                            onChange={handleEthPriceChange}
+                                            style={{ backgroundColor: 'transparent', color: 'white', border: 'none', width: '100px' }}
+                                        />
+                                        <button onClick={handleOkClick}>OK</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        ${ethPrice}
+                                        <button onClick={handleEditClick} style={{ marginLeft: '10px' }}>
+                                            Edit
+                                        </button>
+                                        {showProgress && <CircularProgress size={10} style={{ marginLeft: '10px'}} />}
+                                    </>
+                                )}
+                            </td>
+                        </tr>
+                        {buyOrders.slice(0, numVisibleOrders).map(order => (
+                            <tr key={order.id}
+                                className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
+                                onClick={() => handleRowClick(order.id, order.limitPrice)}>
+                                <td>{Number(order.limitPrice).toFixed(2)}</td>
+                                <td>{Number(order.size).toFixed(2)}</td>
+                                <td className="text-white">7%</td>
+                                <td>
+                                    <button className={isTrade ? "sell-button opacity-30 pointer-events-none" : "buy-button"} onClick={() => handleAction(order.id, order.size)}>
+                                        {isTrade ? "TAKE" : "BORROW"}
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+           </Box>
+        </CardContent>
+      </Card>
+
     );
 };
 
