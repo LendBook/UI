@@ -23,6 +23,7 @@ interface OrderDetails {
     LTV: string;
     APY: string;
     maxBorrow: string;
+    isBuy : boolean | null;
 }
 
 
@@ -37,7 +38,7 @@ export default function BorrowModule() {
     const [activeCurrency, setActiveCurrency] = useState("USDC");
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-    const { orderId, limitPrice, amount } = useOrderContext();
+    const {orderId, limitPrice, amount, isBuy} = useOrderContext();
     const openMenu = Boolean(anchorEl);
 
     // BALANCE
@@ -60,6 +61,8 @@ export default function BorrowModule() {
     const borrow = useBorrow();
 
     const currencyPrice = activeCurrency === 'USDC' ? priceUSDCUSD : priceETHUSD;
+
+
 
     const orderDetailsText = orderDetails
         ? `ID: ${orderDetails.id}\nLimit Price: ${orderDetails.limitPrice}\nAmount: ${orderDetails.amount}\nLiquidation Price: ${orderDetails.liquidationPrice} USDC\nLTV: ${orderDetails.LTV}%\nAPY: ${orderDetails.APY}%\nMax. to borrow: ${orderDetails.maxBorrow} USDC`
@@ -103,17 +106,18 @@ export default function BorrowModule() {
         setActiveCurrency("WETH");
     };
 
-    const fetchOrderDetails = async (orderId: number, limitPrice: string | null, amount: string | null): Promise<OrderDetails> => {
+    const fetchOrderDetails = async (orderId: number, limitPrice: string | null, amount: string | null, isBuy: boolean | null): Promise<OrderDetails> => {
         await new Promise(resolve => setTimeout(resolve, 500));
 
         return {
             id: orderId,
-            limitPrice: limitPrice ?? "0", // Utilisation d'une valeur par défaut si limitPrice est null
-            amount : amount ?? "0", // Utilisation d'une valeur par défaut si amount est null
+            limitPrice: limitPrice ?? "0",
+            amount : amount ?? "0",
             liquidationPrice: "1,900",
             LTV: "95",
             APY: "4.2",
-            maxBorrow: "40k"
+            maxBorrow: "40k",
+            isBuy : isBuy ?? true,
         };
     };
 
@@ -254,7 +258,7 @@ export default function BorrowModule() {
 
     useEffect(() => {
         if (orderId !== null) {
-            fetchOrderDetails(orderId, limitPrice, amount).then(details => {
+            fetchOrderDetails(orderId, limitPrice, amount, isBuy).then(details => {
                 setOrderDetails(details);
             });
         }
@@ -301,6 +305,23 @@ export default function BorrowModule() {
             }
         };
     }, [address]);
+
+    useEffect(() => {
+        if (orderId !== null) {
+            fetchOrderDetails(orderId, limitPrice, amount, isBuy).then(details => {
+                setOrderDetails(details);
+                if (details) {
+                    if (!details.isBuy)
+                    {
+                        setSelectedCurrency('WETH');
+                    }
+                    else{
+                        setSelectedCurrency('USDC');
+                    }
+                }
+            });
+        }
+    }, [orderId]);
 
     useEffect(() => {
         const fetchEthPrice = async () => {

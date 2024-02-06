@@ -30,12 +30,13 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
     const [ethPrice, setEthPrice] = useState<string>("0");
     const [size, setSize] = useState<string | null>(null);
     const [limit, setLimit] = useState<string | null>(null);
+    const [isBuy, setBuy] = useState<boolean | null>(null);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [newEthPrice, setNewEthPrice] = useState<string>(ethPrice);
 
     // SELECT ORDER
     const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
-    const { setOrderId, setLimitPrice, setAmount } = useOrderContext();
+    const { setOrderId, setLimitPrice, setAmount, setIsBuy } = useOrderContext();
 
     // HOOKS
     const take = useTake();
@@ -61,13 +62,16 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
     };
 
 
-    const handleRowClick = (orderId: number, limitPrice: string) => {
+    const handleRowClick = (orderId: number, limitPrice: string, isBuy: boolean) => {
         setSelectedOrderId(orderId);
         setSize(size);
         setLimit(limitPrice);
+        setBuy(isBuy);
+        setIsBuy(isBuy);
         setOrderId(orderId);
         setLimitPrice(limitPrice);
         setAmount(size);
+
     };
 
     const handleEthPriceChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +115,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                         id: i,
                         limitPrice: ethers.utils.formatUnits(order.price, 'ether'),
                         size: ethers.utils.formatUnits(order.quantity, 'ether'),
-                        isBorrowable: order.isBorrowable
+                        isBorrowable: order.isBorrowable,
                     };
 
                     const orderPriceNumber = parseFloat(orderFormatted.limitPrice);
@@ -178,7 +182,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                         {sellOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
                                 className={`sell-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
-                                onClick={() => handleRowClick(order.id, order.limitPrice)}
+                                onClick={() => handleRowClick(order.id, order.limitPrice, false)}
                                 style={{ height: '50px' }}>
                                 <td>{Number(order.limitPrice).toFixed(2)}</td>
                                 <td>{Number(order.size).toFixed(2)}</td>
@@ -225,7 +229,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                         {buyOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
                                 className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
-                                onClick={() => handleRowClick(order.id, order.limitPrice)}
+                                onClick={() => handleRowClick(order.id, order.limitPrice, true)}
                                 style={{ height: '50px' }}>
                                 <td>{Number(order.limitPrice).toFixed(2)}</td>
                                 <td>{(Number(order.size)).toFixed(2)}</td>

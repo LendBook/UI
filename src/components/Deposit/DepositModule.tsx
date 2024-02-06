@@ -24,17 +24,16 @@ import {useOrderContext} from "../Orderbook/OrderContext";
 interface OrderDetails {
     orderId: number;
     limitPrice: string;
+    isBuy : boolean | null;
 }
-
 
 export default function DepositModule() {
     const signer = useEthersSigner();
     const {address} = useAccount();
     const {open} = useWeb3Modal();
 
-    const ethImage = ethIcon; // Mettez ici le bon chemin
-    const usdcImage = usdcIcon; // Mettez ici le bon chemin
-
+    const ethImage = ethIcon;
+    const usdcImage = usdcIcon;
 
     const [chainId, setChainId] = useState<number | null>(null);
 
@@ -69,7 +68,7 @@ export default function DepositModule() {
     const currencyPrice = activeCurrency === 'USDC' ? priceUSDCUSD : priceETHUSD;
 
     const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
-    const {orderId, limitPrice} = useOrderContext();
+    const {orderId, limitPrice, isBuy} = useOrderContext();
 
     const calculatedValueEnterAmount = !isNaN(parseFloat(quantity)) && !isNaN(currencyPrice)
         ? `$ ${(parseFloat(quantity) * currencyPrice).toFixed(2)}`
@@ -245,21 +244,29 @@ export default function DepositModule() {
         }
     };
 
-    const fetchOrderDetails = async (orderId: number, limitPrice: string | null): Promise<OrderDetails> => {
+    const fetchOrderDetails = async (orderId: number, limitPrice: string | null, isBuy: boolean | null): Promise<OrderDetails> => {
         await new Promise(resolve => setTimeout(resolve, 500));
 
         return {
             orderId: orderId,
-            limitPrice: limitPrice ?? "0", // Utilisation d'une valeur par défaut si limitPrice est null
+            limitPrice: limitPrice ?? "0",
+            isBuy : isBuy
         };
     };
 
     useEffect(() => {
         if (orderId !== null) {
-            fetchOrderDetails(orderId, limitPrice).then(details => {
+            fetchOrderDetails(orderId, limitPrice, isBuy).then(details => {
                 setOrderDetails(details);
                 if (details) {
                     setBuyPrice(details.limitPrice);
+                    if (!details.isBuy)
+                    {
+                        setSelectedCurrency('WETH');
+                    }
+                    else{
+                        setSelectedCurrency('USDC');
+                    }
                 }
             });
         }
