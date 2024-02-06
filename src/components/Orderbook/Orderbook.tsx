@@ -116,13 +116,10 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
 
                     const orderPriceNumber = parseFloat(orderFormatted.limitPrice);
 
-                    // Ajoutez une condition pour filtrer les commandes ayant une taille supérieure à zéro
                     if (parseFloat(orderFormatted.size) > 0) {
-                        if ((isDeposit && order.isBuyOrder && orderPriceNumber < ethPriceNumber) ||
-                            (!isDeposit && !order.isBuyOrder && orderPriceNumber > ethPriceNumber)) {
+                        if (order.isBuyOrder && orderPriceNumber < ethPriceNumber)  {
                             fetchedBuyOrders.push(orderFormatted);
-                        } else if ((isDeposit && !order.isBuyOrder && orderPriceNumber > ethPriceNumber) ||
-                            (!isDeposit && order.isBuyOrder && orderPriceNumber < ethPriceNumber)) {
+                        } else if (!order.isBuyOrder && orderPriceNumber > ethPriceNumber) {
                             fetchedSellOrders.push(orderFormatted);
                         }
                     }
@@ -170,8 +167,8 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                     <table className="orderbook-table rounded-lg border-[5px] border-solid border-[#191b1f] ">
                         <thead>
                         <tr>
-                            <th>Price (USDC)</th>
-                            <th>Amount (ETH)</th>
+                            <th>Price</th>
+                            <th>Size (ETH)</th>
                             <th>Utilization rate</th>
                             <th>Apy</th>
                             <th>Action</th>
@@ -184,7 +181,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 onClick={() => handleRowClick(order.id, order.limitPrice)}
                                 style={{ height: '50px' }}>
                                 <td>{Number(order.limitPrice).toFixed(2)}</td>
-                                {isDeposit ? <td>{Number(order.size).toFixed(2)}</td> : <td>{(Number(order.size)/Number(ethPrice)).toFixed(2)}</td>}
+                                <td>{Number(order.size).toFixed(2)}</td>
                                 <td className="text-white">44%</td>
                                 <td className="text-white">9%</td>
                                 <td>
@@ -217,13 +214,20 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 )}
                             </td>
                         </tr>
+                        <tr>
+                            <th>Price</th>
+                            <th>Size (USDC)</th>
+                            <th>Utilization rate</th>
+                            <th>Apy</th>
+                            <th>Action</th>
+                        </tr>
                         {buyOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
                                 className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
                                 onClick={() => handleRowClick(order.id, order.limitPrice)}
                                 style={{ height: '50px' }}>
                                 <td>{Number(order.limitPrice).toFixed(2)}</td>
-                                <td>{(Number(order.size)/Number(ethPrice)).toFixed(2)}</td>
+                                <td>{(Number(order.size)).toFixed(2)}</td>
                                 <td className="text-white">56%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '-'}</td>
                                 <td className="text-white">

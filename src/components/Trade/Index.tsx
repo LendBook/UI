@@ -1,7 +1,7 @@
 import Orderbook from "../Orderbook/Orderbook";
 import { OrderProvider} from "../Orderbook/OrderContext";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
-import DepositModule from "../Deposit/DepositModule";
+import TradeModule from "./TradeModule";
 
 const Index = () => {
     return (
@@ -30,7 +30,7 @@ const Index = () => {
                                     <Orderbook isDeposit={true}/>
                                 </div>
                                 <div style={{minWidth: '40%'}}>
-                                    <DepositModule />
+                                    <TradeModule />
                                 </div>
                             </div>
                         </Grid>
