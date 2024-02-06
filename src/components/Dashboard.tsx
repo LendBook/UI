@@ -553,7 +553,7 @@ export default function Dashboard() {
               <Box sx={{ width: '2px', background: '#34363e' }} />
               <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
                 <Typography variant="subtitle1">Orders</Typography>
-                <Typography variant="subtitle1">{Math.round(countTotalOrder).toLocaleString('en-US')}/3</Typography>
+                <Typography variant="subtitle1">{Math.round(countTotalOrder).toLocaleString('en-US')}</Typography>
               </Box>
               <Box sx={{ width: '2px', background: '#34363e' }} />
               <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
