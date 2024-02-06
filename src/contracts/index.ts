@@ -1,23 +1,23 @@
 
 import {ethers, providers} from "ethers";
-import Contrats from "./contracts/97.json";
+import Contrats from "./contracts/168587773.json";
 import { fromBigNum } from "../utils";
 import {WalletClient, useWalletClient } from "wagmi";
 import { useMemo } from "react";
-const supportChainId = 97;
+const supportChainId = 168587773;
 
 const RPCS = {
     1: "https://mainnet.infura.io/v3/7e2f78ddbf394bc9ab92ebb175b60a64",
-    56: "https://bsc-dataseed.binance.org/",
-    97: "https://bsc-testnet.publicnode.com",
+   // 56: "https://bsc-dataseed.binance.org/",
+   // 97: "https://bsc-testnet.publicnode.com",
     4002: "https://fantom-testnet.publicnode.com",
     168587773: "https://sepolia.blast.io",
 }
 
 const providersRPC = {
     1: new ethers.providers.JsonRpcProvider(RPCS[1]),
-    56: new ethers.providers.JsonRpcProvider(RPCS[56]),
-    97: new ethers.providers.JsonRpcProvider(RPCS[97]),
+  //  56: new ethers.providers.JsonRpcProvider(RPCS[56]),
+  //  97: new ethers.providers.JsonRpcProvider(RPCS[97]),
     4002: new ethers.providers.JsonRpcProvider(RPCS[4002]),
     168587773: new ethers.providers.JsonRpcProvider(RPCS[168587773])
 }
@@ -46,10 +46,6 @@ const usdcContract = new ethers.Contract(Contrats.usdc.address, Contrats.usdc.ab
 const wethContract = new ethers.Contract(Contrats.weth.address, Contrats.weth.abi, providersRPC[supportChainId]);
 const orderbookContract = new ethers.Contract(Contrats.orderbook.address, Contrats.orderbook.abi, providersRPC[supportChainId]);
 
-const ethPriceFeedContract = new ethers.Contract(Contrats.ethPriceFeed.address, Contrats.ethPriceFeed.abi, providersRPC[supportChainId]);
-const usdcPriceFeedContract = new ethers.Contract(Contrats.usdcPriceFeed.address, Contrats.usdcPriceFeed.abi, providersRPC[supportChainId]);
-
-
 const getEthPrice = async () => {
     try {
         const price = await orderbookContract.priceFeed();
@@ -64,8 +60,8 @@ const getEthPrice = async () => {
 
 const getUSDCPrice = async () => {
     try {
-        const price = await usdcPriceFeedContract.latestRoundData();
-        return fromBigNum(price.answer, 8); 
+       // const price = await usdcPriceFeedContract.latestRoundData();
+        return 1; 
         
     } catch (error) {
         console.error('Erreur lors de la récupération du prix USDC:', error);
@@ -79,8 +75,6 @@ const getContractWrapper = (contract: ethers.Contract) => {
             return contract.connect(signer);
         },
         mint: async (to: string, amount: ethers.BigNumber) => {
-            // Suppose que votre contrat a une méthode mint
-            // Si votre contrat ne possède pas cette méthode, vous devrez l'adapter en conséquence
             const tx = await contract.mint(to, amount);
             return tx;
         }

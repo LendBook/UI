@@ -8,7 +8,7 @@ export const useMint = (tokenContract: { connect: (arg0: ethers.providers.JsonRp
     return async (to: string, amount: string) => {
         if (!signer || !tokenContract) return;
         try {
-            const parsedAmount = ethers.utils.parseUnits(amount, 18); // Convertit la chaîne de caractères en BigNumber
+            const parsedAmount = ethers.utils.parseUnits(amount, 18);
             const tx = await tokenContract.connect(signer).mint(
                 to,
                 parsedAmount,

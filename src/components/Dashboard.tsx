@@ -20,11 +20,9 @@ import Button from "@mui/material/Button";
 import useIncreaseSize from "../hooks/useIncreaseSize";
 import useChangeLimitPrice from "../hooks/useChangeLimitPrice";
 import useChangePairedPrice from "../hooks/useChangePairedPrice";
-
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
@@ -35,7 +33,7 @@ import ethIcon from "../asserts/images/coins/eth.svg";
 import usdcIcon from "../asserts/images/coins/usdc.svg";
 import BlastIcon from "../asserts/images/networks/Blast.svg";
 import {useEthersSigner} from "../contracts/index";
-import Contrats from "../contracts/contracts/97.json";
+import Contrats from "../contracts/contracts/168587773.json";
 import {getEthPrice, getUSDCPrice, orderbookContract} from "../contracts/index";
 
 
@@ -549,7 +547,7 @@ export default function Dashboard() {
               </Box>
               <Box sx={{ width: '2px', background: '#34363e' }} />
               <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
-                <Typography variant="subtitle1">Available to lend</Typography>
+                <Typography variant="subtitle1">Available to Borrow</Typography>
                 <Typography variant="subtitle1">$ {Math.round(countTotalBalance).toLocaleString('en-US')}</Typography>
               </Box>
               <Box sx={{ width: '2px', background: '#34363e' }} />

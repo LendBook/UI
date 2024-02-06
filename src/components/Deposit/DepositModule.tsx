@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import {useDeposit} from "../../hooks/useDeposit";
 import {useEthersSigner} from "../../contracts/index";
-import Contrats from "../../contracts/contracts/97.json";
+import Contrats from "../../contracts/contracts/168587773.json";
 import {IconButton} from "@material-tailwind/react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -473,10 +473,10 @@ export default function DepositModule() {
                                                             label={"Enter limit price"}
                                                             variant="outlined"
                                                             margin="normal"
-                                                            value={orderDetailsText}
+                                                           // value={orderDetailsText}
                                                             onChange={onBuyPriceChange}
                                                             InputLabelProps={{ style: { color: 'white' }}}
-                                                            InputProps={{ style: { color: 'white' }}}
+                                                            InputProps={{ style: { color: 'white' }, readOnly: false }} // Assurez-vous que readOnly est défini sur false
                                                             style={{ backgroundColor: '#191b1f'}}
                                                         />
                                                     </div>

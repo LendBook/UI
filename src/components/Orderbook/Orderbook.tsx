@@ -223,7 +223,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 onClick={() => handleRowClick(order.id, order.limitPrice)}
                                 style={{ height: '50px' }}>
                                 <td>{Number(order.limitPrice).toFixed(2)}</td>
-                                <td>{Number(order.size).toFixed(2)}</td>
+                                <td>{(Number(order.size)/Number(ethPrice)).toFixed(2)}</td>
                                 <td className="text-white">56%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '-'}</td>
                                 <td className="text-white">

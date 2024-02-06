@@ -6,34 +6,13 @@ import {ethers, providers} from "ethers";
 import "../../asserts/scss/custom.scss";
 import ethIcon from "../../asserts/images/coins/eth.svg";
 import usdcIcon from "../../asserts/images/coins/usdc.svg";
-import Contrats from "../../contracts/contracts/97.json";
+import Contrats from "../../contracts/contracts/168587773.json";
 import {IconButton} from "@material-tailwind/react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useMint } from "../../hooks/useMint";
-import { usdcContractWrapper, wethContractWrapper } from "../../contracts/index";
-
-export function walletClientToSigner(walletClient: WalletClient) {
-  const {account, chain, transport} = walletClient;
-  const network = {
-    chainId: chain.id,
-    name: chain.name,
-    ensAddress: chain.contracts?.ensRegistry?.address,
-  };
-  const provider = new providers.Web3Provider(transport, network);
-  const signer = provider.getSigner(account.address);
-  return signer;
-}
-
-/** Hook to convert a viem Wallet Client to an ethers.js Signer. */
-export function useEthersSigner({chainId}: { chainId?: number } = {}) {
-  const {data: walletClient} = useWalletClient({chainId});
-  return useMemo(
-      () => (walletClient ? walletClientToSigner(walletClient) : undefined),
-      [walletClient]
-  );
-}
+import { usdcContractWrapper, useEthersSigner, wethContractWrapper } from "../../contracts/index";
 
 
 export default function Faucet() {
@@ -56,7 +35,6 @@ export default function Faucet() {
   const [quantity, setQuantity] = useState('');
 
   const [isValidQty, setIsValidQty] = useState(true);
-
 
   const [selectedCurrency, setSelectedCurrency] = useState('WETH');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -176,7 +154,6 @@ export default function Faucet() {
 
   const onMintUsdc = async () => {
     await mintUsdc(String(address), quantity);
-    console.log("lol")
   };
 
   const onMintWeth = async () => {

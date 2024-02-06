@@ -5,7 +5,7 @@ import {useAccount, useWalletClient, type WalletClient,} from "wagmi";
 import {ethers, providers} from "ethers";
 import {getEthPrice, getUSDCPrice, orderbookContract, useEthersSigner} from "../../contracts";
 import "../../asserts/scss/custom.scss";
-import Contrats from "../../contracts/contracts/97.json";
+import Contrats from "../../contracts/contracts/168587773.json";
 import {useBorrow} from "../../hooks/useBorrow";
 import {useOrderContext} from "../Orderbook/OrderContext";
 import {IconButton} from "@material-tailwind/react";
