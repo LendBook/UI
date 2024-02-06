@@ -437,9 +437,19 @@ export default function BorrowModule() {
                         <div style={{marginBottom: '20px'}}></div>
 
                     </div>
-                            <div className="flex flex-row justify-center items-center ">
-                                {renderLabelDeposit()}
+                    <div className="flex flex-row justify-center items-center ">
+                        {quantity === '' && (
+                            <div
+                                className={`w-[70%] py-[10px] text-center rounded-full bg-gray-400`}
+                            >
+                                <span className="text-[#000000] text-[18px] sm:text-[18px]"><b><span className="font-semibold">APPROVE</span></b></span>
                             </div>
+                        )}
+                        {parseFloat(quantity) !== 0 && (
+                            renderLabelDeposit()
+                        )}
+                    </div>
+                    <div style={{marginBottom: '20px'}}></div>
                     </div>
         </div>
                 </Box>

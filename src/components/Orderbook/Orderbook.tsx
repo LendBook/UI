@@ -171,7 +171,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                             <th>Size (ETH)</th>
                             <th>Utilization rate</th>
                             <th>Apy</th>
-                            <th>Action</th>
+                            <th>Order type</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -184,11 +184,12 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 <td>{Number(order.size).toFixed(2)}</td>
                                 <td className="text-white">44%</td>
                                 <td className="text-white">9%</td>
-                                <td>
-                                    <button className={isDeposit ? "buy-button" : "sell-button"} onClick={() => handleAction(order.id, order.size)}>
-                                        {isDeposit ? "TAKE" : "BORROW"}
+                                <td className="text-white">{isDeposit ? 'BUY' : '-'}</td>
+                                {/*<td>
+                                    <button className={isDeposit ? "buy-button" : "sell-button"}  onClick={() => handleAction(order.id, order.size)}>
+                                        {isDeposit ? "SELL" : "BORROW"}
                                     </button>
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
                         <tr className="eth-price-row">
@@ -219,7 +220,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                             <th>Size (USDC)</th>
                             <th>Utilization rate</th>
                             <th>Apy</th>
-                            <th>Action</th>
+                            <th>Order type</th>
                         </tr>
                         {buyOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
@@ -230,13 +231,14 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 <td>{(Number(order.size)).toFixed(2)}</td>
                                 <td className="text-white">56%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '-'}</td>
-                                <td className="text-white">
+                                <td className="text-white">{isDeposit ? 'SELL' : '-'}</td>
+                               {/* <td className="text-white">
                                     {!isDeposit ? '-' :
                                         <button className="sell-button opacity-30 pointer-events-none">
-                                            TAKE
+                                            BUY
                                         </button>
                                     }
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
 
