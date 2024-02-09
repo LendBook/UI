@@ -29,7 +29,7 @@ export default function Markets() {
     const navigate = useNavigate();
 
     const handleRowClick = () => {
-        navigate('/borrow');
+        navigate('/deposit');
     };
 
     return (

@@ -170,16 +170,16 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
            <Box>
                     <table className="orderbook-table rounded-lg border-[5px] border-solid border-[#191b1f] ">
                         <thead>
-                        <tr>
+                        {isDeposit && <tr>
                             <th>Price</th>
                             <th>Size (ETH)</th>
                             <th>Utilization rate</th>
                             <th>Apy</th>
                             <th>Order type</th>
-                        </tr>
+                        </tr> }
                         </thead>
                         <tbody>
-                        {sellOrders.slice(0, numVisibleOrders).map(order => (
+                        {isDeposit && sellOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
                                 className={`sell-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
                                 onClick={() => handleRowClick(order.id, order.limitPrice, false)}
@@ -188,16 +188,11 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 <td>{Number(order.size).toFixed(2)}</td>
                                 <td className="text-white">44%</td>
                                 <td className="text-white">9%</td>
-                                <td className="text-white">{isDeposit ? 'BUY' : '-'}</td>
-                                {/*<td>
-                                    <button className={isDeposit ? "buy-button" : "sell-button"}  onClick={() => handleAction(order.id, order.size)}>
-                                        {isDeposit ? "SELL" : "BORROW"}
-                                    </button>
-                                </td> */}
+                                {isDeposit && <td className="text-white">SELL</td>}
                             </tr>
                         ))}
                         <tr className="eth-price-row">
-                            <td colSpan={5}>
+                            {!isDeposit && <td colSpan={4}>
                                 {isEditing ? (
                                     <>
                                         <input
@@ -217,14 +212,35 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                         {showProgress && <CircularProgress size={10} style={{ marginLeft: '10px'}} />}
                                     </>
                                 )}
-                            </td>
+                            </td> }
+                            {isDeposit &&<td colSpan={5}>
+                                {isEditing ? (
+                                    <>
+                                        <input
+                                            type="number"
+                                            value={newEthPrice}
+                                            onChange={handleEthPriceChange}
+                                            style={{ backgroundColor: 'transparent', color: 'white', border: 'none', width: '100px' }}
+                                        />
+                                        <button onClick={handleOkClick}>OK</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        ${ethPrice}
+                                        <button onClick={handleEditClick} style={{ marginLeft: '10px' }}>
+                                            Edit
+                                        </button>
+                                        {showProgress && <CircularProgress size={10} style={{ marginLeft: '10px'}} />}
+                                    </>
+                                )}
+                            </td> }
                         </tr>
                         <tr>
                             <th>Price</th>
                             <th>Size (USDC)</th>
                             <th>Utilization rate</th>
                             <th>Apy</th>
-                            <th>Order type</th>
+                            {isDeposit &&  <th>Order type</th> }
                         </tr>
                         {buyOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
@@ -234,8 +250,8 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 <td>{Number(order.limitPrice).toFixed(2)}</td>
                                 <td>{(Number(order.size)).toFixed(2)}</td>
                                 <td className="text-white">56%</td>
-                                <td className="text-white">{isDeposit ? '7%' : '-'}</td>
-                                <td className="text-white">{isDeposit ? 'SELL' : '-'}</td>
+                                <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
+                                {isDeposit && <td className="text-white">SELL</td>}
                                {/* <td className="text-white">
                                     {!isDeposit ? '-' :
                                         <button className="sell-button opacity-30 pointer-events-none">
