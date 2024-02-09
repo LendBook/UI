@@ -3,7 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { getEthPrice, orderbookContract } from '../../contracts';
 import { ethers } from "ethers";
 import "../../asserts/scss/custom.scss";
-import {Box, Card, CardContent, CircularProgress, Slider } from '@mui/material';
+import {Box, Button, Card, CardContent, CircularProgress, FormControl, InputLabel, Menu, MenuItem, Select,
+    SelectChangeEvent, Slider } from '@mui/material';
 import { useTake } from '../../hooks/useTake';
 import { useBorrow } from '../../hooks/useBorrow';
 import { useChangePriceFeed } from '../../hooks/useChangePriceFeed';
@@ -34,6 +35,10 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [newEthPrice, setNewEthPrice] = useState<string>(ethPrice);
 
+    const [step, setStep] = useState(50); // Pour le pas
+    const [nbOrders, setNbOrders] = useState(5); // Pour le nombre d'ordres
+
+
     // SELECT ORDER
     const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
     const { setOrderId, setLimitPrice, setAmount, setIsBuy } = useOrderContext();
@@ -47,6 +52,29 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
     const [showProgress, setShowProgress] = useState(true);
 
     const [numVisibleOrders, setNumVisibleOrders] = useState<number>(10);
+    
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+    const openMenu = Boolean(anchorEl);
+
+    const handleStepChange = (event: SelectChangeEvent) => {
+        setStep(Number(event.target.value)); // Conversion correcte de string à number
+    };
+
+    const handleNbOrdersChange = (event: SelectChangeEvent) => {
+        setNbOrders(Number(event.target.value));
+        setNumVisibleOrders(Number(event.target.value));
+    };
+
+
+    const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
 
     const fetchEthPrice = async () => {
         const price = await getEthPrice();
@@ -201,39 +229,106 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                             onChange={handleEthPriceChange}
                                             style={{ backgroundColor: 'transparent', color: 'white', border: 'none', width: '100px' }}
                                         />
-                                        <button onClick={handleOkClick}>OK</button>
+                                        <Button onClick={handleOkClick}>OK</Button>
+                                        
                                     </>
                                 ) : (
                                     <>
                                         ${ethPrice}
-                                        <button onClick={handleEditClick} style={{ marginLeft: '10px' }}>
+                                        <Button onClick={handleEditClick} style={{ marginLeft: '10px' }}>
                                             Edit
-                                        </button>
-                                        {showProgress && <CircularProgress size={10} style={{ marginLeft: '10px'}} />}
+                                        </Button>
+                                        {showProgress && <CircularProgress size={10} style={{ marginLeft: '10px' }} />}
                                     </>
                                 )}
                             </td> }
-                            {isDeposit &&<td colSpan={5}>
-                                {isEditing ? (
-                                    <>
-                                        <input
-                                            type="number"
-                                            value={newEthPrice}
-                                            onChange={handleEthPriceChange}
-                                            style={{ backgroundColor: 'transparent', color: 'white', border: 'none', width: '100px' }}
-                                        />
-                                        <button onClick={handleOkClick}>OK</button>
-                                    </>
-                                ) : (
-                                    <>
-                                        ${ethPrice}
-                                        <button onClick={handleEditClick} style={{ marginLeft: '10px' }}>
-                                            Edit
-                                        </button>
-                                        {showProgress && <CircularProgress size={10} style={{ marginLeft: '10px'}} />}
-                                    </>
-                                )}
-                            </td> }
+                            {isDeposit && <td colSpan={5} style={{ textAlign: 'center' }}>
+                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                                    {isEditing ? (
+                                        <>
+                                            <input
+                                                type="number"
+                                                value={newEthPrice}
+                                                onChange={handleEthPriceChange}
+                                                style={{ backgroundColor: 'transparent', color: 'white', border: 'none', width: '100px', marginRight: '10px' }}
+                                            />
+                                            <button onClick={handleOkClick} style={{ marginRight: '10px' }}>OK</button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            ${ethPrice}
+                                            <button onClick={handleEditClick} style={{ marginLeft: '10px', marginRight: '20px' }}>
+                                                Edit
+                                            </button>
+                                            {showProgress && <CircularProgress size={10} style={{ marginRight: '20px' }} />}
+                                        </>
+                                    )}
+
+                                    <div style={{ marginRight: '10px', color: 'white', display: 'flex', alignItems: 'center' }}>Step by</div>
+                                    <FormControl variant="standard" sx={{ m: 1, minWidth: 60 }}>
+                                        <Select
+                                            id="step-select"
+                                            value={step.toString()}
+                                            onChange={handleStepChange}
+                                            sx={{
+                                                '.MuiSelect-select': { color: 'white', marginRight: '10px' },
+                                                'svg': { color: 'white' },
+                                                '& .MuiMenu-paper': {
+                                                    backgroundColor: '#131518',
+                                                    boxShadow: 'none', // Supprime les ombres portées qui pourraient inclure des bordures
+                                                    // Vous pouvez également essayer 'border: none' si les bordures sont toujours visibles
+                                                },
+                                                // Styles pour les MenuItem
+                                                '& .MuiMenuItem-root': {
+                                                    backgroundColor: '#131518', // Couleur de fond par défaut
+                                                    color: 'white', // Couleur du texte
+                                                    '&:hover': {
+                                                        backgroundColor: '#131518', // Garde la même couleur de fond au survol
+                                                    },
+                                                },
+                                            }}
+                                        >
+                                            <MenuItem value={50}>50</MenuItem>
+                                            <MenuItem value={100}>100</MenuItem>
+                                            <MenuItem value={200}>200</MenuItem>
+                                            <MenuItem value={500}>500</MenuItem>
+                                        </Select>
+                                    </FormControl>
+
+                                    <div style={{ marginRight: '10px', color: 'white', display: 'flex', alignItems: 'center' }}>Sort by :</div>
+                                    <FormControl variant="standard" sx={{ m: 1, minWidth: 60 }}>
+                                        <Select
+                                            id="sort-by-select"
+                                            value={numVisibleOrders.toString()} 
+                                            onChange={handleNbOrdersChange} 
+                                            sx={{
+                                                '.MuiSelect-select': { color: 'white', marginRight: '10px' },
+                                                'svg': { color: 'white' },
+                                                '& .MuiMenu-paper': {
+                                                    backgroundColor: '#131518',
+                                                    boxShadow: 'none',
+                                                },
+                                                '& .MuiMenuItem-root': {
+                                                    backgroundColor: '#131518',
+                                                    color: 'white',
+                                                    '&:hover': {
+                                                        backgroundColor: '#131518',
+                                                    },
+                                                },
+                                            }}
+                                        >
+                                            <MenuItem value={5}>5</MenuItem>
+                                            <MenuItem value={10}>10</MenuItem>
+                                            <MenuItem value={20}>20</MenuItem>
+                                            <MenuItem value={30}>30</MenuItem>
+                                        </Select>
+                                    </FormControl>
+
+                                </div>
+                            </td>}
+
+
+
                         </tr>
                         <tr>
                             <th>Price</th>
