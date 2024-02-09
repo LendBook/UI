@@ -550,8 +550,8 @@ export default function Dashboard() {
                 <Typography variant="subtitle1">Available to Borrow</Typography>
                 <Typography variant="subtitle1">$ {Math.round(countTotalBalance).toLocaleString('en-US')}</Typography>
               </Box>
-              <Box sx={{ width: '2px', background: '#34363e' }} />
-              <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
+             {/* <Box sx={{ width: '2px', background: '#34363e' }} /> */}
+              {/* <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
                 <Typography variant="subtitle1">Orders</Typography>
                 <Typography variant="subtitle1">{Math.round(countTotalOrder).toLocaleString('en-US')}</Typography>
               </Box>
@@ -559,7 +559,7 @@ export default function Dashboard() {
               <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
                 <Typography variant="subtitle1">Borrow</Typography>
                 <Typography variant="subtitle1">{Math.round(countTotalLent).toLocaleString('en-US')}</Typography>
-              </Box>
+              </Box> */}
             </Box>
 
             <Tabs

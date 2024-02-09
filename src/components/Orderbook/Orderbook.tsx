@@ -326,9 +326,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
 
                                 </div>
                             </td>}
-
-
-
+                            
                         </tr>
                         <tr>
                             <th>Price</th>
