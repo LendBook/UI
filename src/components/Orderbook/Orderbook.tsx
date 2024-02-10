@@ -164,16 +164,56 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
 
             const allBuyOrders = results.flatMap(result => result.fetchedBuyOrders);
             const allSellOrders = results.flatMap(result => result.fetchedSellOrders);
-
-            setBuyOrders(allBuyOrders.sort((a, b) => parseFloat(b.limitPrice) - parseFloat(a.limitPrice)));
-            setSellOrders(allSellOrders.sort((a, b) => parseFloat(b.limitPrice) - parseFloat(a.limitPrice)));
-
+            
+            const adjustedBuyOrders = adjustOrdersToStep(allBuyOrders, Number(ethPriceNumber), step);
+            const adjustedSellOrders = adjustOrdersToStep(allSellOrders, Number(ethPriceNumber), step);
+            
+            setBuyOrders(adjustedBuyOrders);
+            setSellOrders(adjustedSellOrders);
+            
             setShowProgress(false);
         } catch (error) {
             console.error("Erreur : ", error);
             setShowProgress(false);
         }
     };
+
+    const adjustOrdersToStep = (orders: any[], currentPrice: number, step: number) => {
+        let adjustedOrders = [];
+        let buyThreshold = Math.ceil(currentPrice / step) * step; // Prochain palier au-dessus pour les achats
+        let sellThreshold = Math.floor(currentPrice / step) * step; // Prochain palier en dessous pour les ventes
+
+        // Trier les ordres pour faciliter la sélection
+        let sortedBuyOrders = orders.filter(o => parseFloat(o.limitPrice) >= currentPrice)
+            .sort((a, b) => parseFloat(a.limitPrice) - parseFloat(b.limitPrice));
+        let sortedSellOrders = orders.filter(o => parseFloat(o.limitPrice) < currentPrice)
+            .sort((a, b) => parseFloat(b.limitPrice) - parseFloat(a.limitPrice));
+
+        // Sélectionner les ordres d'achat ajustés
+        for (let price = buyThreshold; sortedBuyOrders.length > 0; price += step) {
+            const index = sortedBuyOrders.findIndex(o => parseFloat(o.limitPrice) >= price);
+            if (index !== -1) {
+                adjustedOrders.push(sortedBuyOrders[index]);
+                sortedBuyOrders = sortedBuyOrders.slice(index + 1);
+            } else {
+                break;
+            }
+        }
+
+        for (let price = sellThreshold; sortedSellOrders.length > 0; price -= step) {
+            const index = sortedSellOrders.findIndex(o => parseFloat(o.limitPrice) <= price);
+            if (index !== -1) {
+                adjustedOrders.push(sortedSellOrders[index]);
+                sortedSellOrders = sortedSellOrders.slice(index + 1);
+            } else {
+                break;
+            }
+        }
+
+        return adjustedOrders.sort((a, b) => parseFloat(b.limitPrice) - parseFloat(a.limitPrice)); // Trier les ordres ajustés
+    };
+
+
 
 
     useEffect(() => {
@@ -229,15 +269,15 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                             onChange={handleEthPriceChange}
                                             style={{ backgroundColor: 'transparent', color: 'white', border: 'none', width: '100px' }}
                                         />
-                                        <Button onClick={handleOkClick}>OK</Button>
+                                        <button onClick={handleOkClick}>OK</button>
                                         
                                     </>
                                 ) : (
                                     <>
                                         ${ethPrice}
-                                        <Button onClick={handleEditClick} style={{ marginLeft: '10px' }}>
+                                        <button onClick={handleEditClick} style={{ marginLeft: '10px' }}>
                                             Edit
-                                        </Button>
+                                        </button>
                                         {showProgress && <CircularProgress size={10} style={{ marginLeft: '10px' }} />}
                                     </>
                                 )}
@@ -344,7 +384,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 <td>{(Number(order.size)).toFixed(2)}</td>
                                 <td className="text-white">56%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
-                                {isDeposit && <td className="text-white">SELL</td>}
+                                {isDeposit && <td className="text-white">BUY</td>}
                                {/* <td className="text-white">
                                     {!isDeposit ? '-' :
                                         <button className="sell-button opacity-30 pointer-events-none">
