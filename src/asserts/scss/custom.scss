@@ -3802,7 +3802,7 @@ table {
 
 th, td {
   text-align: center;
-  padding: 8px; /* Adjust padding as needed */
+ // padding: 8px; /* Adjust padding as needed */
 }
 
 thead th {
@@ -3827,13 +3827,15 @@ thead th {
 }
 
 .buy-row {
-  color: #005f2d;
-  background-color: #070F15;
+  color: #08CC0A;
+  background-color: black;
+  font-size: 12px;
 }
 
 .sell-row {
-  color: #a8433f;
-  background-color: #070F15;
+  color: #FF0000;
+  background-color: black;
+  font-size: 12px;
 }
 
 .eth-price-row {
@@ -3874,8 +3876,9 @@ thead th {
 .currency-menu {
   background-color: transparent !important;
   color: white;
-
 }
+
+
 
 
 

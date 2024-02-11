@@ -272,7 +272,11 @@ export default function DepositModule() {
         }
     }, [orderId]);
 
-
+    const handleMaxClick = () => {
+        const maxAmount = selectedCurrency === "USDC" ? usdcBalance : wethBalance;
+        setQuantity(maxAmount);
+    };
+    
     const renderLabelDeposit = () => {
         if (selectedCurrency === "USDC") {
             return <>
@@ -416,6 +420,7 @@ export default function DepositModule() {
                                                         <TextField
                                                             label={"Enter amount"}
                                                             margin="normal"
+                                                            value={quantity}
                                                             onChange={onBuyBudgetChange}
                                                             InputLabelProps={{ style: { color: 'white' } }}
                                                             InputProps={{
@@ -469,7 +474,7 @@ export default function DepositModule() {
                                                             </span>
                                                             <button
                                                                 className="text-[12px] text-white underline"
-                                                                onClick={selectedCurrency === "USDC" ? () => setQuantity(usdcBalance) : () => setQuantity(wethBalance)}
+                                                                onClick={handleMaxClick}
                                                             >
                                                                 Max
                                                             </button>
@@ -480,7 +485,7 @@ export default function DepositModule() {
                                                             label={"Enter limit price"}
                                                             variant="outlined"
                                                             margin="normal"
-                                                           // value={orderDetailsText}
+                                                            value={orderDetailsText}
                                                             onChange={onBuyPriceChange}
                                                             InputLabelProps={{ style: { color: 'white' }}}
                                                             InputProps={{ style: { color: 'white' }, readOnly: false }} // Assurez-vous que readOnly est défini sur false

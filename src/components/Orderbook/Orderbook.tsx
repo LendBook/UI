@@ -243,7 +243,8 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                             <th>Size (ETH)</th>
                             <th>Utilization rate</th>
                             <th>Apy</th>
-                            <th>Order type</th>
+                            <th></th>
+                            {/*<th>Order type</th>*/}
                         </tr> }
                         </thead>
                         <tbody>
@@ -251,17 +252,17 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                             <tr key={order.id}
                                 className={`sell-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
                                 onClick={() => handleRowClick(order.id, order.limitPrice, false)}
-                                style={{ height: '50px' }}>
+                                style={{ height: '20px' }}>
                                 <td>{Number(order.limitPrice).toFixed(2)}</td>
                                 <td>{Number(order.size).toFixed(2)}</td>
                                 <td className="text-white">44%</td>
                                 <td className="text-white">9%</td>
                                 {/*{isDeposit && <td className="text-white">BUY</td>}*/}
-                                <td className="text-white">{isDeposit ? 'BUY' : 'BORROW'}</td>
+                                <td className="text-white">{isDeposit ? 'DEPOSIT ETH' : 'BORROW'}</td>
                             </tr>
                         ))}
                         <tr className="eth-price-row">
-                            {!isDeposit && <td colSpan={4}>
+                            {!isDeposit && <td colSpan={5}>
                                 {isEditing ? (
                                     <>
                                         <input
@@ -374,18 +375,18 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                             <th>Size (USDC)</th>
                             <th>Utilization rate</th>
                             <th>Apy</th>
-                            {isDeposit &&  <th>Order type</th> }
+                           {/* {isDeposit &&  <th>Order type</th> }*/}
                         </tr>
                         {buyOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
                                 className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
                                 onClick={() => handleRowClick(order.id, order.limitPrice, true)}
-                                style={{ height: '50px' }}>
+                                style={{ height: '20px' }}>
                                 <td>{Number(order.limitPrice).toFixed(2)}</td>
                                 <td>{(Number(order.size)).toFixed(2)}</td>
                                 <td className="text-white">56%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
-                                <td className="text-white">{isDeposit ? 'SELL' : 'BORROW'}</td>
+                                <td className="text-white">{isDeposit ? 'DEPOSIT USDC' : 'BORROW'}</td>
                                 {/*{isDeposit && <td className="text-white">SELL</td>}*/}
                                {/* <td className="text-white">
                                     {!isDeposit ? '-' :

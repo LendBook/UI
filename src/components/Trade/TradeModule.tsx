@@ -256,6 +256,11 @@ export default function DepositModule() {
         };
     };
 
+    const handleMaxClick = () => {
+        const maxAmount = selectedCurrency === "USDC" ? usdcBalance : wethBalance;
+        setQuantity(maxAmount);
+    };
+
     useEffect(() => {
         if (orderId !== null) {
             fetchOrderDetails(orderId, limitPrice, isBuy).then(details => {
@@ -418,6 +423,7 @@ export default function DepositModule() {
                                                         <TextField
                                                             label={"Enter amount"}
                                                             margin="normal"
+                                                            value={quantity}
                                                             onChange={onBuyBudgetChange}
                                                             InputLabelProps={{ style: { color: 'white' } }}
                                                             InputProps={{
@@ -471,7 +477,7 @@ export default function DepositModule() {
                                                             </span>
                                                             <button
                                                                 className="text-[12px] text-white underline"
-                                                                onClick={selectedCurrency === "USDC" ? () => setQuantity(usdcBalance) : () => setQuantity(wethBalance)}
+                                                                onClick={handleMaxClick}
                                                             >
                                                                 Max
                                                             </button>

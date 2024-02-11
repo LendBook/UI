@@ -61,11 +61,9 @@ export default function BorrowModule() {
     const borrow = useBorrow();
 
     const currencyPrice = activeCurrency === 'USDC' ? priceUSDCUSD : priceETHUSD;
-
-
-
+    
     const orderDetailsText = orderDetails
-        ? `ID: ${orderDetails.id}\nLimit Price: ${orderDetails.limitPrice}\nAmount: ${orderDetails.amount}\nLiquidation Price: ${orderDetails.liquidationPrice} USDC\nLTV: ${orderDetails.LTV}%\nAPY: ${orderDetails.APY}%\nMax. to borrow: ${orderDetails.maxBorrow} USDC`
+        ? `Limit Price: ${orderDetails.limitPrice}\nLiquidation Price: ${orderDetails.liquidationPrice} USDC\nLTV: ${orderDetails.LTV}%\nAPY: ${orderDetails.APY}%\nMax. to borrow: ${orderDetails.maxBorrow} USDC`
         : 'Select an order to see details';
 
     const calculatedValueSize = !isNaN(parseFloat(quantity)) && !isNaN(currencyPrice)
@@ -184,6 +182,15 @@ export default function BorrowModule() {
             console.error("Error : ", error);
         }
     };
+    
+    const handleMaxClick = () => {
+        const maxAmount = selectedCurrency === "USDC" ? usdcBalance : wethBalance;
+        setQuantity(maxAmount);
+    };
+    
+    useEffect(() => {
+    }, [quantity]);
+
 
     const renderLabelDeposit = () => {
         if (selectedCurrency === "USDC") {
@@ -373,6 +380,7 @@ export default function BorrowModule() {
                             label={"Borrowable asset"}
                             margin="normal"
                             onChange={onSizeChange}
+                            value={quantity}
                             InputLabelProps={{style: {color: 'white'}}}
                             InputProps={{
                                 style: {color: 'white', backgroundColor: 'transparent'},
@@ -449,7 +457,7 @@ export default function BorrowModule() {
                             </span>
                             <button
                                 className="text-[12px] text-white underline"
-                                onClick={selectedCurrency === "USDC" ? () => setQuantity(usdcBalance) : () => setQuantity(wethBalance)}
+                                onClick={handleMaxClick}
                             >
                                 Max
                             </button>
