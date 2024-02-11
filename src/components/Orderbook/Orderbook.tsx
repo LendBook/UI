@@ -256,7 +256,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 <td>{Number(order.size).toFixed(2)}</td>
                                 <td className="text-white">44%</td>
                                 <td className="text-white">9%</td>
-                                {isDeposit && <td className="text-white">SELL</td>}
+                                {isDeposit && <td className="text-white">BUY</td>}
                             </tr>
                         ))}
                         <tr className="eth-price-row">
@@ -384,7 +384,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 <td>{(Number(order.size)).toFixed(2)}</td>
                                 <td className="text-white">56%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
-                                {isDeposit && <td className="text-white">BUY</td>}
+                                {isDeposit && <td className="text-white">SELL</td>}
                                {/* <td className="text-white">
                                     {!isDeposit ? '-' :
                                         <button className="sell-button opacity-30 pointer-events-none">

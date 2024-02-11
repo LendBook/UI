@@ -312,9 +312,8 @@ export default function Dashboard() {
     const interval = setInterval(() => {
       setCountTotalOrder((prevCount) => {
         const nbOrders = userOrders.length;
-        const increment = nbOrders / 100; // Nombre d'incrément pour atteindre la valeur totale
+        const increment = nbOrders / 100;
         const newValue = prevCount + increment;
-        // Arrête l'incrémentation lorsque la valeur atteint totalBalance
         if (newValue >= nbOrders) {
           clearInterval(interval);
           return nbOrders;
