@@ -370,7 +370,7 @@ export default function BorrowModule() {
                     </div>
                     <div className="flex flex-col">
                         <TextField
-                            label={"Collateral"}
+                            label={"Borrowable asset"}
                             margin="normal"
                             onChange={onSizeChange}
                             InputLabelProps={{style: {color: 'white'}}}
