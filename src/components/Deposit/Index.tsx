@@ -8,15 +8,8 @@ const Index = () => {
         <OrderProvider>
             <Card sx={{ maxWidth: '1300px', margin: 'auto', background: 'transparent', boxShadow: 'none',
                 border: 'none' }}>
-                <CardContent
-                    sx={{
-                        width: '100%',
-                        p: '1.5rem 2rem 1.5rem 2rem',
-                        mb: '2rem',
-                    }}
-                >
                     <Box>
-                        <Typography variant="h4" style={{ color: 'white' }}>Deposit</Typography>
+                       {/* <Typography variant="h4" style={{ color: 'white' }}>Deposit</Typography>*/}
                         <Grid
                             container
                             mt="2.5rem"
@@ -35,7 +28,6 @@ const Index = () => {
                             </div>
                         </Grid>
                     </Box>
-                </CardContent>
             </Card>
         </OrderProvider>
     );

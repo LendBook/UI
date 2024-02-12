@@ -485,7 +485,7 @@ export default function DepositModule() {
                                                             label={"Enter limit price"}
                                                             variant="outlined"
                                                             margin="normal"
-                                                            value={orderDetailsText}
+                                                           // value={orderDetailsText}
                                                             onChange={onBuyPriceChange}
                                                             InputLabelProps={{ style: { color: 'white' }}}
                                                             InputProps={{ style: { color: 'white' }, readOnly: false }} // Assurez-vous que readOnly est défini sur false

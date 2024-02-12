@@ -35,15 +35,9 @@ export default function Markets() {
     return (
         <Card sx={{ maxWidth: '1300px', margin: 'auto', background: 'transparent', boxShadow: 'none',
             border: 'none' }}>
-            <CardContent
-                sx={{
-                    width: '100%',
-                    p: '1.5rem 2rem 1.5rem 2rem',
-                    mb: '2rem',
-                }}
-            >
+
                 <Box>
-                    <Typography variant="h4" style={{ color: 'white' }}>Markets</Typography>
+                    {/*<Typography variant="h4" style={{ color: 'white' }}>Markets</Typography>*/}
                     <Grid
                         container
                         mt="2.5rem"
@@ -403,7 +397,6 @@ export default function Markets() {
                         </TableContainer>
                     </Grid>
                 </Box>
-            </CardContent>
         </Card>
     );
 }

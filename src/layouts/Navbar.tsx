@@ -79,7 +79,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 border-gray-800 z-[99]">
+      <nav className="top-0 left-0 right-0 z-[99]">
       <Container className="justify-between p-4 hidden lg:flex">
         {/* Logo à gauche */}
         <div className="flex items-center">
@@ -100,6 +100,7 @@ export default function Navbar() {
                   {linkItem.label}
                 </TextButton>
               </a>
+
           ))}
         </div>
 
@@ -165,15 +166,16 @@ export default function Navbar() {
           </div>
           <List>
             {NAV_LINKS.map((linkItem) => (
-              <a
-                key={linkItem.id}
-                href={linkItem.to}
-                className={`gap-4 font-[GothamPro-Regular] text-[17] ${
-                  pathname === linkItem.to ? "text-gray-100" : "text-gray-500"
-                }`}
-              >
-                {linkItem.label}
-              </a>
+                <a key={linkItem.id} href={linkItem.to} className={pathname === linkItem.to ? "active-link" : ""}>
+                  <TextButton
+                      className={`gap-2 font-[GothamPro-Regular] text-[17] ${
+                          pathname === linkItem.to ? "text-gray-100" : "text-white"
+                      }`}
+                  >
+                    {linkItem.label}
+                  </TextButton>
+                </a>
+
             ))}
           </List>
           <List>

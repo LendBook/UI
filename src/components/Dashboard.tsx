@@ -534,6 +534,7 @@ export default function Dashboard() {
                 mb: '2rem',
               }}
           >
+
             <Box sx={{ display: 'flex', gap: '20px', border: '2px solid #34363e', padding: '10px', borderRadius: '10px', marginBottom: '2rem', background: '#131518' }}>
               <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', '&:hover': { backgroundColor: 'transparent' } }}>
                 <Typography variant="subtitle1">Total Deposit value</Typography>
