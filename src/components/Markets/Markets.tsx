@@ -396,7 +396,7 @@ export default function Markets() {
                             </Table>
                         </TableContainer>
                     </Grid>
-                </Box>"d
+                </Box>
         </Card>
     );
 }
