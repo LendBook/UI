@@ -3828,13 +3828,13 @@ thead th {
 
 .buy-row {
   color: #08CC0A;
-  background-color: black;
+  background-color: #002347;
   font-size: 12px;
 }
 
 .sell-row {
   color: #FF0000;
-  background-color: black;
+  background-color: #002347;
   font-size: 12px;
 }
 
@@ -3879,9 +3879,14 @@ thead th {
 }
 
 .active-link {
-  border-bottom: 4px solid #2d4775; // Ajoute une bordure uniquement en bas
-  padding: 3px;
+  background: #2d4775;
+  //border-bottom: 4px solid #2d4775; /* Ajoute une bordure uniquement en bas */
+  //padding: 3px;
+  box-shadow: 0 0 6px 6px rgba(255, 255, 255, 0.5); /* Ombre blanche avec une certaine transparence */
+  border-radius: 10px; /* Coins arrondis */
 }
+
+
 
 
 

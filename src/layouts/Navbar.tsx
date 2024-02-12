@@ -8,7 +8,7 @@ import Container from "../components/Container";
 import FilledButton from "../components/buttons/FilledButton";
 import TextIconButton from "../components/buttons/TextIconButton";
 import TextButton from "../components/buttons/TextButton";
-import logoImg from "../asserts/images/logo.svg";
+import logoImg from "../asserts/images/logo.png";
 import "../asserts/scss/custom.scss";
 
 
@@ -83,7 +83,7 @@ export default function Navbar() {
       <Container className="justify-between p-4 hidden lg:flex">
         {/* Logo à gauche */}
         <div className="flex items-center">
-          <a href="/#" className="w-[180px] h-[76px]">
+          <a href="/#" className="w-[50px] h-[50px]">
             <img src={logoImg} alt="logo" className="w-full" />
           </a>
         </div>
@@ -168,7 +168,7 @@ export default function Navbar() {
             {NAV_LINKS.map((linkItem) => (
                 <a key={linkItem.id} href={linkItem.to} className={pathname === linkItem.to ? "active-link" : ""}>
                   <TextButton
-                      className={`gap-2 font-[GothamPro-Regular] text-[17] ${
+                      className={`gap-2 font-[GothamPro-Regular] text-[12] ${
                           pathname === linkItem.to ? "text-gray-100" : "text-white"
                       }`}
                   >

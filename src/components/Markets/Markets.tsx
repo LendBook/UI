@@ -49,7 +49,7 @@ export default function Markets() {
                         <TableContainer sx={{ mt: '0.75rem', borderRadius: '14px', overflow: 'hidden', border: '3px solid #34363e' }}>
                             <Table
                                 aria-label="Markets table"
-                                sx={{ borderCollapse: 'initial', backgroundColor: '#131518'}}
+                                sx={{ borderCollapse: 'initial', backgroundColor: '#002347'}}
                             >
                                 <TableHead sx={{
                                     '& > td': {
@@ -396,7 +396,7 @@ export default function Markets() {
                             </Table>
                         </TableContainer>
                     </Grid>
-                </Box>
+                </Box>"d
         </Card>
     );
 }
