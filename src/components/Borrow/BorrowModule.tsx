@@ -34,8 +34,8 @@ export default function BorrowModule() {
 
     const [chainId, setChainId] = useState<number | null>(null);
     const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
-    const [selectedCurrency, setSelectedCurrency] = useState('USDC');
-    const [activeCurrency, setActiveCurrency] = useState("USDC");
+    const [selectedCurrency, setSelectedCurrency] = useState('WETH');
+    const [activeCurrency, setActiveCurrency] = useState("WETH");
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const {orderId, limitPrice, amount, isBuy} = useOrderContext();
@@ -60,10 +60,10 @@ export default function BorrowModule() {
 
     const borrow = useBorrow();
 
-    const currencyPrice = activeCurrency === 'USDC' ? priceUSDCUSD : priceETHUSD;
+    const currencyPrice = activeCurrency === 'WETH' ? priceUSDCUSD : priceETHUSD;
     
     const orderDetailsText = orderDetails
-        ? `Limit Price: ${orderDetails.limitPrice}\nLiquidation Price: ${orderDetails.liquidationPrice} USDC\nLTV: ${orderDetails.LTV}%\nAPY: ${orderDetails.APY}%\nMax. to borrow: ${orderDetails.maxBorrow} USDC`
+        ? `Liq Price: ${orderDetails.limitPrice} USDC\nAPY: ${orderDetails.APY}%\n`
         : 'Select an order to see details';
 
     const calculatedValueSize = !isNaN(parseFloat(quantity)) && !isNaN(currencyPrice)
@@ -358,12 +358,12 @@ export default function BorrowModule() {
             >
                 <Box>
         <div className="flex flex-col text-white bg-[#131518] border-[5px] border-solid border-[#191b1f] px-[20px]">
-                <h2 style={{ marginTop: '20px' }}>Borrow</h2>
+                <h2 style={{ marginTop: '20px' }}>Borrow USDC</h2>
                 <hr />
                 <div className="grid grid-cols-1 md:grid-cols-1  mb-[20px">
                     <div className="flex flex-col">
                         <TextField
-                            label="Borrow"
+                            //label="Borrow"
                             variant="outlined"
                             margin="normal"
                             multiline
@@ -377,12 +377,12 @@ export default function BorrowModule() {
                     </div>
                     <div className="flex flex-col">
                         <TextField
-                            label={"Borrowable asset"}
+                            label={"Amount"}
                             margin="normal"
                             onChange={onSizeChange}
                             value={quantity}
                             InputLabelProps={{style: {color: 'white'}}}
-                            InputProps={{
+                            /*InputProps={{
                                 style: {color: 'white', backgroundColor: 'transparent'},
                                 endAdornment: (
                                     <InputAdornment position="end">
@@ -398,7 +398,7 @@ export default function BorrowModule() {
                                         >
                                             {selectedCurrency && (
                                                 <>
-                                                    {/*<img src={selectedCurrency === 'USDC' ? usdcImage : ethImage} alt={selectedCurrency} style={{ width: '20px', height: '20px' }} /> */}
+                                                    {/!*<img src={selectedCurrency === 'USDC' ? usdcImage : ethImage} alt={selectedCurrency} style={{ width: '20px', height: '20px' }} /> *!/}
                                                     <span style={{
                                                         marginLeft: '10px',
                                                         color: 'white'
@@ -446,7 +446,7 @@ export default function BorrowModule() {
                                         </Menu>
                                     </InputAdornment>
                                 ),
-                            }}
+                            }}*/
                             style={{backgroundColor: '#191b1f'}}
                         />
 
