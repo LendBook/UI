@@ -382,9 +382,9 @@ export default function BorrowModule() {
                             onChange={onSizeChange}
                             value={quantity}
                             InputLabelProps={{style: {color: 'white'}}}
-                            /*InputProps={{
+                            InputProps={{
                                 style: {color: 'white', backgroundColor: 'transparent'},
-                                endAdornment: (
+                                /*endAdornment: (
                                     <InputAdornment position="end">
                                         <IconButton
                                             aria-label="select currency"
@@ -445,8 +445,8 @@ export default function BorrowModule() {
                                             </MenuItem>
                                         </Menu>
                                     </InputAdornment>
-                                ),
-                            }}*/
+                                ),*/
+                            }}
                             style={{backgroundColor: '#191b1f'}}
                         />
 
