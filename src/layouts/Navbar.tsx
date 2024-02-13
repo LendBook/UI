@@ -83,7 +83,7 @@ export default function Navbar() {
       <Container className="justify-between p-4 hidden lg:flex">
         {/* Logo à gauche */}
         <div className="flex items-center">
-          <a href="/#" className="w-[50px] h-[50px]">
+          <a href="/#" className="w-[100px] h-[30px]">
             <img src={logoImg} alt="logo" className="w-full" />
           </a>
         </div>

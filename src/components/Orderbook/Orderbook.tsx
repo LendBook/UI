@@ -376,7 +376,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                             <th>Utilization rate</th>
                             <th>Apy</th>
                             {!isDeposit && <th>Max LTV</th> }
-                            
+
                            {/* {isDeposit &&  <th>Order type</th> }*/}
                         </tr>
                         {buyOrders.slice(0, numVisibleOrders).map(order => (
@@ -389,7 +389,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 <td className="text-white">56%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
                                 <td className="text-white">{isDeposit ? 'DEPOSIT USDC' : 'BORROW'}</td>
-                                <td className="text-white">98%</td>
+                                {!isDeposit && <td className="text-white">98%</td> }
                                 {/*{isDeposit && <td className="text-white">SELL</td>}*/}
                                {/* <td className="text-white">
                                     {!isDeposit ? '-' :
