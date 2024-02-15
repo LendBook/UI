@@ -58,12 +58,13 @@ export default function DepositModule() {
     // ORDER VARIABLE
     const [quantity, setQuantity] = useState('');
     const [buyPrice, setBuyPrice] = useState('');
+    const [isBuyOrder, setIsBuyOrder] = useState(true);
     const [borrowSize, setBorrowSize] = useState('');
 
     const [tapStateTabs, setTapStateTabsOrder] = useState(1);
     const [tapStateButton, setTapStateButton] = useState(1);
 
-    const deposit = useDeposit(quantity, buyPrice, pairedPrice, true, true);
+    const deposit = useDeposit(quantity, buyPrice, pairedPrice, isBuyOrder, true);
 
     const currencyPrice = activeCurrency === 'USDC' ? priceUSDCUSD : priceETHUSD;
 
@@ -172,6 +173,17 @@ export default function DepositModule() {
             setWethAllowance(Number(ethers.utils.formatUnits(userAllowance, 18)).toFixed(2));
         }
     };
+
+    useEffect(() => {
+        if (selectedCurrency === 'WETH')
+        {
+            setIsBuyOrder(true);
+        }
+        if (selectedCurrency === 'USDC')
+        {
+            setIsBuyOrder(false);
+        }
+    }, [signer, address]);
 
     useEffect(() => {
         fetchWethBalanceAndAllowance();

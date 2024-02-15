@@ -184,7 +184,7 @@ export default function BorrowModule() {
     };
     
     const handleMaxClick = () => {
-        const maxAmount = selectedCurrency === "USDC" ? usdcBalance : wethBalance;
+        const maxAmount = wethBalance;
         setQuantity(maxAmount);
     };
     
@@ -322,9 +322,9 @@ export default function BorrowModule() {
                     {
                         setSelectedCurrency('WETH');
                     }
-                    else{
+                   /* else{
                         setSelectedCurrency('USDC');
-                    }
+                    }*/
                 }
             });
         }

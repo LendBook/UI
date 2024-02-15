@@ -19,6 +19,8 @@ interface Order {
     limitPrice: string;
     size: string;
     isBorrowable: boolean;
+    isBuyOrder : boolean;
+    
 }
 
 const Orderbook = ({ isDeposit }: OrderbookProps) => {
@@ -35,7 +37,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [newEthPrice, setNewEthPrice] = useState<string>(ethPrice);
 
-    const [step, setStep] = useState(50); // Pour le pas
+   // const [step, setStep] = useState(50); // Pour le pas
     const [nbOrders, setNbOrders] = useState(5); // Pour le nombre d'ordres
 
 
@@ -51,15 +53,15 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
     // LOADING
     const [showProgress, setShowProgress] = useState(true);
 
-    const [numVisibleOrders, setNumVisibleOrders] = useState<number>(10);
+    const [numVisibleOrders, setNumVisibleOrders] = useState<number>(PAGE_SIZE);
     
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
     const openMenu = Boolean(anchorEl);
 
-    const handleStepChange = (event: SelectChangeEvent) => {
+    /*const handleStepChange = (event: SelectChangeEvent) => {
         setStep(Number(event.target.value)); // Conversion correcte de string à number
-    };
+    };*/
 
     const handleNbOrdersChange = (event: SelectChangeEvent) => {
         setNbOrders(Number(event.target.value));
@@ -123,36 +125,36 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
 
     const fetchOrders = async () => {
         try {
-
             const lastOrderId = await orderbookContract.lastOrderId();
             const numPages = Math.ceil(lastOrderId / PAGE_SIZE);
-            const ethPriceInEther = ethPrice;
-            const ethPriceNumber = ethPriceInEther ? parseFloat(String(ethPriceInEther)) : 0;
+            const ethPriceInEther = ethPrice; // Assurez-vous que ceci est bien le prix d'ETH en Ether et non en Wei ou autre unité.
+            const ethPriceNumber = parseFloat(ethPriceInEther) || 0;
 
             const fetchPromises = Array.from({ length: numPages }, async (_, pageIndex) => {
                 const startId = pageIndex * PAGE_SIZE + 1;
                 const endId = Math.min(startId + PAGE_SIZE - 1, lastOrderId);
 
-                let fetchedBuyOrders: Order[] = [];
-                let fetchedSellOrders: Order[] = [];
+                let fetchedBuyOrders = [];
+                let fetchedSellOrders = [];
 
                 for (let i = startId; i <= endId; i++) {
                     const order = await orderbookContract.orders(i);
+                    if (parseFloat(ethers.utils.formatUnits(order.quantity, 'ether')) > 0) {
+                        const orderFormatted = {
+                            id: i,
+                            limitPrice: ethers.utils.formatUnits(order.price, 'ether'),
+                            size: ethers.utils.formatUnits(order.quantity, 'ether'),
+                            isBorrowable: order.isBorrowable,
+                            isBuyOrder: order.isBuyOrder,
+                        };
 
-                    const orderFormatted = {
-                        id: i,
-                        limitPrice: ethers.utils.formatUnits(order.price, 'ether'),
-                        size: ethers.utils.formatUnits(order.quantity, 'ether'),
-                        isBorrowable: order.isBorrowable,
-                    };
+                        const orderPriceNumber = parseFloat(orderFormatted.limitPrice);
 
-                    const orderPriceNumber = parseFloat(orderFormatted.limitPrice);
-
-                    if (parseFloat(orderFormatted.size) > 0) {
-                        if (order.isBuyOrder && orderPriceNumber < ethPriceNumber)  {
-                            fetchedBuyOrders.push(orderFormatted);
-                        } else if (!order.isBuyOrder && orderPriceNumber > ethPriceNumber) {
-                            fetchedSellOrders.push(orderFormatted);
+                        // Mettre à jour la condition pour séparer correctement les ordres d'achat et de vente
+                        if (!orderFormatted.isBuyOrder && orderPriceNumber > ethPriceNumber) {
+                            fetchedSellOrders.push(orderFormatted); // Ordres d'achat au-dessus du prix d'ETH
+                        } else if (orderFormatted.isBuyOrder && orderPriceNumber < ethPriceNumber) {
+                            fetchedBuyOrders.push(orderFormatted); // Ordres de vente en dessous du prix d'ETH
                         }
                     }
                 }
@@ -162,58 +164,22 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
 
             const results = await Promise.all(fetchPromises);
 
-            const allBuyOrders = results.flatMap(result => result.fetchedBuyOrders);
-            const allSellOrders = results.flatMap(result => result.fetchedSellOrders);
-            
-            const adjustedBuyOrders = adjustOrdersToStep(allBuyOrders, Number(ethPriceNumber), step);
-            const adjustedSellOrders = adjustOrdersToStep(allSellOrders, Number(ethPriceNumber), step);
-            
-            setBuyOrders(adjustedBuyOrders);
-            setSellOrders(adjustedSellOrders);
-            
+            // Trier les ordres d'achat par ordre décroissant de prix
+            const allBuyOrders = results.flatMap(result => result.fetchedBuyOrders)
+                .sort((a, b) => parseFloat(b.limitPrice) - parseFloat(a.limitPrice));
+            // Trier les ordres de vente par ordre croissant de prix
+            const allSellOrders = results.flatMap(result => result.fetchedSellOrders)
+                .sort((a, b) => parseFloat(b.limitPrice) - parseFloat(a.limitPrice));
+
+            setBuyOrders(allBuyOrders);
+            setSellOrders(allSellOrders);
+
             setShowProgress(false);
         } catch (error) {
             console.error("Erreur : ", error);
             setShowProgress(false);
         }
     };
-
-    const adjustOrdersToStep = (orders: any[], currentPrice: number, step: number) => {
-        let adjustedOrders = [];
-        let buyThreshold = Math.ceil(currentPrice / step) * step; // Prochain palier au-dessus pour les achats
-        let sellThreshold = Math.floor(currentPrice / step) * step; // Prochain palier en dessous pour les ventes
-
-        // Trier les ordres pour faciliter la sélection
-        let sortedBuyOrders = orders.filter(o => parseFloat(o.limitPrice) >= currentPrice)
-            .sort((a, b) => parseFloat(a.limitPrice) - parseFloat(b.limitPrice));
-        let sortedSellOrders = orders.filter(o => parseFloat(o.limitPrice) < currentPrice)
-            .sort((a, b) => parseFloat(b.limitPrice) - parseFloat(a.limitPrice));
-
-        // Sélectionner les ordres d'achat ajustés
-        for (let price = buyThreshold; sortedBuyOrders.length > 0; price += step) {
-            const index = sortedBuyOrders.findIndex(o => parseFloat(o.limitPrice) >= price);
-            if (index !== -1) {
-                adjustedOrders.push(sortedBuyOrders[index]);
-                sortedBuyOrders = sortedBuyOrders.slice(index + 1);
-            } else {
-                break;
-            }
-        }
-
-        for (let price = sellThreshold; sortedSellOrders.length > 0; price -= step) {
-            const index = sortedSellOrders.findIndex(o => parseFloat(o.limitPrice) <= price);
-            if (index !== -1) {
-                adjustedOrders.push(sortedSellOrders[index]);
-                sortedSellOrders = sortedSellOrders.slice(index + 1);
-            } else {
-                break;
-            }
-        }
-
-        return adjustedOrders.sort((a, b) => parseFloat(b.limitPrice) - parseFloat(a.limitPrice)); // Trier les ordres ajustés
-    };
-
-
 
 
     useEffect(() => {
@@ -243,6 +209,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                             <th>Size (ETH)</th>
                             <th>Utilization rate</th>
                             <th>Apy</th>
+                            {isDeposit && <th>Max LTV</th> }
                             <th></th>
                             {/*<th>Order type</th>*/}
                         </tr> }
@@ -257,8 +224,10 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 <td>{Number(order.size).toFixed(2)}</td>
                                 <td className="text-white">44%</td>
                                 <td className="text-white">9%</td>
+                                {isDeposit && <td className="text-white">98%</td> }
                                 {/*{isDeposit && <td className="text-white">BUY</td>}*/}
-                                <td className="text-white">{isDeposit ? 'DEPOSIT ETH' : 'BORROW'}</td>
+                                <td className="text-white">{!order.isBuyOrder ? 'DEPOSIT ETH' : 'DEPOSIT USDC'}</td>
+                                
                             </tr>
                         ))}
                         <tr className="eth-price-row">
@@ -306,7 +275,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                         </>
                                     )}
 
-                                    <div style={{ marginRight: '10px', color: 'white', display: 'flex', alignItems: 'center' }}>Step by</div>
+                                   {/* <div style={{ marginRight: '10px', color: 'white', display: 'flex', alignItems: 'center' }}>Step by</div>
                                     <FormControl variant="standard" sx={{ m: 1, minWidth: 60 }}>
                                         <Select
                                             id="step-select"
@@ -335,7 +304,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                             <MenuItem value={200}>200</MenuItem>
                                             <MenuItem value={500}>500</MenuItem>
                                         </Select>
-                                    </FormControl>
+                                    </FormControl>*/}
 
                                     <div style={{ marginRight: '10px', color: 'white', display: 'flex', alignItems: 'center' }}>Sort by :</div>
                                     <FormControl variant="standard" sx={{ m: 1, minWidth: 60 }}>
@@ -368,16 +337,14 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
 
                                 </div>
                             </td>}
-                            
                         </tr>
                         <tr>
                             <th>Price</th>
                             <th>Size (USDC)</th>
                             <th>Utilization rate</th>
                             <th>Apy</th>
-                            {!isDeposit && <th>Max LTV</th> }
-
-                           {/* {isDeposit &&  <th>Order type</th> }*/}
+                            <th>Max LTV</th>
+                            <th></th>
                         </tr>
                         {buyOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
@@ -388,16 +355,9 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 <td>{(Number(order.size)).toFixed(2)}</td>
                                 <td className="text-white">56%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
-                                <td className="text-white">{isDeposit ? 'DEPOSIT USDC' : 'BORROW'}</td>
-                                {!isDeposit && <td className="text-white">98%</td> }
-                                {/*{isDeposit && <td className="text-white">SELL</td>}*/}
-                               {/* <td className="text-white">
-                                    {!isDeposit ? '-' :
-                                        <button className="sell-button opacity-30 pointer-events-none">
-                                            BUY
-                                        </button>
-                                    }
-                                </td> */}
+                                <td className="text-white">98%</td>
+                                {isDeposit &&  <td className="text-white">{order.isBuyOrder ? 'DEPOSIT USDC' : 'DEPOSIT ETH'}</td>}
+                                {!isDeposit &&  <td className="text-white">BORROW</td>}
                             </tr>
                         ))}
 
