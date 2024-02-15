@@ -57,14 +57,15 @@ export default function BorrowModule() {
     // BORROW VARIABLE
     const [quantity, setQuantity] = useState('');
     const [orderID, setOrderID] = useState('');
+    const [orderIdForBorrow, setOrderIdForBorrow] = useState<number | null>(null);
 
     const borrow = useBorrow();
 
     const currencyPrice = activeCurrency === 'WETH' ? priceUSDCUSD : priceETHUSD;
-    
+
     const orderDetailsText = orderDetails
         ? `Liq Price: ${orderDetails.limitPrice} USDC\nAPY: ${orderDetails.APY}%\n`
-        : 'Select an order to see details';
+        : `Select an order to see details`;
 
     const calculatedValueSize = !isNaN(parseFloat(quantity)) && !isNaN(currencyPrice)
         ? `$ ${(parseFloat(quantity) * currencyPrice).toFixed(2)}`
@@ -175,14 +176,20 @@ export default function BorrowModule() {
         }
     };
 
-    const handleBorrow = async (orderId: string, quantity: string) => {
+
+    const handleBorrow = async (quantity: string) => {
         try {
-            await borrow(Number(orderId), quantity);
+            if (orderIdForBorrow !== null) {
+                await borrow(orderIdForBorrow, quantity);
+            } else {
+                console.error("Order ID for borrowing is null");
+            }
         } catch (error) {
             console.error("Error : ", error);
         }
     };
-    
+
+
     const handleMaxClick = () => {
         const maxAmount = wethBalance;
         setQuantity(maxAmount);
@@ -190,6 +197,13 @@ export default function BorrowModule() {
     
     useEffect(() => {
     }, [quantity]);
+
+    useEffect(() => {
+        if (orderId !== null) {
+            setOrderIdForBorrow(orderId);
+        }
+    }, [orderId]);
+
 
 
     const renderLabelDeposit = () => {
@@ -209,7 +223,7 @@ export default function BorrowModule() {
                         <div
                             className={`w-[70%] py-2 text-center rounded-full cursor-pointer hover:opacity-75 select-none bg-green-500`}
                             onClick={async () => {
-                                await handleBorrow(orderID, quantity);
+                                await handleBorrow(quantity);
                                 handleBorrowUSDCClick();
                             }}
                             style={{ marginTop: '15px', marginBottom: '15px' }}
@@ -242,7 +256,7 @@ export default function BorrowModule() {
                         <div
                             className={`w-[70%] py-2  text-center rounded-full cursor-pointer hover:opacity-75 select-none bg-green-500`}
                             onClick={async () => {
-                                await handleBorrow(orderID, quantity);
+                                await handleBorrow(quantity);
                                 handleBorrowWETHClick();
                             }}
                             style={{ marginTop: '15px', marginBottom: '15px' }}

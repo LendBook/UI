@@ -11,10 +11,10 @@ export const useBorrow = () => {
         try {
             const tx = await orderbookContract.connect(signer).borrow(
                 orderId,
-                ethers.utils.parseUnits(quantity, 18),
+                ethers.utils.parseUnits(quantity.toString(), 18),
             );
             await tx.wait();
-            NotificationManager.success("BorrowModule successful!");
+            NotificationManager.success("Borrow successful!");
         } catch (error: any) {
             if (error["code"] === "ACTION_REJECTED")
                 NotificationManager.error("User rejected the transaction.");

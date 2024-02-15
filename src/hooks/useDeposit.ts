@@ -12,7 +12,6 @@ export const useDeposit = (quantity: string, buyPrice: string, pairedPrice: stri
         }, _isBuyOrder: any, _isBorrowable: any) => {
             if (!signer || !orderbookContract) return;
             try {
-                console.log(_quantity.toString, _price.toString, _pairedPrice.toString);
                 const tx = await orderbookContract.connect(signer).deposit(
                     ethers.utils.parseUnits(_quantity.toString(), 18),
                     ethers.utils.parseUnits(_price.toString(), 18),

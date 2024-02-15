@@ -496,7 +496,7 @@ export default function Dashboard() {
           let borrowsDetails = [];
           for (const id of borrowFromIds) {
             const borrow = await orderbookContract.positions(id);
-            if (!ethers.BigNumber.from(borrow.borrowedAssets).isZero()) {
+           if (!ethers.BigNumber.from(borrow.borrowedAssets).isZero()) {
               const formattedBorrow = {
                 id: id,
                 asset: 'ETH',
@@ -504,6 +504,8 @@ export default function Dashboard() {
                 closingPrice: Number(ethers.utils.formatUnits(0, 18)).toFixed(2),
                 apy: 0
               };
+
+              console.log("formated:" +id);
               borrowsDetails.push(formattedBorrow);
             }
           }
