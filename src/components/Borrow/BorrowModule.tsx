@@ -34,8 +34,8 @@ export default function BorrowModule() {
 
     const [chainId, setChainId] = useState<number | null>(null);
     const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
-    const [selectedCurrency, setSelectedCurrency] = useState('WETH');
-    const [activeCurrency, setActiveCurrency] = useState("WETH");
+    const [selectedCurrency, setSelectedCurrency] = useState('USDC');
+    const [activeCurrency, setActiveCurrency] = useState("USDC");
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const {orderId, limitPrice, amount, isBuy} = useOrderContext();
@@ -61,7 +61,7 @@ export default function BorrowModule() {
 
     const borrow = useBorrow();
 
-    const currencyPrice = activeCurrency === 'WETH' ? priceUSDCUSD : priceETHUSD;
+    const currencyPrice = activeCurrency === 'USDC' ? priceUSDCUSD : priceETHUSD;
 
     const orderDetailsText = orderDetails
         ? `Liq Price: ${orderDetails.limitPrice} USDC\nAPY: ${orderDetails.APY}%\n`

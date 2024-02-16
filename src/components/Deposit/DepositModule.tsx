@@ -47,7 +47,7 @@ export default function DepositModule() {
     const [wethAllowance, setWethAllowance] = useState('0');
 
     // DEFAUT
-    const [activeCurrency, setActiveCurrency] = useState("USDC");
+    const [activeCurrency, setActiveCurrency] = useState("WETH");
     const [pairedPrice, setpairedPrice] = useState('0');
     const [isSwitchOn, setIsSwitchOn] = useState(true);
 
@@ -66,7 +66,7 @@ export default function DepositModule() {
 
     const deposit = useDeposit(quantity, buyPrice, pairedPrice, isBuyOrder, true);
 
-    const currencyPrice = activeCurrency === 'USDC' ? priceUSDCUSD : priceETHUSD;
+    const currencyPrice = activeCurrency === 'WETH' ? priceUSDCUSD : priceETHUSD;
 
     const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
     const {orderId, limitPrice, isBuy} = useOrderContext();
@@ -84,7 +84,7 @@ export default function DepositModule() {
         : '';
 
 
-    const [selectedCurrency, setSelectedCurrency] = useState('USDC');
+    const [selectedCurrency, setSelectedCurrency] = useState('WETH');
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const openMenu = Boolean(anchorEl);
 
@@ -277,7 +277,7 @@ export default function DepositModule() {
                         setSelectedCurrency('WETH');
                     }
                     else{
-                        setSelectedCurrency('USDC');
+                        setSelectedCurrency('WETH');
                     }
                 }
             });
@@ -290,7 +290,7 @@ export default function DepositModule() {
     };
     
     const renderLabelDeposit = () => {
-        if (selectedCurrency === "USDC") {
+        /*if (selectedCurrency === "USDC") {
             return <>
                 {parseFloat(usdcAllowance) < parseFloat(quantity) && (
                     <div
@@ -316,7 +316,7 @@ export default function DepositModule() {
                 )}
 
                 </>;
-        } else if (selectedCurrency === "WETH") {
+        } else *//*if (selectedCurrency === "WETH") {*/
             return <>
                 {parseFloat(wethAllowance) < parseFloat(quantity) && (
                     <div
@@ -340,7 +340,7 @@ export default function DepositModule() {
                     </div>
                 )}
             </>;
-        }
+       /* }*/
     };
 
     useEffect(() => {
@@ -497,7 +497,7 @@ export default function DepositModule() {
                                                             label={"Enter limit price"}
                                                             variant="outlined"
                                                             margin="normal"
-                                                           // value={orderDetailsText}
+                                                            value={orderDetailsText}
                                                             onChange={onBuyPriceChange}
                                                             InputLabelProps={{ style: { color: 'white' }}}
                                                             InputProps={{ style: { color: 'white' }, readOnly: false }} // Assurez-vous que readOnly est défini sur false
