@@ -428,7 +428,7 @@ export default function DepositModule() {
                                                             InputLabelProps={{ style: { color: 'white' } }}
                                                             InputProps={{
                                                                 style: { color: 'white', backgroundColor: 'transparent' },
-                                                                endAdornment: (
+                                                                /*endAdornment: (
                                                                     <InputAdornment position="end">
                                                                         <IconButton
                                                                             aria-label="select currency"
@@ -466,7 +466,7 @@ export default function DepositModule() {
                                                                             </MenuItem>
                                                                         </Menu>
                                                                     </InputAdornment>
-                                                                ),
+                                                                ),*/
                                                             }}
                                                             style={{ backgroundColor: '#191b1f' }}
                                                         />

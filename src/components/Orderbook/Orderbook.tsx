@@ -203,19 +203,20 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
             >
            <Box>
                     <table className="orderbook-table rounded-lg border-[5px] border-solid border-[#191b1f] ">
-                        <thead>
-                        {isDeposit && <tr>
+                        {/*<thead>
+                        {!isDeposit && <tr>
                             <th>Price</th>
                             <th>Size (ETH)</th>
-                            <th>Utilization rate</th>
-                            <th>Apy</th>
-                            {isDeposit && <th>Max LTV</th> }
+                            <th>APY</th>
+                            <th>UR</th>
                             <th></th>
-                            {/*<th>Order type</th>*/}
+                            {!isDeposit && <th>Max LTV</th> }
+
+                            <th>Order type</th>
                         </tr> }
-                        </thead>
+                        </thead>*/}
                         <tbody>
-                        {isDeposit && sellOrders.slice(0, numVisibleOrders).map(order => (
+                        {/*{!isDeposit && sellOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
                                 className={`sell-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
                                 onClick={() => handleRowClick(order.id, order.limitPrice, false)}
@@ -224,14 +225,14 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                 <td>{Number(order.size).toFixed(2)}</td>
                                 <td className="text-white">44%</td>
                                 <td className="text-white">9%</td>
-                                {isDeposit && <td className="text-white">98%</td> }
-                                {/*{isDeposit && <td className="text-white">BUY</td>}*/}
-                                <td className="text-white">{!order.isBuyOrder ? 'DEPOSIT ETH' : 'DEPOSIT USDC'}</td>
+                                {!isDeposit && <td className="text-white">98%</td> }
+                                {isDeposit && <td className="text-white">BUY</td>}
+                                <td className="text-white">{!order.isBuyOrder ? <button>DEPOSIT ETH</button> : <button>DEPOSIT USDC</button>}</td>
                                 
                             </tr>
-                        ))}
+                        ))}*/}
                         <tr className="eth-price-row">
-                            {!isDeposit && <td colSpan={5}>
+                            {!isDeposit && <td colSpan={4}>
                                 {isEditing ? (
                                     <>
                                         <input
@@ -253,7 +254,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                     </>
                                 )}
                             </td> }
-                            {isDeposit && <td colSpan={5} style={{ textAlign: 'center' }}>
+                            {isDeposit && <td colSpan={4} style={{ textAlign: 'center' }}>
                                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                                     {isEditing ? (
                                         <>
@@ -274,90 +275,29 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                                             {showProgress && <CircularProgress size={10} style={{ marginRight: '20px' }} />}
                                         </>
                                     )}
-
-                                   {/* <div style={{ marginRight: '10px', color: 'white', display: 'flex', alignItems: 'center' }}>Step by</div>
-                                    <FormControl variant="standard" sx={{ m: 1, minWidth: 60 }}>
-                                        <Select
-                                            id="step-select"
-                                            value={step.toString()}
-                                            onChange={handleStepChange}
-                                            sx={{
-                                                '.MuiSelect-select': { color: 'white', marginRight: '10px' },
-                                                'svg': { color: 'white' },
-                                                '& .MuiMenu-paper': {
-                                                    backgroundColor: '#131518',
-                                                    boxShadow: 'none', // Supprime les ombres portées qui pourraient inclure des bordures
-                                                    // Vous pouvez également essayer 'border: none' si les bordures sont toujours visibles
-                                                },
-                                                // Styles pour les MenuItem
-                                                '& .MuiMenuItem-root': {
-                                                    backgroundColor: '#131518', // Couleur de fond par défaut
-                                                    color: 'white', // Couleur du texte
-                                                    '&:hover': {
-                                                        backgroundColor: '#131518', // Garde la même couleur de fond au survol
-                                                    },
-                                                },
-                                            }}
-                                        >
-                                            <MenuItem value={50}>50</MenuItem>
-                                            <MenuItem value={100}>100</MenuItem>
-                                            <MenuItem value={200}>200</MenuItem>
-                                            <MenuItem value={500}>500</MenuItem>
-                                        </Select>
-                                    </FormControl>*/}
-
-                                    <div style={{ marginRight: '10px', color: 'white', display: 'flex', alignItems: 'center' }}>Sort by :</div>
-                                    <FormControl variant="standard" sx={{ m: 1, minWidth: 60 }}>
-                                        <Select
-                                            id="sort-by-select"
-                                            value={numVisibleOrders.toString()} 
-                                            onChange={handleNbOrdersChange} 
-                                            sx={{
-                                                '.MuiSelect-select': { color: 'white', marginRight: '10px' },
-                                                'svg': { color: 'white' },
-                                                '& .MuiMenu-paper': {
-                                                    backgroundColor: '#131518',
-                                                    boxShadow: 'none',
-                                                },
-                                                '& .MuiMenuItem-root': {
-                                                    backgroundColor: '#131518',
-                                                    color: 'white',
-                                                    '&:hover': {
-                                                        backgroundColor: '#131518',
-                                                    },
-                                                },
-                                            }}
-                                        >
-                                            <MenuItem value={5}>5</MenuItem>
-                                            <MenuItem value={10}>10</MenuItem>
-                                            <MenuItem value={20}>20</MenuItem>
-                                            <MenuItem value={30}>30</MenuItem>
-                                        </Select>
-                                    </FormControl>
-
-                                </div>
+                                    </div>
                             </td>}
                         </tr>
                         <tr>
                             <th>Price</th>
-                            <th>Size (USDC)</th>
-                            <th>Utilization rate</th>
-                            <th>Apy</th>
-                            <th>Max LTV</th>
+                            {/*<th>Size (USDC)</th>*/}
+                            <th>APY</th>
+                            <th>UR</th>
+                           {/* <th>Max LTV</th>*/}
                             <th></th>
                         </tr>
                         {buyOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
                                 className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
-                                onClick={() => handleRowClick(order.id, order.limitPrice, true)}
+                               // onClick={() => handleRowClick(order.id, order.limitPrice, true)}
                                 style={{ height: '20px' }}>
                                 <td>{Number(order.limitPrice).toFixed(2)}</td>
-                                <td>{(Number(order.size)).toFixed(2)}</td>
+                                {/*<td>{(Number(order.size)).toFixed(2)}</td>*/}
                                 <td className="text-white">56%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
-                                <td className="text-white">98%</td>
-                                {isDeposit &&  <td className="text-white">{order.isBuyOrder ? 'DEPOSIT USDC' : 'DEPOSIT ETH'}</td>}
-                                {!isDeposit &&  <td className="text-white">BORROW</td>}
+                                {/*<td className="text-white">98%</td>*/}
+                                {isDeposit &&  <td className="text-white">{order.isBuyOrder ? <button className={` ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>DEPOSIT USDC</button> : <button className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>DEPOSIT ETH</button>}</td>}
+                                {!isDeposit &&  <td className="text-white"><button className={` ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>BORROW</button></td>}
                             </tr>
                         ))}
 

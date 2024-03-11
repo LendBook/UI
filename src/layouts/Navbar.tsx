@@ -32,12 +32,7 @@ const NAV_LINKS: Array<INavLink> = [
   },
   {
     id: 2,
-    label: "Trade",
-    to: "/trade",
-  },
-  {
-    id: 2,
-    label: "Deposit",
+    label: "Earn",
     to: "/deposit",
   },
   {
@@ -47,14 +42,19 @@ const NAV_LINKS: Array<INavLink> = [
   },
   {
     id: 4,
-    label: "My Positions",
-    to: "/dashboard",
+    label: "Trade",
+    to: "/trade",
   },
   {
     id: 5,
+    label: "Dashboard",
+    to: "/dashboard",
+  },
+  /*{
+    id: 6,
     label: "Faucet",
     to: "/faucet",
-  },
+  },*/
 ];
 
 export default function Navbar() {

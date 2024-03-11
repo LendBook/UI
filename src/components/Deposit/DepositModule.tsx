@@ -47,7 +47,7 @@ export default function DepositModule() {
     const [wethAllowance, setWethAllowance] = useState('0');
 
     // DEFAUT
-    const [activeCurrency, setActiveCurrency] = useState("WETH");
+    const [activeCurrency, setActiveCurrency] = useState("USDC");
     const [pairedPrice, setpairedPrice] = useState('0');
     const [isSwitchOn, setIsSwitchOn] = useState(true);
 
@@ -66,7 +66,7 @@ export default function DepositModule() {
 
     const deposit = useDeposit(quantity, buyPrice, pairedPrice, isBuyOrder, true);
 
-    const currencyPrice = activeCurrency === 'WETH' ? priceUSDCUSD : priceETHUSD;
+    const currencyPrice = activeCurrency === 'USDC' ? priceUSDCUSD : priceETHUSD;
 
     const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
     const {orderId, limitPrice, isBuy} = useOrderContext();
@@ -84,7 +84,7 @@ export default function DepositModule() {
         : '';
 
 
-    const [selectedCurrency, setSelectedCurrency] = useState('WETH');
+    const [selectedCurrency, setSelectedCurrency] = useState('USDC');
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const openMenu = Boolean(anchorEl);
 
@@ -330,12 +330,14 @@ export default function DepositModule() {
                     <div
                         className={`w-[70%] py-[10px] text-center rounded-full cursor-pointer hover:opacity-75 select-none bg-green-500`}
                         onClick={async () => {
-                            await onPlaceSellOrder();
-                            handleSellClick();
+                           // await onPlaceSellOrder();
+                            await onPlaceBuyOrder();
+                            // handleSellClick();
+                            handleBuyClick();
                         }}
                     >
                         <span className="flex items-center justify-center text-[#000000] text-[18px] sm:text-[18px] font-semibold">
-                            DEPOSIT WETH
+                            DEPOSIT USDC
                         </span>
                     </div>
                 )}
@@ -425,7 +427,7 @@ export default function DepositModule() {
                     <div className="buy-box max-w-[500px] w-full flex flex-col gap-[50px] text-white h-[100%] bg-[#131518] border-[5px] border-solid border-[#191b1f]">
                         <div className="flex flex-col gap-[30px] p-[5px] ">
                             <div className="flex flex-col gap-[20px] px-[20px]">
-                                <h2 style={{ marginTop: '20px' }}>Deposit</h2>
+                                <h2 style={{ marginTop: '20px' }}>Deposit USDC</h2>
                                 <hr />
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-[20px] mb-[20px]  ">
                                                     <div className="flex flex-col">
@@ -437,7 +439,7 @@ export default function DepositModule() {
                                                             InputLabelProps={{ style: { color: 'white' } }}
                                                             InputProps={{
                                                                 style: { color: 'white', backgroundColor: 'transparent' },
-                                                                endAdornment: (
+                                                                /*endAdornment: (
                                                                     <InputAdornment position="end">
                                                                         <IconButton
                                                                             aria-label="select currency"
@@ -475,7 +477,7 @@ export default function DepositModule() {
                                                                             </MenuItem>
                                                                         </Menu>
                                                                     </InputAdornment>
-                                                                ),
+                                                                ),*/
                                                             }}
                                                             style={{ backgroundColor: '#191b1f' }}
                                                         />
@@ -494,13 +496,25 @@ export default function DepositModule() {
                                                     </div>
                                                     <div className="flex flex-col">
                                                         <TextField
-                                                            label={"Enter limit price"}
+                                                            label={"Choose Deposit Price"}
                                                             variant="outlined"
                                                             margin="normal"
                                                             value={orderDetailsText}
                                                             onChange={onBuyPriceChange}
                                                             InputLabelProps={{ style: { color: 'white' }}}
                                                             InputProps={{ style: { color: 'white' }, readOnly: false }} // Assurez-vous que readOnly est défini sur false
+                                                            style={{ backgroundColor: '#191b1f'}}
+                                                        />
+                                                    </div>
+
+                                                    <div className="flex flex-col text-white">
+                                                        <TextField
+                                                            label="Enter Paired Limit Price"
+                                                            variant="outlined"
+                                                            margin="normal"
+                                                            onChange={onRepostOrderChange}
+                                                            InputLabelProps={{ style: { color: 'white' }}}
+                                                            InputProps={{ style: { color: 'white' }}}
                                                             style={{ backgroundColor: '#191b1f'}}
                                                         />
                                                     </div>
