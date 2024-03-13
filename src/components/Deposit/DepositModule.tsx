@@ -71,6 +71,24 @@ export default function DepositModule() {
     const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
     const {orderId, limitPrice, isBuy} = useOrderContext();
 
+    const [selectedMenuItem, setSelectedMenuItem] = useState<string | null>(null);
+
+    const handleMenuItemClick = (price: string | null) => {
+        if (price !== null) {
+            setpairedPrice(price);
+            handleCurrencyClose();
+        }
+        setSelectedMenuItem((prevPrice) => {
+            if (prevPrice === price) {
+                return null;
+            } else {
+                return price;
+            }
+        });
+    };
+
+
+
     const calculatedValueEnterAmount = !isNaN(parseFloat(quantity)) && !isNaN(currencyPrice)
         ? `$ ${(parseFloat(quantity) * currencyPrice).toFixed(2)}`
         : 'Enter Amount';
@@ -507,42 +525,40 @@ export default function DepositModule() {
                                                         />
                                                     </div>
 
-                                                    <div className="flex flex-col text-white">
-                                                        <TextField
-                                                            label="Enter Paired Limit Price"
-                                                            variant="outlined"
-                                                            margin="normal"
-                                                            onChange={onRepostOrderChange}
-                                                            InputLabelProps={{ style: { color: 'white' }}}
-                                                            InputProps={{ style: { color: 'white' }}}
-                                                            style={{ backgroundColor: '#191b1f'}}
-                                                        />
-                                                    </div>
                                                     <div className="flex flex-col ">
                                                         <Accordion  className="blue-accordion">
                                                             <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: 'white' }}/>} >
-                                                                <Typography className="white-typography">More options</Typography>
+                                                                <Typography className="white-typography">Paired limit price</Typography>
                                                             </AccordionSummary>
                                                             <AccordionDetails >
                                                                 <div className="flex flex-col text-white">
-                                                                    <TextField
-                                                                        label="Enter Paired Limit Price"
-                                                                        variant="outlined"
-                                                                        margin="normal"
-                                                                        onChange={onRepostOrderChange}
-                                                                        InputLabelProps={{ style: { color: 'white' }}}
-                                                                        InputProps={{ style: { color: 'white' }}}
-                                                                        style={{ backgroundColor: '#070F15'}}
-                                                                    />
-                                                                    <div className="text-white text-[12px] px-[10px] mx-[10px] mb-2">
-                                                                        { !isNaN(parseFloat(pairedPrice)) && !isNaN(priceUSDCUSD) ? `~ ${(parseFloat(pairedPrice) * priceUSDCUSD).toFixed(2)} $` : null }
-                                                                    </div>
-                                                                    <div className="flex flex-row justify-between mt-2 mx-[20px] text-white">
-                                                                          <span className="text-[15px] opacity-80">
-                                                                            <span className="font-semibold">Is borrowable ?</span>
-                                                                              <Switch checked={isSwitchOn} onChange={() => setIsSwitchOn(!isSwitchOn)} />
-                                                                          </span>
-                                                                    </div>
+                                                                    <MenuItem
+                                                                        onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.10))}
+                                                                        style={{
+                                                                            backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.10) ? '#f3f4f6' : 'transparent',
+                                                                            color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.10) ? '#000000' : '#ffffff'
+                                                                        }}
+                                                                    >
+                                                                        {String((parseFloat(limitPrice ?? '0')) * 1.10)}
+                                                                    </MenuItem>
+                                                                    <MenuItem
+                                                                        onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.20))}
+                                                                        style={{
+                                                                            backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.20) ? '#f3f4f6' : 'transparent',
+                                                                            color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.20) ? '#000000' : '#ffffff'
+                                                                        }}
+                                                                    >
+                                                                        {String((parseFloat(limitPrice ?? '0')) * 1.20)}
+                                                                    </MenuItem>
+                                                                    <MenuItem
+                                                                        onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.30))}
+                                                                        style={{
+                                                                            backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.30) ? '#f3f4f6' : 'transparent',
+                                                                            color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.30) ? '#000000' : '#ffffff'
+                                                                        }}
+                                                                    >
+                                                                        {String((parseFloat(limitPrice ?? '0')) * 1.30)}
+                                                                    </MenuItem>
                                                                 </div>
                                                             </AccordionDetails>
                                                         </Accordion>
