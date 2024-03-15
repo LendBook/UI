@@ -457,45 +457,6 @@ export default function DepositModule() {
                                                             InputLabelProps={{ style: { color: 'white' } }}
                                                             InputProps={{
                                                                 style: { color: 'white', backgroundColor: 'transparent' },
-                                                                /*endAdornment: (
-                                                                    <InputAdornment position="end">
-                                                                        <IconButton
-                                                                            aria-label="select currency"
-                                                                            onClick={handleCurrencyClick}
-                                                                            style={{ marginRight: '-12px', width: '80px', display: 'flex', alignItems: 'center' }}
-                                                                        >
-                                                                            {selectedCurrency && (
-                                                                                <>
-                                                                                    <span style={{ marginLeft: '10px', color: 'white' }}>{selectedCurrency}</span>
-                                                                                </>
-                                                                            )}
-                                                                            {!selectedCurrency && <span style={{ color: 'white' }}>Select Currency</span>}
-                                                                            <ArrowDropDownIcon style={{ color: 'white' }} />
-                                                                        </IconButton>
-                                                                        <Menu
-                                                                            id="currency-menu"
-                                                                            anchorEl={anchorEl}
-                                                                            open={openMenu}
-                                                                            onClose={handleCloseMenu}
-                                                                            PaperProps={{
-                                                                                style: {
-                                                                                    backgroundColor: '#191b1f',
-                                                                                    color: 'white',
-                                                                                    minWidth: '100px',
-                                                                                },
-                                                                            }}
-                                                                        >
-                                                                            <MenuItem onClick={() => { setSelectedCurrency('USDC'); handleCloseMenu(); }} style={{ display: 'flex', alignItems: 'center', backgroundColor: 'transparent' }}>
-                                                                                <img src={usdcImage} alt="USDC" style={{ width: '20px', height: '20px' }} />
-                                                                                <span style={{ marginLeft: '10px', color: 'white' }}>USDC</span>
-                                                                            </MenuItem>
-                                                                            <MenuItem onClick={() => { setSelectedCurrency('WETH'); handleCloseMenu(); }} style={{ display: 'flex', alignItems: 'center', backgroundColor: 'transparent' }}>
-                                                                                <img src={ethImage} alt="WETH" style={{ width: '20px', height: '20px' }} />
-                                                                                <span style={{ marginLeft: '10px', color: 'white' }}>WETH</span>
-                                                                            </MenuItem>
-                                                                        </Menu>
-                                                                    </InputAdornment>
-                                                                ),*/
                                                             }}
                                                             style={{ backgroundColor: '#191b1f' }}
                                                         />

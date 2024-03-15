@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {useWeb3Modal} from "@web3modal/react";
-import {Box, Card, CardContent, InputAdornment, TextField} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Box, Card, CardContent, InputAdornment, TextField, Typography} from "@mui/material";
 import {useAccount, useWalletClient, type WalletClient,} from "wagmi";
 import {ethers, providers} from "ethers";
 import {getEthPrice, getUSDCPrice, orderbookContract, useEthersSigner} from "../../contracts";
@@ -8,9 +8,8 @@ import "../../asserts/scss/custom.scss";
 import Contrats from "../../contracts/contracts/168587773.json";
 import {useBorrow} from "../../hooks/useBorrow";
 import {useOrderContext} from "../Orderbook/OrderContext";
-import {IconButton} from "@material-tailwind/react";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import Menu from "@mui/material/Menu";
+import {IconButton, Tab, Tabs} from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MenuItem from "@mui/material/MenuItem";
 import ethIcon from "../../asserts/images/coins/eth.svg";
 import usdcIcon from "../../asserts/images/coins/usdc.svg";
@@ -26,12 +25,21 @@ interface OrderDetails {
     isBuy : boolean | null;
 }
 
+export let activeIndex: number = 1;
+
 
 export default function BorrowModule() {
     const signer = useEthersSigner();
     const {address} = useAccount();
     const {open} = useWeb3Modal();
 
+    const [activeTab, setActiveTab] = useState(0);
+
+
+    const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+        setActiveTab(newValue);
+        activeIndex = activeTab;
+    };
     const [chainId, setChainId] = useState<number | null>(null);
     const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
     const [selectedCurrency, setSelectedCurrency] = useState('USDC');
@@ -63,9 +71,16 @@ export default function BorrowModule() {
 
     const currencyPrice = activeCurrency === 'USDC' ? priceUSDCUSD : priceETHUSD;
 
+    const [buyPrice, setBuyPrice] = useState('');
+    const [pairedPrice, setpairedPrice] = useState('0');
+
     const orderDetailsText = orderDetails
         ? `Liq Price: ${orderDetails.limitPrice} USDC\nAPY: ${orderDetails.APY}%\n`
         : `Select an order to see details`;
+
+    const orderDetailsTextDeposit = orderDetails
+        ? `${orderDetails.limitPrice}`
+        : '';
 
     const calculatedValueSize = !isNaN(parseFloat(quantity)) && !isNaN(currencyPrice)
         ? `$ ${(parseFloat(quantity) * currencyPrice).toFixed(2)}`
@@ -95,6 +110,26 @@ export default function BorrowModule() {
             await tx.wait();
             fetchWethBalanceAndAllowance();
         }
+    };
+
+    const handleCurrencyClose = () => {
+        setAnchorEl(null);
+    };
+
+    const [selectedMenuItem, setSelectedMenuItem] = useState<string | null>(null);
+    
+    const handleMenuItemClick = (price: string | null) => {
+        if (price !== null) {
+            setpairedPrice(price);
+            handleCurrencyClose();
+        }
+        setSelectedMenuItem((prevPrice) => {
+            if (prevPrice === price) {
+                return null;
+            } else {
+                return price;
+            }
+        });
     };
 
     const handleBorrowUSDCClick = () => {
@@ -161,6 +196,38 @@ export default function BorrowModule() {
     };
 
     const onSizeChange = (e: any) => {
+        try {
+            if (e.target.value === "") {
+                setQuantity('');
+            } else {
+                let amount = e.target.value;
+                amount = amount.toString().replace(/^0+/, "");
+                if (amount.length === 0) amount = "0";
+                if (amount[0] === ".") amount = "0" + amount;
+                setQuantity(amount);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const onBuyPriceChange = (e: any) => {
+        try {
+            if (e.target.value === "") {
+                setBuyPrice('');
+            } else {
+                let amount = e.target.value;
+                amount = amount.toString().replace(/^0+/, "");
+                if (amount.length === 0) amount = "0";
+                if (amount[0] === ".") amount = "0" + amount;
+                setBuyPrice(amount);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const onBuyBudgetChange = (e: any) => {
         try {
             if (e.target.value === "") {
                 setQuantity('');
@@ -372,131 +439,182 @@ export default function BorrowModule() {
             >
                 <Box>
         <div className="flex flex-col text-white bg-[#131518] border-[5px] border-solid border-[#191b1f] px-[20px]">
-                <h2 style={{ marginTop: '20px' }}>Borrow USDC</h2>
-                <hr />
-                <div className="grid grid-cols-1 md:grid-cols-1  mb-[20px">
-                    <div className="flex flex-col">
-                        <TextField
-                            //label="Borrow"
-                            variant="outlined"
-                            margin="normal"
-                            multiline
-                            rows={5}
-                            value={orderDetailsText}
-                            InputLabelProps={{style: {color: 'white'}}}
-                            InputProps={{style: {color: 'white', fontFamily: 'monospace'}}}
-                            style={{backgroundColor: '#191b1f'}}
-                        />
+            <Box>
+                <Tabs value={activeTab} onChange={handleTabChange}>
+                    <Tab label="Deposit collateral (1)" sx={{ color: "grey", "&.Mui-selected": { color: "white" } }} />
+                    <Tab label="Borrow USDC (2)" sx={{ color: "grey", "&.Mui-selected": { color: "white" } }} />
+                </Tabs>
+                <TabPanel value={activeTab} index={0}>
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-[20px] mb-[20px]  ">
+                        <div className="flex flex-col">
+                            <TextField
+                                label={"Enter amount"}
+                                margin="normal"
+                                value={quantity}
+                                onChange={onBuyBudgetChange}
+                                InputLabelProps={{ style: { color: 'white' } }}
+                                InputProps={{
+                                    style: { color: 'white', backgroundColor: 'transparent' },
+                                }}
+                                style={{ backgroundColor: '#191b1f' }}
+                            />
 
-                    </div>
-                    <div className="flex flex-col">
-                        <TextField
-                            label={"Amount"}
-                            margin="normal"
-                            onChange={onSizeChange}
-                            value={quantity}
-                            InputLabelProps={{style: {color: 'white'}}}
-                            InputProps={{
-                                style: {color: 'white', backgroundColor: 'transparent'},
-                                /*endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="select currency"
-                                            onClick={handleCurrencyClick}
+                            <div className="flex justify-between items-center">
+                                                            <span className="text-white text-[12px]">
+                                                                Balance: {selectedCurrency === "USDC" ? usdcBalance : wethBalance} {selectedCurrency}
+                                                            </span>
+                                <button
+                                    className="text-[12px] text-white underline"
+                                    onClick={handleMaxClick}
+                                >
+                                    Max
+                                </button>
+                            </div>
+                        </div>
+                        <div className="flex flex-col">
+                            <TextField
+                                label={"Choose Deposit Price"}
+                                variant="outlined"
+                                margin="normal"
+                                value={orderDetailsTextDeposit}
+                                onChange={onBuyPriceChange}
+                                InputLabelProps={{ style: { color: 'white' }}}
+                                InputProps={{ style: { color: 'white' }, readOnly: false }} // Assurez-vous que readOnly est défini sur false
+                                style={{ backgroundColor: '#191b1f'}}
+                            />
+                        </div>
+
+                        <div className="flex flex-col ">
+                            <Accordion  className="blue-accordion">
+                                <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: 'white' }}/>} >
+                                    <Typography className="white-typography">Paired limit price</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails >
+                                    <div className="flex flex-col text-white">
+                                        <MenuItem
+                                            onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.10))}
                                             style={{
-                                                marginRight: '-12px',
-                                                width: '80px',
-                                                display: 'flex',
-                                                alignItems: 'center'
+                                                backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.10) ? '#f3f4f6' : 'transparent',
+                                                color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.10) ? '#000000' : '#ffffff'
                                             }}
                                         >
-                                            {selectedCurrency && (
-                                                <>
-                                                    {/!*<img src={selectedCurrency === 'USDC' ? usdcImage : ethImage} alt={selectedCurrency} style={{ width: '20px', height: '20px' }} /> *!/}
-                                                    <span style={{
-                                                        marginLeft: '10px',
-                                                        color: 'white'
-                                                    }}>{selectedCurrency}</span>
-                                                </>
-                                            )}
-                                            {!selectedCurrency && <span style={{color: 'white'}}>Select Currency</span>}
-                                            <ArrowDropDownIcon style={{color: 'white'}}/>
-                                        </IconButton>
-                                        <Menu
-                                            id="currency-menu"
-                                            anchorEl={anchorEl}
-                                            open={openMenu}
-                                            onClose={handleCloseMenu}
-                                            PaperProps={{
-                                                style: {
-                                                    backgroundColor: '#191b1f',
-                                                    color: 'white',
-                                                    minWidth: '100px',
-                                                },
+                                            {String((parseFloat(limitPrice ?? '0')) * 1.10)}
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.20))}
+                                            style={{
+                                                backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.20) ? '#f3f4f6' : 'transparent',
+                                                color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.20) ? '#000000' : '#ffffff'
                                             }}
                                         >
-                                            <MenuItem onClick={() => {
-                                                setSelectedCurrency('USDC');
-                                                handleCloseMenu();
-                                            }} style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                backgroundColor: 'transparent'
-                                            }}>
-                                                <img src={usdcIcon} alt="USDC" style={{width: '20px', height: '20px'}}/>
-                                                <span style={{marginLeft: '10px', color: 'white'}}>USDC</span>
-                                            </MenuItem>
-                                            <MenuItem onClick={() => {
-                                                setSelectedCurrency('WETH');
-                                                handleCloseMenu();
-                                            }} style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                backgroundColor: 'transparent'
-                                            }}>
-                                                <img src={ethIcon} alt="WETH" style={{width: '20px', height: '20px'}}/>
-                                                <span style={{marginLeft: '10px', color: 'white'}}>WETH</span>
-                                            </MenuItem>
-                                        </Menu>
-                                    </InputAdornment>
-                                ),*/
-                            }}
-                            style={{backgroundColor: '#191b1f'}}
-                        />
+                                            {String((parseFloat(limitPrice ?? '0')) * 1.20)}
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.30))}
+                                            style={{
+                                                backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.30) ? '#f3f4f6' : 'transparent',
+                                                color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.30) ? '#000000' : '#ffffff'
+                                            }}
+                                        >
+                                            {String((parseFloat(limitPrice ?? '0')) * 1.30)}
+                                        </MenuItem>
+                                    </div>
+                                </AccordionDetails>
+                            </Accordion>
+                        </div>
+                        {address && (
+                            <>
+                                <div className="flex flex-row justify-center items-center ">
+                                    {quantity === '' && (
+                                        <div
+                                            className={`w-[70%] py-[10px] text-center rounded-full bg-gray-400`}
+                                        >
+                                            <span className="text-[#000000] text-[18px] sm:text-[18px]"><b><span className="font-semibold">APPROVE</span></b></span>
+                                        </div>
+                                    )}
+                                    {parseFloat(quantity) !== 0 && (
+                                        renderLabelDeposit()
+                                    )}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </TabPanel>
+                <TabPanel value={activeTab} index={1}>
+                    <div className="grid grid-cols-1 md:grid-cols-1  mb-[20px">
+                        <div className="flex flex-col">
+                            <TextField
+                                //label="Borrow"
+                                variant="outlined"
+                                margin="normal"
+                                multiline
+                                rows={5}
+                                value={orderDetailsText}
+                                InputLabelProps={{style: {color: 'white'}}}
+                                InputProps={{style: {color: 'white', fontFamily: 'monospace'}}}
+                                style={{backgroundColor: '#191b1f'}}
+                            />
+
+                        </div>
+                        <div className="flex flex-col">
+                            <TextField
+                                label={"Amount"}
+                                margin="normal"
+                                onChange={onSizeChange}
+                                value={quantity}
+                                InputLabelProps={{style: {color: 'white'}}}
+                                InputProps={{
+                                    style: {color: 'white', backgroundColor: 'transparent'},
+                                }}
+                                style={{backgroundColor: '#191b1f'}}
+                            />
 
 
-                        <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center">
                             <span className="text-white text-[12px]">
                                 Balance: {selectedCurrency === "USDC" ? usdcBalance : wethBalance} {selectedCurrency}
                             </span>
-                            <button
-                                className="text-[12px] text-white underline"
-                                onClick={handleMaxClick}
-                            >
-                                Max
-                            </button>
-                        </div>
-
-                        <div style={{marginBottom: '20px'}}></div>
-
-                    </div>
-                    <div className="flex flex-row justify-center items-center ">
-                        {quantity === '' && (
-                            <div
-                                className={`w-[70%] py-[10px] text-center rounded-full bg-gray-400`}
-                            >
-                                <span className="text-[#000000] text-[18px] sm:text-[18px]"><b><span className="font-semibold">APPROVE</span></b></span>
+                                <button
+                                    className="text-[12px] text-white underline"
+                                    onClick={handleMaxClick}
+                                >
+                                    Max
+                                </button>
                             </div>
-                        )}
-                        {parseFloat(quantity) !== 0 && (
-                            renderLabelDeposit()
-                        )}
+
+                            <div style={{marginBottom: '20px'}}></div>
+
+                        </div>
+                        <div className="flex flex-row justify-center items-center ">
+                            {quantity === '' && (
+                                <div
+                                    className={`w-[70%] py-[10px] text-center rounded-full bg-gray-400`}
+                                >
+                                    <span className="text-[#000000] text-[18px] sm:text-[18px]"><b><span className="font-semibold">APPROVE</span></b></span>
+                                </div>
+                            )}
+                            {parseFloat(quantity) !== 0 && (
+                                renderLabelDeposit()
+                            )}
+                        </div>
+                        <div style={{marginBottom: '20px'}}></div>
                     </div>
-                    <div style={{marginBottom: '20px'}}></div>
-                    </div>
+                </TabPanel>
+            </Box>
         </div>
                 </Box>
             </CardContent>
         </Card>
     );
+
+    function TabPanel({ children, value, index }: { children: React.ReactNode, value: number, index: number }) {
+        return (
+            <div role="tabpanel" hidden={value !== index} id={`tabpanel-${index}`}>
+                {value === index && <Box p={3}>{children}</Box>}
+            </div>
+        );
+    }
 }
+
+
+

@@ -4,6 +4,7 @@ import Contrats from "./contracts/168587773.json";
 import { fromBigNum } from "../utils";
 import {WalletClient, useWalletClient } from "wagmi";
 import { useMemo } from "react";
+import { activeIndex } from "../components/Borrow/BorrowModule";
 const supportChainId = 168587773;
 
 const RPCS = {
@@ -82,6 +83,16 @@ const getContractWrapper = (contract: ethers.Contract) => {
         connect: (signer: ethers.Signer) => any;
         mint: (to: string, amount: ethers.BigNumber) => Promise<any>;
     };
+};
+
+export const getIndex = async () => {
+    try {
+        return activeIndex;
+
+    } catch (error) {
+        console.error('failed to fetch index number:', error);
+        return null;
+    }
 };
 
 

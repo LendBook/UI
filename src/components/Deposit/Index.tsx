@@ -9,7 +9,6 @@ const Index = () => {
             <Card sx={{ maxWidth: '1300px', margin: 'auto', background: 'transparent', boxShadow: 'none',
                 border: 'none' }}>
                     <Box>
-                       {/* <Typography variant="h4" style={{ color: 'white' }}>Deposit</Typography>*/}
                         <Grid
                             container
                             mt="2.5rem"
