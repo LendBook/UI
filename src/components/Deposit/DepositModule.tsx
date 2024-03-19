@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {useWeb3Modal} from "@web3modal/react";
-import {Box, Card, CardContent, InputAdornment, Switch, TextField} from "@mui/material";
+import {Box, Card, CardContent, FormControlLabel, InputAdornment, Switch, TextField} from "@mui/material";
 import {useAccount, useWalletClient, type WalletClient,} from "wagmi";
 import {ethers, providers} from "ethers";
 import {getEthPrice, getUSDCPrice, orderbookContract} from "../../contracts";
@@ -37,6 +37,12 @@ export default function DepositModule() {
 
     const [chainId, setChainId] = useState<number | null>(null);
 
+    const [isAdvancedMode, setIsAdvancedMode] = useState(false);
+
+    const handleAdvancedModeChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
+        setIsAdvancedMode(event.target.checked);
+    };
+
     // BALANCE
     const [ethBalance, setEthBalance] = useState('');
     const [usdcBalance, setUsdcBalance] = useState('0');
@@ -49,6 +55,7 @@ export default function DepositModule() {
     // DEFAUT
     const [activeCurrency, setActiveCurrency] = useState("USDC");
     const [pairedPrice, setpairedPrice] = useState('0');
+    const [pairedPriceDefault, setpairedPriceDefault] = useState('0');
     const [isSwitchOn, setIsSwitchOn] = useState(true);
 
     // CHAINLINK FEED PRICE
@@ -97,9 +104,10 @@ export default function DepositModule() {
         ? `$ ${(parseFloat(buyPrice) * currencyPrice).toFixed(2)}`
         : 'Enter Limit Price';
 
+
     const orderDetailsText = orderDetails
-        ? `${orderDetails.limitPrice}`
-        : '';
+        ? `Price: ${Number(orderDetails.limitPrice).toFixed(0)} USDC\nPaired limit price: ${Number(pairedPriceDefault).toFixed(0)}\n`
+        : `Select an order to see details`;
 
 
     const [selectedCurrency, setSelectedCurrency] = useState('USDC');
@@ -276,7 +284,7 @@ export default function DepositModule() {
 
     const fetchOrderDetails = async (orderId: number, limitPrice: string | null, isBuy: boolean | null): Promise<OrderDetails> => {
         await new Promise(resolve => setTimeout(resolve, 500));
-
+        setpairedPriceDefault(String((parseFloat(limitPrice ?? '0')) * 1.10));
         return {
             orderId: orderId,
             limitPrice: limitPrice ?? "0",
@@ -410,6 +418,7 @@ export default function DepositModule() {
 
         fetchEthPrice();
         fetchUsdcPrice();
+
     }, []);
 
 
@@ -445,7 +454,7 @@ export default function DepositModule() {
                     <div className="buy-box max-w-[500px] w-full flex flex-col gap-[50px] text-white h-[100%] bg-[#131518] border-[5px] border-solid border-[#191b1f]">
                         <div className="flex flex-col gap-[30px] p-[5px] ">
                             <div className="flex flex-col gap-[20px] px-[20px]">
-                                <h2 style={{ marginTop: '20px' }}>Deposit USDC</h2>
+                                <h2 style={{ marginTop: '20px' }}>Deposit</h2>
                                 <hr />
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-[20px] mb-[20px]  ">
                                                     <div className="flex flex-col">
@@ -475,24 +484,38 @@ export default function DepositModule() {
                                                     </div>
                                                     <div className="flex flex-col">
                                                         <TextField
-                                                            label={"Choose Deposit Price"}
+                                                            //label="Borrow"
                                                             variant="outlined"
                                                             margin="normal"
+                                                            multiline
+                                                            rows={5}
                                                             value={orderDetailsText}
-                                                            onChange={onBuyPriceChange}
-                                                            InputLabelProps={{ style: { color: 'white' }}}
-                                                            InputProps={{ style: { color: 'white' }, readOnly: false }} // Assurez-vous que readOnly est défini sur false
-                                                            style={{ backgroundColor: '#191b1f'}}
+                                                            InputLabelProps={{style: {color: 'white'}}}
+                                                            InputProps={{
+                                                                style: {
+                                                                    color: 'white',
+                                                                    fontFamily: 'monospace'
+                                                                }
+                                                            }}
+                                                            style={{backgroundColor: '#191b1f'}}
                                                         />
-                                                    </div>
 
+                                                    </div>
                                                     <div className="flex flex-col ">
-                                                        <Accordion  className="blue-accordion">
-                                                            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: 'white' }}/>} >
-                                                                <Typography className="white-typography">Paired limit price</Typography>
+                                                        <FormControlLabel
+                                                            control={<Switch checked={isAdvancedMode} onChange={handleAdvancedModeChange} />}
+                                                            label="Advance Mode"
+                                                        />
+                                                        {isAdvancedMode && (
+                                                            <div className="flex flex-col">
+                                                        <Accordion className="blue-accordion">
+                                                            <AccordionSummary
+                                                                expandIcon={<ExpandMoreIcon sx={{color: 'white'}}/>}>
+                                                                <Typography className="white-typography">Paired limit
+                                                                    price</Typography>
                                                             </AccordionSummary>
-                                                            <AccordionDetails >
-                                                                <div className="flex flex-col text-white">
+                                                            <AccordionDetails>
+                                                            <div className="flex flex-col text-white">
                                                                     <MenuItem
                                                                         onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.10))}
                                                                         style={{
@@ -523,6 +546,9 @@ export default function DepositModule() {
                                                                 </div>
                                                             </AccordionDetails>
                                                         </Accordion>
+                                                            </div>
+                                                            )}
+
                                                     </div>
                                                 </div>
                                                 {address && (

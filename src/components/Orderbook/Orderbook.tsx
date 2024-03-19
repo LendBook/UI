@@ -222,6 +222,13 @@ const Orderbook = ({isDeposit}: OrderbookProps) => {
            <Box>
                     <table className="orderbook-table rounded-lg border-[5px] border-solid border-[#191b1f] ">
                         <thead>
+                        {isDeposit && <tr>
+                            <th>Price</th>
+                            <th>Liquidity</th>
+                            <th>APY</th>
+                            <th>Liquidation LTV</th>
+                            <th></th>
+                        </tr> }
                         {!isDeposit && activeIndex === 1 && <tr>
                             <th>Price</th>
                             <th>Liquidity</th>
@@ -239,31 +246,44 @@ const Orderbook = ({isDeposit}: OrderbookProps) => {
                         </thead>
                         <tbody>
                         
-                        {!isDeposit && activeIndex === 0 && sellOrders.slice(0, numVisibleOrders).map(order => (
+                        {!isDeposit && activeIndex === 1 && sellOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
                                 className={`sell-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
                                 onClick={() => handleRowClick(order.id, order.limitPrice, false)}
                                 style={{ height: '20px' }}>
-                                <td>{Number(order.limitPrice).toFixed(2)}</td>
-                                <td>{Number(order.size).toFixed(2)}</td>
+                                <td>{Number(order.limitPrice).toFixed(0)}</td>
+                                <td>{Number(order.size).toFixed(0)}</td>
                                 <td className="text-white">44%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
-                                {!isDeposit &&  <td className="text-white"><button className={` ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>BORROW</button></td>}
+                                {!isDeposit &&  <td className="text-white"><button className={`button-style ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>SELECT</button></td>}
 
                             </tr>
                         ))}
 
-                        {!isDeposit && activeIndex === 1 && sellOrders.slice(0, numVisibleOrders).map(order => (
+                        {isDeposit && sellOrders.slice(0, numVisibleOrders).map(order => (
+                            <tr key={order.id}
+                                className={`sell-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
+                                onClick={() => handleRowClick(order.id, order.limitPrice, false)}
+                                style={{ height: '20px' }}>
+                                <td>{Number(order.limitPrice).toFixed(0)}</td>
+                                <td>{Number(order.size).toFixed(0)}</td>
+                                <td className="text-white">44%</td>
+                                <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
+                                <td className="text-white"><button className={`button-style ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>SELECT</button></td>
+
+                            </tr>
+                        ))}
+
+                        {!isDeposit && activeIndex === 0 && sellOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
                                 className={`grey-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
                                 onClick={() => handleRowClick(order.id, order.limitPrice, false)}
                                 style={{ height: '20px' }}>
-                                <td>{Number(order.limitPrice).toFixed(2)}</td>
-                                <td>{Number(order.size).toFixed(2)}</td>
+                                <td>{Number(order.limitPrice).toFixed(0)}</td>
+                                <td>{Number(order.size).toFixed(0)}</td>
                                 <td className="text-white">44%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
-                                {!isDeposit &&  <td className="text-white"><button className={` ${selectedOrderId === order.id ? 'selected-row' : ''}`}>BORROW</button></td>}
-
+                                {!isDeposit &&  <td className="text-white"><button className={`button-style buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}>BORROW</button></td>}
                             </tr>
                         ))}
                         <tr className="eth-price-row">
@@ -314,39 +334,40 @@ const Orderbook = ({isDeposit}: OrderbookProps) => {
                             </td>}
                         </tr>
                         <tr>
-                            <th>Price</th>
-                            <th>Liquidity</th>
+                            {!isDeposit &&  <th>Price</th> }
+                            {!isDeposit &&  <th>Liquidity</th>}
                             {/*<th>Size (USDC)</th>*/}
-                            <th>APY</th>
-                            <th>UR</th>
+                            {!isDeposit &&<th>APY</th>}
+                            {!isDeposit &&  <th>UR</th>}
                            {/* <th>Max LTV</th>*/}
-                            {activeIndex === 0 && <th></th> }
+                            {activeIndex === 1 && !isDeposit && <th></th> }
                         </tr>
-                        {activeIndex === 1 && buyOrders.slice(0, numVisibleOrders).map(order => (
+                        {activeIndex === 0 && buyOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
                                 className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
                                // onClick={() => handleRowClick(order.id, order.limitPrice, true)}
                                 style={{ height: '20px' }}>
-                                <td>{Number(order.limitPrice).toFixed(2)}</td>
-                                <td>{(Number(order.size)).toFixed(2)}</td>
+                                <td>{Number(order.limitPrice).toFixed(0)}</td>
+                                <td>{(Number(order.size)).toFixed(0)}</td>
                                 <td className="text-white">56%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
-                                {isDeposit &&  <td className="text-white">{order.isBuyOrder ? <button className={` ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>DEPOSIT USDC</button> : <button className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>DEPOSIT ETH</button>}</td>}
-                                {!isDeposit && <td className="text-white">{order.isBuyOrder ? <button className={` ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>DEPOSIT</button> : <button className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>BORROW</button>}</td>}
+                                {isDeposit && <td className="text-white">{order.isBuyOrder ? <button className={`button-style ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>SELECT</button> : <button className={`button-style buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>SELECT</button>}</td>}
+                                {!isDeposit && <td className="text-white">{order.isBuyOrder ? <button className={`button-style ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>SELECT</button> : <button className={`button-style buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>SELECT</button>}</td>}
+
                             </tr>
                         ))}
 
-                        {activeIndex === 0 && buyOrders.slice(0, numVisibleOrders).map(order => (
+                        {!isDeposit && activeIndex === 1 && buyOrders.slice(0, numVisibleOrders).map(order => (
                             <tr key={order.id}
                                 className={`grey-row ${selectedOrderId === order.id ? 'selected-row' : ''}`}
                                 // onClick={() => handleRowClick(order.id, order.limitPrice, true)}
                                 style={{ height: '20px' }}>
-                                <td>{Number(order.limitPrice).toFixed(2)}</td>
-                                <td>{(Number(order.size)).toFixed(2)}</td>
+                                <td>{Number(order.limitPrice).toFixed(0)}</td>
+                                <td>{(Number(order.size)).toFixed(0)}</td>
                                 <td className="text-white">56%</td>
                                 <td className="text-white">{isDeposit ? '7%' : '5.89%'}</td>
-                                {isDeposit &&  <td className="text-white">{order.isBuyOrder ? <button className={` ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>DEPOSIT USDC</button> : <button className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>DEPOSIT ETH</button>}</td>}
-                                {!isDeposit && <td className="text-white">{order.isBuyOrder ? <button className={` ${selectedOrderId === order.id ? 'selected-row' : ''}`} >DEPOSIT</button> : <button className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`} >BORROW</button>}</td>}
+                                {isDeposit &&  <td className="text-white">{order.isBuyOrder ? <button className={`button-style ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>SELECT</button> : <button className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`} onClick={() => handleRowClick(order.id, order.limitPrice, true)}>SELECT</button>}</td>}
+                                {!isDeposit && <td className="text-white">{order.isBuyOrder ? <button className={`button-style ${selectedOrderId === order.id ? 'selected-row' : ''}`} >SELECT</button> : <button className={`buy-row ${selectedOrderId === order.id ? 'selected-row' : ''}`} >BORROW</button>}</td>}
                             </tr>
                         ))}
 

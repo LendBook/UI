@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {useWeb3Modal} from "@web3modal/react";
-import {Accordion, AccordionDetails, AccordionSummary, Box, Card, CardContent, InputAdornment, TextField, Typography} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Box, Card, CardContent,
+    FormControlLabel, InputAdornment, Switch, TextField, Typography} from "@mui/material";
 import {useAccount, useWalletClient, type WalletClient,} from "wagmi";
 import {ethers, providers} from "ethers";
 import {getEthPrice, getUSDCPrice, orderbookContract, useEthersSigner} from "../../contracts";
@@ -35,6 +36,12 @@ export default function BorrowModule() {
 
     const [activeTab, setActiveTab] = useState(0);
 
+    const [isAdvancedMode, setIsAdvancedMode] = useState(false);
+
+    const handleAdvancedModeChange = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
+        setIsAdvancedMode(event.target.checked);
+    };
+
 
     const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setActiveTab(newValue);
@@ -45,6 +52,8 @@ export default function BorrowModule() {
     const [selectedCurrency, setSelectedCurrency] = useState('USDC');
     const [activeCurrency, setActiveCurrency] = useState("USDC");
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const [pairedPriceDefault, setpairedPriceDefault] = useState('0');
 
     const {orderId, limitPrice, amount, isBuy} = useOrderContext();
     const openMenu = Boolean(anchorEl);
@@ -75,7 +84,7 @@ export default function BorrowModule() {
     const [pairedPrice, setpairedPrice] = useState('0');
 
     const orderDetailsText = orderDetails
-        ? `Liq Price: ${orderDetails.limitPrice} USDC\nAPY: ${orderDetails.APY}%\n`
+        ? `Price: ${Number(orderDetails.limitPrice).toFixed(0)} USDC\nPaired limit price: ${Number(pairedPriceDefault).toFixed(0)}\n`
         : `Select an order to see details`;
 
     const orderDetailsTextDeposit = orderDetails
@@ -142,7 +151,7 @@ export default function BorrowModule() {
 
     const fetchOrderDetails = async (orderId: number, limitPrice: string | null, amount: string | null, isBuy: boolean | null): Promise<OrderDetails> => {
         await new Promise(resolve => setTimeout(resolve, 500));
-
+        setpairedPriceDefault(String((parseFloat(limitPrice ?? '0')) * 1.10));
         return {
             id: orderId,
             limitPrice: limitPrice ?? "0",
@@ -442,7 +451,7 @@ export default function BorrowModule() {
             <Box>
                 <Tabs value={activeTab} onChange={handleTabChange}>
                     <Tab label="Deposit collateral (1)" sx={{ color: "grey", "&.Mui-selected": { color: "white" } }} />
-                    <Tab label="Borrow USDC (2)" sx={{ color: "grey", "&.Mui-selected": { color: "white" } }} />
+                    <Tab label="Borrow (2)" sx={{ color: "grey", "&.Mui-selected": { color: "white" } }} />
                 </Tabs>
                 <TabPanel value={activeTab} index={0}>
                     <div className="grid grid-cols-1 md:grid-cols-1 gap-[20px] mb-[20px]  ">
@@ -473,54 +482,72 @@ export default function BorrowModule() {
                         </div>
                         <div className="flex flex-col">
                             <TextField
-                                label={"Choose Deposit Price"}
+                                //label="Borrow"
                                 variant="outlined"
                                 margin="normal"
-                                value={orderDetailsTextDeposit}
-                                onChange={onBuyPriceChange}
-                                InputLabelProps={{ style: { color: 'white' }}}
-                                InputProps={{ style: { color: 'white' }, readOnly: false }} // Assurez-vous que readOnly est défini sur false
-                                style={{ backgroundColor: '#191b1f'}}
+                                multiline
+                                rows={5}
+                                value={orderDetailsText}
+                                InputLabelProps={{style: {color: 'white'}}}
+                                InputProps={{
+                                    style: {
+                                        color: 'white',
+                                        fontFamily: 'monospace'
+                                    }
+                                }}
+                                style={{backgroundColor: '#191b1f'}}
                             />
+
                         </div>
 
                         <div className="flex flex-col ">
-                            <Accordion  className="blue-accordion">
-                                <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: 'white' }}/>} >
-                                    <Typography className="white-typography">Paired limit price</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails >
-                                    <div className="flex flex-col text-white">
-                                        <MenuItem
-                                            onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.10))}
-                                            style={{
-                                                backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.10) ? '#f3f4f6' : 'transparent',
-                                                color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.10) ? '#000000' : '#ffffff'
-                                            }}
-                                        >
-                                            {String((parseFloat(limitPrice ?? '0')) * 1.10)}
-                                        </MenuItem>
-                                        <MenuItem
-                                            onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.20))}
-                                            style={{
-                                                backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.20) ? '#f3f4f6' : 'transparent',
-                                                color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.20) ? '#000000' : '#ffffff'
-                                            }}
-                                        >
-                                            {String((parseFloat(limitPrice ?? '0')) * 1.20)}
-                                        </MenuItem>
-                                        <MenuItem
-                                            onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.30))}
-                                            style={{
-                                                backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.30) ? '#f3f4f6' : 'transparent',
-                                                color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.30) ? '#000000' : '#ffffff'
-                                            }}
-                                        >
-                                            {String((parseFloat(limitPrice ?? '0')) * 1.30)}
-                                        </MenuItem>
-                                    </div>
-                                </AccordionDetails>
-                            </Accordion>
+                            <FormControlLabel
+                                control={<Switch checked={isAdvancedMode} onChange={handleAdvancedModeChange}/>}
+                                label="Advance Mode"
+                            />
+                            {isAdvancedMode && (
+                                <div className="flex flex-col">
+                                    <Accordion className="blue-accordion">
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon sx={{color: 'white'}}/>}>
+                                            <Typography className="white-typography">Paired limit
+                                                price</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                            <div className="flex flex-col text-white">
+                                                <MenuItem
+                                                    onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.10))}
+                                                    style={{
+                                                        backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.10) ? '#f3f4f6' : 'transparent',
+                                                        color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.10) ? '#000000' : '#ffffff'
+                                                    }}
+                                                >
+                                                    {String((parseFloat(limitPrice ?? '0')) * 1.10)}
+                                                </MenuItem>
+                                                <MenuItem
+                                                    onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.20))}
+                                                    style={{
+                                                        backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.20) ? '#f3f4f6' : 'transparent',
+                                                        color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.20) ? '#000000' : '#ffffff'
+                                                    }}
+                                                >
+                                                    {String((parseFloat(limitPrice ?? '0')) * 1.20)}
+                                                </MenuItem>
+                                                <MenuItem
+                                                    onClick={() => handleMenuItemClick(String((parseFloat(limitPrice ?? '0')) * 1.30))}
+                                                    style={{
+                                                        backgroundColor: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.30) ? '#f3f4f6' : 'transparent',
+                                                        color: selectedMenuItem === String((parseFloat(limitPrice ?? '0')) * 1.30) ? '#000000' : '#ffffff'
+                                                    }}
+                                                >
+                                                    {String((parseFloat(limitPrice ?? '0')) * 1.30)}
+                                                </MenuItem>
+                                            </div>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                </div>
+                            )}
+
                         </div>
                         {address && (
                             <>
@@ -529,7 +556,8 @@ export default function BorrowModule() {
                                         <div
                                             className={`w-[70%] py-[10px] text-center rounded-full bg-gray-400`}
                                         >
-                                            <span className="text-[#000000] text-[18px] sm:text-[18px]"><b><span className="font-semibold">APPROVE</span></b></span>
+                                            <span className="text-[#000000] text-[18px] sm:text-[18px]"><b><span
+                                                className="font-semibold">APPROVE</span></b></span>
                                         </div>
                                     )}
                                     {parseFloat(quantity) !== 0 && (
@@ -590,7 +618,8 @@ export default function BorrowModule() {
                                 <div
                                     className={`w-[70%] py-[10px] text-center rounded-full bg-gray-400`}
                                 >
-                                    <span className="text-[#000000] text-[18px] sm:text-[18px]"><b><span className="font-semibold">APPROVE</span></b></span>
+                                    <span className="text-[#000000] text-[18px] sm:text-[18px]"><b><span
+                                        className="font-semibold">APPROVE</span></b></span>
                                 </div>
                             )}
                             {parseFloat(quantity) !== 0 && (
@@ -607,7 +636,7 @@ export default function BorrowModule() {
         </Card>
     );
 
-    function TabPanel({ children, value, index }: { children: React.ReactNode, value: number, index: number }) {
+    function TabPanel({children, value, index}: { children: React.ReactNode, value: number, index: number }) {
         return (
             <div role="tabpanel" hidden={value !== index} id={`tabpanel-${index}`}>
                 {value === index && <Box p={3}>{children}</Box>}

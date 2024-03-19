@@ -3829,19 +3829,19 @@ thead th {
 .buy-row {
   color: #08CC0A;
   background-color: black;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .grey-row {
   color: darkgrey;
   background-color: black;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .sell-row {
   color: #FF0000;
   background-color: black;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .eth-price-row {
@@ -3891,6 +3891,23 @@ thead th {
   box-shadow: 0 0 6px 6px rgba(255, 255, 255, 0.5); /* Ombre blanche avec une certaine transparence */
   border-radius: 10px; /* Coins arrondis */
 }
+
+.button-style {
+  background-color: #2d4775;
+  border-radius: 8px;
+  width: 100px;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.button-style:active {
+  transform: scale(0.98);
+}
+
+
+
 
 
 
