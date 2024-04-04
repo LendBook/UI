@@ -5,21 +5,19 @@ declare module "*.jpg";
 declare module "*.webp";
 declare module "*.mov";
 
-
 interface IPropsOfComponent {
-    className?: string;
-    children?: ReactNode | string;
-    [key: string]: any;
+  className?: string;
+  children?: ReactNode | string;
+  [key: string]: any;
 }
 
 // global.d.ts
 interface Window {
-    dataLayer: any[];
+  dataLayer: any[];
 }
 
 interface Window {
-    ethereum?: any;
+  ethereum?: any;
 }
 
-
-declare module 'react-notifications';
+declare module "react-notifications";

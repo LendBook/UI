@@ -6,7 +6,7 @@ module.exports = {
     fontFamily: {
       "GothamPro-Regular": ["GothamPro-Regular"],
       "GothamPro-Bold": ["GothamPro-Bold"],
-      "cocogoose": ["cocogoose"],
+      cocogoose: ["cocogoose"],
     },
     extend: {
       colors: {

@@ -1,4 +1,4 @@
-import {useEffect, useState, useRef} from "react";
+import { useEffect, useState, useRef } from "react";
 import { Icon } from "@iconify/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useWeb3Modal } from "@web3modal/react";
@@ -10,7 +10,6 @@ import TextIconButton from "../components/buttons/TextIconButton";
 import TextButton from "../components/buttons/TextButton";
 import logoImg from "../asserts/images/logo.png";
 import "../asserts/scss/custom.scss";
-
 
 const chainId = process.env.REACT_APP_CHAIN_ID;
 
@@ -79,7 +78,7 @@ export default function Navbar() {
   };
 
   return (
-      <nav className="top-0 left-0 right-0 z-[99]">
+    <nav className="top-0 left-0 right-0 z-[99]">
       <Container className="justify-between p-4 hidden lg:flex">
         {/* Logo à gauche */}
         <div className="flex items-center">
@@ -91,48 +90,55 @@ export default function Navbar() {
         {/* Liens de navigation au centre */}
         <div className="flex items-center gap-8">
           {NAV_LINKS.map((linkItem) => (
-              <a key={linkItem.id} href={linkItem.to} className={pathname === linkItem.to ? "active-link" : ""}>
-                <TextButton
-                    className={`gap-2 font-[GothamPro-Regular] text-[17] ${
-                        pathname === linkItem.to ? "text-gray-100" : "text-white"
-                    }`}
-                >
-                  {linkItem.label}
-                </TextButton>
-              </a>
-
+            <a
+              key={linkItem.id}
+              href={linkItem.to}
+              className={pathname === linkItem.to ? "active-link" : ""}
+            >
+              <TextButton
+                className={`gap-2 font-[GothamPro-Regular] text-[17] ${
+                  pathname === linkItem.to ? "text-gray-100" : "text-white"
+                }`}
+              >
+                {linkItem.label}
+              </TextButton>
+            </a>
           ))}
         </div>
 
         <div className="flex items-center">
           {isConnected ? (
-              chain?.id === Number(chainId) ? (
-                  <FilledButton
-                      className="font-[GothamPro-Bold] flex items-center gap-1"
-                      onClick={() => disconnect()}
-                  >
-                    <Icon icon="mdi:wallet-outline" className="text-xl" />
-                    Disconnect
-                  </FilledButton>
-              ) : (
-                  <FilledButton
-                      className="font-[GothamPro-Bold] flex items-center gap-1"
-                      onClick={() => switchNetwork?.(Number(chainId))}
-                  >
-                    <Icon icon="mdi:wallet-outline" className="text-xl" />
-                    Switch mainnet
-                  </FilledButton>
-              )
-          ) : (
+            chain?.id === Number(chainId) ? (
               <FilledButton
-                  className="font-[GothamPro-Bold] flex items-center gap-1"
-                  onClick={() => {
-                    open();
-                  }}
+                className="font-[GothamPro-Bold] flex items-center gap-1"
+                onClick={() => disconnect()}
               >
-                <Icon id="connect-wallet" icon="mdi:wallet-outline" className="text-xl" />
-                Connect Wallet
+                <Icon icon="mdi:wallet-outline" className="text-xl" />
+                Disconnect
               </FilledButton>
+            ) : (
+              <FilledButton
+                className="font-[GothamPro-Bold] flex items-center gap-1"
+                onClick={() => switchNetwork?.(Number(chainId))}
+              >
+                <Icon icon="mdi:wallet-outline" className="text-xl" />
+                Switch mainnet
+              </FilledButton>
+            )
+          ) : (
+            <FilledButton
+              className="font-[GothamPro-Bold] flex items-center gap-1"
+              onClick={() => {
+                open();
+              }}
+            >
+              <Icon
+                id="connect-wallet"
+                icon="mdi:wallet-outline"
+                className="text-xl"
+              />
+              Connect Wallet
+            </FilledButton>
           )}
         </div>
       </Container>
@@ -166,16 +172,19 @@ export default function Navbar() {
           </div>
           <List>
             {NAV_LINKS.map((linkItem) => (
-                <a key={linkItem.id} href={linkItem.to} className={pathname === linkItem.to ? "active-link" : ""}>
-                  <TextButton
-                      className={`gap-2 font-[GothamPro-Regular] text-[12] ${
-                          pathname === linkItem.to ? "text-gray-100" : "text-white"
-                      }`}
-                  >
-                    {linkItem.label}
-                  </TextButton>
-                </a>
-
+              <a
+                key={linkItem.id}
+                href={linkItem.to}
+                className={pathname === linkItem.to ? "active-link" : ""}
+              >
+                <TextButton
+                  className={`gap-2 font-[GothamPro-Regular] text-[12] ${
+                    pathname === linkItem.to ? "text-gray-100" : "text-white"
+                  }`}
+                >
+                  {linkItem.label}
+                </TextButton>
+              </a>
             ))}
           </List>
           <List>
@@ -204,14 +213,16 @@ export default function Navbar() {
                   open();
                 }}
               >
-                <Icon id="connect-wallet" icon="mdi:wallet-outline" className="text-xl" />
+                <Icon
+                  id="connect-wallet"
+                  icon="mdi:wallet-outline"
+                  className="text-xl"
+                />
                 Connect Wallet
               </ListItem>
-
             )}
           </List>
-          <div>
-          </div>
+          <div></div>
         </div>
       </Drawer>
     </nav>

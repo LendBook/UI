@@ -21,7 +21,7 @@ export default function Routes() {
       children: [
         {
           path: "/",
-          element: <Markets/>,
+          element: <Markets />,
         },
         {
           path: "/markets",
