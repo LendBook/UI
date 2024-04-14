@@ -1,4 +1,3 @@
-
 import coinMarket from "../asserts/images/coinmarket-1.svg";
 import facebook from "../asserts/images/facebook-icon.svg";
 import reddit from "../asserts/images/reddit-1.svg";
@@ -15,8 +14,7 @@ export default function Footer() {
         <div className="footer__wrap">
           <div className="footer__content">
             <div className="right">
-              <div className="social__list">
-              </div>
+              <div className="social__list"></div>
             </div>
             <div className="footer__privacy">
               <nav className="footer-nav">
@@ -24,25 +22,23 @@ export default function Footer() {
                   <li
                     id="menu-item-185"
                     className="menu-item menu-item-type-post_type menu-item-object-page menu-item-185"
-                  >
-
-                  </li>
+                  ></li>
                   <li
                     id="menu-item-187"
                     className="menu-item menu-item-type-post_type menu-item-object-page menu-item-privacy-policy menu-item-187"
                   >
                     <a
-                        href="https://twitter.com"
-                        target="_blank"
-                        className="social__link"
-                        rel="noreferrer"
+                      href="https://twitter.com"
+                      target="_blank"
+                      className="social__link"
+                      rel="noreferrer"
                     >
                       <img
-                          src={twitter}
-                          alt="Twitter"
-                          width="45"
-                          height="45"
-                          className="entered lazyloaded"
+                        src={twitter}
+                        alt="Twitter"
+                        width="45"
+                        height="45"
+                        className="entered lazyloaded"
                       />
                     </a>
                   </li>
@@ -51,17 +47,17 @@ export default function Footer() {
                     className="menu-item menu-item-type-post_type menu-item-object-page menu-item-1840"
                   >
                     <a
-                        href="https://t.me"
-                        target="_blank"
-                        className="social__link"
-                        rel="noreferrer"
+                      href="https://t.me"
+                      target="_blank"
+                      className="social__link"
+                      rel="noreferrer"
                     >
                       <img
-                          src={telegram}
-                          alt="Telegram"
-                          width="45"
-                          height="45"
-                          className="entered lazyloaded"
+                        src={telegram}
+                        alt="Telegram"
+                        width="45"
+                        height="45"
+                        className="entered lazyloaded"
                       />
                     </a>
                   </li>
