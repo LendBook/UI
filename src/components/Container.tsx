@@ -5,10 +5,6 @@ interface IProps {
   children: ReactNode;
 }
 
-export default function Container({ className = '', children }: IProps) {
-  return (
-    <div className={`px-6 container ${className}`}>
-      {children}
-    </div>
-  )
+export default function Container({ className = "", children }: IProps) {
+  return <div className={`px-6 container ${className}`}>{children}</div>;
 }

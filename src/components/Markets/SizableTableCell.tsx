@@ -1,4 +1,4 @@
-import { TableCell, TableCellProps } from '@mui/material';
+import { TableCell, TableCellProps } from "@mui/material";
 
 type SizableTableCellProps = TableCellProps & {
   width?: string;
