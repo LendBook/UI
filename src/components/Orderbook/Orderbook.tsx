@@ -45,13 +45,11 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
 
   // VARIABLES
   const [ethPrice, setEthPrice] = useState<string>("0");
+  const [newEthPrice, setNewEthPrice] = useState<string>(ethPrice);
   const [size, setSize] = useState<string | null>(null);
   const [limit, setLimit] = useState<string | null>(null);
   const [isBuy, setBuy] = useState<boolean | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [newEthPrice, setNewEthPrice] = useState<string>(ethPrice);
-
-  const [nbOrders, setNbOrders] = useState(10);
 
   // SELECT ORDER
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
@@ -64,60 +62,15 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
 
   // LOADING
   const [showProgress, setShowProgress] = useState(true);
-
   const [numVisibleOrders, setNumVisibleOrders] = useState<number>(PAGE_SIZE);
-
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-  const openMenu = Boolean(anchorEl);
-
-  /*const handleStepChange = (event: SelectChangeEvent) => {
-        setStep(Number(event.target.value)); // Conversion correcte de string à number
-    };*/
-
-  const handleNbOrdersChange = (event: SelectChangeEvent) => {
-    setNbOrders(Number(event.target.value));
-    setNumVisibleOrders(Number(event.target.value));
-  };
-
-  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
 
   const fetchEthPrice = async () => {
     const price = await getEthPrice();
     if (price) setEthPrice(String(price));
   };
 
-  const handleAction = async (orderId: number, size: string) => {
-    if (isDeposit) {
-      await take(orderId, size);
-    } else {
-      await borrow(orderId, size);
-    }
-  };
-
-  const handleRowClick = (
-    orderId: number,
-    limitPrice: string,
-    isBuy: boolean
-  ) => {
-    setSelectedOrderId(orderId);
-    setSize(size);
-    setLimit(limitPrice);
-    setBuy(isBuy);
-    setIsBuy(isBuy);
-    setOrderId(orderId);
-    setLimitPrice(limitPrice);
-    setAmount(size);
-  };
-
   const handleEthPriceChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+      event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setNewEthPrice(event.target.value);
   };
@@ -136,6 +89,22 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
       setShowProgress(false);
     }, 10000);
   };
+
+  const handleRowClick = (
+    orderId: number,
+    limitPrice: string,
+    isBuy: boolean
+  ) => {
+    setSelectedOrderId(orderId);
+    setSize(size);
+    setLimit(limitPrice);
+    setBuy(isBuy);
+    setIsBuy(isBuy);
+    setOrderId(orderId);
+    setLimitPrice(limitPrice);
+    setAmount(size);
+  };
+
 
   const fetchOrders = async () => {
     try {
@@ -217,10 +186,6 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
   }, []);
 
   useEffect(() => {
-    fetchEthPrice();
-  }, []);
-
-  useEffect(() => {
     const fetchIndex = async () => {
       const index = await getIndex();
       if (index !== null) {
@@ -250,6 +215,7 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
         <Box>
           <table className="orderbook-table rounded-lg border-[5px] border-solid border-[#191b1f] ">
             <thead>
+           {/* Si on est dans la section /deposit */}
               {isDeposit && (
                 <tr>
                   <th>Price</th>
@@ -259,23 +225,17 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
                   <th></th>
                 </tr>
               )}
-              {!isDeposit && activeIndex === 1 && (
-                <tr>
-                  <th>Price</th>
-                  <th>Liquidity</th>
-                  <th>APY</th>
-                  <th>Liquidation LTV</th>
-                  <th></th>
-                </tr>
-              )}
-              {!isDeposit && activeIndex === 0 && (
-                <tr>
-                  <th>Price</th>
-                  <th>Liquidity</th>
-                  <th>APY</th>
-                  <th>UR</th>
-                  <th></th>
-                </tr>
+
+           {/* Si on est dans la section /borrow */}
+              {!isDeposit && (
+                  <tr>
+                    <th>Price</th>
+                    <th>Liquidity</th>
+                    <th>APY</th>
+                    {activeIndex === 1 && <th>Liquidation LTV</th>}
+                    {activeIndex === 0 && <th>UR</th>}
+                    <th></th>
+                  </tr>
               )}
             </thead>
             <tbody>

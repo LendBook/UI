@@ -6,20 +6,16 @@ import { useEthersSigner } from "../contracts/index";
 export const useDeposit = (
   quantity: string,
   buyPrice: string,
-  pairedPrice: string,
-  b: boolean,
-  b1: boolean
+  pairedPoolId: string,
 ) => {
   const signer = useEthersSigner();
 
   return async (
     _quantity: { toString: () => string },
     _price: { toString: () => string },
-    _pairedPrice: {
+    _pairedPoolId: {
       toString: () => string;
     },
-    _isBuyOrder: any,
-    _isBorrowable: any
   ) => {
     if (!signer || !orderbookContract) return;
     try {
@@ -28,9 +24,7 @@ export const useDeposit = (
         .deposit(
           ethers.utils.parseUnits(_quantity.toString(), 18),
           ethers.utils.parseUnits(_price.toString(), 18),
-          ethers.utils.parseUnits(_pairedPrice.toString(), 18),
-          _isBuyOrder,
-          _isBorrowable
+          ethers.utils.parseUnits(_pairedPoolId.toString(), 18),
         );
       await tx.wait();
       NotificationManager.success("Deposit Success !");

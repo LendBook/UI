@@ -64,8 +64,8 @@ export default function DepositModule() {
 
   // DEFAUT
   const [activeCurrency, setActiveCurrency] = useState("USDC");
-  const [pairedPrice, setpairedPrice] = useState("0");
-  const [pairedPriceDefault, setpairedPriceDefault] = useState("0");
+  const [pairedPoolId, setpairedPoolId] = useState("0");
+  const [pairedPoolIdDefault, setpairedPoolIdDefault] = useState("0");
   const [isSwitchOn, setIsSwitchOn] = useState(true);
 
   // CHAINLINK FEED PRICE
@@ -81,7 +81,7 @@ export default function DepositModule() {
   const [tapStateTabs, setTapStateTabsOrder] = useState(1);
   const [tapStateButton, setTapStateButton] = useState(1);
 
-  const deposit = useDeposit(quantity, buyPrice, pairedPrice, isBuyOrder, true);
+  const deposit = useDeposit(quantity, buyPrice, pairedPoolId);
 
   const currencyPrice = activeCurrency === "USDC" ? priceUSDCUSD : priceETHUSD;
 
@@ -92,7 +92,7 @@ export default function DepositModule() {
 
   const handleMenuItemClick = (price: string | null) => {
     if (price !== null) {
-      setpairedPrice(price);
+      setpairedPoolId(price);
       handleCurrencyClose();
     }
     setSelectedMenuItem((prevPrice) => {
@@ -117,7 +117,7 @@ export default function DepositModule() {
   const orderDetailsText = orderDetails
     ? `Price: ${Number(orderDetails.limitPrice).toFixed(
         0
-      )} USDC\nPaired limit price: ${Number(pairedPriceDefault).toFixed(0)}\n`
+      )} USDC\nPaired limit price: ${Number(pairedPoolIdDefault).toFixed(0)}\n`
     : `Select an order to see details`;
 
   const [selectedCurrency, setSelectedCurrency] = useState("USDC");
@@ -292,23 +292,23 @@ export default function DepositModule() {
   };
 
   const onPlaceBuyOrder = async () => {
-    await deposit(quantity, buyPrice, pairedPrice, true, isSwitchOn);
+    await deposit(quantity, buyPrice, pairedPoolId);
   };
 
   const onPlaceSellOrder = async () => {
-    await deposit(quantity, buyPrice, pairedPrice, false, isSwitchOn);
+    await deposit(quantity, buyPrice, pairedPoolId);
   };
 
   const onRepostOrderChange = (e: any) => {
     try {
       if (e.target.value === "") {
-        setpairedPrice("");
+        setpairedPoolId("");
       } else {
         let amount = e.target.value;
         amount = amount.toString().replace(/^0+/, "");
         if (amount.length === 0) amount = "0";
         if (amount[0] === ".") amount = "0" + amount;
-        setpairedPrice(amount);
+        setpairedPoolId(amount);
       }
     } catch (error) {
       console.log(error);
@@ -321,7 +321,7 @@ export default function DepositModule() {
     isBuy: boolean | null
   ): Promise<OrderDetails> => {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    setpairedPriceDefault(String(parseFloat(limitPrice ?? "0") * 1.1));
+    setpairedPoolIdDefault(String(parseFloat(limitPrice ?? "0") * 1.1));
     return {
       orderId: orderId,
       limitPrice: limitPrice ?? "0",
@@ -464,13 +464,13 @@ export default function DepositModule() {
   useEffect(() => {
     if (buyPrice && !isNaN(Number(buyPrice))) {
       const buyPriceNum = parseFloat(buyPrice);
-      let adjustPairedPrice = 0;
+      let adjustpairedPoolId = 0;
       if (activeCurrency == "USDC") {
-        adjustPairedPrice = buyPriceNum + buyPriceNum * 0.1;
-        setpairedPrice(adjustPairedPrice.toString());
+        adjustpairedPoolId = buyPriceNum + buyPriceNum * 0.1;
+        setpairedPoolId(adjustpairedPoolId.toString());
       } else if (activeCurrency == "WETH") {
-        adjustPairedPrice = buyPriceNum - buyPriceNum * 0.1;
-        setpairedPrice(adjustPairedPrice.toString());
+        adjustpairedPoolId = buyPriceNum - buyPriceNum * 0.1;
+        setpairedPoolId(adjustpairedPoolId.toString());
       }
       setIsSwitchOn(!isSwitchOn);
     }
