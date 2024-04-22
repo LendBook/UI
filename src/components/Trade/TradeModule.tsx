@@ -54,8 +54,8 @@ export default function DepositModule() {
   const [wethAllowance, setWethAllowance] = useState("0");
 
   // DEFAUT
-  const [activeCurrency, setActiveCurrency] = useState("WETH");
-  const [pairedPrice, setpairedPrice] = useState("0");
+  const [activeCurrency, setActiveCurrency] = useState("USDC");
+  const [pairedPoolId, setpairedPoolId] = useState("0");
   const [isSwitchOn, setIsSwitchOn] = useState(true);
 
   // CHAINLINK FEED PRICE
@@ -70,9 +70,9 @@ export default function DepositModule() {
   const [tapStateTabs, setTapStateTabsOrder] = useState(1);
   const [tapStateButton, setTapStateButton] = useState(1);
 
-  const deposit = useDeposit(quantity, buyPrice, pairedPrice, true, true);
+  const deposit = useDeposit(quantity, buyPrice, pairedPoolId);
 
-  const currencyPrice = activeCurrency === "WETH" ? priceUSDCUSD : priceETHUSD;
+  const currencyPrice = activeCurrency === "USDC" ? priceUSDCUSD : priceETHUSD;
 
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const { orderId, limitPrice, isBuy } = useOrderContext();
@@ -89,7 +89,7 @@ export default function DepositModule() {
 
   const orderDetailsText = orderDetails ? `${orderDetails.limitPrice}` : "";
 
-  const [selectedCurrency, setSelectedCurrency] = useState("WETH");
+  const [selectedCurrency, setSelectedCurrency] = useState("USDC");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
 
@@ -252,23 +252,23 @@ export default function DepositModule() {
   };
 
   const onPlaceBuyOrder = async () => {
-    await deposit(quantity, buyPrice, pairedPrice, true, isSwitchOn);
+    await deposit(quantity, buyPrice, pairedPoolId);
   };
 
   const onPlaceSellOrder = async () => {
-    await deposit(quantity, buyPrice, pairedPrice, false, isSwitchOn);
+    await deposit(quantity, buyPrice, pairedPoolId);
   };
 
   const onRepostOrderChange = (e: any) => {
     try {
       if (e.target.value === "") {
-        setpairedPrice("");
+        setpairedPoolId("");
       } else {
         let amount = e.target.value;
         amount = amount.toString().replace(/^0+/, "");
         if (amount.length === 0) amount = "0";
         if (amount[0] === ".") amount = "0" + amount;
-        setpairedPrice(amount);
+        setpairedPoolId(amount);
       }
     } catch (error) {
       console.log(error);
@@ -426,13 +426,13 @@ export default function DepositModule() {
   useEffect(() => {
     if (buyPrice && !isNaN(Number(buyPrice))) {
       const buyPriceNum = parseFloat(buyPrice);
-      let adjustPairedPrice = 0;
+      let adjustpairedPoolId = 0;
       if (activeCurrency == "USDC") {
-        adjustPairedPrice = buyPriceNum + buyPriceNum * 0.1;
-        setpairedPrice(adjustPairedPrice.toString());
+        adjustpairedPoolId = buyPriceNum + buyPriceNum * 0.1;
+        setpairedPoolId(adjustpairedPoolId.toString());
       } else if (activeCurrency == "WETH") {
-        adjustPairedPrice = buyPriceNum - buyPriceNum * 0.1;
-        setpairedPrice(adjustPairedPrice.toString());
+        adjustpairedPoolId = buyPriceNum - buyPriceNum * 0.1;
+        setpairedPoolId(adjustpairedPoolId.toString());
       }
       setIsSwitchOn(!isSwitchOn);
     }
@@ -569,10 +569,10 @@ export default function DepositModule() {
                             style={{ backgroundColor: "#070F15" }}
                           />
                           <div className="text-white text-[12px] px-[10px] mx-[10px] mb-2">
-                            {!isNaN(parseFloat(pairedPrice)) &&
+                            {!isNaN(parseFloat(pairedPoolId)) &&
                             !isNaN(priceUSDCUSD)
                               ? `~ ${(
-                                  parseFloat(pairedPrice) * priceUSDCUSD
+                                  parseFloat(pairedPoolId) * priceUSDCUSD
                                 ).toFixed(2)} $`
                               : null}
                           </div>

@@ -1,0 +1,23 @@
+[
+  {
+    "chainID": 81457,
+    "RpcUrl": "https://rpc.blast.io",
+    "Name": "Blast",
+    "Explorer": "https://blastscan.io/",
+    "logourl": "https://raw.githubusercontent.com/LendBook/lendbook-images/main/networks/Blast.svg"
+  },
+  {
+    "chainID": 8453,
+    "RpcUrl": "https://base.llamarpc.com",
+    "Name": "Base",
+    "Explorer": "https://basescan.org/",
+    "logourl": "https://raw.githubusercontent.com/LendBook/lendbook-images/main/networks/Base.svg"
+  },
+  {
+    "chainID": 42161,
+    "RpcUrl": "https://arb1.arbitrum.io/rpc",
+    "Name": "Arbitrum",
+    "Explorer": "https://arbiscan.io",
+    "logourl": "https://raw.githubusercontent.com/LendBook/lendbook-images/main/networks/Arbitrum.svg"
+  }
+]

@@ -1,230 +1,79 @@
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu } from "@headlessui/react";
+import networks from "../config/networks.json";  // Make sure the path is correct
+import logoImg from "../asserts/images/logo.png";  // Make sure the path is correct
 import { useWeb3Modal } from "@web3modal/react";
 import { useAccount, useDisconnect, useSwitchNetwork, useNetwork } from "wagmi";
-import { Drawer, List, ListItem } from "@material-tailwind/react";
-import Container from "../components/Container";
-import FilledButton from "../components/buttons/FilledButton";
-import TextIconButton from "../components/buttons/TextIconButton";
-import TextButton from "../components/buttons/TextButton";
-import logoImg from "../asserts/images/logo.png";
-import "../asserts/scss/custom.scss";
-
-const chainId = process.env.REACT_APP_CHAIN_ID;
-
-// -----------------------------------------------------------------------------------------
-
-interface INavLink {
-  id: number;
-  label: string;
-  to: string;
-}
-
-// -----------------------------------------------------------------------------------------
-
-const NAV_LINKS: Array<INavLink> = [
-  {
-    id: 1,
-    label: "Markets",
-    to: "/markets",
-  },
-  {
-    id: 2,
-    label: "Earn",
-    to: "/deposit",
-  },
-  {
-    id: 3,
-    label: "Borrow",
-    to: "/borrow",
-  },
-  /*{
-    id: 4,
-    label: "Trade",
-    to: "/trade",
-  },*/
-  {
-    id: 5,
-    label: "Dashboard",
-    to: "/dashboard",
-  },
-  /*{
-    id: 6,
-    label: "Faucet",
-    to: "/faucet",
-  },*/
-];
 
 export default function Navbar() {
-  const { pathname } = useLocation();
   const { open } = useWeb3Modal();
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
-  const navigate = useNavigate();
-  const { address } = useAccount();
+  const [currentNetwork, setCurrentNetwork] = useState(networks[0]);  // Default to first network
 
-  const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
+  useEffect(() => {
+    const network = networks.find(n => n.chainID === chain?.id);
+    if (network) setCurrentNetwork(network);
+  }, [chain]);
 
-  const closeDrawer = () => {
-    setVisibleDrawer(false);
-  };
-
-  const navigateToPage = (to: string) => {
-    navigate(to);
-    closeDrawer();
-  };
+  const truncateAddress = (address: string | undefined) => address ? `${address.substring(0, 6)}...${address.substring(address.length - 4)}` : '';
 
   return (
-    <nav className="top-0 left-0 right-0 z-[99]">
-      <Container className="justify-between p-4 hidden lg:flex">
-        {/* Logo à gauche */}
-        <div className="flex items-center">
-          <a href="/#" className="w-[100px] h-[30px]">
-            <img src={logoImg} alt="logo" className="w-full" />
-          </a>
-        </div>
-
-        {/* Liens de navigation au centre */}
-        <div className="flex items-center gap-8">
-          {NAV_LINKS.map((linkItem) => (
-            <a
-              key={linkItem.id}
-              href={linkItem.to}
-              className={pathname === linkItem.to ? "active-link" : ""}
-            >
-              <TextButton
-                className={`gap-2 font-[GothamPro-Regular] text-[17] ${
-                  pathname === linkItem.to ? "text-gray-100" : "text-white"
-                }`}
-              >
-                {linkItem.label}
-              </TextButton>
-            </a>
-          ))}
-        </div>
-
-        <div className="flex items-center">
-          {isConnected ? (
-            chain?.id === Number(chainId) ? (
-              <FilledButton
-                className="font-[GothamPro-Bold] flex items-center gap-1"
-                onClick={() => disconnect()}
-              >
-                <Icon icon="mdi:wallet-outline" className="text-xl" />
-                Disconnect
-              </FilledButton>
-            ) : (
-              <FilledButton
-                className="font-[GothamPro-Bold] flex items-center gap-1"
-                onClick={() => switchNetwork?.(Number(chainId))}
-              >
-                <Icon icon="mdi:wallet-outline" className="text-xl" />
-                Switch mainnet
-              </FilledButton>
-            )
-          ) : (
-            <FilledButton
-              className="font-[GothamPro-Bold] flex items-center gap-1"
-              onClick={() => {
-                open();
-              }}
-            >
-              <Icon
-                id="connect-wallet"
-                icon="mdi:wallet-outline"
-                className="text-xl"
-              />
-              Connect Wallet
-            </FilledButton>
-          )}
-        </div>
-      </Container>
-
-      <Container className="justify-between items-center p-4 flex lg:hidden">
-        <Link to="/">
-          <img src={logoImg} alt="logo" className="w-full" />
-        </Link>
-
-        <TextIconButton
-          className="flex justify-center items-center"
-          onClick={() => setVisibleDrawer(true)}
-        >
-          <Icon icon="ion:menu" className="text-xl" />
-        </TextIconButton>
-      </Container>
-      <Drawer
-        open={visibleDrawer}
-        onClose={closeDrawer}
-        className="p-4 bg-gray-900"
-      >
-        <div className="flex flex-col gap-8">
-          <div className="flex items-center justify-between">
-            <a href="/">
-              <img src={logoImg} alt="logo" className="w-8" />
-            </a>
-
-            <TextIconButton onClick={closeDrawer}>
-              <Icon icon="akar-icons:cross" className="text-xl" />
-            </TextIconButton>
+      <nav className="bg-white text-black w-full fixed top-0 left-0 z-30 shadow-md">
+        <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex-shrink-0">
+              <Link to="/">
+                <img className="h-10 w-auto" src={logoImg} alt="Logo"/>
+              </Link>
+            </div>
+            <div className="flex items-center">
+              <div className="flex-shrink-0 mr-4">
+                <button
+                    onClick={() => isConnected ? disconnect() : open()}
+                    className="inline-flex items-center px-4 py-2 border border-[#003f7d] text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                >
+                  {isConnected ? truncateAddress(address) : "Connect Wallet"}
+                </button>
+              </div>
+              <div className="relative">
+                <Menu as="div" className="ml-4 text-left">
+                  <div>
+                    <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-gray-100 rounded-md border border-[#003f7d] hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                      <img src={currentNetwork.logourl} className="h-5 w-5 mr-2" alt="Network Logo"/>
+                      <Icon icon="heroicons-solid:chevron-down" className="h-5 w-5" aria-hidden="true"/>
+                    </Menu.Button>
+                  </div>
+                  <Menu.Items className="origin-top-right absolute right-0 mt-2 w-20 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="py-1">
+                      {networks.map((network) => (
+                          <Menu.Item key={network.chainID}>
+                            {({ active }) => (
+                                <button
+                                    onClick={() => {
+                                      if (switchNetwork) {
+                                        switchNetwork(network.chainID);
+                                        setCurrentNetwork(network);
+                                      }
+                                    }}
+                                    className={`${active ? 'bg-gray-100' : 'text-gray-900'} flex justify-center w-full px-4 py-2 text-sm text-gray-900`}
+                                >
+                                  <img src={network.logourl} alt={network.Name} className="h-5 w-5"/>
+                                </button>
+                            )}
+                          </Menu.Item>
+                      ))}
+                    </div>
+                  </Menu.Items>
+                </Menu>
+              </div>
+            </div>
           </div>
-          <List>
-            {NAV_LINKS.map((linkItem) => (
-              <a
-                key={linkItem.id}
-                href={linkItem.to}
-                className={pathname === linkItem.to ? "active-link" : ""}
-              >
-                <TextButton
-                  className={`gap-2 font-[GothamPro-Regular] text-[12] ${
-                    pathname === linkItem.to ? "text-gray-100" : "text-white"
-                  }`}
-                >
-                  {linkItem.label}
-                </TextButton>
-              </a>
-            ))}
-          </List>
-          <List>
-            {isConnected ? (
-              chain?.id === Number(chainId) ? (
-                <ListItem
-                  className="gap-4 text-gray-100 font-[GothamPro-Bold]"
-                  onClick={() => disconnect()}
-                >
-                  <Icon icon="mdi:wallet-outline" className="text-xl" />
-                  Disconnect
-                </ListItem>
-              ) : (
-                <ListItem
-                  className="gap-4 text-gray-100 font-[GothamPro-Bold]"
-                  onClick={() => switchNetwork?.(Number(chainId))}
-                >
-                  <Icon icon="mdi:wallet-outline" className="text-xl" />
-                  Switch network
-                </ListItem>
-              )
-            ) : (
-              <ListItem
-                className="gap-4 text-gray-100 font-[GothamPro-Bold]"
-                onClick={() => {
-                  open();
-                }}
-              >
-                <Icon
-                  id="connect-wallet"
-                  icon="mdi:wallet-outline"
-                  className="text-xl"
-                />
-                Connect Wallet
-              </ListItem>
-            )}
-          </List>
-          <div></div>
         </div>
-      </Drawer>
-    </nav>
+      </nav>
   );
 }
