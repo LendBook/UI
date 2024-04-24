@@ -12,6 +12,7 @@ const Markets = lazy(() => import("./components/About"));
 const Dashboard = lazy(() => import("./components/Dashboard"));
 const Faucet = lazy(() => import("./components/Faucet/Faucet"));
 const About = lazy(() => import("./components/About"));
+const InakiTest = lazy(() => import("./components/InakiTest/Index"));
 // ----------------------------------------------------------------------------------
 
 export default function Routes() {
@@ -48,6 +49,10 @@ export default function Routes() {
         {
           path: "/faucet",
           element: <Faucet />,
+        },
+        {
+          path: "/inakitest",
+          element: <InakiTest />,
         },
       ],
     },

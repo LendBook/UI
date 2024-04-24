@@ -15,7 +15,6 @@ a {
 @tailwind components;
 @tailwind utilities;
 
-
 @font-face {
   font-family: "GothamPro-Bold";
   src: url("./asserts/fonts/GothamPro-GothamPro-Bold.ttf");
@@ -36,8 +35,8 @@ a {
 
 body {
   font-family: "GothamPro-Regular";
-//  background: url('background.png') center center/cover no-repeat;
-  background-color: #002347;
+  //  background: url('background.png') center center/cover no-repeat;
+  background-color: #e9f4ffff; // #e9f4ffff; #f3f5f6ff;
 }
 
 .interact-button {
@@ -61,6 +60,3 @@ body {
   margin: 0 5px;
   border-radius: 10px; /* Pour des coins arrondis */
 }
-
-
-
