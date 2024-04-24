@@ -6,6 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box"; // Import de Box pour créer le cadre
 import { styled } from "@mui/material/styles";
 
 // Type générique pour une ligne de données
@@ -21,20 +22,22 @@ type TableProps<T extends string | number> = {
 // Style des cellules
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#e9f4ffff",
+    backgroundColor: "#e9f4ff",
     color: "#7d96af",
     fontWeight: "bold",
+    borderBottom: "0px",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    color: "#333", // Couleur de texte personnalisée pour les cellules du corps
+    color: "#333333", // Couleur de texte personnalisée pour les cellules du corps
+    borderBottom: "1px solid #e9f4ff",
   },
 }));
 
 // Style pour la ligne au survol
 const HoverTableRow = styled(TableRow)(({ theme }) => ({
   "&:hover": {
-    backgroundColor: "#88a7c6",
+    backgroundColor: "#a7c1dc",
   },
 }));
 
@@ -61,56 +64,63 @@ export default function TableCustom<T extends string | number>({
 
   return (
     <div className="container relative z-2 mt-10">
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column, index) => (
-                <StyledTableCell key={index}>{column}</StyledTableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row, rowIndex) => {
-              const isRowClickable = clickableRows && activeRow !== rowIndex;
-              const rowStyles = {
-                "&:last-child td, &:last-child th": {
-                  border: 0,
-                },
-                cursor: isRowClickable ? "pointer" : "default",
-                backgroundColor: rowIndex === activeRow ? "#88a7c6" : "inherit",
-              };
+      <Box
+        component={Paper}
+        elevation={1} // Ombre du cadre
+        sx={{ borderRadius: 1, padding: 2 }} // Styles du cadre
+      >
+        <TableContainer component={Paper} elevation={0}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column, index) => (
+                  <StyledTableCell key={index}>{column}</StyledTableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.map((row, rowIndex) => {
+                const isRowClickable = clickableRows && activeRow !== rowIndex;
+                const rowStyles = {
+                  "&:last-child td, &:last-child th": {
+                    border: 0,
+                  },
+                  cursor: isRowClickable ? "pointer" : "default",
+                  backgroundColor:
+                    rowIndex === activeRow ? "#a7c1dc" : "inherit",
+                };
 
-              if (isRowClickable) {
-                return (
-                  <HoverTableRow
-                    key={rowIndex}
-                    onClick={() => handleClick(rowIndex, row)}
-                    sx={rowStyles}
-                  >
-                    {columns.map((column, colIndex) => (
-                      <TableCell key={colIndex} align="left">
-                        {row[column as keyof RowData<T>]}
-                      </TableCell>
-                    ))}
-                  </HoverTableRow>
-                );
-              } else {
-                // If not clickable, render a regular TableRow
-                return (
-                  <TableRow key={rowIndex} sx={rowStyles}>
-                    {columns.map((column, colIndex) => (
-                      <TableCell key={colIndex} align="left">
-                        {row[column as keyof RowData<T>]}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              }
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                if (isRowClickable) {
+                  return (
+                    <HoverTableRow
+                      key={rowIndex}
+                      onClick={() => handleClick(rowIndex, row)}
+                      sx={rowStyles}
+                    >
+                      {columns.map((column, colIndex) => (
+                        <StyledTableCell key={colIndex} align="left">
+                          {row[column as keyof RowData<T>]}
+                        </StyledTableCell>
+                      ))}
+                    </HoverTableRow>
+                  );
+                } else {
+                  // If not clickable, render a regular TableRow
+                  return (
+                    <TableRow key={rowIndex} sx={rowStyles}>
+                      {columns.map((column, colIndex) => (
+                        <StyledTableCell key={colIndex} align="left">
+                          {row[column as keyof RowData<T>]}
+                        </StyledTableCell>
+                      ))}
+                    </TableRow>
+                  );
+                }
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </div>
   );
 }
