@@ -64,6 +64,7 @@ export default function TableCustom<T extends string | number>({
 
   return (
     <div className="container relative z-2 mt-10">
+      <div className="text-primary">Hello</div>
       <Box
         component={Paper}
         elevation={1} // Ombre du cadre
