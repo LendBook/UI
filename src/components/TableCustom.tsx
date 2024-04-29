@@ -9,7 +9,6 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box"; // Import de Box pour créer le cadre
 import { styled } from "@mui/material/styles";
 
-
 // Type générique pour une ligne de données
 type RowData<T extends string | number> = Record<T, string | number>;
 
@@ -23,7 +22,7 @@ type TableProps<T extends string | number> = {
 // Style des cellules
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.error,
+    backgroundColor: theme.palette.background.default,
     color: "#7d96af",
     fontWeight: "bold",
     borderBottom: "0px",
