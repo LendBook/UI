@@ -3,6 +3,8 @@ import { OrderProvider } from "../Orderbook/OrderContext";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import TradeModule from "../Trade/TradeModule";
 import TableCustom from "../TableCustom";
+import AmountCustom from "../AmountCustom";
+import { useState } from "react";
 
 const columns = [
   "Collateral",
@@ -43,13 +45,39 @@ const handleRowClick = (rowData: any) => {
 };
 
 const Index = () => {
+  const [currentQuantity, setCurrentQuantity] = useState("");
+
+  // Fonction pour gérer les changements de valeur de quantity
+  const handleQuantityChange = (newQuantity: any) => {
+    setCurrentQuantity(newQuantity);
+    console.log("New Quantity:", newQuantity);
+  };
+
   return (
     <div>
-      <TableCustom
-        data={data}
-        clickableRows={true}
-        onRowClick={handleRowClick}
-      />
+      <div className="container" style={{ marginBottom: "10px" }}>
+        <AmountCustom
+          title="Collateral Amount"
+          tokenWalletBalance="4050"
+          selectedToken="USDC"
+          ratioToUSD={1.01}
+          onQuantityChange={handleQuantityChange}
+        />
+      </div>
+
+      <div className="container">
+        <span className="text-black text-[12px] font-bold">
+          Test, on appelle la Quantity: {currentQuantity}
+        </span>
+      </div>
+
+      <div className="container">
+        <TableCustom
+          data={data}
+          clickableRows={true}
+          onRowClick={handleRowClick}
+        />
+      </div>
     </div>
   );
 };
