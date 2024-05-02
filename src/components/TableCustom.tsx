@@ -22,7 +22,7 @@ type TableProps<T extends string | number> = {
 // Style des cellules
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#e9f4ff",
+    backgroundColor: theme.palette.background.default,
     color: "#7d96af",
     fontWeight: "bold",
     borderBottom: "0px",
