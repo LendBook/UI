@@ -64,19 +64,21 @@ const Index = () => {
           onQuantityChange={handleQuantityChange}
         />
       </div>
-
       <div className="container">
-        <span className="text-black text-[12px] font-bold">
-          Test, on appelle la Quantity: {currentQuantity}
+        <span className="text-error text-[12px] font-bold">
+          Test : on appelle la Quantity {currentQuantity}
         </span>
       </div>
 
-      <div className="container">
-        <TableCustom
-          data={data}
-          clickableRows={true}
-          onRowClick={handleRowClick}
-        />
+      <div className="flex mt-10">
+        <div className="container">
+          <TableCustom
+            title="Select a Liquidation Price"
+            data={data}
+            clickableRows={true}
+            onRowClick={handleRowClick}
+          />
+        </div>
       </div>
     </div>
   );
