@@ -46,7 +46,7 @@ export default function Navbar() {
             <div className="relative">
               <Menu as="div" className="ml-4 text-left">
                 <div>
-                  <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-gray-100 rounded-md border border-[#003f7d] hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                  <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-gray-100 rounded-md border border-primary hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                     <img
                       src={currentNetwork.logourl}
                       className="h-5 w-5 mr-2"
