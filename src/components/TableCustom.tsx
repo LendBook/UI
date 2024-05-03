@@ -26,11 +26,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: "#7d96af",
     fontWeight: "bold",
     borderBottom: "0px",
+    paddingTop: "5px", // Adjust the top padding as per your requirement
+    paddingBottom: "5px", // Adjust the bottom padding as per your requirement
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     color: "#333333", // Couleur de texte personnalisée pour les cellules du corps
     borderBottom: "1px solid #e9f4ff",
+    paddingTop: "6px", // Adjust the top padding as per your requirement
+    paddingBottom: "6px", // Adjust the bottom padding as per your requirement
   },
 }));
 
@@ -67,7 +71,7 @@ export default function TableCustom<T extends string | number>({
       <Box
         component={Paper}
         elevation={1} // Ombre du cadre
-        sx={{ borderRadius: 1, padding: 2 }} // Styles du cadre
+        sx={{ borderRadius: 1, padding: 1 }} // Styles du cadre
       >
         <TableContainer component={Paper} elevation={0}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">

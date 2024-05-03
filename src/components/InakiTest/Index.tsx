@@ -45,6 +45,24 @@ const handleRowClick = (rowData: any) => {
   // Faire quelque chose avec les données de la ligne
 };
 
+const dataMetric = [
+  {
+    title: "My total Collateral",
+    value: "4562",
+    unit: "WETH",
+  },
+  {
+    title: "My total Borrows",
+    value: "6000",
+    unit: "USDC",
+  },
+  {
+    title: "Excess Collateral",
+    value: "0.125",
+    unit: "WETH",
+  },
+];
+
 const Index = () => {
   const [currentQuantity, setCurrentQuantity] = useState("");
 
@@ -82,7 +100,7 @@ const Index = () => {
 
       <div className="flex mt-10">
         <div className="container">
-          <MetricCustom title="Collateral Amount" value="911" unit="ETH" />
+          <MetricCustom data={dataMetric} />
         </div>
       </div>
     </div>
