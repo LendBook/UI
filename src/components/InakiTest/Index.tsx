@@ -5,6 +5,7 @@ import TradeModule from "../Trade/TradeModule";
 import TableCustom from "../TableCustom";
 import AmountCustom from "../AmountCustom";
 import { useState } from "react";
+import MetricCustom from "../MetricCustom";
 
 const columns = [
   "Collateral",
@@ -44,6 +45,24 @@ const handleRowClick = (rowData: any) => {
   // Faire quelque chose avec les données de la ligne
 };
 
+const dataMetric = [
+  {
+    title: "My total Collateral",
+    value: "5",
+    unit: "WETH",
+  },
+  {
+    title: "My total Borrows",
+    value: "10000",
+    unit: "USDC",
+  },
+  {
+    title: "Excess Collateral",
+    value: "1.125",
+    unit: "WETH",
+  },
+];
+
 const Index = () => {
   const [currentQuantity, setCurrentQuantity] = useState("");
 
@@ -58,9 +77,9 @@ const Index = () => {
       <div className="container" style={{ marginBottom: "10px" }}>
         <AmountCustom
           title="Collateral Amount"
-          tokenWalletBalance="4050"
-          selectedToken="USDC"
-          ratioToUSD={1.01}
+          tokenWalletBalance="11"
+          selectedToken="WETH"
+          ratioToUSD={3100}
           onQuantityChange={handleQuantityChange}
         />
       </div>
@@ -78,6 +97,12 @@ const Index = () => {
             clickableRows={true}
             onRowClick={handleRowClick}
           />
+        </div>
+      </div>
+
+      <div className="flex mt-10">
+        <div className="container">
+          <MetricCustom data={dataMetric} />
         </div>
       </div>
     </div>

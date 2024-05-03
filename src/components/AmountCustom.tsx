@@ -108,9 +108,9 @@ export default function AmountCustom({
 
   return (
     <Box className="max-w-[300px]">
-      <span className="text-black text-[24px] font-bold">{title}</span>
+      <span className="text-primary text-[24px] font-bold">{title}</span>
       <Paper
-        elevation={1}
+        elevation={4}
         style={{ padding: "0px", width: "100%" }}
         className="flex flex-col"
       >
