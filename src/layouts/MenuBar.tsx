@@ -19,6 +19,7 @@ function classNames(...classes: string[]) {
 
 export default function MenuBar() {
   const [selectedPair, setSelectedPair] = useState(pairs[0]); // Default to first pair
+  const [selectedMenu, setSelectedMenu] = useState(MENU_LINKS[0].id); // Default to first menu link
 
   return (
     <div className="bg-white text-black w-64 fixed top-16 left-0 h-full z-10 shadow-md">
@@ -100,7 +101,12 @@ export default function MenuBar() {
           <Link
             key={menu.id}
             to={menu.to}
-            className="p-4 hover:bg-gray-200 text-black no-underline visited:text-black"
+            onClick={() => setSelectedMenu(menu.id)}
+            className={`p-4 hover:bg-gray-100  no-underline ${
+              selectedMenu === menu.id
+                ? "font-bold text-black bg-bgLight"
+                : "font-thin text-dark"
+            }`}
           >
             {menu.label}
           </Link>

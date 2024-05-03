@@ -9,6 +9,8 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
+import { styled } from "@mui/material/styles";
+import theme from "../theme";
 
 //valeur à recuperer
 //price feed indiquatif in USD
@@ -106,7 +108,7 @@ export default function AmountCustom({
 
   return (
     <Box className="max-w-[300px]">
-      <span className="text-gray-700 text-[24px] font-bold">{title}</span>
+      <span className="text-black text-[24px] font-bold">{title}</span>
       <Paper
         elevation={1}
         style={{ padding: "0px", width: "100%" }}
@@ -120,15 +122,17 @@ export default function AmountCustom({
           onClick={handleClick}
           onBlur={handleBlur}
           InputLabelProps={{
-            style: { color: "#434343" },
+            style: { color: theme.palette.text.primary },
           }}
           InputProps={{
             style: {
-              color: "#333333",
-              backgroundColor: "white",
+              color: theme.palette.text.primary,
+              backgroundColor: theme.palette.common.white,
             },
             endAdornment: (
-              <InputAdornment position="end">{selectedToken}</InputAdornment>
+              <InputAdornment position="end">
+                <span className="text-dark">{selectedToken}</span>
+              </InputAdornment>
             ),
           }}
           sx={{
@@ -138,14 +142,14 @@ export default function AmountCustom({
         />
       </Paper>
       <div className="flex justify-between items-center">
-        <span className="text-gray-700 text-[12px]">{message}</span>
+        <span className="text-dark text-[12px]">{message}</span>
         <div className="flex items-center">
-          <span className="text-black text-[12px]">
+          <span className="text-dark text-[12px]">
             Balance: {formatNumber(parseFloat(tokenWalletBalance))}
           </span>
           <div style={{ width: "10px" }} /> {/* Espace */}
           <button
-            className="text-black text-[12px] underline font-bold"
+            className="text-dark text-[12px] underline font-bold"
             onClick={handleMaxClick}
           >
             Max
