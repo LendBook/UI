@@ -136,7 +136,7 @@ const Index = () => {
                 handleClick={handleButtonClick}
                 textClickable="Transaction"
                 textNotClickable="Finalize transaction"
-                buttonWidth={305}
+                buttonWidth={300}
                 borderRadius={50}
               />
             </div>
