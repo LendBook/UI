@@ -5,6 +5,7 @@ import TradeModule from "../Trade/TradeModule";
 import TableCustom from "../TableCustom";
 import AmountCustom from "../AmountCustom";
 import { useState } from "react";
+import MetricCustom from "../MetricCustom";
 
 const columns = [
   "Collateral",
@@ -77,6 +78,10 @@ const Index = () => {
           clickableRows={true}
           onRowClick={handleRowClick}
         />
+      </div>
+
+      <div className="flex container mb-10">
+        <MetricCustom title="Collateral Amount" value="911" unit="ETH" />
       </div>
     </div>
   );
