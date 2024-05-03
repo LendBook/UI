@@ -23,7 +23,7 @@ export default function Routes() {
       children: [
         {
           path: "/",
-          element: <InakiTest />,
+          element: <Markets />,
         },
         {
           path: "/markets",
