@@ -6,6 +6,7 @@ import TableCustom from "../TableCustom";
 import AmountCustom from "../AmountCustom";
 import { useState } from "react";
 import MetricCustom from "../MetricCustom";
+import CustomButton from "../CustomButton";
 
 const columns = [
   "Collateral",
@@ -65,47 +66,89 @@ const dataMetric = [
 
 const Index = () => {
   const [currentQuantity, setCurrentQuantity] = useState("");
+  const [buttonClickable, setButtonClickable] = useState(false);
+  const [message, setMessage] = useState("");
 
   // Fonction pour gérer les changements de valeur de quantity
   const handleQuantityChange = (newQuantity: any) => {
     setCurrentQuantity(newQuantity);
     console.log("New Quantity:", newQuantity);
+    if (newQuantity > 0) {
+      setButtonClickable(true);
+    } else {
+      setButtonClickable(false);
+    }
+  };
+
+  const handleButtonClick = () => {
+    setMessage("Button clicked!");
   };
 
   return (
-    <div>
-      <div className="container" style={{ marginBottom: "10px" }}>
-        <AmountCustom
-          title="Collateral Amount"
-          tokenWalletBalance="11"
-          selectedToken="WETH"
-          ratioToUSD={3100}
-          onQuantityChange={handleQuantityChange}
-        />
-      </div>
-      <div className="container">
-        <span className="text-error text-[12px] font-bold">
-          Test : on appelle la Quantity {currentQuantity}
-        </span>
-      </div>
+    <Card
+      sx={{
+        maxWidth: "1100px",
+        margin: "auto",
+        background: "transparent",
+        boxShadow: "none",
+        border: "none",
+      }}
+    >
+      <Box>
+        <div>
+          <div>to be removed</div>
+          <div className="flex mt-12 space-between items-baseline">
+            <div className="container" style={{ marginBottom: "10px" }}>
+              <AmountCustom
+                title="Collateral Amount"
+                tokenWalletBalance="11"
+                selectedToken="WETH"
+                ratioToUSD={3100}
+                onQuantityChange={handleQuantityChange}
+              />
+              <span className="text-success text-[12px] font-bold">
+                Test : on appelle la Quantity {currentQuantity}
+              </span>
+            </div>
 
-      <div className="flex mt-10">
-        <div className="container">
-          <TableCustom
-            title="Select a Liquidation Price"
-            data={data}
-            clickableRows={true}
-            onRowClick={handleRowClick}
-          />
-        </div>
-      </div>
+            <div className="flex mt-10">
+              <div className="container">
+                <MetricCustom data={dataMetric} />
+              </div>
+            </div>
+          </div>
 
-      <div className="flex mt-10">
-        <div className="container">
-          <MetricCustom data={dataMetric} />
+          <div className="flex mt-10">
+            <div className="container">
+              <TableCustom
+                title="Select a Liquidation Price"
+                data={data}
+                clickableRows={true}
+                onRowClick={handleRowClick}
+              />
+            </div>
+          </div>
+
+          <div className="flex mt-10">
+            <div className="container">
+              <CustomButton
+                clickable={buttonClickable}
+                handleClick={handleButtonClick}
+                textClickable="Transaction"
+                textNotClickable="Finalize transaction"
+                buttonWidth={300}
+                borderRadius={50}
+              />
+            </div>
+          </div>
+          <div className="container">
+            <span className="text-success text-[12px] font-bold">
+              {message}
+            </span>
+          </div>
         </div>
-      </div>
-    </div>
+      </Box>
+    </Card>
   );
 };
 
