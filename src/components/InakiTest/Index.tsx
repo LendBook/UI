@@ -48,17 +48,17 @@ const handleRowClick = (rowData: any) => {
 const dataMetric = [
   {
     title: "My total Collateral",
-    value: "4562",
+    value: "5",
     unit: "WETH",
   },
   {
     title: "My total Borrows",
-    value: "6000",
+    value: "10000",
     unit: "USDC",
   },
   {
     title: "Excess Collateral",
-    value: "0.125",
+    value: "1.125",
     unit: "WETH",
   },
 ];
@@ -77,9 +77,9 @@ const Index = () => {
       <div className="container" style={{ marginBottom: "10px" }}>
         <AmountCustom
           title="Collateral Amount"
-          tokenWalletBalance="4050"
-          selectedToken="USDC"
-          ratioToUSD={1.01}
+          tokenWalletBalance="11"
+          selectedToken="WETH"
+          ratioToUSD={3100}
           onQuantityChange={handleQuantityChange}
         />
       </div>

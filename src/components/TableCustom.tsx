@@ -76,12 +76,15 @@ export default function TableCustom<T extends string | number>({
 
   return (
     <Box>
-      <span className="text-black text-[24px] font-bold">{title}</span>
+      <span className="text-primary text-[24px] font-bold">{title}</span>
       <div className="container relative z-2 mt-10">
         <Box
           component={Paper}
-          elevation={1} // Ombre du cadre
-          sx={{ borderRadius: 1, padding: 1 }} // Styles du cadre
+          elevation={4} // Ombre du cadre
+          sx={{
+            borderRadius: 1,
+            padding: 1,
+          }} // Styles du cadre
         >
           <TableContainer component={Paper} elevation={0}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
