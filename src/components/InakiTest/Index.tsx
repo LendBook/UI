@@ -80,8 +80,10 @@ const Index = () => {
         />
       </div>
 
-      <div className="flex container mb-10">
-        <MetricCustom title="Collateral Amount" value="911" unit="ETH" />
+      <div className="flex mt-10">
+        <div className="container">
+          <MetricCustom title="Collateral Amount" value="911" unit="ETH" />
+        </div>
       </div>
     </div>
   );
