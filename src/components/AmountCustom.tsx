@@ -42,11 +42,11 @@ export default function AmountCustom({
   const [quantity, setQuantity] = useState("");
 
   // Effet pour suivre les changements de quantity et appeler la fonction onQuantityChange
-  useEffect(() => {
-    if (onQuantityChange) {
-      onQuantityChange(quantity);
-    }
-  }, [quantity, onQuantityChange]);
+  // useEffect(() => {
+  //   if (onQuantityChange) {
+  //     onQuantityChange(quantity);
+  //   }
+  // }, [quantity, onQuantityChange]);
 
   function formatNumber(num: any) {
     if (num >= 1000000000) {
@@ -73,13 +73,14 @@ export default function AmountCustom({
   // INPUT
   const onBuyBudgetChange = (e: any) => {
     try {
+      let amount = "";
       if (e.target.value === "") {
-        setQuantity("");
-        setMessage("");
+        setQuantity(amount);
+        setMessage(amount);
       } else {
         let inputValue = e.target.value;
         inputValue = inputValue.replace(/,/g, ".");
-        let amount = inputValue.replace(/[^0-9.]/g, "");
+        amount = inputValue.replace(/[^0-9.]/g, "");
 
         // Si plus d'un point décimal est présent, retirer tous les points sauf le premier
         const decimalCount = amount.split(".").length - 1;
@@ -93,6 +94,9 @@ export default function AmountCustom({
         if (amount[0] === ".") amount = "0" + amount;
         setQuantity(amount);
         setMessage("$" + formatNumber(parseFloat(amount) * ratioToUSD));
+      }
+      if (onQuantityChange) {
+        onQuantityChange(amount);
       }
     } catch (error) {
       console.log(error);
