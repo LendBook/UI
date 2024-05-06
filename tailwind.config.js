@@ -30,6 +30,9 @@ module.exports = {
         bgLight: "#e9f4ff",
       },
     },
+    screens: {
+      "md-plus": { min: "1000px" }, // Définir une taille d'écran personnalisée légèrement au-dessus de md
+    },
   },
   plugins: [],
 };

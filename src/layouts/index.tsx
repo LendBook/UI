@@ -17,17 +17,23 @@ export default function LandingLayout() {
   useEffect(() => {}, [isMobile, isTablet, isLaptop, isDesktop]);
 
   return (
-      <>
-        <Navbar />  {/* Navbar first, covering the full width at the top */}
-        <div className="min-h-screen flex flex-row">
-          <MenuBar />  {/* MenuBar on the left under the Navbar */}
-          <div className="flex flex-col flex-grow">
-            <main className="flex-grow">
-              <Outlet />  {/* Dynamic content rendered here */}
-            </main>
-          </div>
+    <>
+      <Navbar /> {/* Navbar first, covering the full width at the top */}
+      <div className="min-h-screen flex flex-row relative">
+        <MenuBar /> {/* MenuBar on the left under the Navbar */}
+        <div
+          className="flex flex-col flex-grow"
+          style={{
+            //minWidth: "500px",
+            overflowX: "auto",
+          }}
+        >
+          <main className="flex-grow">
+            <Outlet /> {/* Dynamic content rendered here */}
+          </main>
         </div>
-        <Footer />
-      </>
+      </div>
+      <Footer />
+    </>
   );
 }

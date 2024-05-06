@@ -9,7 +9,7 @@ import youtube from "../asserts/images/youtube-1.svg";
 import twitter from "../asserts/images/twitter-icon.svg";
 export default function Footer() {
   return (
-    <footer className="footer dark-blue">
+    <footer className="ml-72 footer dark-blue">
       <div className="footer__container">
         <div className="footer__wrap">
           <div className="footer__content">

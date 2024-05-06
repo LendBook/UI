@@ -34,7 +34,7 @@ const dataTable = [
 
 const dataMetric = [
   {
-    title: "My total Supply",
+    title: "My amount already supplied",
     value: "10000",
     unit: "USDC",
   },
@@ -76,69 +76,71 @@ const Index = () => {
   };
 
   return (
-    <Card
-      sx={{
-        maxWidth: "1100px",
-        margin: "auto",
-        background: "transparent",
-        boxShadow: "none",
-        border: "none",
-      }}
-    >
-      <Box>
-        <div>
-          <div className=" mt-24  text-primary text-[48px] font-bold">
-            Lend to Earn
-          </div>
-          <div className="flex space-between items-baseline">
-            <div className="container" style={{ marginBottom: "10px" }}>
-              <AmountCustom
-                title="Supply Amount"
-                tokenWalletBalance="11320"
-                selectedToken="USDC"
-                ratioToUSD={1.01}
-                onQuantityChange={handleQuantityChange}
-              />
+    <div className="mt-20 ml-72 mr-4">
+      <Card
+        sx={{
+          maxWidth: "1100px",
+          margin: "auto",
+          background: "transparent",
+          boxShadow: "none",
+          border: "none",
+        }}
+      >
+        <Box>
+          <div>
+            <div className=" text-primary text-[48px] font-bold">
+              Lend to Earn
+            </div>
+            <div className="flex flex-col md-plus:flex-row space-between items-baseline">
+              <div className="container" style={{ marginBottom: "10px" }}>
+                <AmountCustom
+                  title="Supply Amount"
+                  tokenWalletBalance="11320"
+                  selectedToken="USDC"
+                  ratioToUSD={1.01}
+                  onQuantityChange={handleQuantityChange}
+                />
+              </div>
+
+              <div className="flex mt-10 md-plus:ml-10 md-plus:mt-0">
+                <div className="container">
+                  <MetricCustom data={dataMetric} />
+                </div>
+              </div>
             </div>
 
             <div className="flex mt-10">
               <div className="container">
-                <MetricCustom data={dataMetric} />
+                <TableCustom
+                  title="Select a Buy Price"
+                  data={dataTable}
+                  clickableRows={true}
+                  onRowClick={handleRowClick}
+                />
               </div>
             </div>
-          </div>
 
-          <div className="flex mt-10">
+            <div className="flex mt-10">
+              <div className="container">
+                <CustomButton
+                  clickable={buttonClickable}
+                  handleClick={handleButtonClick}
+                  textClickable="Finalize transaction"
+                  textNotClickable="Finalize transaction"
+                  buttonWidth={300}
+                  borderRadius={50}
+                />
+              </div>
+            </div>
             <div className="container">
-              <TableCustom
-                title="Select a Buy Price"
-                data={dataTable}
-                clickableRows={true}
-                onRowClick={handleRowClick}
-              />
+              <span className="text-success text-[12px] font-bold">
+                {message}
+              </span>
             </div>
           </div>
-
-          <div className="flex mt-10">
-            <div className="container">
-              <CustomButton
-                clickable={buttonClickable}
-                handleClick={handleButtonClick}
-                textClickable="Finalize transaction"
-                textNotClickable="Finalize transaction"
-                buttonWidth={300}
-                borderRadius={50}
-              />
-            </div>
-          </div>
-          <div className="container">
-            <span className="text-success text-[12px] font-bold">
-              {message}
-            </span>
-          </div>
-        </div>
-      </Box>
-    </Card>
+        </Box>
+      </Card>
+    </div>
   );
 };
 
