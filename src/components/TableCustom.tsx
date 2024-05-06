@@ -33,7 +33,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     paddingBottom: "5px", // Adjust the bottom padding as per your requirement
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+    fontSize: 15,
     color: theme.palette.common.black, // Couleur de texte personnalisée pour les cellules du corps
     borderBottom: "1px solid",
     paddingTop: "6px", // Adjust the top padding as per your requirement
