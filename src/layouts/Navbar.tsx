@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { Menu } from "@headlessui/react";
-import networks from "../config/networks.json"; // Make sure the path is correct
-import logoImg from "../asserts/images/logo.png"; // Make sure the path is correct
+import networks from "../config/testnet.json"; 
+import logoImg from "../asserts/images/logo.png"; 
 import { useWeb3Modal } from "@web3modal/react";
 import { useAccount, useDisconnect, useSwitchNetwork, useNetwork } from "wagmi";
 
