@@ -6,6 +6,7 @@ import TableCustom from "../TableCustom";
 import AmountCustom from "../AmountCustom";
 import { useState } from "react";
 import MetricCustom from "../MetricCustom";
+import TabsCustom from "../TabsCustom";
 
 const columns = [
   "Collateral",
@@ -73,39 +74,39 @@ const Index = () => {
   };
 
   return (
-    <div>
-      <div className="container" style={{ marginBottom: "10px" }}>
-        <AmountCustom
-          title="Collateral Amount"
-          tokenWalletBalance="11"
-          selectedToken="WETH"
-          ratioToUSD={3100}
-          onQuantityChange={handleQuantityChange}
-        />
-      </div>
-      <div className="container">
+      <div>
+        <div className="container" style={{marginBottom: "10px"}}>
+          <AmountCustom
+              title="Collateral Amount"
+              tokenWalletBalance="11"
+              selectedToken="WETH"
+              ratioToUSD={3100}
+              onQuantityChange={handleQuantityChange}
+          />
+        </div>
+        <div className="container">
         <span className="text-error text-[12px] font-bold">
           Test : on appelle la Quantity {currentQuantity}
         </span>
-      </div>
+        </div>
 
-      <div className="flex mt-10">
-        <div className="container">
-          <TableCustom
-            title="Select a Liquidation Price"
-            data={data}
-            clickableRows={true}
-            onRowClick={handleRowClick}
-          />
+        <div className="flex mt-10">
+          <div className="container">
+            <TableCustom
+                title="Select a Liquidation Price"
+                data={data}
+                clickableRows={true}
+                onRowClick={handleRowClick}
+            />
+          </div>
+        </div>
+
+        <div className="flex mt-10">
+          <div className="container">
+            <MetricCustom data={dataMetric}/>
+          </div>
         </div>
       </div>
-
-      <div className="flex mt-10">
-        <div className="container">
-          <MetricCustom data={dataMetric} />
-        </div>
-      </div>
-    </div>
   );
 };
 
