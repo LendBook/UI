@@ -7,6 +7,7 @@ import AmountCustom from "../AmountCustom";
 import { useState } from "react";
 import MetricCustom from "../MetricCustom";
 import CustomButton from "../CustomButton";
+import TabsCustom from "../TabsCustom";
 
 const dataTable = [
   {
@@ -41,40 +42,6 @@ const dataMetric = [
 ];
 
 const Index = () => {
-  const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
-  const [buyPrice, setBuyPrice] = useState("");
-  const [buttonClickable, setButtonClickable] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const updateButtonClickable = (supplyAmountQuantity: any, buyPrice: any) => {
-    if (supplyAmountQuantity > 0 && buyPrice !== "") {
-      setButtonClickable(true);
-    } else {
-      setButtonClickable(false);
-    }
-    setMessage(
-      "Transaction parameters : supply=" +
-        supplyAmountQuantity +
-        " AND buy price =" +
-        buyPrice
-    );
-  };
-
-  // Fonction pour gérer les changements de valeur de quantity
-  const handleQuantityChange = (newQuantity: any) => {
-    setSupplyAmountQuantity(newQuantity);
-    updateButtonClickable(newQuantity, buyPrice);
-  };
-
-  const handleRowClick = (rowData: any) => {
-    setBuyPrice(rowData["Buy Price"]);
-    updateButtonClickable(supplyAmountQuantity, rowData["Buy Price"]);
-  };
-
-  const handleButtonClick = () => {
-    setMessage("Button clicked!");
-  };
-
   return (
     <div className="mt-20 ml-72 mr-4">
       <Card
@@ -89,54 +56,23 @@ const Index = () => {
         <Box>
           <div>
             <div className=" text-primary text-[48px] font-bold">
-              Lend to Earn
-            </div>
-            <div className="flex flex-col md-plus:flex-row space-between items-baseline">
-              <div className="container" style={{ marginBottom: "10px" }}>
-                <AmountCustom
-                  title="Supply Amount"
-                  tokenWalletBalance="11320"
-                  selectedToken="USDC"
-                  ratioToUSD={1.01}
-                  onQuantityChange={handleQuantityChange}
-                />
-              </div>
-
-              <div className="flex mt-10 md-plus:ml-10 md-plus:mt-0">
-                <div className="container">
-                  <MetricCustom data={dataMetric} />
-                </div>
-              </div>
+              Inaki Test
             </div>
 
             <div className="flex mt-10">
               <div className="container">
                 <TableCustom
-                  title="Select a Buy Price"
+                  title="Template table"
                   data={dataTable}
-                  clickableRows={true}
-                  onRowClick={handleRowClick}
+                  clickableRows={false}
                 />
               </div>
             </div>
 
             <div className="flex mt-10">
               <div className="container">
-                <CustomButton
-                  clickable={buttonClickable}
-                  handleClick={handleButtonClick}
-                  textClickable="Finalize transaction"
-                  textNotClickable="Finalize transaction"
-                  buttonWidth={300}
-                  borderRadius={50}
-                />
+                <TabsCustom labels={["As Lender", "As Borrower"]} />
               </div>
-            </div>
-
-            <div className="container">
-              <span className="text-success text-[12px] font-bold">
-                {message}
-              </span>
             </div>
           </div>
         </Box>

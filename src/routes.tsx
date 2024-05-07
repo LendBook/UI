@@ -12,6 +12,7 @@ const Dashboard = lazy(() => import("./components/Dashboard"));
 const Faucet = lazy(() => import("./components/Faucet/Faucet"));
 const About = lazy(() => import("./components/About"));
 const InakiTest = lazy(() => import("./components/InakiTest/Index"));
+const Lend = lazy(() => import("./components/Lend/Index"));
 const Template = lazy(() => import("./components/Template/Index"));
 // ----------------------------------------------------------------------------------
 
@@ -28,6 +29,10 @@ export default function Routes() {
         {
           path: "/markets",
           element: <Markets />,
+        },
+        {
+          path: "/lend",
+          element: <Lend />,
         },
         {
           path: "/trade",
