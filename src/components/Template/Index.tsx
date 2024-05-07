@@ -49,7 +49,6 @@ const Index = () => {
     setBuyPrice(rowData["Buy Price"]);
     updateButtonClickable(supplyAmountQuantity, rowData["Buy Price"]);
   };
-  
 
   return (
     <div className="mt-20 ml-72 mr-4">
@@ -64,14 +63,11 @@ const Index = () => {
       >
         <Box>
           <div>
-            <div className=" text-primary text-[48px] font-bold">
-              TEMPLATE
-            </div>
+            <div className=" text-primary text-[48px] font-bold">Template</div>
             <div className="flex flex-col md-plus:flex-row space-between items-baseline">
               <div className="container" style={{ marginBottom: "10px" }}>
-                Template
+                Text
               </div>
-              
             </div>
 
             <div className="flex mt-10">
@@ -84,7 +80,6 @@ const Index = () => {
                 />
               </div>
             </div>
-            
           </div>
         </Box>
       </Card>
