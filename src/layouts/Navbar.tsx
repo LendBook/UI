@@ -26,7 +26,10 @@ export default function Navbar() {
       : "";
 
   return (
-    <nav className="bg-white text-black w-full fixed top-0 left-0 z-30 shadow-md">
+    <nav
+      className="bg-white text-black w-full fixed top-0 left-0 z-30 shadow-md"
+      style={{ zIndex: 9999 }}
+    >
       <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4">
         <div className="flex justify-between h-16 items-center">
           <div className="flex-shrink-0">

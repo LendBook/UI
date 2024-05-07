@@ -4,7 +4,7 @@ const tailwindColors = {
   primary: "#003F7D",
   secondary: "#002347",
   success: "#28a745",
-  error: "#dc3545",
+  error: "#bebebe",
   warning: "#ffc107",
   info: "#59748d",
   light: "#f8f9fa",
