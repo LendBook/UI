@@ -6,7 +6,6 @@ import TableCustom from "../TableCustom";
 import AmountCustom from "../AmountCustom";
 import { useState } from "react";
 import MetricCustom from "../MetricCustom";
-import TabsCustom from "../TabsCustom";
 
 const columns = [
   "Collateral",
