@@ -56,16 +56,20 @@ export default function MetricCustom<T extends string>({
       sx={{ borderRadius: 1, padding: 1, display: "inline-block" }}
       className="flex flex-col"
     >
-      <div className="flex">
+      <div className="flex flex-col">
         {data.map((row, rowIndex) => (
-          <div key={rowIndex} className="min-w-[300px]">
+          <div
+            key={rowIndex} //className="min-w-[300px]"
+          >
             <Paper
               elevation={0}
               style={{
                 borderRadius: 1,
                 padding: 2,
                 backgroundColor: theme.palette.background.default,
-                marginRight: rowIndex !== data.length - 1 ? 10 : 0,
+                //marginRight: rowIndex !== data.length - 1 ? 10 : 0,
+                marginBottom: rowIndex !== data.length - 1 ? 10 : 0,
+                width: "300px",
               }}
               className="flex flex-col"
             >

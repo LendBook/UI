@@ -36,8 +36,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
     color: theme.palette.common.black, // Couleur de texte personnalisée pour les cellules du corps
     borderBottom: "1px solid",
-    paddingTop: "6px", // Adjust the top padding as per your requirement
-    paddingBottom: "6px", // Adjust the bottom padding as per your requirement
+    paddingTop: "8px", // Adjust the top padding as per your requirement
+    paddingBottom: "8px", // Adjust the bottom padding as per your requirement
     borderColor: theme.palette.background.default,
   },
 }));
@@ -86,7 +86,17 @@ export default function TableCustom<T extends string | number>({
             padding: 1,
           }} // Styles du cadre
         >
-          <TableContainer component={Paper} elevation={0}>
+          <TableContainer
+            component={Paper}
+            elevation={0}
+            // sx={{
+            //   maxWidth: "100%",
+            //   overflowX: "auto",
+            //   "@media (max-width: 1000px)": {
+            //     maxWidth: "1000px", // Définir une largeur maximale pour le TableContainer
+            //   },
+            // }}
+          >
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
