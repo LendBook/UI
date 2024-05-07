@@ -6,7 +6,7 @@ import TableCustom from "../TableCustom";
 import AmountCustom from "../AmountCustom";
 import { useState } from "react";
 import MetricCustom from "../MetricCustom";
-import CustomButton from "../CustomButton";
+
 
 const dataTable = [
   {
@@ -120,18 +120,7 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="flex mt-10">
-              <div className="container">
-                <CustomButton
-                  clickable={buttonClickable}
-                  handleClick={handleButtonClick}
-                  textClickable="Finalize transaction"
-                  textNotClickable="Finalize transaction"
-                  buttonWidth={300}
-                  borderRadius={50}
-                />
-              </div>
-            </div>
+         
             <div className="container">
               <span className="text-success text-[12px] font-bold">
                 {message}
