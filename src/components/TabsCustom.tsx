@@ -1,51 +1,64 @@
 import React, { useState } from "react";
-import { Box, Tabs, Tab, Paper } from "@mui/material";
-import { styled, useTheme } from "@mui/material/styles";
+import {
+  Box,
+  Tabs,
+  Tab,
+  Paper,
+  Button,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import theme from "../theme";
 
 type TabProps = {
-    labels: string[];
+  labels: string[];
 };
 
-const StyledTabs = styled(Tabs)(({ theme }) => ({
-    backgroundColor: theme.palette.background.default,
-    color: theme.palette.info.main,
-}));
-
-const StyledTab = styled(Tab)(({ theme }) => ({
-    fontWeight: "bold",
-    '&.Mui-selected': { // Style quand l'onglet est sélectionné
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.common.white,
-    },
-    '&.Mui-focusVisible': { // Style lors de la focus
-        backgroundColor: theme.palette.primary.light,
-    }
+const StyledToggleButton = styled(ToggleButton)(({ theme, selected }) => ({
+  backgroundColor: selected ? "black" : "inherit",
 }));
 
 export default function TabsCustom({ labels }: TabProps) {
-    const [value, setValue] = useState(0);
-    const theme = useTheme();
+  const [alignment, setAlignment] = React.useState(labels[0]);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
-    };
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string
+  ) => {
+    setAlignment(newAlignment);
+  };
 
-    return (
-        <Box sx={{ width: '100%' }}>
-            <Paper elevation={4} sx={{ borderRadius: 1 }}>
-                <StyledTabs
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="customized tabs"
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="fullWidth"
-                >
-                    {labels.map((label, index) => (
-                        <StyledTab label={label} key={index} />
-                    ))}
-                </StyledTabs>
-            </Paper>
-        </Box>
-    );
+  return (
+    <Paper
+      elevation={4}
+      sx={{ borderRadius: 1, padding: 1, display: "inline-block" }}
+      className="flex flex-col"
+    >
+      <div>
+        <ToggleButtonGroup
+          color="primary"
+          value={alignment}
+          exclusive
+          onChange={handleChange}
+          aria-label="Platform"
+        >
+          {labels.map((label) => (
+            <ToggleButton
+              key={label}
+              value={label}
+              style={{
+                backgroundColor:
+                  alignment === label ? theme.palette.primary.main : "inherit",
+                color:
+                  alignment === label ? theme.palette.common.white : "inherit",
+              }}
+            >
+              {label}
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+      </div>
+    </Paper>
+  );
 }
