@@ -15,8 +15,7 @@ const Index = () => {
   const [showAll, setShowAll] = useState<boolean>(false);
 
   const { data, loading, error } = useFetchLendOrder(
-    orderbookContract,
-    [1, 2, 3, 4, 5, 6, 7]
+    orderbookContract, [1, 2, 3, 4, 5, 6, 7]
   );
 
   useEffect(() => {
