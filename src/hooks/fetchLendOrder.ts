@@ -17,17 +17,21 @@ export const useFetchLendOrder = (contract: ethers.Contract, poolIds: number[]) 
 
     const fetchData = async () => {
         try {
+            const genesisPoolResponse = await axios.get('/v1/constant/GenesisPoolId');
+            const genesisPoolId = genesisPoolResponse.data.GenesisPoolId; // Assurez-vous que ceci correspond à la structure de réponse de votre API
+
             const results = await Promise.all(poolIds.map(async (poolId) => {
                 // Fetch data from the API
                 const apiResponses = await Promise.all([
-                    axios.get(`/v1/request/viewPoolAvailableAssets/${poolId}`),
+                    axios.get(`/v1/request/pools/${poolId}`),
                     axios.get(`/v1/request/viewLendingRate/${poolId}`),
                     axios.get(`/v1/request/viewUtilizationRate/${poolId}`),
-                    axios.get(`/v1/request/limitPrice/${poolId}`),
+                    axios.get(`/v1/request/limitPrice/${genesisPoolId}`),
                     "",
                 ]);
 
-                const availableAssets = parseFloat(ethers.utils.formatUnits(apiResponses[0].data.result, 'ether'));
+                const resultsAvailableAssets = apiResponses[0].data.result.split(',');
+                const availableAssets = parseFloat(ethers.utils.formatUnits(resultsAvailableAssets[0], 'ether'));
                 const lendingRate = parseFloat(ethers.utils.formatUnits(apiResponses[1].data.result, 'ether')) * 100;
                 const utilizationRate = parseFloat(ethers.utils.formatUnits(apiResponses[2].data.result, 'ether')) * 100;
                 const buyPrice = parseFloat(ethers.utils.formatUnits(apiResponses[3].data.result, 'ether'))
