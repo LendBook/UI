@@ -4,8 +4,10 @@ import AmountCustom from "../AmountCustom";
 import { useEffect, useState } from "react";
 import MetricCustom from "../MetricCustom";
 import CustomButton from "../CustomButton";
-import { useFetchLendOrder } from "../../hooks/fetchLendOrder";
+import { useFetchLendOrder } from "../../hooks/useFetchLendOrder";
 import { orderbookContract } from "../../contracts";
+import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
+import { ethers } from "ethers";
 
 const Index = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -13,16 +15,37 @@ const Index = () => {
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [showAll, setShowAll] = useState<boolean>(false);
+  const [provider, setProvider] = useState<ethers.providers.Web3Provider | null>(null);
+  const [walletAddress, setWalletAddress] = useState<string>('');
 
+  const { userInfo, loadingUser, errorUser } = useFetchUserInfo(provider, walletAddress);
   const { data, loading, error } = useFetchLendOrder(
     orderbookContract, [1, 2, 3, 4, 5, 6, 7]
   );
+  
+  useEffect(() => {
+    const initProvider = () => {
+      if (window.ethereum) {
+        const providerTemp = new ethers.providers.Web3Provider(window.ethereum);
+        setProvider(providerTemp);
+        providerTemp.getSigner().getAddress()
+            .then(setWalletAddress)
+            .catch(console.error);
+      } else {
+        console.error("Please install MetaMask!");
+      }
+    };
+
+    initProvider();
+  }, []);
+
 
   useEffect(() => {
     if (!loading && !error && data) {
       console.log("Fetched data:", data);
     }
   }, [data, loading, error]);
+  
 
   const updateButtonClickable = (quantity: number, price: string) => {
     const isClickable = quantity > 0 && price !== "";
@@ -53,7 +76,7 @@ const Index = () => {
 
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography>Error: {error}</Typography>;
-
+  
   const displayedData = showAll ? data : data.slice(0, 3);
 
   return (
@@ -87,7 +110,7 @@ const Index = () => {
                   data={[
                     {
                       title: "My amount already supplied",
-                      value: "10000",
+                      value: userInfo.totalDepositsWithQuote,
                       unit: "USDC",
                     },
                   ]}
