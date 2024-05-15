@@ -46,7 +46,7 @@ export default function MetricCustom<T extends string>({
     } else if (num >= 1000) {
       return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Ajoute une virgule après les trois premiers chiffres
     } else {
-      return num.toFixed(2);
+      return num.toFixed(4);
     }
   }
 
