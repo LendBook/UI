@@ -33,14 +33,6 @@ const dataTable = [
   },
 ];
 
-const dataMetric = [
-  {
-    title: "My amount already supplied",
-    value: "10000",
-    unit: "USDC",
-  },
-];
-
 const Index = () => {
   return (
     <div className="mt-20 ml-72 mr-4">
