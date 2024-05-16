@@ -108,6 +108,10 @@ export default function AmountCustom({
     setQuantity(maxAmount);
     setMessage("$" + formatNumber(parseFloat(maxAmount) * ratioToUSD));
     setLabel("");
+
+    if (onQuantityChange) {
+      onQuantityChange(maxAmount);
+    }
   };
 
   return (
