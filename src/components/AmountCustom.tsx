@@ -152,15 +152,11 @@ export default function AmountCustom({
       <div className="flex justify-between items-center">
         <span className="text-dark text-[12px]">{message}</span>
         <div className="flex items-center">
-          <span className="text-dark text-[12px]">
-            Balance: {formatNumber(parseFloat(tokenWalletBalance))}
-          </span>
-          <div style={{ width: "10px" }} /> {/* Espace */}
           <button
-            className="text-dark text-[12px] underline font-bold"
+            className="text-dark text-[10px] underline font-bold"
             onClick={handleMaxClick}
           >
-            Max
+            Available : {formatNumber(parseFloat(tokenWalletBalance))}
           </button>
         </div>
       </div>

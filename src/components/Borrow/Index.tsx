@@ -35,6 +35,13 @@ const Index = () => {
       Utilization: "60%",
       "My Borrowing positons": "",
     },
+    {
+      "Liquidation Price": "2,800 USDC",
+      "Available Supply": "1.2M USDC",
+      "Borrow APY": "6.0%",
+      Utilization: "60%",
+      "My Borrowing positons": "",
+    },
   ];
 
   const updateButtonClickable = (
