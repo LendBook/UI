@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { Menu } from "@headlessui/react";
 import networks from "../config/testnet.json";
-import pairs from "../config/pairs.json"; 
-import logoImg from "../asserts/images/logo.png"; 
+import pairs from "../config/pairs.json";
+import logoImg from "../asserts/images/logo.png";
 import { useWeb3Modal } from "@web3modal/react";
 import { useAccount, useDisconnect, useSwitchNetwork, useNetwork } from "wagmi";
-import { usePriceOracle } from "../hooks/usePriceOracle"; 
+import { usePriceOracle } from "../hooks/usePriceOracle";
 
 export default function Navbar() {
   const { open } = useWeb3Modal();
@@ -15,7 +15,7 @@ export default function Navbar() {
   const { disconnect } = useDisconnect();
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
-  const [currentNetwork, setCurrentNetwork] = useState(networks[0]); 
+  const [currentNetwork, setCurrentNetwork] = useState(networks[0]);
 
   useEffect(() => {
     const network = networks.find((n) => n.chainID === chain?.id);
@@ -27,7 +27,7 @@ export default function Navbar() {
       ? `${address.substring(0, 6)}...${address.substring(address.length - 4)}`
       : "";
 
-  const wethUsdcPair = pairs.find(
+  const tokenPair = pairs.find(
     (pair) => pair.tokenA === "WETH" && pair.tokenB.trim() === "USDC"
   );
 
@@ -46,20 +46,30 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {wethUsdcPair && (
+          {tokenPair && (
             <div className="flex-grow text-center flex flex-col items-center justify-center">
-              <div className="flex items-center">
-                <img src={wethUsdcPair.logourlA} alt="WETH Logo" className="h-4 w-4 mr-1" />
-                <span className="text-black text-sm font-medium">
-                  {wethUsdcPair.tokenA} /
+              <div className="flex items-center ">
+                <img
+                  src={tokenPair.logourlA}
+                  alt="WETH Logo"
+                  className="h-4 w-4 mr-1"
+                />
+                <span className="text-info font-medium">
+                  {tokenPair.tokenA} /
                 </span>
-                <img src={wethUsdcPair.logourlB} alt="USDC Logo" className="h-4 w-4 ml-1" />
-                <span className="text-black text-sm font-medium">
-                  {wethUsdcPair.tokenB.trim()}
+                <img
+                  src={tokenPair.logourlB}
+                  alt="USDC Logo"
+                  className="h-4 w-4 ml-1 mr-1"
+                />
+                <span className="text-info font-medium">
+                  {tokenPair.tokenB.trim()}
                 </span>
               </div>
-              <span className="text-black text-sm font-medium mt-1">
-                Oracle Price: 1 {wethUsdcPair.tokenA} = {loading ? "Loading..." : price ? price.toFixed(2) : "0"} {wethUsdcPair.tokenB.trim()}
+              <span className="text-info text-sm font-medium mt-1">
+                Oracle Price : 1 {tokenPair.tokenA} ={" "}
+                {loading ? "Loading..." : price ? price.toFixed(2) : "0"}{" "}
+                {tokenPair.tokenB.trim()}
               </span>
             </div>
           )}
