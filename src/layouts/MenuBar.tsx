@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import pairs from "../config/pairs.json"; // Make sure the path is correct
+import pairs from "../config/pairs.json";
 import { Icon } from "@iconify/react";
 
 const MENU_LINKS = [
