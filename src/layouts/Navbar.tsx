@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { Menu } from "@headlessui/react";
-import networks from "../config/testnet.json"; 
-import logoImg from "../asserts/images/logo.png"; 
+import networks from "../config/testnet.json";
+import pairs from "../config/pairs.json";
+import logoImg from "../asserts/images/logo.png";
 import { useWeb3Modal } from "@web3modal/react";
 import { useAccount, useDisconnect, useSwitchNetwork, useNetwork } from "wagmi";
+import { usePriceOracle } from "../hooks/usePriceOracle";
 
 export default function Navbar() {
   const { open } = useWeb3Modal();
@@ -13,7 +15,7 @@ export default function Navbar() {
   const { disconnect } = useDisconnect();
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
-  const [currentNetwork, setCurrentNetwork] = useState(networks[0]); // Default to first network
+  const [currentNetwork, setCurrentNetwork] = useState(networks[0]);
 
   useEffect(() => {
     const network = networks.find((n) => n.chainID === chain?.id);
@@ -24,6 +26,12 @@ export default function Navbar() {
     address
       ? `${address.substring(0, 6)}...${address.substring(address.length - 4)}`
       : "";
+
+  const tokenPair = pairs.find(
+    (pair) => pair.tokenA === "WETH" && pair.tokenB.trim() === "USDC"
+  );
+
+  const { price, loading, error } = usePriceOracle();
 
   return (
     <nav
@@ -37,6 +45,35 @@ export default function Navbar() {
               <img className="h-10 w-auto" src={logoImg} alt="Logo" />
             </Link>
           </div>
+
+          {tokenPair && (
+            <div className="flex-grow text-center flex flex-col items-center justify-center">
+              <div className="flex items-center ">
+                <img
+                  src={tokenPair.logourlA}
+                  alt="WETH Logo"
+                  className="h-4 w-4 mr-1"
+                />
+                <span className="text-info font-medium">
+                  {tokenPair.tokenA} /
+                </span>
+                <img
+                  src={tokenPair.logourlB}
+                  alt="USDC Logo"
+                  className="h-4 w-4 ml-1 mr-1"
+                />
+                <span className="text-info font-medium">
+                  {tokenPair.tokenB.trim()}
+                </span>
+              </div>
+              <span className="text-info text-sm font-medium mt-1">
+                Oracle Price : 1 {tokenPair.tokenA} ={" "}
+                {loading ? "Loading..." : price ? price.toFixed(2) : "0"}{" "}
+                {tokenPair.tokenB.trim()}
+              </span>
+            </div>
+          )}
+
           <div className="flex items-center">
             <div className="flex-shrink-0 mr-4">
               <button
