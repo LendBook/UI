@@ -1,17 +1,17 @@
 import { ethers, providers } from "ethers";
-import Contrats from "./contracts/168587773.json";
+import Contrats from "./contracts/11155111.json";
 import { fromBigNum } from "../utils";
 import { WalletClient, useWalletClient } from "wagmi";
 import { useMemo } from "react";
 import { activeIndex } from "../components/Borrow/BorrowModule";
-const supportChainId = 168587773;
+const supportChainId = 11155111;
 
 const RPCS = {
   1: "https://mainnet.infura.io/v3/7e2f78ddbf394bc9ab92ebb175b60a64",
   // 56: "https://bsc-dataseed.binance.org/",
   // 97: "https://bsc-testnet.publicnode.com",
   4002: "https://fantom-testnet.publicnode.com",
-  168587773: "https://sepolia.blast.io",
+  11155111: "https://rpc.sepolia.org",
 };
 
 const providersRPC = {
@@ -19,7 +19,7 @@ const providersRPC = {
   //  56: new ethers.providers.JsonRpcProvider(RPCS[56]),
   //  97: new ethers.providers.JsonRpcProvider(RPCS[97]),
   4002: new ethers.providers.JsonRpcProvider(RPCS[4002]),
-  168587773: new ethers.providers.JsonRpcProvider(RPCS[168587773]),
+  11155111: new ethers.providers.JsonRpcProvider(RPCS[11155111]),
 };
 
 export function walletClientToSigner(walletClient: WalletClient) {
