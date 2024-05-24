@@ -20,9 +20,8 @@ export const useFetchLendOrder = (
 
   const fetchData = async () => {
     try {
-      const genesisPoolResponse = await axios.get("/v1/constant/GenesisPoolId");
-      const genesisPoolId = genesisPoolResponse.data.GenesisPoolId;
-
+    
+      const genesisPoolId = 1111111110;
       const results = await Promise.all(
         poolIds.map(async (poolId) => {
           // Fetch data from the API
