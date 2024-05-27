@@ -45,7 +45,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 // Style pour la ligne au survol
 const HoverTableRow = styled(TableRow)(({ theme }) => ({
   "&:hover": {
-    backgroundColor: theme.palette.background.default, //
+    backgroundColor: theme.palette.background.default, //theme.palette.action.hover,
     "& .MuiTableCell-root": {
       //color: theme.palette.common.white, // Changement de couleur du texte en blanc
     },
