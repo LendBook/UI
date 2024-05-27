@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import { styled } from "@mui/material/styles";
 import theme from "../theme";
+import { formatNumber } from "./GlobalFunctions";
 
 //valeur à recuperer
 //price feed indiquatif in USD
@@ -47,18 +48,6 @@ export default function AmountCustom({
   //     onQuantityChange(quantity);
   //   }
   // }, [quantity, onQuantityChange]);
-
-  function formatNumber(num: any) {
-    if (num >= 1000000000) {
-      return (num / 1000000000).toFixed(2) + "B";
-    } else if (num >= 1000000) {
-      return (num / 1000000).toFixed(2) + "M";
-    } else if (num >= 1000) {
-      return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Ajoute une virgule après les trois premiers chiffres
-    } else {
-      return num.toFixed(2);
-    }
-  }
 
   const handleClick = () => {
     setLabel("");

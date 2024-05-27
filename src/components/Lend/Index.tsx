@@ -15,22 +15,29 @@ const Index = () => {
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [showAll, setShowAll] = useState<boolean>(false);
-  const [provider, setProvider] = useState<ethers.providers.Web3Provider | null>(null);
-  const [walletAddress, setWalletAddress] = useState<string>('');
+  const [provider, setProvider] =
+    useState<ethers.providers.Web3Provider | null>(null);
+  const [walletAddress, setWalletAddress] = useState<string>("");
 
-  const { userInfo, loadingUser, errorUser } = useFetchUserInfo(provider, walletAddress);
-  const { data, loading, error } = useFetchLendOrder(
-    orderbookContract, [1, 2, 3, 4, 5, 6, 7]
+  const { userInfo, loadingUser, errorUser } = useFetchUserInfo(
+    provider,
+    walletAddress
   );
-  
+  const { data, loading, error } = useFetchLendOrder(
+    orderbookContract,
+    [1111111110, 1111111108, 1111111106]
+  );
+
   useEffect(() => {
     const initProvider = () => {
       if (window.ethereum) {
         const providerTemp = new ethers.providers.Web3Provider(window.ethereum);
         setProvider(providerTemp);
-        providerTemp.getSigner().getAddress()
-            .then(setWalletAddress)
-            .catch(console.error);
+        providerTemp
+          .getSigner()
+          .getAddress()
+          .then(setWalletAddress)
+          .catch(console.error);
       } else {
         console.error("Please install MetaMask!");
       }
@@ -39,13 +46,11 @@ const Index = () => {
     initProvider();
   }, []);
 
-
   useEffect(() => {
     if (!loading && !error && data) {
       console.log("Fetched data:", data);
     }
   }, [data, loading, error]);
-  
 
   const updateButtonClickable = (quantity: number, price: string) => {
     const isClickable = quantity > 0 && price !== "";
@@ -76,7 +81,7 @@ const Index = () => {
 
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography>Error: {error}</Typography>;
-  
+
   const displayedData = showAll ? data : data.slice(0, 3);
 
   return (
