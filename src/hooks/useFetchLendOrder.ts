@@ -20,16 +20,15 @@ export const useFetchLendOrder = (
 
   const fetchData = async () => {
     try {
-    
       const genesisPoolId = 1111111110;
       const results = await Promise.all(
         poolIds.map(async (poolId) => {
           // Fetch data from the API
           const apiResponses = await Promise.all([
-            axios.get(`/v1/request/pools/${poolId}`),
-            axios.get(`/v1/request/viewLendingRate/${poolId}`),
-            axios.get(`/v1/request/viewUtilizationRate/${poolId}`),
-            axios.get(`/v1/request/limitPrice/${genesisPoolId + poolId}`),
+            axios.get(`/v1/request/pools/1`),
+            axios.get(`/v1/request/viewLendingRate/1`),
+            axios.get(`/v1/request/viewUtilizationRate/1`),
+            axios.get(`/v1/request/limitPrice/${poolId}`),
             "",
           ]);
 
