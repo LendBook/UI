@@ -10,6 +10,7 @@ import Box from "@mui/material/Box"; // Import de Box pour créer le cadre
 import { styled } from "@mui/material/styles";
 import theme from "../theme";
 import { title } from "process";
+import { formatNumber } from "./GlobalFunctions";
 
 // Type générique pour une ligne de données
 type RowData<T extends string | number> = Record<T, string | number>;

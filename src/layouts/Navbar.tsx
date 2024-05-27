@@ -8,6 +8,7 @@ import logoImg from "../asserts/images/logo.png";
 import { useWeb3Modal } from "@web3modal/react";
 import { useAccount, useDisconnect, useSwitchNetwork, useNetwork } from "wagmi";
 import { usePriceOracle } from "../hooks/usePriceOracle";
+import { formatNumber } from "../components/GlobalFunctions";
 
 export default function Navbar() {
   const { open } = useWeb3Modal();
@@ -68,7 +69,7 @@ export default function Navbar() {
               </div>
               <span className="text-info text-sm font-medium mt-1">
                 Oracle Price : 1 {tokenPair.tokenA} ={" "}
-                {loading ? "Loading..." : price ? price.toFixed(2) : "0"}{" "}
+                {loading ? "Loading..." : price ? formatNumber(price) : "0"}{" "}
                 {tokenPair.tokenB.trim()}
               </span>
             </div>

@@ -25,7 +25,7 @@ const Index = () => {
   );
   const { data, loading, error } = useFetchLendOrder(
     orderbookContract,
-    [1111111108, 1111111110]
+    [1111111110, 1111111108, 1111111106]
   );
 
   useEffect(() => {
