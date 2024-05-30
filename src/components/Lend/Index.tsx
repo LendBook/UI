@@ -8,6 +8,8 @@ import { useFetchLendOrder } from "../../hooks/useFetchLendOrder";
 import { orderbookContract } from "../../contracts";
 import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
 import { ethers } from "ethers";
+import TransactionSummary from "../TransactionSummary";
+import { formatNumber } from "../GlobalFunctions";
 
 const Index = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -72,9 +74,9 @@ const Index = () => {
     );
   };
 
-  const handleQuantityChange = (newQuantity: any) => {
-    setSupplyAmountQuantity(newQuantity);
-    updateButtonClickable(newQuantity, buyPrice, poolId);
+  const handleQuantityChange = (newQuantity: string) => {
+    setSupplyAmountQuantity(parseFloat(newQuantity));
+    updateButtonClickable(parseFloat(newQuantity), buyPrice, poolId);
   };
 
   const handleRowClick = (rowData: any) => {
@@ -97,6 +99,20 @@ const Index = () => {
   if (error) return <Typography>Error: {error}</Typography>;
 
   const displayedData = data; //showAll ? data : data.slice(0, 3);
+
+  const transactionData = [
+    {
+      title: "Supplied Amount",
+      value:
+        supplyAmountQuantity === 0 || isNaN(supplyAmountQuantity)
+          ? ""
+          : `${formatNumber(supplyAmountQuantity)} USDC`,
+    },
+    {
+      title: "Selected buy price",
+      value: buyPrice,
+    },
+  ];
 
   return (
     <div className="mt-20 ml-72 mr-4">
@@ -159,11 +175,14 @@ const Index = () => {
               borderRadius={50}
             />
           </div>
-          <div className="container">
+          <div className="flex mt-5">
+            <TransactionSummary data={transactionData} />
+          </div>
+          {/* <div className="container">
             <span className="text-success text-[12px] font-bold">
               {message}
             </span>
-          </div>
+          </div> */}
         </Box>
       </Card>
     </div>

@@ -58,29 +58,29 @@ const borrowData = [
   },
 ];
 
+const metricsData = [
+  {
+    title: "My total Collateral",
+    value: "2",
+    unit: "WETH",
+  },
+  {
+    title: "My total Borrows",
+    value: "6,000",
+    unit: "USDC",
+  },
+  {
+    title: "My Excess Collateral",
+    value: "0.12",
+    unit: "WETH",
+  },
+];
+
 const AsBorrower = () => {
   return (
     <div>
       <div className="flex mt-10 ">
-        <MetricCustom
-          data={[
-            {
-              title: "My total Collateral",
-              value: "2",
-              unit: "WETH",
-            },
-            {
-              title: "My total Borrows",
-              value: "6,000",
-              unit: "USDC",
-            },
-            {
-              title: "My Excess Collateral",
-              value: "0.12",
-              unit: "WETH",
-            },
-          ]}
-        />
+        <MetricCustom data={metricsData} />
       </div>
       <div className="flex mt-10">
         <CustomTable

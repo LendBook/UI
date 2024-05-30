@@ -8,6 +8,7 @@ import MetricCustom from "../MetricCustom";
 import CustomButton from "../CustomButton";
 import TabsCustom from "../TabsCustom";
 import CustomTable from "../CustomTable";
+import TransactionSummary from "../TransactionSummary";
 
 const templateDataTableColumnsConfig = [
   { key: "dataA", title: "Data A" },
@@ -33,6 +34,19 @@ const templateDataTable = [
     dataA: "3000 USDC",
     dataB: "3500 USDC",
     dataC: "2500 USDC",
+  },
+];
+
+const transactionData = [
+  {
+    title: "Supplied Amount",
+    value: "2000",
+    unit: "USDC",
+  },
+  {
+    title: "Selected buy price",
+    value: "6000",
+    unit: "USDC",
   },
 ];
 
@@ -73,6 +87,10 @@ const Index = () => {
                 clickableRows={true}
                 onRowClick={handleRowClick}
               />
+            </div>
+
+            <div className="flex mt-10">
+              <TransactionSummary data={transactionData} />
             </div>
           </div>
         </Box>
