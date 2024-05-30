@@ -1,5 +1,5 @@
 import { Box, Card, Typography, Button } from "@mui/material";
-import TableCustom from "../TableCustom";
+import CustomTable from "../CustomTable";
 import AmountCustom from "../AmountCustom";
 import { useEffect, useState } from "react";
 import MetricCustom from "../MetricCustom";
@@ -12,6 +12,7 @@ import { ethers } from "ethers";
 const Index = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
   const [buyPrice, setBuyPrice] = useState<string>("");
+  const [poolId, setPoolId] = useState<string>("");
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [showAll, setShowAll] = useState<boolean>(false);
@@ -27,6 +28,13 @@ const Index = () => {
     orderbookContract,
     [1111111110, 1111111108, 1111111106]
   );
+  const dataColumnsConfig = [
+    { key: "buyPrice", title: "Buy Price" },
+    { key: "totalSupply", title: "Total Supply" },
+    { key: "netAPY", title: "Net APY" },
+    { key: "utilization", title: "Utilization" },
+    { key: "mySupply", title: "My Supply" },
+  ];
 
   useEffect(() => {
     const initProvider = () => {
@@ -52,23 +60,29 @@ const Index = () => {
     }
   }, [data, loading, error]);
 
-  const updateButtonClickable = (quantity: number, price: string) => {
+  const updateButtonClickable = (
+    quantity: number,
+    price: string,
+    poolId: string
+  ) => {
     const isClickable = quantity > 0 && price !== "";
     setButtonClickable(isClickable);
     setMessage(
-      `Transaction parameters: supply=${quantity} AND buy price=${price}`
+      `Transaction parameters: supply=${quantity} AND buy price=${price} AND poolID=${poolId}`
     );
   };
 
   const handleQuantityChange = (newQuantity: any) => {
     setSupplyAmountQuantity(newQuantity);
-    updateButtonClickable(newQuantity, buyPrice);
+    updateButtonClickable(newQuantity, buyPrice, poolId);
   };
 
   const handleRowClick = (rowData: any) => {
     const newBuyPrice = rowData.buyPrice;
     setBuyPrice(newBuyPrice);
-    updateButtonClickable(supplyAmountQuantity, newBuyPrice);
+    const newPoolId = rowData.id;
+    setPoolId(newPoolId);
+    updateButtonClickable(supplyAmountQuantity, newBuyPrice, newPoolId);
   };
 
   const handleButtonClick = () => {
@@ -82,7 +96,7 @@ const Index = () => {
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography>Error: {error}</Typography>;
 
-  const displayedData = showAll ? data : data.slice(0, 3);
+  const displayedData = data; //showAll ? data : data.slice(0, 3);
 
   return (
     <div className="mt-20 ml-72 mr-4">
@@ -124,8 +138,9 @@ const Index = () => {
             </div>
           </div>
           <div className="flex mt-10">
-            <TableCustom
+            <CustomTable
               title="Select a Buy Price"
+              columnsConfig={dataColumnsConfig}
               data={displayedData}
               clickableRows={true}
               onRowClick={handleRowClick}

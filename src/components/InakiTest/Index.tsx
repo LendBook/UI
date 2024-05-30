@@ -2,36 +2,46 @@ import Orderbook from "../Orderbook/Orderbook";
 import { OrderProvider } from "../Orderbook/OrderContext";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import TradeModule from "../Trade/TradeModule";
-import TableCustom from "../TableCustom";
 import AmountCustom from "../AmountCustom";
 import { useState } from "react";
 import MetricCustom from "../MetricCustom";
 import CustomButton from "../CustomButton";
 import TabsCustom from "../TabsCustom";
+import CustomTable from "../CustomTable";
 
-const dataTable = [
+const templateDataTableColumnsConfig = [
+  { key: "dataA", title: "Data A" },
+  { key: "dataB", title: "Data B" },
+  { key: "dataC", title: "Data C" },
+];
+
+const templateDataTable = [
   {
-    "Buy Price": "3,400 USDC",
-    "Total Supply": "10M USDC",
-    "Net APY": "10.3%",
-    Utilization: "85%",
-    "My Supply": "",
+    id: 1,
+    dataA: "1000 USDC",
+    dataB: "1500 USDC",
+    dataC: "2500 USDC",
   },
   {
-    "Buy Price": "3,200 USDC",
-    "Total Supply": "8.2M USDC",
-    "Net APY": "7.8%",
-    Utilization: "76%",
-    "My Supply": "7,000 USDC",
+    id: 2,
+    dataA: "2000 USDC",
+    dataB: "2500 USDC",
+    dataC: "2500 USDC",
   },
   {
-    "Buy Price": "3,000 USDC",
-    "Total Supply": "3.3M USDC",
-    "Net APY": "6.1%",
-    Utilization: "60%",
-    "My Supply": "3,000 USDC",
+    id: 3,
+    dataA: "3000 USDC",
+    dataB: "3500 USDC",
+    dataC: "2500 USDC",
   },
 ];
+
+const handleRowClick = (rowData: any) => {
+  console.log(rowData);
+  console.log(templateDataTable);
+  const newBuyPrice = rowData.dataA;
+  const newPoolId = rowData.id;
+};
 
 const Index = () => {
   return (
@@ -50,21 +60,19 @@ const Index = () => {
             <div className=" text-primary text-[48px] font-bold">
               Inaki Test
             </div>
-
-            <div className="flex mt-10">
-              <div className="container">
-                <TableCustom
-                  title="Template table"
-                  data={dataTable}
-                  clickableRows={false}
-                />
-              </div>
-            </div>
-
             <div className="flex mt-10">
               <div className="container">
                 <TabsCustom labels={["As Lender", "As Borrower"]} />
               </div>
+            </div>
+            <div className="flex mt-10">
+              <CustomTable
+                title="Select a Buy Price"
+                columnsConfig={templateDataTableColumnsConfig}
+                data={templateDataTable}
+                clickableRows={true}
+                onRowClick={handleRowClick}
+              />
             </div>
           </div>
         </Box>
