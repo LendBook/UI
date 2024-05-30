@@ -1,4 +1,4 @@
-import { Box, Card } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import CustomTable from "../CustomTable";
 import AmountCustom from "../AmountCustom";
 import { useState } from "react";
@@ -50,7 +50,9 @@ const Index = () => {
       >
         <Box>
           <div>
-            <div className=" text-primary text-[48px] font-bold">Template</div>
+            <Typography variant="h3" color="black" fontWeight="bold">
+              Template
+            </Typography>
             <div className="flex flex-col md-plus:flex-row space-between items-baseline">
               <div className="container" style={{ marginBottom: "10px" }}>
                 Text

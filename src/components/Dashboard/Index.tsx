@@ -23,7 +23,7 @@ const Index = () => {
         }}
       >
         <Box>
-          <Typography variant="h4" color="primary" fontWeight="bold">
+          <Typography variant="h3" color="black" fontWeight="bold">
             My Dashboard
           </Typography>
         </Box>

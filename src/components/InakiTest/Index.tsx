@@ -57,9 +57,9 @@ const Index = () => {
       >
         <Box>
           <div>
-            <div className=" text-primary text-[48px] font-bold">
+            <Typography variant="h3" color="black" fontWeight="bold">
               Inaki Test
-            </div>
+            </Typography>
             <div className="flex mt-10">
               <div className="container">
                 <TabsCustom labels={["As Lender", "As Borrower"]} />

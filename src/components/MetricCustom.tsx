@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import theme from "../theme";
 import { title } from "process";
+import { formatNumber } from "./GlobalFunctions";
 
 //valeur à recuperer
 //price feed indiquatif in USD
@@ -23,12 +24,17 @@ type MetricCustomProps<T extends string> = {
   data: RowData<T>[];
 };
 
-// // Définition des types pour les props de AmountCustom
-// type MetricCustomProps = {
-//   title?: string;
-//   value: string;
-//   unit?: string;
-// };
+const Container = styled(Box)(({ theme }) => ({
+  display: "inline-flex",
+  flexWrap: "wrap",
+  gap: theme.spacing(1),
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+  },
+  [theme.breakpoints.up("md")]: {
+    flexDirection: "row",
+  },
+}));
 
 // Composant TableCustom
 export default function MetricCustom<T extends string>({
@@ -38,25 +44,13 @@ export default function MetricCustom<T extends string>({
   // const [selectedToken, setSelectedToken] = useState("USDC");
   // const ratioToUSD = 1.01;
 
-  function formatNumber(num: any) {
-    if (num >= 1000000000) {
-      return (num / 1000000000).toFixed(2) + "B";
-    } else if (num >= 1000000) {
-      return (num / 1000000).toFixed(2) + "M";
-    } else if (num >= 1000) {
-      return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Ajoute une virgule après les trois premiers chiffres
-    } else {
-      return num.toFixed(4);
-    }
-  }
-
   return (
     <Paper
       elevation={4}
       sx={{ borderRadius: 1, padding: 1, display: "inline-block" }}
       className="flex flex-col"
     >
-      <div className="flex flex-col">
+      <Container>
         {data.map((row, rowIndex) => (
           <div
             key={rowIndex} //className="min-w-[300px]"
@@ -68,7 +62,7 @@ export default function MetricCustom<T extends string>({
                 padding: 2,
                 backgroundColor: theme.palette.background.default,
                 //marginRight: rowIndex !== data.length - 1 ? 10 : 0,
-                marginBottom: rowIndex !== data.length - 1 ? 10 : 0,
+                //marginBottom: rowIndex !== data.length - 1 ? 10 : 0,
                 width: "300px",
               }}
               className="flex flex-col"
@@ -94,7 +88,7 @@ export default function MetricCustom<T extends string>({
             </Paper>
           </div>
         ))}
-      </div>
+      </Container>
     </Paper>
   );
 }

@@ -102,7 +102,7 @@ const Index = () => {
         }}
       >
         <Box>
-          <Typography variant="h4" color="primary" fontWeight="bold">
+          <Typography variant="h3" color="black" fontWeight="bold">
             Borrow
           </Typography>
           <div className="flex flex-col md-plus:flex-row space-between items-baseline mt-10 ">
