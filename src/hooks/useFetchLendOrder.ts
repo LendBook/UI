@@ -4,11 +4,13 @@ import { ethers } from "ethers";
 import { formatNumber } from "../components/GlobalFunctions";
 
 interface LendOrderData {
+  id: number;
   buyPrice: string;
   totalSupply: string;
   netAPY: string;
   utilization: string;
   mySupply: string;
+  [key: string]: string | number;
 }
 
 export const useFetchLendOrder = (
@@ -51,6 +53,7 @@ export const useFetchLendOrder = (
           const mySupply = apiResponses[4];
 
           return {
+            id: poolId,
             buyPrice: `${formatNumber(buyPrice)} USDC`,
             totalSupply: `${formatNumber(availableAssets)} USDC`,
             netAPY: `${formatNumber(lendingRate)}%`,

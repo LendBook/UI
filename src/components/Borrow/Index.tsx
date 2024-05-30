@@ -1,9 +1,9 @@
 import { Box, Card, Typography, Button } from "@mui/material";
-import TableCustom from "../TableCustom";
 import AmountCustom from "../AmountCustom";
 import { useEffect, useState } from "react";
 import MetricCustom from "../MetricCustom";
 import CustomButton from "../CustomButton";
+import CustomTable from "../CustomTable";
 
 const Index = () => {
   const [collateralQuantity, setCollateralQuantity] = useState<number>(0);
@@ -13,34 +13,38 @@ const Index = () => {
   const [message, setMessage] = useState<string>("");
   const [showAll, setShowAll] = useState<boolean>(false);
 
-  const data = [
+  const customDataColumnsConfig = [
+    { key: "liquidationPrice", title: "Liquidation Price" },
+    { key: "availableSupply", title: "Available Supply" },
+    { key: "borrowAPY", title: "Borrow APY" },
+    { key: "utilization", title: "Utilization" },
+    { key: "myBorrowingPositions", title: "My Borrowing Positions" },
+  ];
+
+  const customData = [
     {
-      "Liquidation Price": "3,400 USDC",
-      "Available Supply": "10M USDC",
-      "Borrow APY": "10.3%",
-      Utilization: "95%",
-      "My Borrowing positons": "",
+      id: 1,
+      liquidationPrice: "3,400 USDC",
+      availableSupply: "10M USDC",
+      borrowAPY: "10.3%",
+      utilization: "95%",
+      myBorrowingPositions: "",
     },
     {
-      "Liquidation Price": "3,200 USDC",
-      "Available Supply": "8.2M USDC",
-      "Borrow APY": "7.8%",
-      Utilization: "90%",
-      "My Borrowing positons": "7000 USDC",
+      id: 2,
+      liquidationPrice: "3,200 USDC",
+      availableSupply: "8.2M USDC",
+      borrowAPY: "7.8%",
+      utilization: "90%",
+      myBorrowingPositions: "7000 USDC",
     },
     {
-      "Liquidation Price": "3,000 USDC",
-      "Available Supply": "3.3M USDC",
-      "Borrow APY": "6.1%",
-      Utilization: "60%",
-      "My Borrowing positons": "",
-    },
-    {
-      "Liquidation Price": "2,800 USDC",
-      "Available Supply": "1.2M USDC",
-      "Borrow APY": "6.0%",
-      Utilization: "60%",
-      "My Borrowing positons": "",
+      id: 3,
+      liquidationPrice: "3,000 USDC",
+      availableSupply: "8.0M USDC",
+      borrowAPY: "7.0%",
+      utilization: "50%",
+      myBorrowingPositions: "",
     },
   ];
 
@@ -67,7 +71,7 @@ const Index = () => {
   };
 
   const handleRowClick = (rowData: any) => {
-    const newliquidationPrice = rowData["Liquidation Price"];
+    const newliquidationPrice = rowData.liquidationPrice;
     setLiquidationPrice(newliquidationPrice);
     updateButtonClickable(
       collateralQuantity,
@@ -84,7 +88,7 @@ const Index = () => {
     setShowAll(!showAll);
   };
 
-  const displayedData = showAll ? data : data.slice(0, 3);
+  const displayedData = showAll ? customData : customData.slice(0, 3);
 
   return (
     <div className="mt-20 ml-72 mr-4">
@@ -98,7 +102,7 @@ const Index = () => {
         }}
       >
         <Box>
-          <Typography variant="h4" color="primary" fontWeight="bold">
+          <Typography variant="h3" color="black" fontWeight="bold">
             Borrow
           </Typography>
           <div className="flex flex-col md-plus:flex-row space-between items-baseline mt-10 ">
@@ -136,8 +140,9 @@ const Index = () => {
           </div>
 
           <div className="flex mt-10">
-            <TableCustom
+            <CustomTable
               title="Select a Liquidation Price"
+              columnsConfig={customDataColumnsConfig}
               data={displayedData}
               clickableRows={true}
               onRowClick={handleRowClick}
@@ -161,6 +166,8 @@ const Index = () => {
               {message}
             </span>
           </div>
+
+          <div className="flex mt-10"></div>
         </Box>
       </Card>
     </div>

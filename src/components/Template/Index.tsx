@@ -1,21 +1,33 @@
-import { Box, Card } from "@mui/material";
-import TableCustom from "../TableCustom";
+import { Box, Card, Typography } from "@mui/material";
+import CustomTable from "../CustomTable";
 import AmountCustom from "../AmountCustom";
 import { useState } from "react";
 import MetricCustom from "../MetricCustom";
 
-const dataTable = [
+const templateDataTableColumnsConfig = [
+  { key: "dataA", title: "Data A" },
+  { key: "dataB", title: "Data B" },
+  { key: "dataC", title: "Data C" },
+];
+
+const templateDataTable = [
   {
-    "Data A": "1000 USDC",
-    "Data B": "1000 USDC",
+    id: 1,
+    dataA: "1000 USDC",
+    dataB: "1500 USDC",
+    dataC: "2500 USDC",
   },
   {
-    "Data A": "1000 USDC",
-    "Data B": "1000 USDC",
+    id: 2,
+    dataA: "2000 USDC",
+    dataB: "2500 USDC",
+    dataC: "2500 USDC",
   },
   {
-    "Data A": "1000 USDC",
-    "Data B": "1000 USDC",
+    id: 3,
+    dataA: "3000 USDC",
+    dataB: "3500 USDC",
+    dataC: "2500 USDC",
   },
 ];
 
@@ -24,31 +36,6 @@ const Index = () => {
   const [buyPrice, setBuyPrice] = useState("");
   const [buttonClickable, setButtonClickable] = useState(false);
   const [message, setMessage] = useState("");
-
-  const updateButtonClickable = (supplyAmountQuantity: any, buyPrice: any) => {
-    if (supplyAmountQuantity > 0 && buyPrice !== "") {
-      setButtonClickable(true);
-    } else {
-      setButtonClickable(false);
-    }
-    setMessage(
-      "Transaction parameters : supply=" +
-        supplyAmountQuantity +
-        " AND buy price =" +
-        buyPrice
-    );
-  };
-
-  // Fonction pour gérer les changements de valeur de quantity
-  const handleQuantityChange = (newQuantity: any) => {
-    setSupplyAmountQuantity(newQuantity);
-    updateButtonClickable(newQuantity, buyPrice);
-  };
-
-  const handleRowClick = (rowData: any) => {
-    setBuyPrice(rowData["Buy Price"]);
-    updateButtonClickable(supplyAmountQuantity, rowData["Buy Price"]);
-  };
 
   return (
     <div className="mt-20 ml-72 mr-4">
@@ -63,7 +50,9 @@ const Index = () => {
       >
         <Box>
           <div>
-            <div className=" text-primary text-[48px] font-bold">Template</div>
+            <Typography variant="h3" color="black" fontWeight="bold">
+              Template
+            </Typography>
             <div className="flex flex-col md-plus:flex-row space-between items-baseline">
               <div className="container" style={{ marginBottom: "10px" }}>
                 Text
@@ -71,14 +60,12 @@ const Index = () => {
             </div>
 
             <div className="flex mt-10">
-              <div className="container">
-                <TableCustom
-                  title="Template"
-                  data={dataTable}
-                  clickableRows={true}
-                  onRowClick={handleRowClick}
-                />
-              </div>
+              <CustomTable
+                title="Template"
+                columnsConfig={templateDataTableColumnsConfig}
+                data={templateDataTable}
+                clickableRows={true}
+              />
             </div>
           </div>
         </Box>

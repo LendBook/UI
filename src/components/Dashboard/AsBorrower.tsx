@@ -1,22 +1,60 @@
-import TableCustom from "../TableCustom";
 import MetricCustom from "../MetricCustom";
-import { userInfo } from "os";
+import CustomTable from "../CustomTable";
 
-const dataCollateral = [
+const collateralWithdrawClick = (id: number) => {
+  console.log(`Button clicked! ${id}`);
+};
+const collateralSupplyClick = (id: number) => {
+  console.log(`Button clicked! ${id}`);
+};
+
+const collateralDataColumnsConfig = [
+  { key: "sellPrice", title: "Sell Price" },
+  { key: "mySupply", title: "My Supply" },
   {
-    "Sell Price": "5,000 USDC",
-    "My Supply": "5 ETH",
-    Action: "Withdraw / Supply more",
+    key: "withdraw",
+    title: "",
+    isButton: true,
+    onButtonClick: collateralWithdrawClick,
+  },
+  {
+    key: "supply",
+    title: "",
+    isButton: true,
+    onButtonClick: collateralSupplyClick,
   },
 ];
 
-const dataBorrowingPositions = [
+const collateralData = [
   {
-    "Liquidation Price": "4,000 USDC",
-    "My Borrow": "6,000 USDC",
-    "Interest Rate": "7.8%",
-    Utilization: "80%",
-    Action: "Repay",
+    id: 1,
+    sellPrice: "5,000 USDC",
+    mySupply: "5 WETH",
+    withdraw: "Withdraw",
+    supply: "Supply more",
+  },
+];
+
+const borrowRepayClick = (id: number) => {
+  console.log(`Button clicked! ${id}`);
+};
+
+const borrowDataColumnsConfig = [
+  { key: "liquidationPrice", title: "Liquidation Price" },
+  { key: "myBorrow", title: "My Borrow" },
+  { key: "interestRate", title: "Interest Rate" },
+  { key: "utilization", title: "Utilization" },
+  { key: "repay", title: "", isButton: true, onButtonClick: borrowRepayClick },
+];
+
+const borrowData = [
+  {
+    id: 1,
+    liquidationPrice: "4,000 USDC",
+    myBorrow: "6,000 USDC",
+    interestRate: "7.8%",
+    utilization: "80%",
+    repay: "Repay",
   },
 ];
 
@@ -45,16 +83,18 @@ const AsBorrower = () => {
         />
       </div>
       <div className="flex mt-10">
-        <TableCustom
+        <CustomTable
           title="Collateral deposited as Sell Orders "
-          data={dataCollateral}
+          columnsConfig={collateralDataColumnsConfig}
+          data={collateralData}
           clickableRows={false}
         />
       </div>
       <div className="flex mt-10">
-        <TableCustom
+        <CustomTable
           title="Borrowing Positions"
-          data={dataBorrowingPositions}
+          columnsConfig={borrowDataColumnsConfig}
+          data={borrowData}
           clickableRows={false}
         />
       </div>

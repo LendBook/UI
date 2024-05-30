@@ -6,20 +6,27 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box"; // Import de Box pour créer le cadre
+import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 import theme from "../theme";
-import { title } from "process";
-import { formatNumber } from "./GlobalFunctions";
 
 // Type générique pour une ligne de données
-type RowData<T extends string | number> = Record<T, string | number>;
+type RowData<T extends string | number> = Record<T, string | number> & {
+  id: number;
+};
 
-// Définition des types pour les props de TableCustom
+// Définition des types pour les props de CustomTable
 type TableProps<T extends string | number> = {
   title?: string;
-  data: RowData<T>[];
-  clickableRows?: boolean; // Marquer clickableRows comme optionnelle avec une valeur par défaut
+  columnsConfig: {
+    key: T;
+    title: string;
+    isButton?: boolean;
+    onButtonClick?: (id: number) => void;
+  }[];
+  data: RowData<T>[]; //data object needs to have at least "id" as one of his key
+  clickableRows?: boolean;
   onRowClick?: (row: RowData<T>) => void;
 };
 
@@ -30,15 +37,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: theme.palette.info.main,
     fontWeight: "bold",
     borderBottom: "0px",
-    paddingTop: "5px", // Adjust the top padding as per your requirement
-    paddingBottom: "5px", // Adjust the bottom padding as per your requirement
+    paddingTop: "5px",
+    paddingBottom: "5px",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    color: theme.palette.common.black, // Couleur de texte personnalisée pour les cellules du corps
+    color: theme.palette.common.black,
     borderBottom: "1px solid",
-    paddingTop: "8px", // Adjust the top padding as per your requirement
-    paddingBottom: "8px", // Adjust the bottom padding as per your requirement
+    paddingTop: "8px",
+    paddingBottom: "8px",
     borderColor: theme.palette.background.default,
   },
 }));
@@ -46,21 +53,20 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 // Style pour la ligne au survol
 const HoverTableRow = styled(TableRow)(({ theme }) => ({
   "&:hover": {
-    backgroundColor: theme.palette.background.default, //theme.palette.action.hover,
-    "& .MuiTableCell-root": {
-      //color: theme.palette.common.white, // Changement de couleur du texte en blanc
-    },
+    backgroundColor: theme.palette.background.default, //theme.palette.action.hover, //theme.palette.background.default,
   },
 }));
 
-// Composant TableCustom
-export default function TableCustom<T extends string | number>({
+// Composant CustomTable
+export default function CustomTable<T extends string | number>({
   title = "Select",
+  columnsConfig,
   data,
-  clickableRows = false, // Définir clickableRows à false par défaut
+  clickableRows = false,
   onRowClick,
 }: TableProps<T>) {
-  const columns = data.length > 0 ? (Object.keys(data[0]) as T[]) : [];
+  const columns = columnsConfig.map((config) => config.key);
+
   const [activeRow, setActiveRow] = useState<number | null>(null);
 
   const handleClick = (rowIndex: number, row: RowData<T>) => {
@@ -73,6 +79,7 @@ export default function TableCustom<T extends string | number>({
     }
 
     setActiveRow(rowIndex);
+    console.log(data);
   };
 
   return (
@@ -81,28 +88,20 @@ export default function TableCustom<T extends string | number>({
       <div className="container relative z-2 mt-10">
         <Box
           component={Paper}
-          elevation={4} // Ombre du cadre
+          elevation={4}
           sx={{
             borderRadius: 1,
             padding: 1,
-          }} // Styles du cadre
+          }}
         >
-          <TableContainer
-            component={Paper}
-            elevation={0}
-            // sx={{
-            //   maxWidth: "100%",
-            //   overflowX: "auto",
-            //   "@media (max-width: 1000px)": {
-            //     maxWidth: "1000px", // Définir une largeur maximale pour le TableContainer
-            //   },
-            // }}
-          >
+          <TableContainer component={Paper} elevation={0}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  {columns.map((column, index) => (
-                    <StyledTableCell key={index}>{column}</StyledTableCell>
+                  {columnsConfig.map((column, index) => (
+                    <StyledTableCell key={column.key}>
+                      {column.title}
+                    </StyledTableCell>
                   ))}
                 </TableRow>
               </TableHead>
@@ -121,16 +120,14 @@ export default function TableCustom<T extends string | number>({
                         : "inherit",
                     "& .MuiTableCell-root":
                       rowIndex === activeRow
-                        ? {
-                            color: theme.palette.common.white, // Changement de couleur du texte en blanc
-                          }
+                        ? { color: theme.palette.common.white }
                         : "inherit",
                   };
 
                   if (isRowClickable) {
                     return (
                       <HoverTableRow
-                        key={rowIndex}
+                        key={row.id}
                         onClick={() => handleClick(rowIndex, row)}
                         sx={rowStyles}
                       >
@@ -142,14 +139,37 @@ export default function TableCustom<T extends string | number>({
                       </HoverTableRow>
                     );
                   } else {
-                    // If not clickable, render a regular TableRow
                     return (
-                      <TableRow key={rowIndex} sx={rowStyles}>
-                        {columns.map((column, colIndex) => (
-                          <StyledTableCell key={colIndex} align="left">
-                            {row[column as keyof RowData<T>]}
-                          </StyledTableCell>
-                        ))}
+                      <TableRow key={row.id} sx={rowStyles}>
+                        {columns.map((column, colIndex) => {
+                          const columnConfig = columnsConfig.find(
+                            (config) => config.key === column
+                          );
+                          if (columnConfig && columnConfig.isButton) {
+                            // Si la colonne est configurée comme étant un bouton
+                            return (
+                              <StyledTableCell key={colIndex} align="left">
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() =>
+                                    columnConfig.onButtonClick &&
+                                    columnConfig.onButtonClick(row.id as number)
+                                  }
+                                >
+                                  {row[column as keyof RowData<T>]}
+                                </Button>
+                              </StyledTableCell>
+                            );
+                          } else {
+                            // Si la colonne est une colonne de texte normale
+                            return (
+                              <StyledTableCell key={colIndex} align="left">
+                                {row[column as keyof RowData<T>]}
+                              </StyledTableCell>
+                            );
+                          }
+                        })}
                       </TableRow>
                     );
                   }

@@ -25,7 +25,6 @@ type AmountCustomProps = {
   onQuantityChange?: (quantity: string) => void;
 };
 
-// Composant TableCustom
 export default function AmountCustom({
   title = "Collateral Amount",
   tokenWalletBalance = "0",
