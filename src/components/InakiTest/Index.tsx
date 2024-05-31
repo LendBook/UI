@@ -9,6 +9,9 @@ import TabsCustom from "../TabsCustom";
 import CustomTable from "../CustomTable";
 import TransactionSummary from "../TransactionSummary";
 
+import * as React from "react";
+import { BarChart } from "@mui/x-charts/BarChart";
+
 const templateDataTableColumnsConfig = [
   { key: "dataA", title: "Data A" },
   { key: "dataB", title: "Data B" },
@@ -36,19 +39,6 @@ const templateDataTable = [
   },
 ];
 
-const transactionData = [
-  {
-    title: "Supplied Amount",
-    value: "2000",
-    unit: "USDC",
-  },
-  {
-    title: "Selected buy price",
-    value: "6000",
-    unit: "USDC",
-  },
-];
-
 const handleRowClick = (rowData: any) => {
   console.log(rowData);
   console.log(templateDataTable);
@@ -56,6 +46,18 @@ const handleRowClick = (rowData: any) => {
   const newPoolId = rowData.id;
 };
 
+const seriesA = {
+  data: [2, 3, 1, 4, 5],
+  label: "Series A",
+};
+const seriesB = {
+  data: [3, 1, 4, 2, 1],
+  label: "Series B",
+};
+const seriesC = {
+  data: [3, 2, 4, 5, 1],
+  label: "Series C",
+};
 const Index = () => {
   return (
     <div className="mt-20 ml-72 mr-4">
@@ -87,9 +89,16 @@ const Index = () => {
                 onRowClick={handleRowClick}
               />
             </div>
-
             <div className="flex mt-10">
-              <TransactionSummary data={transactionData} />
+              <BarChart
+                width={600}
+                height={300}
+                series={[
+                  { ...seriesA, stack: "total" },
+                  { ...seriesB, stack: "total" },
+                  { ...seriesC, stack: "total" },
+                ]}
+              />
             </div>
           </div>
         </Box>
