@@ -22,6 +22,7 @@ type AmountCustomProps = {
   tokenWalletBalance: string;
   selectedToken?: string;
   ratioToUSD?: number;
+  initialQuantity?: string;
   onQuantityChange?: (quantity: string) => void;
 };
 
@@ -30,6 +31,7 @@ export default function AmountCustom({
   tokenWalletBalance = "0",
   selectedToken = "USDC",
   ratioToUSD = 1.01,
+  initialQuantity = "",
   onQuantityChange, // Fonction de gestion du changement de quantité passée en prop
 }: AmountCustomProps) {
   // const [tokenWalletBalance, settokenWalletBalance] = useState("15232");
@@ -41,12 +43,26 @@ export default function AmountCustom({
   // ORDER VARIABLE
   const [quantity, setQuantity] = useState("");
 
-  // Effet pour suivre les changements de quantity et appeler la fonction onQuantityChange
-  // useEffect(() => {
-  //   if (onQuantityChange) {
-  //     onQuantityChange(quantity);
-  //   }
-  // }, [quantity, onQuantityChange]);
+  useEffect(() => {
+    if (
+      initialQuantity === "0" ||
+      initialQuantity === "" ||
+      isNaN(parseFloat(initialQuantity))
+    ) {
+      setQuantity("");
+      setMessage("");
+      setLabel("Enter Amount");
+    } else if (initialQuantity !== quantity) {
+      setQuantity(initialQuantity);
+
+      setMessage("$" + formatNumber(parseFloat(initialQuantity) * ratioToUSD));
+      setLabel("");
+
+      if (onQuantityChange) {
+        onQuantityChange(initialQuantity);
+      }
+    }
+  }, [initialQuantity]);
 
   const handleClick = () => {
     setLabel("");
@@ -58,6 +74,7 @@ export default function AmountCustom({
   };
 
   const [message, setMessage] = useState("");
+
   // INPUT
   const onBuyBudgetChange = (e: any) => {
     try {
@@ -104,7 +121,7 @@ export default function AmountCustom({
 
   return (
     <Box className="max-w-[300px]">
-      <span className="text-primary text-[24px] font-bold">{title}</span>
+      <span className="text-primary text-[20px] font-bold">{title}</span>
       <Paper
         elevation={4}
         style={{ padding: "0px", width: "100%" }}
@@ -140,12 +157,14 @@ export default function AmountCustom({
       <div className="flex justify-between items-center">
         <span className="text-dark text-[12px]">{message}</span>
         <div className="flex items-center">
-          <button
-            className="text-dark text-[10px] underline font-bold"
-            onClick={handleMaxClick}
-          >
-            Available : {formatNumber(parseFloat(tokenWalletBalance))}
-          </button>
+          {tokenWalletBalance !== "" && (
+            <button
+              className="text-dark text-[10px] underline font-bold"
+              onClick={handleMaxClick}
+            >
+              Available : {formatNumber(parseFloat(tokenWalletBalance))}
+            </button>
+          )}
         </div>
       </div>
     </Box>

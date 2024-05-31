@@ -1,7 +1,6 @@
 import Orderbook from "../Orderbook/Orderbook";
 import { OrderProvider } from "../Orderbook/OrderContext";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
-import TradeModule from "../Trade/TradeModule";
 import AmountCustom from "../AmountCustom";
 import { useState } from "react";
 import MetricCustom from "../MetricCustom";

@@ -84,7 +84,7 @@ export default function CustomTable<T extends string | number>({
 
   return (
     <Box>
-      <span className="text-primary text-[24px] font-bold">{title}</span>
+      <span className="text-primary text-[20px] font-bold">{title}</span>
       <div className="container relative z-2 mt-10">
         <Box
           component={Paper}
