@@ -35,4 +35,13 @@ module.exports = {
     },
   },
   plugins: [],
+
+  variants: {
+    extend: {
+      transform: ["hover", "group-hover"],
+      transitionProperty: ["hover", "group-hover"],
+      transitionDuration: ["hover", "group-hover"],
+      rotate: ["hover", "group-hover"],
+    },
+  },
 };
