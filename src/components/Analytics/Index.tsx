@@ -32,20 +32,20 @@ const valueFormatter = (value: number | null) =>
   `$${formatNumber(String(value))}`;
 
 const chartSetting = {
-  yAxis: [
-    {
-      min: 0,
-      //max: 60000,
-      tickLabel: null,
-    },
-  ],
+  // yAxis: [
+  //   {
+  //     min: 0,
+  //     //max: 60000,
+  //     tickLabel: null,
+  //   },
+  // ],
   width: 1000,
   height: 300,
-  sx: {
-    [`.${axisClasses.left} .${axisClasses.label}`]: {
-      transform: "translate(-20px, 0)",
-    },
-  },
+  // sx: {
+  //   [`.${axisClasses.left} .${axisClasses.label}`]: {
+  //     transform: "translate(-20px, 0)",
+  //   },
+  // },
 };
 
 const Index = () => {
@@ -103,6 +103,7 @@ const Index = () => {
               <BarChart
                 dataset={sortedData}
                 xAxis={[{ scaleType: "band", dataKey: "buyPrice" }]}
+                tooltip={{ trigger: "axis" }}
                 series={[
                   {
                     dataKey: "deposits",
