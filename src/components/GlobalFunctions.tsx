@@ -1,4 +1,7 @@
 export const formatNumber = (num: string | number): string => {
+  if (num === "") {
+    return "";
+  }
   if (typeof num === "string") {
     num = parseFloat(num);
   }
@@ -11,4 +14,22 @@ export const formatNumber = (num: string | number): string => {
   } else {
     return num.toFixed(2);
   }
+};
+
+interface ObjectWithId {
+  id: number;
+  [key: string]: string | number; // Utiliser 'any' pour permettre n'importe quel type de valeur
+}
+
+export const mergeObjects = (
+  objectA: ObjectWithId[],
+  objectB: ObjectWithId[]
+): ObjectWithId[] => {
+  return objectA.map((itemA) => {
+    const itemB = objectB.find((item) => item.poolId === itemA.poolId);
+    return {
+      ...itemA,
+      ...itemB, // fusionne les propriétés de itemB dans itemA
+    };
+  });
 };

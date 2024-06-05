@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import MetricCustom from "../MetricCustom";
 import CustomButton from "../CustomButton";
 import CustomTable from "../CustomTable";
+import { orderbookContract } from "../../contracts";
+import { ethers } from "ethers";
+import { useFetchLendOrder } from "../../hooks/useFetchLendOrder";
+import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
+import { mergeObjects } from "../GlobalFunctions";
 
 const Index = () => {
   const [collateralQuantity, setCollateralQuantity] = useState<number>(0);
@@ -12,41 +17,55 @@ const Index = () => {
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [showAll, setShowAll] = useState<boolean>(false);
+  const [provider, setProvider] =
+    useState<ethers.providers.Web3Provider | null>(null);
+  const [walletAddress, setWalletAddress] = useState<string>("");
+
+  //API
+  const { userInfo, userDeposits, userBorrows, loadingUser, errorUser } =
+    useFetchUserInfo(provider, walletAddress);
+
+  const { data, loading, error } = useFetchLendOrder(
+    orderbookContract,
+    [1111111110, 1111111108, 1111111106]
+  );
 
   const customDataColumnsConfig = [
-    { key: "liquidationPrice", title: "Liquidation Price" },
+    { key: "buyPrice", title: "Liquidation Price" },
+    { key: "deposits", title: "Total Supply" },
     { key: "availableSupply", title: "Available Supply" },
-    { key: "borrowAPY", title: "Borrow APY" },
-    { key: "utilization", title: "Utilization" },
+    { key: "borrowingRate", title: "Borrow APY" },
+    { key: "utilizationRate", title: "Utilization" },
     { key: "myBorrowingPositions", title: "My Borrowing Positions" },
   ];
 
-  const customData = [
-    {
-      id: 1,
-      liquidationPrice: "3,400 USDC",
-      availableSupply: "10M USDC",
-      borrowAPY: "10.3%",
-      utilization: "95%",
-      myBorrowingPositions: "",
-    },
-    {
-      id: 2,
-      liquidationPrice: "3,200 USDC",
-      availableSupply: "8.2M USDC",
-      borrowAPY: "7.8%",
-      utilization: "90%",
-      myBorrowingPositions: "7000 USDC",
-    },
-    {
-      id: 3,
-      liquidationPrice: "3,000 USDC",
-      availableSupply: "8.0M USDC",
-      borrowAPY: "7.0%",
-      utilization: "50%",
-      myBorrowingPositions: "",
-    },
-  ];
+  const mergedData = mergeObjects(data, userBorrows);
+
+  const displayedData = showAll ? mergedData : mergedData.slice(0, 3);
+
+  useEffect(() => {
+    const initProvider = () => {
+      if (window.ethereum) {
+        const providerTemp = new ethers.providers.Web3Provider(window.ethereum);
+        setProvider(providerTemp);
+        providerTemp
+          .getSigner()
+          .getAddress()
+          .then(setWalletAddress)
+          .catch(console.error);
+      } else {
+        console.error("Please install MetaMask!");
+      }
+    };
+
+    initProvider();
+  }, []);
+
+  useEffect(() => {
+    if (!loading && !error && data) {
+      console.log("Fetched data:", data);
+    }
+  }, [data, loading, error]);
 
   const updateButtonClickable = (
     collateralQuantity: number,
@@ -88,8 +107,6 @@ const Index = () => {
     setShowAll(!showAll);
   };
 
-  const displayedData = showAll ? customData : customData.slice(0, 3);
-
   return (
     <div className="mt-20 ml-72 mr-4">
       <Card
@@ -121,7 +138,7 @@ const Index = () => {
                   data={[
                     {
                       title: "Excess collateral",
-                      value: "0.125",
+                      value: userInfo.excessCollateral,
                       unit: "WETH",
                     },
                   ]}
@@ -168,6 +185,17 @@ const Index = () => {
           </div>
 
           <div className="flex mt-10"></div>
+          {/*<div>
+            {Object.entries(userBorrows).map(([key, value]) => (
+              <div key={key}>
+                <h3>{key}</h3>
+                <p>orderId: {value.orderId}</p>
+                <p>poolId: {value.poolId}</p>
+                <p>borrower: {value.borrower}</p>
+                <p>quantity: {value.myBorrowingPositions}</p>
+              </div>
+            ))}
+          </div>*/}
         </Box>
       </Card>
     </div>
