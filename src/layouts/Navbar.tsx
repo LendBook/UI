@@ -9,6 +9,8 @@ import { useWeb3Modal } from "@web3modal/react";
 import { useAccount, useDisconnect, useSwitchNetwork, useNetwork } from "wagmi";
 import { usePriceOracle } from "../hooks/usePriceOracle";
 import { formatNumber } from "../components/GlobalFunctions";
+import AmountCustom from "../components/AmountCustom";
+import CustomButton from "../components/CustomButton";
 
 export default function Navbar() {
   const { open } = useWeb3Modal();
@@ -34,6 +36,30 @@ export default function Navbar() {
 
   const { price, loading, error } = usePriceOracle();
 
+  //oracle update :
+  const [buttonClickable, setButtonClickable] = useState<boolean>(false);
+  const [updatedOraclePrice, setUpdatedOraclePrice] = useState<number>(0);
+  const handleOraclePriceChange = (newPrice: string) => {
+    setUpdatedOraclePrice(parseFloat(newPrice));
+    updateButtonPriceClickable(parseFloat(newPrice));
+  };
+  const updateButtonPriceClickable = (newPrice: number) => {
+    if (price) {
+      if (newPrice === 0 || isNaN(newPrice)) {
+        setButtonClickable(false);
+      } else {
+        setButtonClickable(false);
+        if (newPrice !== parseFloat(formatNumber(price))) {
+          setButtonClickable(true);
+        }
+      }
+    }
+  };
+  const handleButtonClick = () => {
+    //setMessage("Button clicked!");
+    console.log("clicked");
+  };
+
   return (
     <nav
       className="bg-white text-black w-full fixed top-0 left-0 z-30 shadow-md"
@@ -47,33 +73,55 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {tokenPair && (
-            <div className="flex-grow text-center flex flex-col items-center justify-center">
-              <div className="flex items-center ">
-                <img
-                  src={tokenPair.logourlA}
-                  alt="WETH Logo"
-                  className="h-4 w-4 mr-1"
-                />
-                <span className="text-info font-medium">
-                  {tokenPair.tokenA} /
-                </span>
-                <img
-                  src={tokenPair.logourlB}
-                  alt="USDC Logo"
-                  className="h-4 w-4 ml-1 mr-1"
-                />
-                <span className="text-info font-medium">
+          <div className="flex">
+            {tokenPair && (
+              <div className="flex-grow text-center flex flex-col items-center justify-center">
+                <div className="flex items-center ">
+                  <img
+                    src={tokenPair.logourlA}
+                    alt="WETH Logo"
+                    className="h-4 w-4 mr-1"
+                  />
+                  <span className="text-info font-medium">
+                    {tokenPair.tokenA} /
+                  </span>
+                  <img
+                    src={tokenPair.logourlB}
+                    alt="USDC Logo"
+                    className="h-4 w-4 ml-1 mr-1"
+                  />
+                  <span className="text-info font-medium">
+                    {tokenPair.tokenB.trim()}
+                  </span>
+                </div>
+                <span className="text-info text-sm font-medium mt-1">
+                  Oracle Price : 1 {tokenPair.tokenA} ={" "}
+                  {loading ? "Loading..." : price ? formatNumber(price) : "0"}{" "}
                   {tokenPair.tokenB.trim()}
                 </span>
               </div>
-              <span className="text-info text-sm font-medium mt-1">
-                Oracle Price : 1 {tokenPair.tokenA} ={" "}
-                {loading ? "Loading..." : price ? formatNumber(price) : "0"}{" "}
-                {tokenPair.tokenB.trim()}
-              </span>
+            )}
+            <div
+              className="flex items-center"
+              style={{ transform: "scale(0.7)" }}
+            >
+              <AmountCustom
+                title="New oracle price"
+                tokenWalletBalance=""
+                selectedToken="USDC"
+                ratioToUSD={0}
+                onQuantityChange={handleOraclePriceChange}
+              />
+              <div className="ml-5">
+                <CustomButton
+                  clickable={buttonClickable}
+                  handleClick={handleButtonClick}
+                  textClickable="Update Oracle Price"
+                  textNotClickable="Update Oracle Price"
+                />
+              </div>
             </div>
-          )}
+          </div>
 
           <div className="flex items-center">
             <div className="flex-shrink-0 mr-4">

@@ -155,7 +155,9 @@ export default function AmountCustom({
         />
       </Paper>
       <div className="flex justify-between items-center">
-        <span className="text-dark text-[12px]">{message}</span>
+        {ratioToUSD !== 0 && (
+          <span className="text-dark text-[12px]">{message}</span>
+        )}
         <div className="flex items-center">
           {tokenWalletBalance !== "" && (
             <button
