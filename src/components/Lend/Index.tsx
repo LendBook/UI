@@ -9,7 +9,7 @@ import { orderbookContract } from "../../contracts";
 import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
 import { ethers } from "ethers";
 import TransactionSummary from "../TransactionSummary";
-import { formatNumber } from "../GlobalFunctions";
+import { formatNumber, mergeObjects } from "../GlobalFunctions";
 
 const Index = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -22,21 +22,25 @@ const Index = () => {
     useState<ethers.providers.Web3Provider | null>(null);
   const [walletAddress, setWalletAddress] = useState<string>("");
 
-  const { userInfo, loadingUser, errorUser } = useFetchUserInfo(
-    provider,
-    walletAddress
-  );
+  const { userInfo, userDeposits, userBorrows, loadingUser, errorUser } =
+    useFetchUserInfo(provider, walletAddress);
+
   const { data, loading, error } = useFetchLendOrder(
     orderbookContract,
     [1111111110, 1111111108, 1111111106]
   );
+
   const dataColumnsConfig = [
-    { key: "buyPrice", title: "Buy Price" },
-    { key: "totalSupply", title: "Total Supply" },
-    { key: "netAPY", title: "Net APY" },
-    { key: "utilization", title: "Utilization" },
-    { key: "mySupply", title: "My Supply" },
+    { key: "buyPrice", title: "Buy Price", metric: "USDC" },
+    { key: "deposits", title: "Total Supply", metric: "USDC" },
+    { key: "lendingRate", title: "Net APY", metric: "%" },
+    { key: "utilizationRate", title: "Utilization", metric: "%" },
+    { key: "mySupply", title: "My Supply", metric: "USDC" },
   ];
+
+  const mergedData = mergeObjects(data, userDeposits);
+
+  const displayedData = showAll ? mergedData : mergedData.slice(0, 3);
 
   useEffect(() => {
     const initProvider = () => {
@@ -82,7 +86,7 @@ const Index = () => {
   const handleRowClick = (rowData: any) => {
     const newBuyPrice = rowData.buyPrice;
     setBuyPrice(newBuyPrice);
-    const newPoolId = rowData.id;
+    const newPoolId = rowData.poolId;
     setPoolId(newPoolId);
     updateButtonClickable(supplyAmountQuantity, newBuyPrice, newPoolId);
   };
@@ -98,8 +102,6 @@ const Index = () => {
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography>Error: {error}</Typography>;
 
-  const displayedData = data; //showAll ? data : data.slice(0, 3);
-
   const transactionData = [
     {
       title: "Supplied Amount",
@@ -110,7 +112,7 @@ const Index = () => {
     },
     {
       title: "Selected buy price",
-      value: buyPrice,
+      value: formatNumber(buyPrice),
     },
   ];
 
@@ -145,7 +147,7 @@ const Index = () => {
                   data={[
                     {
                       title: "My amount already supplied",
-                      value: userInfo.totalDepositsWithQuote,
+                      value: userInfo.totalDepositsQuote,
                       unit: "USDC",
                     },
                   ]}
@@ -183,6 +185,20 @@ const Index = () => {
               {message}
             </span>
           </div> */}
+
+          {/*
+          <div>
+            {Object.entries(userDeposits).map(([key, value]) => (
+              <div key={key}>
+                <h3>{key}</h3>
+                <p>orderId: {value.orderId}</p>
+                <p>poolId: {value.poolId}</p>
+                <p>maker: {value.maker}</p>
+                <p>quantity: {value.mySupply}</p>
+              </div>
+            ))}
+          </div>
+          */}
         </Box>
       </Card>
     </div>

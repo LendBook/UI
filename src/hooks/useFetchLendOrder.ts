@@ -5,11 +5,14 @@ import { formatNumber } from "../components/GlobalFunctions";
 
 interface LendOrderData {
   id: number;
-  buyPrice: string;
-  totalSupply: string;
-  netAPY: string;
-  utilization: string;
-  mySupply: string;
+  poolId: number;
+  buyPrice: number;
+  deposits: number;
+  lendingRate: number;
+  borrowingRate: number;
+  utilizationRate: number;
+  borrows: number;
+  availableSupply: number;
   [key: string]: string | number;
 }
 
@@ -32,11 +35,11 @@ export const useFetchLendOrder = (
             axios.get(`/v1/request/viewLendingRate/${poolId}`),
             axios.get(`/v1/request/viewUtilizationRate/${poolId}`),
             axios.get(`/v1/request/limitPrice/${poolId}`),
-            "(To Be Done)",
+            axios.get(`/v1/request/viewBorrowingRate/${poolId}`),
           ]);
 
           const resultsAvailableAssets = apiResponses[0].data.result.split(",");
-          const availableAssets = parseFloat(
+          const deposits = parseFloat(
             ethers.utils.formatUnits(resultsAvailableAssets[0], "ether")
           );
           const lendingRate =
@@ -50,15 +53,25 @@ export const useFetchLendOrder = (
           const buyPrice = parseFloat(
             ethers.utils.formatUnits(apiResponses[3].data.result, "ether")
           );
-          const mySupply = apiResponses[4];
+          const borrowingRate = parseFloat(
+            ethers.utils.formatUnits(apiResponses[4].data.result, "ether")
+          );
+          const borrows = parseFloat(
+            ethers.utils.formatUnits(resultsAvailableAssets[1], "ether")
+          );
 
           return {
             id: poolId,
-            buyPrice: `${formatNumber(buyPrice)} USDC`,
-            totalSupply: `${formatNumber(availableAssets)} USDC`,
-            netAPY: `${formatNumber(lendingRate)}%`,
-            utilization: `${utilizationRate.toFixed(2)}%`,
-            mySupply: `${mySupply} USDC`,
+            poolId: poolId,
+            buyPrice: buyPrice, //`${formatNumber(buyPrice)} USDC`,
+            deposits: deposits, //`${formatNumber(availableAssets)} USDC`,
+            lendingRate: lendingRate, //`${formatNumber(lendingRate)}%`,
+            borrowingRate: borrowingRate,
+            utilizationRate: utilizationRate, //`${utilizationRate.toFixed(2)}%`,
+            mySupply: 0,
+            myBorrowingPositions: 0,
+            borrows: borrows,
+            availableSupply: deposits - borrows,
           };
         })
       );

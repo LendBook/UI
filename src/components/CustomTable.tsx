@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import theme from "../theme";
+import { formatNumber } from "../components/GlobalFunctions";
 
 // Type générique pour une ligne de données
 type RowData<T extends string | number> = Record<T, string | number> & {
@@ -22,6 +23,7 @@ type TableProps<T extends string | number> = {
   columnsConfig: {
     key: T;
     title: string;
+    metric?: string;
     isButton?: boolean;
     onButtonClick?: (id: number) => void;
   }[];
@@ -133,7 +135,8 @@ export default function CustomTable<T extends string | number>({
                       >
                         {columns.map((column, colIndex) => (
                           <StyledTableCell key={colIndex} align="left">
-                            {row[column as keyof RowData<T>]}
+                            {formatNumber(row[column as keyof RowData<T>])}{" "}
+                            {columnsConfig[colIndex].metric}
                           </StyledTableCell>
                         ))}
                       </HoverTableRow>
@@ -162,10 +165,10 @@ export default function CustomTable<T extends string | number>({
                               </StyledTableCell>
                             );
                           } else {
-                            // Si la colonne est une colonne de texte normale
                             return (
                               <StyledTableCell key={colIndex} align="left">
-                                {row[column as keyof RowData<T>]}
+                                {formatNumber(row[column as keyof RowData<T>])}{" "}
+                                {columnsConfig[colIndex].metric}
                               </StyledTableCell>
                             );
                           }

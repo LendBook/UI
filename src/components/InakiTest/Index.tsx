@@ -1,59 +1,47 @@
-import Orderbook from "../Orderbook/Orderbook";
-import { OrderProvider } from "../Orderbook/OrderContext";
-import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
-import AmountCustom from "../AmountCustom";
-import { useState } from "react";
-import MetricCustom from "../MetricCustom";
-import CustomButton from "../CustomButton";
-import TabsCustom from "../TabsCustom";
-import CustomTable from "../CustomTable";
-import TransactionSummary from "../TransactionSummary";
+import { Box, Card, Typography } from "@mui/material";
+import { BarChart } from "@mui/x-charts/BarChart";
+import { axisClasses } from "@mui/x-charts/ChartsAxis";
 
-const templateDataTableColumnsConfig = [
-  { key: "dataA", title: "Data A" },
-  { key: "dataB", title: "Data B" },
-  { key: "dataC", title: "Data C" },
-];
-
-const templateDataTable = [
+const dataset = [
   {
-    id: 1,
-    dataA: "1000 USDC",
-    dataB: "1500 USDC",
-    dataC: "2500 USDC",
+    poolId: 999,
+    limitPrice: 4000,
+    deposits: 10000,
+    borrows: 7000,
   },
   {
-    id: 2,
-    dataA: "2000 USDC",
-    dataB: "2500 USDC",
-    dataC: "2500 USDC",
+    poolId: 997,
+    limitPrice: 3800,
+    deposits: 10000,
+    borrows: 7000,
   },
   {
-    id: 3,
-    dataA: "3000 USDC",
-    dataB: "3500 USDC",
-    dataC: "2500 USDC",
+    poolId: 995,
+    limitPrice: 3600,
+    deposits: 20000,
+    borrows: 7000,
   },
 ];
+// Trier le dataset par ordre croissant de limitPrice
+const sortedDataset = dataset.sort((a, b) => a.limitPrice - b.limitPrice);
 
-const transactionData = [
-  {
-    title: "Supplied Amount",
-    value: "2000",
-    unit: "USDC",
-  },
-  {
-    title: "Selected buy price",
-    value: "6000",
-    unit: "USDC",
-  },
-];
+const valueFormatter = (value: number | null) => `${value}mm`;
 
-const handleRowClick = (rowData: any) => {
-  console.log(rowData);
-  console.log(templateDataTable);
-  const newBuyPrice = rowData.dataA;
-  const newPoolId = rowData.id;
+const chartSetting = {
+  yAxis: [
+    {
+      min: 0,
+      max: 60000,
+      tickLabel: null,
+    },
+  ],
+  width: 1000,
+  height: 300,
+  sx: {
+    [`.${axisClasses.left} .${axisClasses.label}`]: {
+      transform: "translate(-20px, 0)",
+    },
+  },
 };
 
 const Index = () => {
@@ -74,22 +62,23 @@ const Index = () => {
               Inaki Test
             </Typography>
             <div className="flex mt-10">
-              <div className="container">
-                <TabsCustom labels={["As Lender", "As Borrower"]} />
-              </div>
-            </div>
-            <div className="flex mt-10">
-              <CustomTable
-                title="Select a Buy Price"
-                columnsConfig={templateDataTableColumnsConfig}
-                data={templateDataTable}
-                clickableRows={true}
-                onRowClick={handleRowClick}
+              <BarChart
+                dataset={sortedDataset}
+                xAxis={[{ scaleType: "band", dataKey: "limitPrice" }]}
+                series={[
+                  {
+                    dataKey: "deposits",
+                    label: "Deposits",
+                    valueFormatter,
+                  },
+                  {
+                    dataKey: "borrows",
+                    label: "Borrows",
+                    valueFormatter,
+                  },
+                ]}
+                {...chartSetting}
               />
-            </div>
-
-            <div className="flex mt-10">
-              <TransactionSummary data={transactionData} />
             </div>
           </div>
         </Box>
