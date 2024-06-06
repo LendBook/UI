@@ -49,10 +49,9 @@ const chartSetting = {
 };
 
 const Index = () => {
-  const { data, loading, error } = useFetchLendOrder(
-    orderbookContract,
-    [1111111110, 1111111108, 1111111106]
-  );
+  const { data, loading, error } = useFetchLendOrder([
+    1111111110, 1111111108, 1111111106,
+  ]);
   const dataColumnsConfig = [
     { key: "buyPrice", title: "Buy Price", metric: "USDC" },
     { key: "deposits", title: "Total Supply", metric: "USDC" },
