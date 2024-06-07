@@ -7,6 +7,7 @@ import CustomButton from "../CustomButton";
 import { useFetchLendOrder } from "../../hooks/useFetchLendOrder";
 import { orderbookContract } from "../../contracts";
 import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
+import { useFetchPriceForEmptyPools } from "../../hooks/useFetchPriceForEmptyPools";
 import { ethers } from "ethers";
 import TransactionSummary from "../TransactionSummary";
 import { formatNumber, mergeObjects } from "../GlobalFunctions";
@@ -25,10 +26,14 @@ const Index = () => {
   const { userInfo, userDeposits, userBorrows, loadingUser, errorUser } =
     useFetchUserInfo(provider, walletAddress);
 
-  const { data, loading, error } = useFetchLendOrder(
-    orderbookContract,
-    [1111111110, 1111111108, 1111111106]
-  );
+  const { pricePoolId, pricePoolIdLoading, pricePoolIdError } =
+    useFetchPriceForEmptyPools();
+
+  const poolIds = pricePoolId.map((item) => item.poolId);
+  console.log(`poolIds : ${poolIds}`);
+  const { data, loading, error } = useFetchLendOrder([
+    1111111110, 1111111108, 1111111106,
+  ]); // useFetchLendOrder(poolIds); TODO mettre ça a la place quand on n'a plus de prblm d'api
 
   const dataColumnsConfig = [
     { key: "buyPrice", title: "Buy Price", metric: "USDC" },
@@ -38,7 +43,8 @@ const Index = () => {
     { key: "mySupply", title: "My Supply", metric: "USDC" },
   ];
 
-  const mergedData = mergeObjects(data, userDeposits);
+  let mergedData = mergeObjects(data, userDeposits);
+  mergedData = mergeObjects(mergedData, pricePoolId);
 
   const displayedData = showAll ? mergedData : mergedData.slice(0, 3);
 
@@ -185,7 +191,6 @@ const Index = () => {
               {message}
             </span>
           </div> */}
-
           {/*
           <div>
             {Object.entries(userDeposits).map(([key, value]) => (
@@ -199,6 +204,15 @@ const Index = () => {
             ))}
           </div>
           */}
+          {/* <div>
+            {Object.entries(pricePoolId).map(([key, value]) => (
+              <div key={key}>
+                <h3>{key}</h3>
+                <p>poolId: {value.poolId}</p>
+                <p>buyPrice: {value.buyPrice}</p>
+              </div>
+            ))}
+          </div> */}
         </Box>
       </Card>
     </div>

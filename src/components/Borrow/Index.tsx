@@ -25,10 +25,9 @@ const Index = () => {
   const { userInfo, userDeposits, userBorrows, loadingUser, errorUser } =
     useFetchUserInfo(provider, walletAddress);
 
-  const { data, loading, error } = useFetchLendOrder(
-    orderbookContract,
-    [1111111110, 1111111108, 1111111106]
-  );
+  const { data, loading, error } = useFetchLendOrder([
+    1111111110, 1111111108, 1111111106,
+  ]);
 
   const customDataColumnsConfig = [
     { key: "buyPrice", title: "Liquidation Price" },

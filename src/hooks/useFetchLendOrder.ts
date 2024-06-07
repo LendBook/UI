@@ -16,10 +16,7 @@ interface LendOrderData {
   [key: string]: string | number;
 }
 
-export const useFetchLendOrder = (
-  contract: ethers.Contract,
-  poolIds: number[]
-) => {
+export const useFetchLendOrder = (poolIds: number[]) => {
   const [data, setData] = useState<LendOrderData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
@@ -29,6 +26,7 @@ export const useFetchLendOrder = (
       const genesisPoolId = 1111111110;
       const results = await Promise.all(
         poolIds.map(async (poolId) => {
+          console.log(`poolIdspoolIds ${poolId}`);
           // Fetch data from the API
           const apiResponses = await Promise.all([
             axios.get(`/v1/request/pools/${poolId}`),
@@ -59,6 +57,7 @@ export const useFetchLendOrder = (
           const borrows = parseFloat(
             ethers.utils.formatUnits(resultsAvailableAssets[1], "ether")
           );
+          console.log(`poolIdspoolIdslendingRate ${lendingRate}`);
 
           return {
             id: poolId,

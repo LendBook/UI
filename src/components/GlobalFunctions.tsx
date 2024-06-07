@@ -16,6 +16,10 @@ export const formatNumber = (num: string | number): string => {
   }
 };
 
+// /////////////////////////////////////////////////////////////
+// function used to update some elements inside an object
+// /////////////////////////////////////////////////////////////
+
 interface ObjectWithId {
   id: number;
   [key: string]: string | number; // Utiliser 'any' pour permettre n'importe quel type de valeur
