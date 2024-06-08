@@ -1,7 +1,6 @@
 import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import BigNumber from 'bignumber.js';
-import { useEthersSigner } from "./hooks/useEthersSigner";
 import { Web3Modal } from "@web3modal/react";
 import { mainnet, bsc, bscTestnet, fantomTestnet } from "wagmi/chains";
 import { blast } from "./utils/blastTestnet";
@@ -10,10 +9,10 @@ import { ToastContainer } from "react-toastify";
 import { EthereumClient, w3mConnectors, w3mProvider } from "@web3modal/ethereum";
 import { NotificationContainer } from "react-notifications";
 import "react-notifications/lib/notifications.css";
-import Loading from "./components/Loading";
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/index';
 import LandingLayout from "./layouts/landinglayout";
+import Loading from "./components/Loading";
 
 // Import components
 const Home = lazy(() => import('./components/Markets/Markets'));
@@ -28,14 +27,13 @@ const InakiTest = lazy(() => import('./components/InakiTest/Index'));
 const Lend = lazy(() => import('./components/Lend/Index'));
 const Template = lazy(() => import('./components/Template/Index'));
 
-// This config is required for number formatting
 BigNumber.config({
   EXPONENTIAL_AT: 1000,
   DECIMAL_PLACES: 80,
 });
 
 const projectId = process.env.REACT_APP_CONNECT_PROJECT_ID || "";
-const chains = [mainnet, bsc, bscTestnet, fantomTestnet, blast];
+const chains = [mainnet, bsc, blast];
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 const wagmiConfig = createConfig({
   autoConnect: true,
@@ -45,13 +43,7 @@ const wagmiConfig = createConfig({
 const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
 const App = () => {
-  const { account, connect } = useEthersSigner();
-
-  useEffect(() => {
-    if (!account && window.localStorage.getItem('accountStatus')) {
-      connect();
-    }
-  }, [account, connect]);
+  
 
   return (
     <ThemeProvider theme={theme}>
