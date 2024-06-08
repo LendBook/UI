@@ -1,29 +1,24 @@
-import { useCallback } from "react";
 import { ethers } from "ethers";
 import { orderbookContract } from "../contracts";
-import { useEthersSigner } from "../contracts/index";
 import { NotificationManager } from "react-notifications";
+import { useEthersSigner } from "../contracts/index";
 
-export const useIncreaseSizeBorrow = () => {
+export const useTakeBaseTokens = () => {
   const signer = useEthersSigner();
 
-  return useCallback(async (orderId: any, size: string) => {
+  return async (poolId: number, quantity: string) => {
     if (!signer || !orderbookContract) return;
-
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .take(orderId, ethers.utils.parseUnits(size, 18));
+        .takeBaseTokens(poolId, ethers.utils.parseUnits(quantity.toString(), 18));
       await tx.wait();
-
-      NotificationManager.success("Increase Size BorrowModule successful!");
+      NotificationManager.success("Take Base Tokens successful!");
     } catch (error: any) {
       if (error["code"] === "ACTION_REJECTED")
         NotificationManager.error("User rejected the transaction.");
       else NotificationManager.error("Error: " + error);
       console.log("error ----------->", error["code"]);
     }
-  }, []);
+  };
 };
-
-export default useIncreaseSizeBorrow;

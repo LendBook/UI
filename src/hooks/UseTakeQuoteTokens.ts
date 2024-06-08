@@ -3,17 +3,17 @@ import { orderbookContract } from "../contracts";
 import { NotificationManager } from "react-notifications";
 import { useEthersSigner } from "../contracts/index";
 
-export const useRepay = () => {
+export const useTakeQuoteTokens = () => {
   const signer = useEthersSigner();
 
-  return async (positionId: number, quantity: string) => {
+  return async (poolId: number, quantity: string) => {
     if (!signer || !orderbookContract) return;
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .repay(positionId, ethers.utils.parseUnits(quantity.toString(), 18));
+        .takeQuoteTokens(poolId, ethers.utils.parseUnits(quantity.toString(), 18));
       await tx.wait();
-      NotificationManager.success("Repay successful!");
+      NotificationManager.success("Take Quote Tokens successful!");
     } catch (error: any) {
       if (error["code"] === "ACTION_REJECTED")
         NotificationManager.error("User rejected the transaction.");

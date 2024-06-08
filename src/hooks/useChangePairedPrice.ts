@@ -1,19 +1,17 @@
-import { useCallback } from "react";
 import { ethers } from "ethers";
 import { orderbookContract } from "../contracts";
 import { NotificationManager } from "react-notifications";
 import { useEthersSigner } from "../contracts/index";
 
-const useChangePairedPrice = () => {
+export const useChangePairedPrice = () => {
   const signer = useEthersSigner();
-  return useCallback(async (orderId: any, pairedPrice: string) => {
-    if (!signer || !orderbookContract) return;
 
+  return async (orderId: number, newPairedPoolId: number) => {
+    if (!signer || !orderbookContract) return;
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .changePairedPrice(orderId, ethers.utils.parseUnits(pairedPrice, 18));
-
+        .changePairedPrice(orderId, newPairedPoolId);
       await tx.wait();
       NotificationManager.success("Change Paired Price successful!");
     } catch (error: any) {
@@ -22,7 +20,5 @@ const useChangePairedPrice = () => {
       else NotificationManager.error("Error: " + error);
       console.log("error ----------->", error["code"]);
     }
-  }, []);
+  };
 };
-
-export default useChangePairedPrice;
