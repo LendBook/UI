@@ -11,7 +11,7 @@ export const useTakeQuoteTokens = () => {
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .takeQuoteTokens(poolId, ethers.utils.parseUnits(quantity.toString(), 18));
+        .takeQuoteTokens(poolId, ethers.utils.parseUnits(quantity, 18));
       await tx.wait();
       NotificationManager.success("Take Quote Tokens successful!");
     } catch (error: any) {

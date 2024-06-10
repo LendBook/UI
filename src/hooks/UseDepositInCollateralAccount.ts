@@ -11,7 +11,7 @@ export const useDepositInCollateralAccount = () => {
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .depositInCollateralAccount(ethers.utils.parseUnits(quantity.toString(), 18));
+        .depositInCollateralAccount(ethers.utils.parseUnits(quantity, 18));
       await tx.wait();
       NotificationManager.success("Deposit in Collateral Account successful!");
     } catch (error: any) {

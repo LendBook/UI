@@ -11,7 +11,7 @@ export const useLiquidateUser = () => {
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .liquidateUser(user, ethers.utils.parseUnits(quantity.toString(), 18));
+        .liquidateUser(user, ethers.utils.parseUnits(quantity, 18));
       await tx.wait();
       NotificationManager.success("Liquidate user successful!");
     } catch (error: any) {

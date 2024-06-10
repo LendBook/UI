@@ -11,7 +11,7 @@ export const useTakeBaseTokens = () => {
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .takeBaseTokens(poolId, ethers.utils.parseUnits(quantity.toString(), 18));
+        .takeBaseTokens(poolId, ethers.utils.parseUnits(quantity, 18));
       await tx.wait();
       NotificationManager.success("Take Base Tokens successful!");
     } catch (error: any) {

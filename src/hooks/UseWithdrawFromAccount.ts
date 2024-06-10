@@ -11,7 +11,7 @@ export const useWithdrawFromAccount = () => {
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .withdrawFromAccount(ethers.utils.parseUnits(quantity.toString(), 18), inQuote);
+        .withdrawFromAccount(ethers.utils.parseUnits(quantity, 18), inQuote);
       await tx.wait();
       NotificationManager.success("Withdraw from Account successful!");
     } catch (error: any) {

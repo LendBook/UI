@@ -11,7 +11,7 @@ export const useDeposit = () => {
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .deposit(poolId, ethers.utils.parseUnits(quantity.toString(), 18), pairedPoolId);
+        .deposit(poolId, ethers.utils.parseUnits(quantity, 18), pairedPoolId);
       await tx.wait();
       NotificationManager.success("Deposit successful!");
     } catch (error: any) {

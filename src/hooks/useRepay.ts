@@ -11,7 +11,7 @@ export const useRepay = () => {
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .repay(positionId, ethers.utils.parseUnits(quantity.toString(), 18));
+        .repay(positionId, ethers.utils.parseUnits(quantity, 18));
       await tx.wait();
       NotificationManager.success("Repay successful!");
     } catch (error: any) {
