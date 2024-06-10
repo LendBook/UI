@@ -3,17 +3,17 @@ import { orderbookContract } from "../contracts";
 import { NotificationManager } from "react-notifications";
 import { useEthersSigner } from "../contracts/index";
 
-export const useLiquidateBorrower = () => {
+export const useLiquidateUser = () => {
   const signer = useEthersSigner();
 
-  return async (borrower: string, quantity: string) => {
+  return async (user: string, quantity: string) => {
     if (!signer || !orderbookContract) return;
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .liquidateBorrower(borrower, ethers.utils.parseUnits(quantity.toString(), 18));
+        .liquidateUser(user, ethers.utils.parseUnits(quantity.toString(), 18));
       await tx.wait();
-      NotificationManager.success("Liquidate Borrower successful!");
+      NotificationManager.success("Liquidate user successful!");
     } catch (error: any) {
       if (error["code"] === "ACTION_REJECTED")
         NotificationManager.error("User rejected the transaction.");
