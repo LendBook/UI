@@ -1,7 +1,9 @@
+import React from 'react';
+
 export default function Loading() {
   return (
-    <div className="fixed inset-0 !z-[9999]">
-      <div className="w-screen h-screen bg-[#191b1f] flex flex-col gap-1 items-center justify-center bg-opacity-90">
+    <div className="fixed inset-0 flex items-center justify-center !z-[9999]">
+      <div className="flex flex-col items-center">
         <svg
           aria-hidden="true"
           className="inline w-14 h-14 mr-2 text-gray-900 animate-spin fill-blue-600"
@@ -18,7 +20,7 @@ export default function Loading() {
             fill="currentFill"
           />
         </svg>
-        <p className="text-white text-lg">Loading...</p>
+        <p className="text-gray-900 text-lg">Loading...</p>
       </div>
     </div>
   );
