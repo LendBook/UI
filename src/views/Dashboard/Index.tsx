@@ -1,6 +1,6 @@
 import { Box, Card, Typography } from "@mui/material";
 import { useState } from "react";
-import TabsCustom from "../TabsCustom";
+import TabsCustom from "../../components/TabsCustom";
 import AsLender from "./AsLender";
 import AsBorrower from "./AsBorrower";
 

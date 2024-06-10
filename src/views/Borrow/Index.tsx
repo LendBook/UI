@@ -1,14 +1,14 @@
-import { Box, Card, Typography, Button } from "@mui/material";
-import AmountCustom from "../AmountCustom";
+import { Box, Card, Typography, Button, Skeleton } from "@mui/material";
+import AmountCustom from "../../components/AmountCustom";
 import { useEffect, useState } from "react";
-import MetricCustom from "../MetricCustom";
-import CustomButton from "../CustomButton";
-import CustomTable from "../CustomTable";
+import MetricCustom from "../../components/MetricCustom";
+import CustomButton from "../../components/CustomButton";
+import CustomTable from "../../components/CustomTable";
 import { orderbookContract } from "../../contracts";
 import { ethers } from "ethers";
 import { useFetchLendOrder } from "../../hooks/useFetchLendOrder";
 import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
-import { mergeObjects } from "../GlobalFunctions";
+import { mergeObjects } from "../../components/GlobalFunctions";
 
 const Index = () => {
   const [collateralQuantity, setCollateralQuantity] = useState<number>(0);
@@ -121,48 +121,58 @@ const Index = () => {
           <Typography variant="h3" color="black" fontWeight="bold">
             Borrow
           </Typography>
-          <div className="flex flex-col md-plus:flex-row space-between items-baseline mt-10 ">
-            <div className="container" style={{ marginBottom: "10px" }}>
-              <AmountCustom
-                title="Collateral Amount"
-                tokenWalletBalance="12.42"
-                selectedToken="WETH"
-                ratioToUSD={3010}
-                onQuantityChange={handleCollateralQuantityChange}
-              />
-            </div>
-            <div className="flex mt-10 md-plus:ml-10 md-plus:mt-0">
-              <div className="container">
-                <MetricCustom
-                  data={[
-                    {
-                      title: "Excess collateral",
-                      value: userInfo.excessCollateral,
-                      unit: "WETH",
-                    },
-                  ]}
+          {loadingUser ? (
+            <Skeleton variant="rectangular" width="100%" height={300} animation="wave" />
+          ) : (
+            <div>
+              <div className="flex flex-col md-plus:flex-row space-between items-baseline mt-10 ">
+                <div className="container" style={{ marginBottom: "10px" }}>
+                  <AmountCustom
+                    title="Collateral Amount"
+                    tokenWalletBalance="12.42"
+                    selectedToken="WETH"
+                    ratioToUSD={3010}
+                    onQuantityChange={handleCollateralQuantityChange}
+                  />
+                </div>
+                <div className="flex mt-10 md-plus:ml-10 md-plus:mt-0">
+                  <div className="container">
+                    <MetricCustom
+                      data={[
+                        {
+                          title: "Excess collateral",
+                          value: userInfo.excessCollateral,
+                          unit: "WETH",
+                        },
+                      ]}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="container" style={{ marginBottom: "10px" }}>
+                <AmountCustom
+                  title="Borrowed Amount"
+                  tokenWalletBalance="376"
+                  selectedToken="USDC"
+                  ratioToUSD={1.01}
+                  onQuantityChange={handleBorrowedQuantityChange}
                 />
               </div>
             </div>
-          </div>
-          <div className="container" style={{ marginBottom: "10px" }}>
-            <AmountCustom
-              title="Borrowed Amount"
-              tokenWalletBalance="376"
-              selectedToken="USDC"
-              ratioToUSD={1.01}
-              onQuantityChange={handleBorrowedQuantityChange}
-            />
-          </div>
+          )}
 
           <div className="flex mt-10">
-            <CustomTable
-              title="Select a Liquidation Price"
-              columnsConfig={customDataColumnsConfig}
-              data={displayedData}
-              clickableRows={true}
-              onRowClick={handleRowClick}
-            />
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={300} animation="wave" />
+            ) : (
+              <CustomTable
+                title="Select a Liquidation Price"
+                columnsConfig={customDataColumnsConfig}
+                data={displayedData}
+                clickableRows={true}
+                onRowClick={handleRowClick}
+              />
+            )}
           </div>
           <Button onClick={toggleShowAll}>
             {showAll ? "Show Less" : "Show More"}
@@ -178,9 +188,7 @@ const Index = () => {
             />
           </div>
           <div className="container">
-            <span className="text-success text-[12px] font-bold">
-              {message}
-            </span>
+            <span className="text-success text-[12px] font-bold">{message}</span>
           </div>
 
           <div className="flex mt-10"></div>

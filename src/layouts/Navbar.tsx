@@ -1,42 +1,18 @@
-import { useState, useEffect } from "react";
+// Navbar.tsx
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Icon } from "@iconify/react";
-import { Menu } from "@headlessui/react";
-import networks from "../config/testnet.json";
-import pairs from "../config/pairs.json";
 import logoImg from "../asserts/images/logo.png";
-import { useWeb3Modal } from "@web3modal/react";
-import { useAccount, useDisconnect, useSwitchNetwork, useNetwork } from "wagmi";
 import { usePriceOracle } from "../hooks/usePriceOracle";
 import { formatNumber } from "../components/GlobalFunctions";
-import AmountCustom from "../components/AmountCustom";
-import CustomButton from "../components/CustomButton";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useTheme } from "../context/ThemeContext";
+import { Switch } from "@headlessui/react";
 
 export default function Navbar() {
-  const { open } = useWeb3Modal();
-  const { address, isConnected } = useAccount();
-  const { disconnect } = useDisconnect();
-  const { switchNetwork } = useSwitchNetwork();
-  const { chain } = useNetwork();
-  const [currentNetwork, setCurrentNetwork] = useState(networks[0]);
+  const { price, loading } = usePriceOracle();
+  const { darkMode, toggleDarkMode } = useTheme();
 
-  useEffect(() => {
-    const network = networks.find((n) => n.chainID === chain?.id);
-    if (network) setCurrentNetwork(network);
-  }, [chain]);
-
-  const truncateAddress = (address: string | undefined) =>
-    address
-      ? `${address.substring(0, 6)}...${address.substring(address.length - 4)}`
-      : "";
-
-  const tokenPair = pairs.find(
-    (pair) => pair.tokenA === "WETH" && pair.tokenB.trim() === "USDC"
-  );
-
-  const { price, loading, error } = usePriceOracle();
-
-  //oracle update :
+  // Oracle update
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [updatedOraclePrice, setUpdatedOraclePrice] = useState<number>(0);
   const handleOraclePriceChange = (newPrice: string) => {
@@ -56,127 +32,53 @@ export default function Navbar() {
     }
   };
   const handleButtonClick = () => {
-    //setMessage("Button clicked!");
     console.log("clicked");
   };
 
   return (
-    <nav
-      className="bg-white text-black w-full fixed top-0 left-0 z-30 shadow-md"
-      style={{ zIndex: 9999 }}
-    >
+    <nav className={`w-full fixed top-0 left-0 z-30 shadow-md ${darkMode ? 'bg-black text-white' : 'bg-white text-black'}`}>
       <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4">
-        <div className="flex justify-between h-16 items-center">
-          <div className="flex-shrink-0">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex items-center">
             <Link to="/">
               <img className="h-10 w-auto" src={logoImg} alt="Logo" />
             </Link>
           </div>
 
-          <div className="flex">
-            {tokenPair && (
-              <div className="flex-grow text-center flex flex-col items-center justify-center">
-                <div className="flex items-center ">
-                  <img
-                    src={tokenPair.logourlA}
-                    alt="WETH Logo"
-                    className="h-4 w-4 mr-1"
-                  />
-                  <span className="text-info font-medium">
-                    {tokenPair.tokenA} /
-                  </span>
-                  <img
-                    src={tokenPair.logourlB}
-                    alt="USDC Logo"
-                    className="h-4 w-4 ml-1 mr-1"
-                  />
-                  <span className="text-info font-medium">
-                    {tokenPair.tokenB.trim()}
-                  </span>
-                </div>
-                <span className="text-info text-sm font-medium mt-1">
-                  Oracle Price : 1 {tokenPair.tokenA} ={" "}
-                  {loading ? "Loading..." : price ? formatNumber(price) : "0"}{" "}
-                  {tokenPair.tokenB.trim()}
-                </span>
-              </div>
-            )}
-            <div
-              className="flex items-center"
-              style={{ transform: "scale(0.7)" }}
+          <div className="flex items-center flex-grow justify-center">
+            <span className={`text-info text-sm font-medium ${darkMode ? 'text-white' : 'text-black'}`}>
+              Oracle Price: 1 WETH = {loading ? "Loading..." : price ? formatNumber(price) : "0"} USDC
+            </span>
+            <input
+              type="number"
+              placeholder="Enter amount"
+              value={updatedOraclePrice}
+              onChange={(e) => handleOraclePriceChange(e.target.value)}
+              className={`ml-4 p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
+              style={{ width: '200px', height: '40px' }}
+            />
+            <button
+              onClick={handleButtonClick}
+              disabled={!buttonClickable}
+              className={`ml-2 p-2 border border-gray-300 rounded ${buttonClickable ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-500'}`}
+              style={{ height: '40px' }}
             >
-              <AmountCustom
-                title="New oracle price"
-                tokenWalletBalance=""
-                selectedToken="USDC"
-                ratioToUSD={0}
-                onQuantityChange={handleOraclePriceChange}
-              />
-              <div className="ml-5">
-                <CustomButton
-                  clickable={buttonClickable}
-                  handleClick={handleButtonClick}
-                  textClickable="Update Oracle Price"
-                  textNotClickable="Update Oracle Price"
-                />
-              </div>
-            </div>
+              Update
+            </button>
           </div>
 
-          <div className="flex items-center">
-            <div className="flex-shrink-0 mr-4">
-              <button
-                onClick={() => (isConnected ? disconnect() : open())}
-                className="inline-flex items-center px-4 py-2 border border-bgBtn text-sm font-medium rounded-md text-white bg-bgBtn hover:bg-bgBtnHover"
-              >
-                {isConnected ? truncateAddress(address) : "Connect Wallet"}
-              </button>
-            </div>
-            <div className="relative">
-              <Menu as="div" className="ml-4 text-left">
-                <div>
-                  <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-gray-100 rounded-md border border-primary hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                    <img
-                      src={currentNetwork.logourl}
-                      className="h-5 w-5 mr-2"
-                      alt="Network Logo"
-                    />
-                    <Icon
-                      icon="heroicons-solid:chevron-down"
-                      className="h-5 w-5"
-                      aria-hidden="true"
-                    />
-                  </Menu.Button>
-                </div>
-                <Menu.Items className="origin-top-right absolute right-0 mt-2 w-20 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="py-1">
-                    {networks.map((network) => (
-                      <Menu.Item key={network.chainID}>
-                        {({ active }) => (
-                          <button
-                            onClick={() => {
-                              if (switchNetwork) {
-                                switchNetwork(network.chainID);
-                                setCurrentNetwork(network);
-                              }
-                            }}
-                            className={`${
-                              active ? "bg-gray-100" : "text-gray-900"
-                            } flex justify-center w-full px-4 py-2 text-sm text-gray-900`}
-                          >
-                            <img
-                              src={network.logourl}
-                              alt={network.Name}
-                              className="h-5 w-5"
-                            />
-                          </button>
-                        )}
-                      </Menu.Item>
-                    ))}
-                  </div>
-                </Menu.Items>
-              </Menu>
-            </div>
+          <div className="flex items-center space-x-4">
+            <Switch
+              checked={darkMode}
+              onChange={toggleDarkMode}
+              className={`${darkMode ? 'bg-gray-700' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full border-2 border-white`}
+            >
+              <span className="sr-only">Enable dark mode</span>
+              <span
+                className={`${darkMode ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition`}
+              />
+            </Switch>
+            <ConnectButton />
           </div>
         </div>
       </div>

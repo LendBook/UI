@@ -1,10 +1,10 @@
 import { Box, Card, IconButton, Typography, styled } from "@mui/material";
-import AmountCustom from "../AmountCustom";
+import AmountCustom from "../../components/AmountCustom";
 import { useState } from "react";
 import SwapVertRoundedIcon from "@mui/icons-material/SwapVertRounded";
-import CustomButton from "../CustomButton";
-import TransactionSummary from "../TransactionSummary";
-import { formatNumber } from "../GlobalFunctions";
+import CustomButton from "../../components/CustomButton";
+import TransactionSummary from "../../components/TransactionSummary";
+import { formatNumber } from "../../components/GlobalFunctions";
 
 const Index = () => {
   const oraclePrice = 4000;
