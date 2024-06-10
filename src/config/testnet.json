@@ -1,0 +1,16 @@
+[
+  {
+    "chainID": 23888,
+    "RpcUrl": "http://testnet-rpc.blastblockchain.com",
+    "Name": "Blast",
+    "Explorer": "https://blastscan.io/",
+    "logourl": "https://raw.githubusercontent.com/LendBook/lendbook-images/main/networks/Blast.svg"
+  },
+  {
+    "chainID": 11155111,
+    "RpcUrl": "https://ethereum-sepolia-rpc.publicnode.com",
+    "Name": "Sepolia",
+    "Explorer": "https://sepolia.etherscan.io/",
+    "logourl": "https://raw.githubusercontent.com/LendBook/lendbook-images/main/networks/Ethereum.svg"
+  }
+]

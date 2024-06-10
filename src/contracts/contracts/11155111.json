@@ -1,6 +1,6 @@
 {
   "orderbook": {
-    "address": "0x6594A8eb1faE6C2Ea173D13fb7E9D56659F35864",
+    "address": "0xebC35802D0A2D210dF744850e4490E424d53bF04",
     "abi": [
       {
         "type": "constructor",
@@ -986,7 +986,7 @@
     ]
   },
   "usdc": {
-    "address": "0x4d9190d9C405F322DAE52565F7559B5F73c1B54a",
+    "address": "0xb1aea92d4bf0bfbc2c5ba679a2819efefc998ceb",
     "abi": [
       {
         "inputs": [],
@@ -1532,7 +1532,7 @@
     ]
   },
   "weth": {
-    "address": "0x3C8fcEe4800D9d670773292acabba06E8FE25D5a",
+    "address": "0x25b8e42bdFC4cf8268B56B049d5C730762035407",
     "abi": [
       {
         "inputs": [],

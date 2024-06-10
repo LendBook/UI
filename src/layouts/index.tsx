@@ -1,12 +1,12 @@
+// src/layouts/LandingLayout.tsx
+
 import { lazy, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Outlet } from "react-router-dom";
-// ---------------------------------------------------------------------------------------
 
 const Navbar = lazy(() => import("./Navbar"));
+const MenuBar = lazy(() => import("./MenuBar"));
 const Footer = lazy(() => import("./Footer"));
-
-// ---------------------------------------------------------------------------------------
 
 export default function LandingLayout() {
   const isMobile = useMediaQuery({ maxWidth: 480 });
@@ -18,12 +18,20 @@ export default function LandingLayout() {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <div>
-          <Outlet />
+      <Navbar /> {/* Navbar first, covering the full width at the top */}
+      <div className="min-h-screen flex flex-row relative">
+        <MenuBar /> {/* MenuBar on the left under the Navbar */}
+        <div
+          className="flex flex-col flex-grow"
+          style={{
+            //minWidth: "500px",
+            overflowX: "auto",
+          }}
+        >
+          <main className="flex-grow">
+            <Outlet /> {/* Dynamic content rendered here */}
+          </main>
         </div>
-        {/*<Footer />*/}
       </div>
     </>
   );

@@ -2,6 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## to launch the dapp locally
+
+```
+nvm use 16.18.0
+yarn install
+yarn start
+```
+
 ## Available Scripts
 
 In the project directory, you can run:

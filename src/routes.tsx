@@ -8,9 +8,13 @@ const Borrow = lazy(() => import("./components/Borrow/Index"));
 const Trade = lazy(() => import("./components/Trade/Index"));
 const Deposit = lazy(() => import("./components/Deposit/Index"));
 const Markets = lazy(() => import("./components/Markets/Markets"));
-const Dashboard = lazy(() => import("./components/Dashboard"));
+const Dashboard = lazy(() => import("./components/Dashboard/Index"));
+const Analytics = lazy(() => import("./components/Analytics/Index"));
 const Faucet = lazy(() => import("./components/Faucet/Faucet"));
 const About = lazy(() => import("./components/About"));
+const InakiTest = lazy(() => import("./components/InakiTest/Index"));
+const Lend = lazy(() => import("./components/Lend/Index"));
+const Template = lazy(() => import("./components/Template/Index"));
 // ----------------------------------------------------------------------------------
 
 export default function Routes() {
@@ -28,6 +32,10 @@ export default function Routes() {
           element: <Markets />,
         },
         {
+          path: "/lend",
+          element: <Lend />,
+        },
+        {
           path: "/trade",
           element: <Trade />,
         },
@@ -41,12 +49,24 @@ export default function Routes() {
           element: <Borrow />,
         },
         {
+          path: "/analytics",
+          element: <Analytics />,
+        },
+        {
           path: "/dashboard",
           element: <Dashboard />,
         },
         {
           path: "/faucet",
           element: <Faucet />,
+        },
+        {
+          path: "/inakitest",
+          element: <InakiTest />,
+        },
+        {
+          path: "/template",
+          element: <Template />,
         },
       ],
     },
