@@ -81,7 +81,7 @@ export default function DepositModule() {
   const [tapStateTabs, setTapStateTabsOrder] = useState(1);
   const [tapStateButton, setTapStateButton] = useState(1);
 
-  const deposit = useDeposit(quantity, buyPrice, pairedPoolId);
+  const deposit = useDeposit();
 
   const currencyPrice = activeCurrency === "USDC" ? priceUSDCUSD : priceETHUSD;
 
@@ -292,11 +292,11 @@ export default function DepositModule() {
   };
 
   const onPlaceBuyOrder = async () => {
-    await deposit(quantity, buyPrice, pairedPoolId);
+    await deposit(0, buyPrice, 1);
   };
 
   const onPlaceSellOrder = async () => {
-    await deposit(quantity, buyPrice, pairedPoolId);
+    await deposit(0, buyPrice, 1);
   };
 
   const onRepostOrderChange = (e: any) => {

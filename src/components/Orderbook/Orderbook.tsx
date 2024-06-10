@@ -17,7 +17,6 @@ import {
   SelectChangeEvent,
   Slider,
 } from "@mui/material";
-import { useTake } from "../../hooks/useTake";
 import { useBorrow } from "../../hooks/useBorrow";
 import { useChangePriceFeed } from "../../hooks/useChangePriceFeed";
 import { useOrderContext } from "./OrderContext";
@@ -56,7 +55,6 @@ const Orderbook = ({ isDeposit }: OrderbookProps) => {
   const { setOrderId, setLimitPrice, setAmount, setIsBuy } = useOrderContext();
 
   // HOOKS
-  const take = useTake();
   const borrow = useBorrow();
   const changePrice = useChangePriceFeed();
 

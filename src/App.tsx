@@ -22,7 +22,6 @@ const Deposit = lazy(() => import('./components/Deposit/Index'));
 const Markets = lazy(() => import('./components/Markets/Markets'));
 const Dashboard = lazy(() => import('./components/Dashboard/Index'));
 const AnalyticsPage = lazy(() => import('./components/Analytics/Index'));
-const Faucet = lazy(() => import('./components/Faucet/Faucet'));
 const InakiTest = lazy(() => import('./components/InakiTest/Index'));
 const Lend = lazy(() => import('./components/Lend/Index'));
 const Template = lazy(() => import('./components/Template/Index'));
@@ -60,7 +59,6 @@ const App = () => {
                 <Route path="borrow" element={<Borrow />} />
                 <Route path="analytics" element={<AnalyticsPage />} />
                 <Route path="dashboard" element={<Dashboard />} />
-                <Route path="faucet" element={<Faucet />} />
                 <Route path="inakitest" element={<InakiTest />} />
                 <Route path="template" element={<Template />} />
               </Route>
