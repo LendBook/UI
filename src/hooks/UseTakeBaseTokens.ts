@@ -3,17 +3,17 @@ import { orderbookContract } from "../contracts";
 import { NotificationManager } from "react-notifications";
 import { useEthersSigner } from "../contracts/index";
 
-export const useChangePairedPrice = () => {
+export const useTakeBaseTokens = () => {
   const signer = useEthersSigner();
 
-  return async (orderId: number, newPairedPoolId: number) => {
+  return async (poolId: number, quantity: string) => {
     if (!signer || !orderbookContract) return;
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .changePairedPrice(orderId, newPairedPoolId);
+        .takeBaseTokens(poolId, ethers.utils.parseUnits(quantity, 18));
       await tx.wait();
-      NotificationManager.success("Change Paired Price successful!");
+      NotificationManager.success("Take Base Tokens successful!");
     } catch (error: any) {
       if (error["code"] === "ACTION_REJECTED")
         NotificationManager.error("User rejected the transaction.");
