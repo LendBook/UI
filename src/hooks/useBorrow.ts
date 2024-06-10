@@ -6,12 +6,12 @@ import { useEthersSigner } from "../contracts/index";
 export const useBorrow = () => {
   const signer = useEthersSigner();
 
-  return async (orderId: number, quantity: string) => {
+  return async (poolId: number, quantity: string) => {
     if (!signer || !orderbookContract) return;
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .borrow(orderId, ethers.utils.parseUnits(quantity.toString(), 18));
+        .borrow(poolId, ethers.utils.parseUnits(quantity, 18));
       await tx.wait();
       NotificationManager.success("Borrow successful!");
     } catch (error: any) {

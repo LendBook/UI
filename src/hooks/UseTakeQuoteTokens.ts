@@ -1,21 +1,19 @@
-// useChangeBorrowable.tsx
-
 import { ethers } from "ethers";
 import { orderbookContract } from "../contracts";
 import { NotificationManager } from "react-notifications";
 import { useEthersSigner } from "../contracts/index";
 
-export const useChangeBorrowable = () => {
+export const useTakeQuoteTokens = () => {
   const signer = useEthersSigner();
 
-  return async (orderId: number, isBorrowable: boolean) => {
+  return async (poolId: number, quantity: string) => {
     if (!signer || !orderbookContract) return;
     try {
       const tx = await orderbookContract
         .connect(signer)
-        .changeBorrowable(orderId, isBorrowable);
+        .takeQuoteTokens(poolId, ethers.utils.parseUnits(quantity, 18));
       await tx.wait();
-      NotificationManager.success("Order borrowable status changed!");
+      NotificationManager.success("Take Quote Tokens successful!");
     } catch (error: any) {
       if (error["code"] === "ACTION_REJECTED")
         NotificationManager.error("User rejected the transaction.");
