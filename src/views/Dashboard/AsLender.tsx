@@ -1,4 +1,4 @@
-import CustomTable from "../CustomTable";
+import CustomTable from "../../components/CustomTable";
 
 const sellOrdersWithdrawClick = (id: number) => {
   console.log(`Button clicked! ${id}`);

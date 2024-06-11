@@ -1,6 +1,8 @@
+// LandingLayout.tsx
 import React, { lazy, useEffect, Suspense } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Outlet } from "react-router-dom";
+import { ThemeProvider } from "../context/ThemeContext"; 
 
 const Navbar = lazy(() => import("./Navbar"));
 const MenuBar = lazy(() => import("./MenuBar"));
@@ -14,12 +16,12 @@ export default function LandingLayout() {
   useEffect(() => {}, [isMobile, isTablet, isLaptop, isDesktop]);
 
   return (
-    <>
-      <Suspense fallback={<div>Loading Navbar...</div>}>
+    <ThemeProvider>
+      <Suspense fallback={<div></div>}>
         <Navbar />
       </Suspense>
       <div className="min-h-screen flex flex-row relative">
-        <Suspense fallback={<div>Loading Menu...</div>}>
+        <Suspense fallback={<div></div>}>
           <MenuBar />
         </Suspense>
         <div
@@ -33,6 +35,6 @@ export default function LandingLayout() {
           </main>
         </div>
       </div>
-    </>
+    </ThemeProvider>
   );
 }

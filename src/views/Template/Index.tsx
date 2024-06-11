@@ -1,8 +1,8 @@
 import { Box, Card, Typography } from "@mui/material";
-import CustomTable from "../CustomTable";
-import AmountCustom from "../AmountCustom";
+import CustomTable from "../../components/CustomTable";
+import AmountCustom from "../../components/AmountCustom";
 import { useState } from "react";
-import MetricCustom from "../MetricCustom";
+import MetricCustom from "../../components/MetricCustom";
 
 const templateDataTableColumnsConfig = [
   { key: "dataA", title: "Data A" },

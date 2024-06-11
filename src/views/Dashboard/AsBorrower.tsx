@@ -1,5 +1,5 @@
-import MetricCustom from "../MetricCustom";
-import CustomTable from "../CustomTable";
+import MetricCustom from "../../components/MetricCustom";
+import CustomTable from "../../components/CustomTable";
 
 const collateralWithdrawClick = (id: number) => {
   console.log(`Button clicked! ${id}`);

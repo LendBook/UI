@@ -1,7 +1,7 @@
 import { Box, Card, Typography } from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { axisClasses } from "@mui/x-charts/ChartsAxis";
-import { formatNumber } from "../GlobalFunctions";
+import { formatNumber } from "../../components/GlobalFunctions";
 import { useFetchLendOrder } from "../../hooks/useFetchLendOrder";
 import { orderbookContract } from "../../contracts";
 

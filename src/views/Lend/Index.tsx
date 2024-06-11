@@ -1,16 +1,16 @@
-import { Box, Card, Typography, Button } from "@mui/material";
-import CustomTable from "../CustomTable";
-import AmountCustom from "../AmountCustom";
+import { Box, Card, Typography, Button, Skeleton } from "@mui/material";
+import CustomTable from "../../components/CustomTable";
+import AmountCustom from "../../components/AmountCustom";
 import { useEffect, useState } from "react";
-import MetricCustom from "../MetricCustom";
-import CustomButton from "../CustomButton";
+import MetricCustom from "../../components/MetricCustom";
+import CustomButton from "../../components/CustomButton";
 import { useFetchLendOrder } from "../../hooks/useFetchLendOrder";
 import { orderbookContract } from "../../contracts";
 import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
 import { useFetchPriceForEmptyPools } from "../../hooks/useFetchPriceForEmptyPools";
 import { ethers } from "ethers";
-import TransactionSummary from "../TransactionSummary";
-import { formatNumber, mergeObjects } from "../GlobalFunctions";
+import TransactionSummary from "../../components/TransactionSummary";
+import { formatNumber, mergeObjects } from "../../components/GlobalFunctions";
 
 const Index = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -105,7 +105,6 @@ const Index = () => {
     setShowAll(!showAll);
   };
 
-  if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography>Error: {error}</Typography>;
 
   const transactionData = [
@@ -139,36 +138,48 @@ const Index = () => {
           </Typography>
           <div className="flex flex-col md-plus:flex-row space-between items-baseline mt-10 ">
             <div className="container" style={{ marginBottom: "10px" }}>
-              <AmountCustom
-                title="Supply Amount"
-                tokenWalletBalance="11320"
-                selectedToken="USDC"
-                ratioToUSD={1.01}
-                onQuantityChange={handleQuantityChange}
-              />
+              {loadingUser ? (
+                <Skeleton variant="rectangular" width="100%" height={118} animation="wave" />
+              ) : (
+                <AmountCustom
+                  title="Supply Amount"
+                  tokenWalletBalance="11320"
+                  selectedToken="USDC"
+                  ratioToUSD={1.01}
+                  onQuantityChange={handleQuantityChange}
+                />
+              )}
             </div>
             <div className="flex mt-10 md-plus:ml-10 md-plus:mt-0">
               <div className="container">
-                <MetricCustom
-                  data={[
-                    {
-                      title: "My amount already supplied",
-                      value: userInfo.totalDepositsQuote,
-                      unit: "USDC",
-                    },
-                  ]}
-                />
+                {loadingUser ? (
+                  <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+                ) : (
+                  <MetricCustom
+                    data={[
+                      {
+                        title: "My amount already supplied",
+                        value: userInfo.totalDepositsQuote,
+                        unit: "USDC",
+                      },
+                    ]}
+                  />
+                )}
               </div>
             </div>
           </div>
           <div className="flex mt-10">
-            <CustomTable
-              title="Select a Buy Price"
-              columnsConfig={dataColumnsConfig}
-              data={displayedData}
-              clickableRows={true}
-              onRowClick={handleRowClick}
-            />
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
+            ) : (
+              <CustomTable
+                title="Select a Buy Price"
+                columnsConfig={dataColumnsConfig}
+                data={displayedData}
+                clickableRows={true}
+                onRowClick={handleRowClick}
+              />
+            )}
           </div>
           <Button onClick={toggleShowAll}>
             {showAll ? "Show Less" : "Show More"}
@@ -186,33 +197,6 @@ const Index = () => {
           <div className="flex mt-5">
             <TransactionSummary data={transactionData} />
           </div>
-          {/* <div className="container">
-            <span className="text-success text-[12px] font-bold">
-              {message}
-            </span>
-          </div> */}
-          {/*
-          <div>
-            {Object.entries(userDeposits).map(([key, value]) => (
-              <div key={key}>
-                <h3>{key}</h3>
-                <p>orderId: {value.orderId}</p>
-                <p>poolId: {value.poolId}</p>
-                <p>maker: {value.maker}</p>
-                <p>quantity: {value.mySupply}</p>
-              </div>
-            ))}
-          </div>
-          */}
-          {/* <div>
-            {Object.entries(pricePoolId).map(([key, value]) => (
-              <div key={key}>
-                <h3>{key}</h3>
-                <p>poolId: {value.poolId}</p>
-                <p>buyPrice: {value.buyPrice}</p>
-              </div>
-            ))}
-          </div> */}
         </Box>
       </Card>
     </div>

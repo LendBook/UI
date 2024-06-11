@@ -1,48 +1,40 @@
+// MenuBar.tsx
 import { Link } from "react-router-dom";
 import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import pairs from "../config/pairs.json";
+import pairs from "../config/constants/pair.json";
+import MENU_LINKS from "../config/constants/menu";
 import { Icon } from "@iconify/react";
-
-const MENU_LINKS = [
-  { id: 1, label: "Lend to Earn", to: "/lend" },
-  { id: 2, label: "Borrow", to: "/borrow" },
-  { id: 3, label: "Trade", to: "/trade" },
-  { id: 4, label: "My Dashboard", to: "/dashboard" },
-  { id: 5, label: "Analytics", to: "/analytics" },
-  { id: 6, label: "Inaki Test", to: "/inakitest" },
-  { id: 7, label: "Template", to: "/template" },
-];
+import { useTheme } from "../context/ThemeContext"; 
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function MenuBar() {
-  const [selectedPair, setSelectedPair] = useState(pairs[0]); // Default to first pair
-  const [selectedMenu, setSelectedMenu] = useState(MENU_LINKS[0].id); // Default to first menu link
+  const { darkMode } = useTheme(); 
+  const [selectedPair, setSelectedPair] = useState(pairs[0]); 
+  const [selectedMenu, setSelectedMenu] = useState(MENU_LINKS[0].id);
 
   return (
-    <div className="bg-white text-black w-64 fixed top-16 left-0 h-full z-10 shadow-md">
+    <div className={`w-64 fixed top-16 left-0 h-full z-10 shadow-md ${darkMode ? 'bg-black text-white' : 'bg-white text-black'}`}>
       <div className="flex flex-col pt-2">
-        {" "}
-        {/* Added pt-2 here for top padding */}
         <div className="px-4 py-2">
           <Menu as="div" className="relative inline-block text-left w-full">
             <div>
-              <Menu.Button className="group w-full bg-gray-100 rounded-md px-3.5 py-2 text-sm text-left font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex justify-between items-center">
+              <Menu.Button className={`group w-full rounded-md px-3.5 py-2 text-sm text-left font-medium ${darkMode ? 'bg-gray-800 text-gray-200 hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex justify-between items-center`}>
                 {selectedPair ? (
                   <>
                     <img
                       src={selectedPair.logourlA}
                       alt={selectedPair.tokenA}
-                      className="h-5 w-5 mr-2"
+                      style={{ height: '20px', width: '20px', marginRight: '4px' }}
                     />
                     {selectedPair.tokenA} /
                     <img
                       src={selectedPair.logourlB}
                       alt={selectedPair.tokenB}
-                      className="h-5 w-5 ml-2 mr-2"
+                      style={{ height: '20px', width: '20px', marginLeft: '4px', marginRight: '4px' }}
                     />
                     {selectedPair.tokenB}
                   </>
@@ -65,28 +57,29 @@ export default function MenuBar() {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div className="py-1">
+              <Menu.Items className={`origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-900'}`}>
+                <div className="py-1 flex flex-wrap">
                   {pairs.map((pair) => (
                     <Menu.Item key={pair.chainID}>
                       {({ active }) => (
                         <button
                           onClick={() => setSelectedPair(pair)}
                           className={classNames(
-                            active ? "bg-gray-100" : "",
-                            "block px-4 py-2 text-sm text-gray-900 w-full text-left"
+                            active ? (darkMode ? 'bg-gray-700' : 'bg-gray-100') : "",
+                            "inline-flex items-center px-4 py-2 text-sm w-full text-left"
                           )}
+                          style={{ display: 'inline-flex', marginRight: '4px' }}
                         >
                           <img
                             src={pair.logourlA}
                             alt={pair.tokenA}
-                            className="inline h-5 w-5 mr-2"
+                            style={{ height: '20px', width: '20px', marginRight: '4px' }}
                           />
                           {pair.tokenA} /
                           <img
                             src={pair.logourlB}
                             alt={pair.tokenB}
-                            className="inline h-5 w-5 ml-2"
+                            style={{ height: '20px', width: '20px', marginLeft: '4px' }}
                           />
                           {pair.tokenB}
                         </button>
@@ -103,11 +96,7 @@ export default function MenuBar() {
             key={menu.id}
             to={menu.to}
             onClick={() => setSelectedMenu(menu.id)}
-            className={`p-4 hover:bg-gray-100  no-underline ${
-              selectedMenu === menu.id
-                ? "font-bold text-black bg-bgLight"
-                : "font-thin text-dark"
-            }`}
+            className={`p-4 no-underline ${darkMode ? 'text-white hover:bg-gray-700' : 'text-black hover:bg-gray-100'} ${selectedMenu === menu.id ? (darkMode ? 'bg-gray-700' : 'bg-bgLight font-bold') : 'font-thin'}`}
           >
             {menu.label}
           </Link>

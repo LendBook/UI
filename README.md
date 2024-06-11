@@ -5,7 +5,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## to launch the dapp locally
 
 ```
-nvm use 16.18.0
+nvm use 18.18.0
 yarn install
 yarn start
 ```
