@@ -138,48 +138,38 @@ const Index = () => {
           </Typography>
           <div className="flex flex-col md-plus:flex-row space-between items-baseline mt-10 ">
             <div className="container" style={{ marginBottom: "10px" }}>
-              {loadingUser ? (
-                <Skeleton variant="rectangular" width="100%" height={118} animation="wave" />
-              ) : (
-                <AmountCustom
-                  title="Supply Amount"
-                  tokenWalletBalance="11320"
-                  selectedToken="USDC"
-                  ratioToUSD={1.01}
-                  onQuantityChange={handleQuantityChange}
-                />
-              )}
+              <AmountCustom
+                title="Supply Amount"
+                tokenWalletBalance="11320"
+                selectedToken="USDC"
+                ratioToUSD={1.01}
+                onQuantityChange={handleQuantityChange}
+              />
             </div>
             <div className="flex mt-10 md-plus:ml-10 md-plus:mt-0">
               <div className="container">
-                {loadingUser ? (
-                  <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-                ) : (
-                  <MetricCustom
-                    data={[
-                      {
-                        title: "My amount already supplied",
-                        value: userInfo.totalDepositsQuote,
-                        unit: "USDC",
-                      },
-                    ]}
-                  />
-                )}
+                <MetricCustom
+                  data={[
+                    {
+                      title: "My amount already supplied",
+                      value: userInfo.totalDepositsQuote,
+                      unit: "USDC",
+                    },
+                  ]}
+                  isLoading={loading}
+                />
               </div>
             </div>
           </div>
           <div className="flex mt-10">
-            {loading ? (
-              <Skeleton variant="rectangular" width="100%" height={100} animation="wave" />
-            ) : (
-              <CustomTable
-                title="Select a Buy Price"
-                columnsConfig={dataColumnsConfig}
-                data={displayedData}
-                clickableRows={true}
-                onRowClick={handleRowClick}
-              />
-            )}
+            <CustomTable
+              title="Select a Buy Price"
+              columnsConfig={dataColumnsConfig}
+              data={displayedData}
+              clickableRows={true}
+              onRowClick={handleRowClick}
+              isLoading={loading}
+            />
           </div>
           <Button onClick={toggleShowAll}>
             {showAll ? "Show Less" : "Show More"}
