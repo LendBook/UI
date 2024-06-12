@@ -89,14 +89,15 @@ export default function CustomTable<T extends string | number>({
 
   return (
     <Box>
-      <span className="text-primary text-[20px] font-bold">{title}</span>
+      <span className="text-dark text-[18px] font-bold">{title}</span>
       <div className="container relative z-2 mt-10">
         <Box
           component={Paper}
-          elevation={4}
+          elevation={1} //4
           sx={{
             borderRadius: 1,
             padding: 1,
+            border: `1px solid ${theme.palette.background.default}`,
           }}
         >
           <TableContainer component={Paper} elevation={0}>

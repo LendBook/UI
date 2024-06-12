@@ -133,7 +133,7 @@ const Index = () => {
         }}
       >
         <Box>
-          <Typography variant="h3" color="black" fontWeight="bold">
+          <Typography variant="h4" color="black" fontWeight="bold">
             Lend to Earn
           </Typography>
           <div className="flex flex-col md-plus:flex-row space-between items-baseline mt-10 ">

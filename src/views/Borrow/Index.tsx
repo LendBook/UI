@@ -125,7 +125,7 @@ const Index = () => {
         }}
       >
         <Box>
-          <Typography variant="h3" color="black" fontWeight="bold">
+          <Typography variant="h4" color="black" fontWeight="bold">
             Borrow
           </Typography>
           <div>
