@@ -11,6 +11,7 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import theme from "../theme";
 import { formatNumber } from "../components/GlobalFunctions";
+import { Skeleton } from "@mui/material";
 
 // Type générique pour une ligne de données
 type RowData<T extends string | number> = Record<T, string | number> & {
@@ -30,6 +31,7 @@ type TableProps<T extends string | number> = {
   data: RowData<T>[]; //data object needs to have at least "id" as one of his key
   clickableRows?: boolean;
   onRowClick?: (row: RowData<T>) => void;
+  isLoading?: boolean;
 };
 
 // Style des cellules
@@ -66,6 +68,7 @@ export default function CustomTable<T extends string | number>({
   data,
   clickableRows = false,
   onRowClick,
+  isLoading = false,
 }: TableProps<T>) {
   const columns = columnsConfig.map((config) => config.key);
 
@@ -86,14 +89,15 @@ export default function CustomTable<T extends string | number>({
 
   return (
     <Box>
-      <span className="text-primary text-[20px] font-bold">{title}</span>
+      <span className="text-dark text-[18px] font-bold">{title}</span>
       <div className="container relative z-2 mt-10">
         <Box
           component={Paper}
-          elevation={4}
+          elevation={1} //4
           sx={{
             borderRadius: 1,
             padding: 1,
+            border: `1px solid ${theme.palette.background.default}`,
           }}
         >
           <TableContainer component={Paper} elevation={0}>
@@ -135,8 +139,14 @@ export default function CustomTable<T extends string | number>({
                       >
                         {columns.map((column, colIndex) => (
                           <StyledTableCell key={colIndex} align="left">
-                            {formatNumber(row[column as keyof RowData<T>])}{" "}
-                            {columnsConfig[colIndex].metric}
+                            {isLoading ? (
+                              <Skeleton variant="text" />
+                            ) : (
+                              <>
+                                {formatNumber(row[column as keyof RowData<T>])}{" "}
+                                {columnsConfig[colIndex].metric}
+                              </>
+                            )}
                           </StyledTableCell>
                         ))}
                       </HoverTableRow>

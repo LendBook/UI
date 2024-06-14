@@ -50,7 +50,7 @@ const Index = () => {
       >
         <Box>
           <div>
-            <Typography variant="h3" color="black" fontWeight="bold">
+            <Typography variant="h4" color="black" fontWeight="bold">
               Template
             </Typography>
             <div className="flex flex-col md-plus:flex-row space-between items-baseline">

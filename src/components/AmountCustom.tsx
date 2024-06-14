@@ -121,9 +121,9 @@ export default function AmountCustom({
 
   return (
     <Box className="max-w-[300px]">
-      <span className="text-primary text-[20px] font-bold">{title}</span>
+      <span className="text-dark text-[18px] font-bold">{title}</span>
       <Paper
-        elevation={4}
+        elevation={1}
         style={{ padding: "0px", width: "100%" }}
         className="flex flex-col"
       >
@@ -149,7 +149,7 @@ export default function AmountCustom({
             ),
           }}
           sx={{
-            fieldset: { borderColor: "transparent" },
+            fieldset: { borderColor: theme.palette.background.default }, //"transparent"
           }}
           variant="outlined"
         />

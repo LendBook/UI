@@ -75,7 +75,7 @@ const Index = () => {
       >
         <Box>
           <div>
-            <Typography variant="h3" color="black" fontWeight="bold">
+            <Typography variant="h4" color="black" fontWeight="bold">
               Analytics
             </Typography>
             {/* <div className="flex mt-10">

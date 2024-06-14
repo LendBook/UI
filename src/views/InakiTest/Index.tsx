@@ -58,7 +58,7 @@ const Index = () => {
       >
         <Box>
           <div>
-            <Typography variant="h3" color="black" fontWeight="bold">
+            <Typography variant="h4" color="black" fontWeight="bold">
               Inaki Test
             </Typography>
             <div className="flex mt-10">
