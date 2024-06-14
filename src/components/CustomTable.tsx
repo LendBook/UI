@@ -143,8 +143,11 @@ export default function CustomTable<T extends string | number>({
                               <Skeleton variant="text" />
                             ) : (
                               <>
-                                {formatNumber(row[column as keyof RowData<T>])}{" "}
-                                {columnsConfig[colIndex].metric}
+                                {columnsConfig[colIndex].metric !== undefined
+                                  ? `${formatNumber(
+                                      row[column as keyof RowData<T>]
+                                    )} ${columnsConfig[colIndex].metric}`
+                                  : `${row[column as keyof RowData<T>]}`}
                               </>
                             )}
                           </StyledTableCell>
@@ -177,8 +180,11 @@ export default function CustomTable<T extends string | number>({
                           } else {
                             return (
                               <StyledTableCell key={colIndex} align="left">
-                                {formatNumber(row[column as keyof RowData<T>])}{" "}
-                                {columnsConfig[colIndex].metric}
+                                {columnsConfig[colIndex].metric !== undefined
+                                  ? `${formatNumber(
+                                      row[column as keyof RowData<T>]
+                                    )} ${columnsConfig[colIndex].metric}`
+                                  : `${row[column as keyof RowData<T>]}`}
                               </StyledTableCell>
                             );
                           }

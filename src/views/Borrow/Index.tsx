@@ -36,12 +36,16 @@ const Index = () => {
   ]);
 
   const customDataColumnsConfig = [
-    { key: "buyPrice", title: "Liquidation Price" },
-    { key: "deposits", title: "Total Supply" },
-    { key: "availableSupply", title: "Available Supply" },
-    { key: "borrowingRate", title: "Borrow APY" },
-    { key: "utilizationRate", title: "Utilization" },
-    { key: "myBorrowingPositions", title: "My Borrowing Positions" },
+    { key: "buyPrice", title: "Liquidation Price", metric: "USDC" },
+    { key: "deposits", title: "Total Supply", metric: "USDC" },
+    { key: "availableSupply", title: "Available Supply", metric: "USDC" },
+    { key: "borrowingRate", title: "Borrow APY", metric: "%" },
+    { key: "utilizationRate", title: "Utilization", metric: "%" },
+    {
+      key: "myBorrowingPositions",
+      title: "My Borrowing Positions",
+      metric: "USDC",
+    },
   ];
 
   let mergedData = mergeObjects(data, userBorrows);
