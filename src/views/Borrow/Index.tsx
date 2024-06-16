@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 import MetricCustom from "../../components/MetricCustom";
 import CustomButton from "../../components/CustomButton";
 import CustomTable from "../../components/CustomTable";
-import { orderbookContract } from "../../contracts";
 import { ethers } from "ethers";
-import { useFetchLendOrder } from "../../hooks/useFetchLendOrder";
-import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
+import { useFetchLendOrder } from "../../hooks/api/lend";
+import { useFetchUserInfo } from "../../hooks/api/userInfo";
 import { mergeObjects } from "../../components/GlobalFunctions";
-import { useFetchPriceForEmptyPools } from "../../hooks/useFetchPriceForEmptyPools";
+import { useFetchPriceForEmptyPools } from "../../hooks/api/emptyPools";
 
 const Index = () => {
   const [collateralQuantity, setCollateralQuantity] = useState<number>(0);

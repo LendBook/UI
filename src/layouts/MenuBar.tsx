@@ -9,7 +9,7 @@ import { Icon } from "@iconify/react";
 import { useTheme } from "../context/ThemeContext";
 import { styled } from "@mui/material/styles";
 import { Button } from "@mui/material";
-import { id } from "ethers/lib/utils";
+import StyledRouterButton from "../components/buttons/StyledRouterButton";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -154,26 +154,25 @@ export default function MenuBar() {
           </Menu>
         </div>
         <nav className="flex flex-col items-center justify-center">
-          {MENU_LINKS.map((menu) => (
-            <StyledButton
-              key={menu.id}
-              component={RouterLink}
-              to={menu.to}
-              onClick={() => setSelectedMenu(menu.id)}
-              //variant={selectedMenu === menu.id ? "contained" : "outlined"}
-              //color={darkMode ? "secondary" : "primary"}
-              elevation={0}
-              sx={{
-                backgroundColor:
-                  selectedMenu === menu.id &&
-                  (darkMode ? "grey.700" : "grey.200"),
-                fontWeight: selectedMenu === menu.id ? "bold" : "normal",
-              }}
-            >
-              {menu.label}
-            </StyledButton>
-          ))}
-        </nav>
+        {MENU_LINKS.map((menu) => (
+          <StyledRouterButton
+            key={menu.id}
+            to={menu.to}
+            onClick={() => setSelectedMenu(menu.id)}
+            sx={{
+              backgroundColor:
+                selectedMenu === menu.id
+                  ? darkMode
+                    ? 'grey.700'
+                    : 'grey.200'
+                  : undefined,
+              fontWeight: selectedMenu === menu.id ? 'bold' : 'normal',
+            }}
+          >
+            {menu.label}
+          </StyledRouterButton>
+        ))}
+      </nav>
       </div>
     </div>
   );
