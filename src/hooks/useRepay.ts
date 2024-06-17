@@ -1,24 +1,24 @@
 import { ethers } from "ethers";
-import { orderbookContract } from "../contracts";
 import { NotificationManager } from "react-notifications";
-import { useEthersSigner } from "../contracts/index";
+import { useOrderbook } from "./useOrderbook";
 
 export const useRepay = () => {
-  const signer = useEthersSigner();
+  const { contract } = useOrderbook();
 
   return async (positionId: number, quantity: string) => {
-    if (!signer || !orderbookContract) return;
+    if (!contract) return;
+
     try {
-      const tx = await orderbookContract
-        .connect(signer)
-        .repay(positionId, ethers.utils.parseUnits(quantity, 18));
+      const tx = await contract.repay(positionId, ethers.utils.parseUnits(quantity, 18));
       await tx.wait();
       NotificationManager.success("Repay successful!");
     } catch (error: any) {
-      if (error["code"] === "ACTION_REJECTED")
+      if (error.code === "ACTION_REJECTED") {
         NotificationManager.error("User rejected the transaction.");
-      else NotificationManager.error("Error: " + error);
-      console.log("error ----------->", error["code"]);
+      } else {
+        NotificationManager.error("Error: " + error.message);
+      }
+      console.error("error ----------->", error);
     }
   };
 };

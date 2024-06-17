@@ -9,7 +9,7 @@ import { Icon } from "@iconify/react";
 import { useTheme } from "../context/ThemeContext";
 import { styled } from "@mui/material/styles";
 import { Button } from "@mui/material";
-import { id } from "ethers/lib/utils";
+import StyledRouterButton from "../components/buttons/StyledRouterButton";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -20,8 +20,8 @@ export default function MenuBar() {
   const [selectedPair, setSelectedPair] = useState(pairs[0]);
   const [selectedMenu, setSelectedMenu] = useState(MENU_LINKS[0].id);
 
-  const StyledButton = styled(Button)(({ theme }) => ({
-    marginBottom: theme.spacing(2), // Equivalent to Tailwind's mb-4
+  const StyledButton = styled(StyledRouterButton)(({ theme }) => ({
+    marginBottom: theme.spacing(1), // Equivalent to Tailwind's mb-4
     width: "90%", // Make the button take full width
     justifyContent: "flex-start", // Align text to the left
     padding: theme.spacing(1), // Equivalent to Tailwind's p-4
@@ -157,16 +157,15 @@ export default function MenuBar() {
           {MENU_LINKS.map((menu) => (
             <StyledButton
               key={menu.id}
-              component={RouterLink}
               to={menu.to}
               onClick={() => setSelectedMenu(menu.id)}
-              //variant={selectedMenu === menu.id ? "contained" : "outlined"}
-              //color={darkMode ? "secondary" : "primary"}
-              elevation={0}
               sx={{
                 backgroundColor:
-                  selectedMenu === menu.id &&
-                  (darkMode ? "grey.700" : "grey.200"),
+                  selectedMenu === menu.id
+                    ? darkMode
+                      ? "grey.700"
+                      : "grey.200"
+                    : undefined,
                 fontWeight: selectedMenu === menu.id ? "bold" : "normal",
               }}
             >
