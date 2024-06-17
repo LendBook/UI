@@ -4,7 +4,7 @@ import { Address } from '../config/constants/types'
 const chainId = 11155111
 
 export const getAddress = (address: Address): string => {
-  return address[chainId] ? address[chainId] : address[chainId]
+  return address[chainId]
 }
 
 export const getOrderAddress = () => {
