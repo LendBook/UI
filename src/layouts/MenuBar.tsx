@@ -20,8 +20,8 @@ export default function MenuBar() {
   const [selectedPair, setSelectedPair] = useState(pairs[0]);
   const [selectedMenu, setSelectedMenu] = useState(MENU_LINKS[0].id);
 
-  const StyledButton = styled(Button)(({ theme }) => ({
-    marginBottom: theme.spacing(2), // Equivalent to Tailwind's mb-4
+  const StyledButton = styled(StyledRouterButton)(({ theme }) => ({
+    marginBottom: theme.spacing(1), // Equivalent to Tailwind's mb-4
     width: "90%", // Make the button take full width
     justifyContent: "flex-start", // Align text to the left
     padding: theme.spacing(1), // Equivalent to Tailwind's p-4
@@ -154,25 +154,25 @@ export default function MenuBar() {
           </Menu>
         </div>
         <nav className="flex flex-col items-center justify-center">
-        {MENU_LINKS.map((menu) => (
-          <StyledRouterButton
-            key={menu.id}
-            to={menu.to}
-            onClick={() => setSelectedMenu(menu.id)}
-            sx={{
-              backgroundColor:
-                selectedMenu === menu.id
-                  ? darkMode
-                    ? 'grey.700'
-                    : 'grey.200'
-                  : undefined,
-              fontWeight: selectedMenu === menu.id ? 'bold' : 'normal',
-            }}
-          >
-            {menu.label}
-          </StyledRouterButton>
-        ))}
-      </nav>
+          {MENU_LINKS.map((menu) => (
+            <StyledButton
+              key={menu.id}
+              to={menu.to}
+              onClick={() => setSelectedMenu(menu.id)}
+              sx={{
+                backgroundColor:
+                  selectedMenu === menu.id
+                    ? darkMode
+                      ? "grey.700"
+                      : "grey.200"
+                    : undefined,
+                fontWeight: selectedMenu === menu.id ? "bold" : "normal",
+              }}
+            >
+              {menu.label}
+            </StyledButton>
+          ))}
+        </nav>
       </div>
     </div>
   );
