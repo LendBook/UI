@@ -3,6 +3,7 @@ import axios from "axios";
 import { ethers } from "ethers";
 import { id } from "ethers/lib/utils";
 import { step } from "@material-tailwind/react";
+import { usePriceOracle } from "./oraclePrice";
 
 interface PriceForPoolIdData {
   id: number;
@@ -65,6 +66,8 @@ function generatePriceData(
     (isIncreasing && currentPrice < finalPrice) ||
     (!isIncreasing && currentPrice > finalPrice)
   ) {
+    console.log(`create buy price ${currentPrice}`);
+
     priceData.push({
       id: currentId,
       poolId: currentId,
@@ -104,6 +107,8 @@ function generatePriceData(
   }
   priceData = priceData.filter((item) => idsToKeep.includes(item.id));
 
+  priceData = [...priceData].reverse(); //inverse the order of price list
+
   return { priceData, closestPoolIdUnderPriceFeed };
 }
 
@@ -115,6 +120,8 @@ export const useFetchPriceForEmptyPools = () => {
 
   const [poolIdCloseToPriceFeed, setPoolIdCloseToPriceFeed] =
     useState<number>(0);
+
+  //const { price: priceFeed, loading: loadingPriceFeed } = usePriceOracle();
 
   async function fetchPricePoolIdInfo() {
     setLoading(true);
@@ -131,6 +138,7 @@ export const useFetchPriceForEmptyPools = () => {
       const priceFeed = parseFloat(
         ethers.utils.formatUnits(priceFeedResponse.data.priceFeed, 18)
       );
+      //const { price: priceFeed, loading: loadingPriceFeed } = usePriceOracle();
 
       //FIXME : need to call api when genesisPoolId is public in smartcontract
       const genesisPoolId = 1111111110;
