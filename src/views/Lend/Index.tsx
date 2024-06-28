@@ -10,6 +10,8 @@ import { useFetchPriceForEmptyPools } from "../../hooks/api/emptyPools";
 import { ethers } from "ethers";
 import TransactionSummary from "../../components/TransactionSummary";
 import { formatNumber, mergeObjects } from "../../components/GlobalFunctions";
+import { error } from "console";
+import { useDeposit } from "../../hooks/useDeposit";
 
 const Index = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -30,9 +32,10 @@ const Index = () => {
 
   const poolIds = pricePoolId.map((item) => item.poolId);
   console.log(`poolIds : ${poolIds}`);
-  const { data, loading, error } = useFetchLendOrder([
-    1111111110, 1111111108, 1111111106,
-  ]); // useFetchLendOrder(poolIds); TODO mettre ça a la place quand on n'a plus de prblm d'api
+  // const { data, loading, error } = useFetchLendOrder([
+  //   1111111110, 1111111108, 1111111106,
+  // ]); // useFetchLendOrder(poolIds); TODO mettre ça a la place quand on n'a plus de prblm d'api
+  const { data, loading, error } = useFetchLendOrder(poolIds);
 
   const dataColumnsConfig = [
     { key: "buyPrice", title: "Buy Price", metric: "USDC" },
@@ -96,8 +99,16 @@ const Index = () => {
     updateButtonClickable(supplyAmountQuantity, newBuyPrice, newPoolId);
   };
 
-  const handleButtonClick = () => {
+  const deposit = useDeposit();
+
+  const handleButtonClick = async () => {
     setMessage("Button clicked!");
+
+    await deposit(
+      Number(poolId),
+      String(supplyAmountQuantity),
+      Number(poolId) + 1
+    );
   };
 
   const toggleShowAll = () => {

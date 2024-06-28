@@ -9,6 +9,8 @@ import { useFetchLendOrder } from "../../hooks/api/lend";
 import { useFetchUserInfo } from "../../hooks/api/userInfo";
 import { mergeObjects } from "../../components/GlobalFunctions";
 import { useFetchPriceForEmptyPools } from "../../hooks/api/emptyPools";
+import { useBorrow } from "../../hooks/useBorrow";
+import { useDepositInCollateralAccount } from "../../hooks/UseDepositInCollateralAccount";
 
 const Index = () => {
   const [collateralQuantity, setCollateralQuantity] = useState<number>(0);
@@ -20,6 +22,7 @@ const Index = () => {
   const [provider, setProvider] =
     useState<ethers.providers.Web3Provider | null>(null);
   const [walletAddress, setWalletAddress] = useState<string>("");
+  const [poolId, setPoolId] = useState<string>("");
 
   //API
   const { userInfo, userDeposits, userBorrows, loadingUser, errorUser } =
@@ -30,9 +33,10 @@ const Index = () => {
 
   const poolIds = pricePoolId.map((item) => item.poolId);
   console.log(`poolIds : ${poolIds}`);
-  const { data, loading, error } = useFetchLendOrder([
-    1111111110, 1111111108, 1111111106,
-  ]);
+  // const { data, loading, error } = useFetchLendOrder([
+  //   1111111110, 1111111108, 1111111106,
+  // ]); // useFetchLendOrder(poolIds); TODO mettre ça a la place quand on n'a plus de prblm d'api
+  const { data, loading, error } = useFetchLendOrder(poolIds);
 
   const customDataColumnsConfig = [
     { key: "buyPrice", title: "Liquidation Price", metric: "USDC" },
@@ -101,6 +105,8 @@ const Index = () => {
   const handleRowClick = (rowData: any) => {
     const newliquidationPrice = rowData.liquidationPrice;
     setLiquidationPrice(newliquidationPrice);
+    const newPoolId = rowData.poolId;
+    setPoolId(newPoolId);
     updateButtonClickable(
       collateralQuantity,
       borrowedQuantity,
@@ -108,10 +114,18 @@ const Index = () => {
     );
   };
 
-  const handleButtonClick = () => {
-    setMessage("Button clicked!");
-  };
+  const borrow = useBorrow();
+  const depositInCollateralAccount = useDepositInCollateralAccount();
 
+  const handleButtonClick = async () => {
+    setMessage("Button clicked!");
+    if (collateralQuantity == 0) {
+      await borrow(Number(poolId), String(borrowedQuantity));
+    } else {
+      await depositInCollateralAccount(String(collateralQuantity));
+      await borrow(Number(poolId), String(borrowedQuantity));
+    }
+  };
   const toggleShowAll = () => {
     setShowAll(!showAll);
   };

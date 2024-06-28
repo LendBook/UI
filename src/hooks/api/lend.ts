@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { ethers } from "ethers";
 import { formatNumber } from "../../components/GlobalFunctions";
@@ -84,8 +84,26 @@ export const useFetchLendOrder = (poolIds: number[]) => {
     }
   };
 
+  const prevPoolIdsRef = useRef<number[]>();
+
+  const arraysEqual = (a: number[], b: number[]) => {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+
+    for (let i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  };
+
   useEffect(() => {
-    fetchData();
+    if (poolIds && !arraysEqual(prevPoolIdsRef.current || [], poolIds)) {
+      prevPoolIdsRef.current = poolIds;
+      setLoading(true);
+      fetchData();
+      console.log("useEffect based on poolIds");
+    }
   }, [poolIds]);
 
   return { data, loading, error };
