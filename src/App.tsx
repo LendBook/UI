@@ -3,9 +3,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { NotificationContainer } from "react-notifications";
 import { ThemeProvider } from "@mui/material/styles";
+import { useAccount } from "wagmi";
+import { ethers } from "ethers";
 import theme from "./theme/index";
 import LandingLayout from "./layouts/landinglayout";
 import Loading from "./components/Loading";
+import { DataProvider } from './context/DataContext';
 
 // Import components
 const Home = lazy(() => import("./views/Markets/Index"));
@@ -19,88 +22,93 @@ const Lend = lazy(() => import("./views/Lend/Index"));
 const Template = lazy(() => import("./views/Template/Index"));
 
 const App = () => {
+  const { address: walletAddress } = useAccount();
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingLayout />}>
-            <Route
-              index
-              element={
-                <Suspense fallback={<Loading />}>
-                  <Home />
-                </Suspense>
-              }
-            />
-            <Route
-              path="markets"
-              element={
-                <Suspense fallback={<Loading />}>
-                  <Markets />
-                </Suspense>
-              }
-            />
-            <Route
-              path="lend"
-              element={
-                <Suspense fallback={<Loading />}>
-                  <Lend />
-                </Suspense>
-              }
-            />
-            <Route
-              path="trade"
-              element={
-                <Suspense fallback={<Loading />}>
-                  <Trade />
-                </Suspense>
-              }
-            />
-            <Route
-              path="borrow"
-              element={
-                <Suspense fallback={<Loading />}>
-                  <Borrow />
-                </Suspense>
-              }
-            />
-            <Route
-              path="analytics"
-              element={
-                <Suspense fallback={<Loading />}>
-                  <AnalyticsPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="dashboard"
-              element={
-                <Suspense fallback={<Loading />}>
-                  <Dashboard />
-                </Suspense>
-              }
-            />
-            <Route
-              path="inakitest"
-              element={
-                <Suspense fallback={<Loading />}>
-                  <InakiTest />
-                </Suspense>
-              }
-            />
-            <Route
-              path="template"
-              element={
-                <Suspense fallback={<Loading />}>
-                  <Template />
-                </Suspense>
-              }
-            />
-          </Route>
-        </Routes>
-        <ToastContainer className="!z-[99999]" />
-        <NotificationContainer />
-      </BrowserRouter>
+      <DataProvider provider={provider} walletAddress={walletAddress}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LandingLayout />}>
+              <Route
+                index
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <Home />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="markets"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <Markets />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="lend"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <Lend />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="trade"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <Trade />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="borrow"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <Borrow />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="analytics"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <AnalyticsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="dashboard"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <Dashboard />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="inakitest"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <InakiTest />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="template"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <Template />
+                  </Suspense>
+                }
+              />
+            </Route>
+          </Routes>
+          <ToastContainer className="!z-[99999]" />
+          <NotificationContainer />
+        </BrowserRouter>
+      </DataProvider>
     </ThemeProvider>
   );
 };
