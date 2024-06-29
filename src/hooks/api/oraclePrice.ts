@@ -7,7 +7,7 @@ interface PriceFeedData {
 }
 
 export const usePriceOracle = () => {
-  const [price, setPrice] = useState<number | null>(null);
+  const [price, setPrice] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
@@ -15,7 +15,9 @@ export const usePriceOracle = () => {
     try {
       const response = await axios.get("/v1/constant/priceFeed");
       const priceData: PriceFeedData = response.data;
-      const priceInUSDC = parseFloat(ethers.utils.formatUnits(priceData.priceFeed, 18));
+      const priceInUSDC = parseFloat(
+        ethers.utils.formatUnits(priceData.priceFeed, 18)
+      );
       setPrice(priceInUSDC);
     } catch (err) {
       setError("Failed to fetch price data");
@@ -27,6 +29,12 @@ export const usePriceOracle = () => {
 
   useEffect(() => {
     fetchPrice();
+    const interval = setInterval(() => {
+      fetchPrice();
+    }, 10000); // 10 seconds
+
+    // Cleanup the interval on component unmount
+    return () => clearInterval(interval);
   }, []);
 
   return { price, loading, error };
