@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { ethers } from "ethers";
-import { type } from "os";
 
-interface UserDepositOrdersData {
+export interface UserDepositOrdersData {
   id: number;
   orderId: number;
   poolId: number;
@@ -12,7 +11,7 @@ interface UserDepositOrdersData {
   [key: string]: string | number;
 }
 
-interface UserBorrowsData {
+export interface UserBorrowsData {
   id: number;
   orderId: number;
   poolId: number;
@@ -21,7 +20,7 @@ interface UserBorrowsData {
   [key: string]: string | number;
 }
 
-export const useFetchUserInfo = (provider: unknown, walletAddress: unknown) => {
+export const useFetchUserInfo = (provider: any, walletAddress: string | undefined) => {
   const [userInfo, setUserInfo] = useState({
     totalDepositsQuote: "",
     totalDepositsBase: "",
@@ -29,7 +28,6 @@ export const useFetchUserInfo = (provider: unknown, walletAddress: unknown) => {
   });
   const [userDeposits, setUserDeposits] = useState<UserDepositOrdersData[]>([]);
   const [userBorrows, setUserBorrows] = useState<UserBorrowsData[]>([]);
-
   const [loadingUser, setLoading] = useState(true);
   const [errorUser, setError] = useState<string | null>(null);
 
@@ -41,7 +39,7 @@ export const useFetchUserInfo = (provider: unknown, walletAddress: unknown) => {
     }
   }, [walletAddress, provider]);
 
-  async function fetchGlobalUserInfo(address: any) {
+  const fetchGlobalUserInfo = async (address: string) => {
     setLoading(true);
     try {
       const responseQuote = await axios.get(
@@ -70,17 +68,15 @@ export const useFetchUserInfo = (provider: unknown, walletAddress: unknown) => {
         totalDepositsBase: formattedTotalBase,
         excessCollateral: excessCollateral,
       });
-
-      console.log(`yeuhhh : ${formattedTotalQuote}`);
     } catch (err: any) {
       const errorMessage = `Failed to fetch user info: ${err.message}`;
       setError(errorMessage);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  async function fetchDepositOrdersInfo(address: any) {
+  const fetchDepositOrdersInfo = async (address: string) => {
     setLoading(true);
     try {
       const depositOrdersIdResponse = await axios.get(
@@ -90,11 +86,8 @@ export const useFetchUserInfo = (provider: unknown, walletAddress: unknown) => {
       let depositOrdersId_l = depositOrdersIdResponse.data.result.split(",");
       depositOrdersId_l = depositOrdersId_l.map(Number);
 
-      console.log(`yeuh : ${depositOrdersId_l[1]}`);
-
       const results = await Promise.all(
         depositOrdersId_l.map(async (depositOrdersId: Number) => {
-          // Fetch data from the API
           const orderResponse = await axios.get(
             `/v1/request/orders/${depositOrdersId}`
           );
@@ -122,9 +115,9 @@ export const useFetchUserInfo = (provider: unknown, walletAddress: unknown) => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  async function fetchBorrowsInfo(address: any) {
+  const fetchBorrowsInfo = async (address: string) => {
     setLoading(true);
     try {
       const borrowsIdResponse = await axios.get(
@@ -134,11 +127,8 @@ export const useFetchUserInfo = (provider: unknown, walletAddress: unknown) => {
       let borrowsId_l = borrowsIdResponse.data.result.split(",");
       borrowsId_l = borrowsId_l.map(Number);
 
-      console.log(`borrows : ${borrowsId_l[0]}`);
-
       const results = await Promise.all(
         borrowsId_l.map(async (borrowsId: Number) => {
-          // Fetch data from the API
           const orderResponse = await axios.get(
             `/v1/request/positions/${borrowsId}`
           );
@@ -166,7 +156,7 @@ export const useFetchUserInfo = (provider: unknown, walletAddress: unknown) => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return { userInfo, userDeposits, userBorrows, loadingUser, errorUser };
 };

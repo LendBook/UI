@@ -5,7 +5,7 @@ import { id } from "ethers/lib/utils";
 import { step } from "@material-tailwind/react";
 import { usePriceOracle } from "./oraclePrice";
 
-interface PriceForPoolIdData {
+export interface PriceForPoolIdData {
   id: number;
   poolId: number;
   buyPrice: number;

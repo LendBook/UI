@@ -11,6 +11,8 @@ import { mergeObjects } from "../../components/GlobalFunctions";
 import { useFetchPriceForEmptyPools } from "../../hooks/api/emptyPools";
 import { useBorrow } from "../../hooks/useBorrow";
 import { useDepositInCollateralAccount } from "../../hooks/UseDepositInCollateralAccount";
+import { useDataContext } from "../../context/DataContext";
+import { error } from "console";
 
 const Index = () => {
   const [collateralQuantity, setCollateralQuantity] = useState<number>(0);
@@ -25,18 +27,28 @@ const Index = () => {
   const [poolId, setPoolId] = useState<string>("");
 
   //API
-  const { userInfo, userDeposits, userBorrows, loadingUser, errorUser } =
-    useFetchUserInfo(provider, walletAddress);
 
-  const { pricePoolId, pricePoolIdLoading, pricePoolIdError } =
-    useFetchPriceForEmptyPools();
+  const {
+    userInfo,
+    userBorrows,
+    loadingUser,
+    pricePoolId,
+    pricePoolIdLoading,
+    pricePoolIdError,
+    lendOrderData,
+    lendOrderLoading,
+    lendOrderError,
+  } = useDataContext();
 
-  const poolIds = pricePoolId.map((item) => item.poolId);
-  console.log(`poolIds : ${poolIds}`);
-  // const { data, loading, error } = useFetchLendOrder([
-  //   1111111110, 1111111108, 1111111106,
-  // ]); // useFetchLendOrder(poolIds); TODO mettre ça a la place quand on n'a plus de prblm d'api
-  const { data, loading, error } = useFetchLendOrder(poolIds);
+  // const { pricePoolId, pricePoolIdLoading, pricePoolIdError } =
+  //   useFetchPriceForEmptyPools();
+
+  // const poolIds = pricePoolId.map((item) => item.poolId);
+  // console.log(`poolIds : ${poolIds}`);
+  // // const { data, loading, error } = useFetchLendOrder([
+  // //   1111111110, 1111111108, 1111111106,
+  // // ]); // useFetchLendOrder(poolIds); TODO mettre ça a la place quand on n'a plus de prblm d'api
+  // const { data, loading, error } = useFetchLendOrder(poolIds);
 
   const customDataColumnsConfig = [
     { key: "buyPrice", title: "Liquidation Price", metric: "USDC" },
@@ -51,34 +63,34 @@ const Index = () => {
     },
   ];
 
-  let mergedData = mergeObjects(data, userBorrows);
+  let mergedData = mergeObjects(lendOrderData, userBorrows);
   mergedData = mergeObjects(mergedData, pricePoolId);
 
   const displayedData = showAll ? mergedData : mergedData.slice(0, 3);
 
-  useEffect(() => {
-    const initProvider = () => {
-      if (window.ethereum) {
-        const providerTemp = new ethers.providers.Web3Provider(window.ethereum);
-        setProvider(providerTemp);
-        providerTemp
-          .getSigner()
-          .getAddress()
-          .then(setWalletAddress)
-          .catch(console.error);
-      } else {
-        console.error("Please install MetaMask!");
-      }
-    };
+  // useEffect(() => {
+  //   const initProvider = () => {
+  //     if (window.ethereum) {
+  //       const providerTemp = new ethers.providers.Web3Provider(window.ethereum);
+  //       setProvider(providerTemp);
+  //       providerTemp
+  //         .getSigner()
+  //         .getAddress()
+  //         .then(setWalletAddress)
+  //         .catch(console.error);
+  //     } else {
+  //       console.error("Please install MetaMask!");
+  //     }
+  //   };
 
-    initProvider();
-  }, []);
+  //   initProvider();
+  // }, []);
 
-  useEffect(() => {
-    if (!loading && !error && data) {
-      console.log("Fetched data:", data);
-    }
-  }, [data, loading, error]);
+  // useEffect(() => {
+  //   if (!loading && !error && data) {
+  //     console.log("Fetched data:", data);
+  //   }
+  // }, [data, loading, error]);
 
   const updateButtonClickable = (
     collateralQuantity: number,
@@ -103,7 +115,7 @@ const Index = () => {
   };
 
   const handleRowClick = (rowData: any) => {
-    const newliquidationPrice = rowData.liquidationPrice;
+    const newliquidationPrice = rowData.buyPrice;
     setLiquidationPrice(newliquidationPrice);
     const newPoolId = rowData.poolId;
     setPoolId(newPoolId);
@@ -189,7 +201,7 @@ const Index = () => {
               data={displayedData}
               clickableRows={true}
               onRowClick={handleRowClick}
-              isLoading={loading}
+              isLoading={lendOrderLoading}
             />
           </div>
           <Button onClick={toggleShowAll}>

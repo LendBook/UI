@@ -2,15 +2,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logoImg from "../asserts/images/logo.png";
-import { usePriceOracle } from "../hooks/api/oraclePrice";
 import { formatNumber } from "../components/GlobalFunctions";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useTheme } from "../context/ThemeContext";
 import { Switch } from "@headlessui/react";
 import { useChangePriceFeed } from "../hooks/useChangePriceFeed";
+import { useDataContext } from "../context/DataContext";
 
 export default function Navbar() {
-  const { price, loading } = usePriceOracle();
+  const { price, priceLoading } = useDataContext();
   const [previousPrice, setPreviousPrice] = useState<number | null>(null);
   const { darkMode, toggleDarkMode } = useTheme();
 
@@ -66,7 +66,8 @@ export default function Navbar() {
               }`}
             >
               Oracle Price: 1 WETH ={" "}
-              {loading ? "Loading..." : price ? formatNumber(price) : "0"} USDC
+              {priceLoading ? "Loading..." : price ? formatNumber(price) : "0"}{" "}
+              USDC
             </span>
             <input
               type="number"
