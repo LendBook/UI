@@ -12,6 +12,7 @@ import TransactionSummary from "../../components/TransactionSummary";
 import { formatNumber, mergeObjects } from "../../components/GlobalFunctions";
 import { error } from "console";
 import { useDeposit } from "../../hooks/useDeposit";
+import { useDataContext } from "../../context/DataContext";
 
 const Index = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -24,18 +25,27 @@ const Index = () => {
     useState<ethers.providers.Web3Provider | null>(null);
   const [walletAddress, setWalletAddress] = useState<string>("");
 
-  const { userInfo, userDeposits, userBorrows, loadingUser, errorUser } =
-    useFetchUserInfo(provider, walletAddress);
+  const {
+    userInfo,
+    userDeposits,
+    loadingUser,
+    pricePoolId,
+    pricePoolIdLoading,
+    pricePoolIdError,
+    lendOrderData,
+    lendOrderLoading,
+    lendOrderError,
+  } = useDataContext();
 
-  const { pricePoolId, pricePoolIdLoading, pricePoolIdError } =
-    useFetchPriceForEmptyPools();
+  // const { pricePoolId, pricePoolIdLoading, pricePoolIdError } =
+  //   useFetchPriceForEmptyPools();
 
-  const poolIds = pricePoolId.map((item) => item.poolId);
-  console.log(`poolIds : ${poolIds}`);
-  // const { data, loading, error } = useFetchLendOrder([
-  //   1111111110, 1111111108, 1111111106,
-  // ]); // useFetchLendOrder(poolIds); TODO mettre ça a la place quand on n'a plus de prblm d'api
-  const { data, loading, error } = useFetchLendOrder(poolIds);
+  // const poolIds = pricePoolId.map((item) => item.poolId);
+  // console.log(`poolIds : ${poolIds}`);
+  // // const { data, loading, error } = useFetchLendOrder([
+  // //   1111111110, 1111111108, 1111111106,
+  // // ]); // useFetchLendOrder(poolIds); TODO mettre ça a la place quand on n'a plus de prblm d'api
+  // const { data, loading, error } = useFetchLendOrder(poolIds);
 
   const dataColumnsConfig = [
     { key: "buyPrice", title: "Buy Price", metric: "USDC" },
@@ -45,34 +55,34 @@ const Index = () => {
     { key: "mySupply", title: "My Supply", metric: "USDC" },
   ];
 
-  let mergedData = mergeObjects(data, userDeposits);
+  let mergedData = mergeObjects(lendOrderData, userDeposits);
   mergedData = mergeObjects(mergedData, pricePoolId);
 
   const displayedData = showAll ? mergedData : mergedData.slice(0, 3);
 
-  useEffect(() => {
-    const initProvider = () => {
-      if (window.ethereum) {
-        const providerTemp = new ethers.providers.Web3Provider(window.ethereum);
-        setProvider(providerTemp);
-        providerTemp
-          .getSigner()
-          .getAddress()
-          .then(setWalletAddress)
-          .catch(console.error);
-      } else {
-        console.error("Please install MetaMask!");
-      }
-    };
+  // useEffect(() => {
+  //   const initProvider = () => {
+  //     if (window.ethereum) {
+  //       const providerTemp = new ethers.providers.Web3Provider(window.ethereum);
+  //       setProvider(providerTemp);
+  //       providerTemp
+  //         .getSigner()
+  //         .getAddress()
+  //         .then(setWalletAddress)
+  //         .catch(console.error);
+  //     } else {
+  //       console.error("Please install MetaMask!");
+  //     }
+  //   };
 
-    initProvider();
-  }, []);
+  //   initProvider();
+  // }, []);
 
-  useEffect(() => {
-    if (!loading && !error && data) {
-      console.log("Fetched data:", data);
-    }
-  }, [data, loading, error]);
+  // useEffect(() => {
+  //   if (!loading && !error && lendOrderData) {
+  //     console.log("Fetched data:", lendOrderData);
+  //   }
+  // }, [data, loading, error]);
 
   const updateButtonClickable = (
     quantity: number,
@@ -115,7 +125,7 @@ const Index = () => {
     setShowAll(!showAll);
   };
 
-  if (error) return <Typography>Error: {error}</Typography>;
+  //if (error) return <Typography>Error: {error}</Typography>;
 
   const transactionData = [
     {
@@ -166,7 +176,7 @@ const Index = () => {
                       unit: "USDC",
                     },
                   ]}
-                  isLoading={loading}
+                  isLoading={loadingUser}
                 />
               </div>
             </div>
@@ -178,7 +188,7 @@ const Index = () => {
               data={displayedData}
               clickableRows={true}
               onRowClick={handleRowClick}
-              isLoading={loading}
+              isLoading={lendOrderLoading}
             />
           </div>
           <Button onClick={toggleShowAll}>

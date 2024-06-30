@@ -3,7 +3,7 @@ import axios from "axios";
 import { ethers } from "ethers";
 import { formatNumber } from "../../components/GlobalFunctions";
 
-interface LendOrderData {
+export interface LendOrderData {
   id: number;
   poolId: number;
   buyPrice: number;
