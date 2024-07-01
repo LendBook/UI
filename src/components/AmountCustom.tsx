@@ -121,9 +121,9 @@ export default function AmountCustom({
 
   return (
     <Box className="max-w-[300px]">
-      <span className="text-dark text-[18px] font-bold">{title}</span>
+      <span className="text-primary text-[18px] font-bold">{title}</span>
       <Paper
-        elevation={1}
+        elevation={0}
         style={{ padding: "0px", width: "100%" }}
         className="flex flex-col"
       >
@@ -140,11 +140,11 @@ export default function AmountCustom({
           InputProps={{
             style: {
               color: theme.palette.text.primary,
-              backgroundColor: theme.palette.common.white,
+              backgroundColor: theme.palette.background.default, //theme.palette.common.white,
             },
             endAdornment: (
               <InputAdornment position="end">
-                <span className="text-dark">{selectedToken}</span>
+                <span className="text-dark font-bold">{selectedToken}</span>
               </InputAdornment>
             ),
           }}

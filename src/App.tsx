@@ -8,7 +8,7 @@ import { ethers } from "ethers";
 import theme from "./theme/index";
 import LandingLayout from "./layouts/landinglayout";
 import Loading from "./components/Loading";
-import { DataProvider } from './context/DataContext';
+import { DataProvider } from "./context/DataContext";
 
 // Import components
 const Home = lazy(() => import("./views/Markets/Index"));
@@ -20,6 +20,7 @@ const AnalyticsPage = lazy(() => import("./views/Analytics/Index"));
 const InakiTest = lazy(() => import("./views/InakiTest/Index"));
 const Lend = lazy(() => import("./views/Lend/Index"));
 const Template = lazy(() => import("./views/Template/Index"));
+const BorrowNew = lazy(() => import("./views/BorrowNew/Index"));
 
 const App = () => {
   const { address: walletAddress } = useAccount();
@@ -100,6 +101,14 @@ const App = () => {
                 element={
                   <Suspense fallback={<Loading />}>
                     <Template />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="borrownew"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <BorrowNew />
                   </Suspense>
                 }
               />
