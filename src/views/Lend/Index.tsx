@@ -161,7 +161,7 @@ const Index = () => {
             <div className="container" style={{ marginBottom: "10px" }}>
               <AmountCustom
                 title="Supply Amount"
-                tokenWalletBalance="11320"
+                tokenWalletBalance={11320}
                 selectedToken="USDC"
                 ratioToUSD={1.01}
                 onQuantityChange={handleQuantityChange}

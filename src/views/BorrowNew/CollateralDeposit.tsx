@@ -36,7 +36,7 @@ const CollateralDeposit = () => {
     <div>
       <AmountCustom
         title="Amount to deposit"
-        tokenWalletBalance="12.42"
+        tokenWalletBalance={12.42}
         selectedToken="WETH"
         ratioToUSD={3010}
         onQuantityChange={handleCollateralQuantityChange}

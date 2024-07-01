@@ -99,7 +99,7 @@ const Repay = () => {
     <div>
       <AmountCustom
         title="Amount to repay"
-        tokenWalletBalance="376"
+        tokenWalletBalance={376}
         selectedToken="USDC"
         ratioToUSD={1.01}
         onQuantityChange={handleQuantityChange}

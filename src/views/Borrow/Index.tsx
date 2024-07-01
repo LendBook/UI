@@ -163,7 +163,7 @@ const Index = () => {
               <div className="container" style={{ marginBottom: "10px" }}>
                 <AmountCustom
                   title="Collateral Amount"
-                  tokenWalletBalance="12.42"
+                  tokenWalletBalance={12.42}
                   selectedToken="WETH"
                   ratioToUSD={3010}
                   onQuantityChange={handleCollateralQuantityChange}
@@ -187,7 +187,7 @@ const Index = () => {
             <div className="container" style={{ marginBottom: "10px" }}>
               <AmountCustom
                 title="Borrowed Amount"
-                tokenWalletBalance="376"
+                tokenWalletBalance={376}
                 selectedToken="USDC"
                 ratioToUSD={1.01}
                 onQuantityChange={handleBorrowedQuantityChange}

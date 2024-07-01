@@ -10,15 +10,15 @@ const Index = () => {
   const oraclePrice = 4000;
 
   const quoteTokenName = "USDC";
-  const quoteTokenWalletBalance = "11320";
+  const quoteTokenWalletBalance = 11320;
   const quoteTokenRatioToUsd = 1.001;
 
   const baseTokenName = "WETH";
-  const baseTokenWalletBalance = "15";
+  const baseTokenWalletBalance = 15;
   const baseTokenRatioToUsd = 4005;
 
   const [sellTokenName, setSellTokenName] = useState<string>(baseTokenName);
-  const [sellTokenWalletBalance, setSellTokenWalletBalance] = useState<string>(
+  const [sellTokenWalletBalance, setSellTokenWalletBalance] = useState<number>(
     baseTokenWalletBalance
   );
   const [sellTokenRatioToUsd, setSellTokenRatioToUsd] =
@@ -166,7 +166,7 @@ const Index = () => {
               <div className="mt-2">
                 <AmountCustom
                   title="Receive"
-                  tokenWalletBalance=""
+                  tokenWalletBalance={baseTokenWalletBalance}
                   selectedToken={buyTokenName}
                   ratioToUSD={buyTokenRatioToUsd}
                   initialQuantity={String(buyAmountQuantity)}

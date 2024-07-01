@@ -9,6 +9,19 @@ const CollateralWithdraw = () => {
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [textAfterClick, setTextAfterClick] = useState<string>("");
 
+  const {
+    userInfo,
+    userDeposits,
+    loadingUser,
+    pricePoolId,
+    pricePoolIdLoading,
+    pricePoolIdError,
+    orderData,
+    orderLoading,
+    orderError,
+    orderMergedData,
+  } = useDataContext();
+
   const updateButtonClickable = (collateralQuantity: number) => {
     const isClickable = collateralQuantity > 0;
     setButtonClickable(isClickable);
@@ -37,7 +50,7 @@ const CollateralWithdraw = () => {
     <div>
       <AmountCustom
         title="Amount to withdraw"
-        tokenWalletBalance="12.42"
+        tokenWalletBalance={userInfo.excessCollateral}
         selectedToken="WETH"
         ratioToUSD={3010}
         onQuantityChange={handleCollateralQuantityChange}

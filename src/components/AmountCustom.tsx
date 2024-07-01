@@ -19,7 +19,7 @@ import { formatNumber } from "./GlobalFunctions";
 // Définition des types pour les props de AmountCustom
 type AmountCustomProps = {
   title?: string;
-  tokenWalletBalance: string;
+  tokenWalletBalance: number;
   selectedToken?: string;
   ratioToUSD?: number;
   initialQuantity?: string;
@@ -28,7 +28,7 @@ type AmountCustomProps = {
 
 export default function AmountCustom({
   title = "Collateral Amount",
-  tokenWalletBalance = "0",
+  tokenWalletBalance = 0,
   selectedToken = "USDC",
   ratioToUSD = 1.01,
   initialQuantity = "",
@@ -109,7 +109,7 @@ export default function AmountCustom({
   };
 
   const handleMaxClick = () => {
-    const maxAmount = tokenWalletBalance;
+    const maxAmount = tokenWalletBalance.toString();
     setQuantity(maxAmount);
     setMessage("$" + formatNumber(parseFloat(maxAmount) * ratioToUSD));
     setLabel("");
@@ -159,12 +159,12 @@ export default function AmountCustom({
           <span className="text-dark text-[12px]">{message}</span>
         )}
         <div className="flex items-center">
-          {tokenWalletBalance !== "" && (
+          {tokenWalletBalance !== 0 && (
             <button
               className="text-dark text-[10px] underline font-bold"
               onClick={handleMaxClick}
             >
-              Available : {formatNumber(parseFloat(tokenWalletBalance))}
+              Available : {formatNumber(tokenWalletBalance)}
             </button>
           )}
         </div>

@@ -90,7 +90,7 @@ const Borrow = () => {
     <div>
       <AmountCustom
         title="Amount to borrow"
-        tokenWalletBalance="376"
+        tokenWalletBalance={376}
         selectedToken="USDC"
         ratioToUSD={1.01}
         onQuantityChange={handleQuantityChange}
