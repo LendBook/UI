@@ -8,6 +8,7 @@ import Repay from "./Repay";
 import theme from "../../theme";
 import MetricCustom from "../../components/MetricCustom";
 import { useDataContext } from "../../context/DataContext";
+import TabsCustomV2 from "../../components/TabsCustomV2";
 
 const Index = () => {
   const [selectedCollateralTab, setSelectedCollateralTab] =
@@ -54,7 +55,7 @@ const Index = () => {
       >
         <Box>
           <div>
-            <Typography variant="h4" color="black" fontWeight="bold">
+            <Typography variant="h4" color="black">
               Borrow
             </Typography>
             <div className="flex mt-5"></div>
@@ -71,7 +72,7 @@ const Index = () => {
                 }}
                 className="flex"
               >
-                <TabsCustom
+                <TabsCustomV2
                   labels={["Deposit collateral", "Withdraw collateral"]}
                   onClick={handleToggleCollateralClick}
                 />
@@ -104,7 +105,7 @@ const Index = () => {
               }}
               className="flex flex-col"
             >
-              <TabsCustom
+              <TabsCustomV2
                 labels={["Borrow", "Repay"]}
                 onClick={handleToggleBorrowClick}
               />
