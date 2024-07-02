@@ -5,20 +5,28 @@ import { useOrderbook } from "./useOrderbook";
 export const useBorrow = () => {
   const { contract } = useOrderbook();
 
-  return async (poolId: number, quantity: string) => {
-    if (!contract) return;
+  return async (poolId: number, quantity: string): Promise<string> => {
+    if (!contract) return "Contract not found";
 
     try {
-      const tx = await contract.borrow(poolId, ethers.utils.parseUnits(quantity, 18));
+      const tx = await contract.borrow(
+        poolId,
+        ethers.utils.parseUnits(quantity, 18)
+      );
       await tx.wait();
-      NotificationManager.success("Borrow successful!");
+      const successMessage = "Borrow successful!";
+      NotificationManager.success(successMessage);
+      return successMessage;
     } catch (error: any) {
+      let errorMessage;
       if (error.code === "ACTION_REJECTED") {
-        NotificationManager.error("User rejected the transaction.");
+        errorMessage = "User rejected the transaction.";
       } else {
-        NotificationManager.error("Error: " + error.message);
+        errorMessage = "Error: " + error.message;
       }
+      NotificationManager.error(errorMessage);
       console.error("error ----------->", error);
+      return errorMessage;
     }
   };
 };

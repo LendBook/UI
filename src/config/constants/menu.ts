@@ -7,6 +7,7 @@ const MENU_LINKS = [
   { id: 6, label: "Analytics", to: "/analytics" },
   { id: 7, label: "Inaki Test", to: "/inakitest" },
   { id: 8, label: "Template", to: "/template" },
+  { id: 9, label: "Borrow New", to: "/borrownew" },
 ];
 
 export default MENU_LINKS;

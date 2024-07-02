@@ -37,27 +37,30 @@ type TableProps<T extends string | number> = {
 // Style des cellules
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.background.default,
+    //backgroundColor: theme.palette.background.default,
     color: theme.palette.info.main,
-    fontWeight: "bold",
-    borderBottom: "0px",
+    //fontWeight: "bold",
+    borderBottom: "1px solid", //"0px",
+    borderColor: "white", //theme.palette.background.default, //theme.palette.background.default,
     paddingTop: "5px",
     paddingBottom: "5px",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    color: theme.palette.common.black,
+    fontWeight: "bold",
+    color: theme.palette.info.main,
     borderBottom: "1px solid",
     paddingTop: "8px",
     paddingBottom: "8px",
-    borderColor: theme.palette.background.default,
+    borderColor: "white", //theme.palette.background.default, //theme.palette.background.default,
   },
 }));
 
 // Style pour la ligne au survol
 const HoverTableRow = styled(TableRow)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
   "&:hover": {
-    backgroundColor: theme.palette.background.default, //theme.palette.action.hover, //theme.palette.background.default,
+    backgroundColor: theme.palette.error.main, //theme.palette.primary.main, //theme.palette.background.default, //theme.palette.action.hover, //theme.palette.background.default,
   },
 }));
 
@@ -88,16 +91,16 @@ export default function CustomTable<T extends string | number>({
   };
 
   return (
-    <Box>
-      <span className="text-dark text-[18px] font-bold">{title}</span>
+    <Box sx={{ width: "100%" }}>
+      <span className="text-primary text-[18px] font-bold">{title}</span>
       <div className="container relative z-2 mt-10">
         <Box
           component={Paper}
-          elevation={1} //4
+          elevation={0} //1
           sx={{
             borderRadius: 1,
-            padding: 1,
-            border: `1px solid ${theme.palette.background.default}`,
+            padding: 0, //1
+            //border: `1px solid ${theme.palette.background.default}`,
           }}
         >
           <TableContainer component={Paper} elevation={0}>
@@ -120,13 +123,16 @@ export default function CustomTable<T extends string | number>({
                       border: 0,
                     },
                     cursor: isRowClickable ? "pointer" : "default",
-                    backgroundColor:
-                      rowIndex === activeRow
-                        ? theme.palette.primary.main
-                        : "inherit",
+                    // backgroundColor:
+                    //   rowIndex === activeRow
+                    //     ? theme.palette.primary.main
+                    //     : "inherit",
                     "& .MuiTableCell-root":
                       rowIndex === activeRow
-                        ? { color: theme.palette.common.white }
+                        ? {
+                            color: theme.palette.common.white,
+                            backgroundColor: theme.palette.primary.main,
+                          }
                         : "inherit",
                   };
 

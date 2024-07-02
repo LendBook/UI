@@ -30,14 +30,15 @@ const Index = () => {
 
   const {
     userInfo,
-    userBorrows,
+    userDeposits,
     loadingUser,
     pricePoolId,
     pricePoolIdLoading,
     pricePoolIdError,
-    lendOrderData,
-    lendOrderLoading,
-    lendOrderError,
+    orderData,
+    orderLoading,
+    orderError,
+    orderMergedData,
   } = useDataContext();
 
   // const { pricePoolId, pricePoolIdLoading, pricePoolIdError } =
@@ -63,10 +64,10 @@ const Index = () => {
     },
   ];
 
-  let mergedData = mergeObjects(lendOrderData, userBorrows);
-  mergedData = mergeObjects(mergedData, pricePoolId);
+  // let mergedData = mergeObjects(lendOrderData, userBorrows);
+  // mergedData = mergeObjects(mergedData, pricePoolId);
 
-  const displayedData = showAll ? mergedData : mergedData.slice(0, 3);
+  const displayedData = showAll ? orderMergedData : orderMergedData.slice(0, 3);
 
   // useEffect(() => {
   //   const initProvider = () => {
@@ -162,7 +163,7 @@ const Index = () => {
               <div className="container" style={{ marginBottom: "10px" }}>
                 <AmountCustom
                   title="Collateral Amount"
-                  tokenWalletBalance="12.42"
+                  tokenWalletBalance={12.42}
                   selectedToken="WETH"
                   ratioToUSD={3010}
                   onQuantityChange={handleCollateralQuantityChange}
@@ -186,7 +187,7 @@ const Index = () => {
             <div className="container" style={{ marginBottom: "10px" }}>
               <AmountCustom
                 title="Borrowed Amount"
-                tokenWalletBalance="376"
+                tokenWalletBalance={376}
                 selectedToken="USDC"
                 ratioToUSD={1.01}
                 onQuantityChange={handleBorrowedQuantityChange}
@@ -201,7 +202,7 @@ const Index = () => {
               data={displayedData}
               clickableRows={true}
               onRowClick={handleRowClick}
-              isLoading={lendOrderLoading}
+              isLoading={orderLoading}
             />
           </div>
           <Button onClick={toggleShowAll}>

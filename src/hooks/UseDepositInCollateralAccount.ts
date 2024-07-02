@@ -5,20 +5,26 @@ import { useOrderbook } from "./useOrderbook";
 export const useDepositInCollateralAccount = () => {
   const { contract } = useOrderbook();
 
-  return async (quantity: string) => {
-    if (!contract) return;
-
+  return async (quantity: string): Promise<string> => {
+    if (!contract) return "Contract not found";
     try {
-      const tx = await contract.depositInCollateralAccount(ethers.utils.parseUnits(quantity, 18));
+      const tx = await contract.depositInCollateralAccount(
+        ethers.utils.parseUnits(quantity, 18)
+      );
       await tx.wait();
-      NotificationManager.success("Deposit in Collateral Account successful!");
+      const successMessage = "Deposit collateral successful!";
+      NotificationManager.success(successMessage);
+      return successMessage;
     } catch (error: any) {
+      let errorMessage;
       if (error.code === "ACTION_REJECTED") {
-        NotificationManager.error("User rejected the transaction.");
+        errorMessage = "User rejected the transaction.";
       } else {
-        NotificationManager.error("Error: " + error.message);
+        errorMessage = "Error: " + error.message;
       }
+      NotificationManager.error(errorMessage);
       console.error("error ----------->", error);
+      return errorMessage;
     }
   };
 };

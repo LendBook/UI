@@ -5,20 +5,28 @@ import { useOrderbook } from "./useOrderbook";
 export const useWithdrawFromAccount = () => {
   const { contract } = useOrderbook();
 
-  return async (quantity: string, inQuote: boolean) => {
-    if (!contract) return;
+  return async (quantity: string, inQuote: boolean): Promise<string> => {
+    if (!contract) return "Contract not found";
 
     try {
-      const tx = await contract.withdrawFromAccount(ethers.utils.parseUnits(quantity, 18), inQuote);
+      const tx = await contract.withdrawFromAccount(
+        ethers.utils.parseUnits(quantity, 18),
+        inQuote
+      );
       await tx.wait();
-      NotificationManager.success("Withdraw from Account successful!");
+      const successMessage = "Withdraw from Account successful!";
+      NotificationManager.success(successMessage);
+      return successMessage;
     } catch (error: any) {
+      let errorMessage;
       if (error.code === "ACTION_REJECTED") {
-        NotificationManager.error("User rejected the transaction.");
+        errorMessage = "User rejected the transaction.";
       } else {
-        NotificationManager.error("Error: " + error.message);
+        errorMessage = "Error: " + error.message;
       }
+      NotificationManager.error(errorMessage);
       console.error("error ----------->", error);
+      return errorMessage;
     }
   };
 };

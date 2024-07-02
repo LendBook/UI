@@ -34,7 +34,7 @@ const Container = styled(Box)(({ theme }) => ({
     flexDirection: "column",
   },
   [theme.breakpoints.up("md")]: {
-    flexDirection: "row",
+    flexDirection: "column", //"row"
   },
 }));
 
@@ -68,7 +68,7 @@ export default function MetricCustom<T extends string>({
               style={{
                 borderRadius: 1,
                 padding: 2,
-                backgroundColor: theme.palette.background.default,
+                //backgroundColor: theme.palette.background.default,
                 //marginRight: rowIndex !== data.length - 1 ? 10 : 0,
                 //marginBottom: rowIndex !== data.length - 1 ? 10 : 0,
                 width: "300px",
@@ -79,7 +79,7 @@ export default function MetricCustom<T extends string>({
                 <Typography
                   variant="body2"
                   style={{
-                    fontWeight: "bold",
+                    //fontWeight: "bold",
                     color: theme.palette.info.main,
                   }}
                 >
@@ -87,7 +87,10 @@ export default function MetricCustom<T extends string>({
                 </Typography>
                 <Typography
                   variant="body1"
-                  style={{ color: "votre_couleur_phrase" }}
+                  style={{
+                    color: theme.palette.primary.main,
+                    fontWeight: "bold",
+                  }}
                 >
                   {isLoading ? (
                     <Skeleton variant="text" width="50%" />

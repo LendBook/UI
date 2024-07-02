@@ -10,14 +10,15 @@ import {
   useFetchPriceForEmptyPools,
 } from "../hooks/api/emptyPools";
 import { LendOrderData, useFetchLendOrder } from "../hooks/api/lend";
+import { ObjectWithId, mergeObjects } from "../components/GlobalFunctions";
 
 interface DataContextType {
   pricePoolId: PriceForPoolIdData[];
   pricePoolIdLoading: boolean;
   pricePoolIdError: string;
-  lendOrderData: LendOrderData[];
-  lendOrderLoading: boolean;
-  lendOrderError: string;
+  orderData: LendOrderData[];
+  orderLoading: boolean;
+  orderError: string;
   price: number | null;
   priceLoading: boolean;
   priceError: string;
@@ -26,6 +27,7 @@ interface DataContextType {
   userBorrows: UserBorrowsData[];
   loadingUser: boolean;
   errorUser: string | null;
+  orderMergedData: ObjectWithId[];
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -45,9 +47,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({
     useFetchPriceForEmptyPools();
   const poolIds = pricePoolId.map((item) => item.poolId);
   const {
-    data: lendOrderData,
-    loading: lendOrderLoading,
-    error: lendOrderError,
+    data: orderData,
+    loading: orderLoading,
+    error: orderError,
   } = useFetchLendOrder(poolIds);
 
   //  const { data: lendOrderData, loading: lendOrderLoading, error: lendOrderError } = useFetchLendOrder([1111111110]);
@@ -56,15 +58,19 @@ export const DataProvider: React.FC<DataProviderProps> = ({
   const { userInfo, userDeposits, userBorrows, loadingUser, errorUser } =
     useFetchUserInfo(provider, walletAddress);
 
+  let orderMergedData = mergeObjects(orderData, userDeposits);
+  orderMergedData = mergeObjects(orderMergedData, userBorrows);
+  orderMergedData = mergeObjects(orderMergedData, pricePoolId);
+
   return (
     <DataContext.Provider
       value={{
         pricePoolId,
         pricePoolIdLoading,
         pricePoolIdError,
-        lendOrderData,
-        lendOrderLoading,
-        lendOrderError,
+        orderData,
+        orderLoading,
+        orderError,
         price,
         priceLoading,
         priceError,
@@ -73,6 +79,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({
         userBorrows,
         loadingUser,
         errorUser,
+        orderMergedData,
       }}
     >
       {children}

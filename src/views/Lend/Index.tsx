@@ -32,9 +32,10 @@ const Index = () => {
     pricePoolId,
     pricePoolIdLoading,
     pricePoolIdError,
-    lendOrderData,
-    lendOrderLoading,
-    lendOrderError,
+    orderData,
+    orderLoading,
+    orderError,
+    orderMergedData,
   } = useDataContext();
 
   // const { pricePoolId, pricePoolIdLoading, pricePoolIdError } =
@@ -55,10 +56,10 @@ const Index = () => {
     { key: "mySupply", title: "My Supply", metric: "USDC" },
   ];
 
-  let mergedData = mergeObjects(lendOrderData, userDeposits);
-  mergedData = mergeObjects(mergedData, pricePoolId);
+  // let mergedData = mergeObjects(orderData, userDeposits);
+  // mergedData = mergeObjects(mergedData, pricePoolId);
 
-  const displayedData = showAll ? mergedData : mergedData.slice(0, 3);
+  const displayedData = showAll ? orderMergedData : orderMergedData.slice(0, 3);
 
   // useEffect(() => {
   //   const initProvider = () => {
@@ -160,7 +161,7 @@ const Index = () => {
             <div className="container" style={{ marginBottom: "10px" }}>
               <AmountCustom
                 title="Supply Amount"
-                tokenWalletBalance="11320"
+                tokenWalletBalance={11320}
                 selectedToken="USDC"
                 ratioToUSD={1.01}
                 onQuantityChange={handleQuantityChange}
@@ -188,7 +189,7 @@ const Index = () => {
               data={displayedData}
               clickableRows={true}
               onRowClick={handleRowClick}
-              isLoading={lendOrderLoading}
+              isLoading={orderLoading}
             />
           </div>
           <Button onClick={toggleShowAll}>

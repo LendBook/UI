@@ -19,8 +19,11 @@ type TabProps = {
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
-    margin: theme.spacing(0.5),
-    border: 0,
+    //margin: theme.spacing(0.5),
+    border: `2px solid ${theme.palette.primary.main}`,
+    textTransform: "none",
+    fontSize: "100%",
+    padding: "3px 16px",
   },
 }));
 
@@ -61,8 +64,8 @@ export default function TabsCustom({ labels, onClick }: TabProps) {
 
   return (
     <Paper
-      elevation={4}
-      sx={{ borderRadius: 1, padding: 1, display: "inline-block" }}
+      elevation={0} //4
+      sx={{ borderRadius: 1, padding: 0, display: "inline-block" }}
       className="flex flex-col"
     >
       <StyledToggleButtonGroup
@@ -82,8 +85,11 @@ export default function TabsCustom({ labels, onClick }: TabProps) {
               backgroundColor:
                 alignment === label ? theme.palette.primary.main : "inherit",
               color:
-                alignment === label ? theme.palette.common.white : "inherit",
-              fontWeight: "bold",
+                alignment === label
+                  ? theme.palette.common.white
+                  : theme.palette.primary.main,
+              //fontWeight: "bold",
+              fontWeight: alignment === label ? "bold" : "inherit",
             }}
           >
             {label}
