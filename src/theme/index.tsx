@@ -17,7 +17,7 @@ const tailwindColors = {
   bgBtnHover: "#002347",
   borderColor: "#4ACFFF",
 
-  bgLight: "#e9f4ff",
+  bgLight: "#f0f2f5", //"#e9f4ff",
 };
 
 const index = createTheme({
