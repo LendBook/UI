@@ -16,7 +16,7 @@ const Borrow = () => {
   const [poolId, setPoolId] = useState<string>("");
   const [textAfterClick, setTextAfterClick] = useState<string>("");
   const [textNotClickable, setTextNotClickable] = useState<string>(
-    "Must enter a borrowed amount"
+    "Must enter an amount to borrow"
   );
 
   const {

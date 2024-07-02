@@ -30,7 +30,7 @@ export default function CustomButton({
           //textTransform: "none",
           width: typeof buttonWidth === "number" ? `${buttonWidth}px` : "auto",
           padding: "6px 10px",
-          border: "none",
+          border: `1px solid ${theme.palette.primary.main}`,
           alignItems: "center",
           textTransform: "none",
           borderRadius:
@@ -46,7 +46,7 @@ export default function CustomButton({
 
           color: clickable
             ? theme.palette.common.white
-            : theme.palette.info.main,
+            : theme.palette.primary.main,
         }}
         onClick={handleClick}
         //disabled={!clickable}
