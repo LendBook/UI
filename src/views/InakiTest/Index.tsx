@@ -1,49 +1,64 @@
-import { Box, Card, Paper, Typography, Tabs, Tab, styled } from "@mui/material";
-import { useState } from "react";
-import TabsCustom from "../../components/TabsCustom";
-import { TabPanel } from "@material-tailwind/react";
-import theme from "../../theme";
-import TabsCustomV2 from "../../components/TabsCustomV2";
+import { Box, Card, Paper, Typography } from "@mui/material";
+import { BarChart } from "@mui/x-charts/BarChart";
+import { formatNumber } from "../../components/GlobalFunctions";
+import { useFetchLendOrder } from "../../hooks/api/lend";
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
+const dataset = [
+  {
+    poolId: 999,
+    limitPrice: 4000,
+    deposits: 10000,
+    borrows: 7000,
+  },
+  {
+    poolId: 997,
+    limitPrice: 3800,
+    deposits: 10000,
+    borrows: 7000,
+  },
+  {
+    poolId: 995,
+    limitPrice: 3600,
+    deposits: 20000,
+    borrows: 7000,
+  },
+];
+// Trier le dataset par ordre croissant de limitPrice
+const sortedDataset = dataset.sort((a, b) => a.limitPrice - b.limitPrice);
 
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+const valueFormatter = (value: number | null) =>
+  `$${formatNumber(String(value))}`;
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
+const chartSetting = {
+  // yAxis: [
+  //   {
+  //     min: 0,
+  //     //max: 60000,
+  //     tickLabel: null,
+  //   },
+  // ],
+  width: 1000,
+  height: 300,
+  // sx: {
+  //   [`.${axisClasses.left} .${axisClasses.label}`]: {
+  //     transform: "translate(-20px, 0)",
+  //   },
+  // },
+};
 
 const Index = () => {
-  const [value, setValue] = useState(0);
+  const { data, loading, error } = useFetchLendOrder([
+    1111111110, 1111111108, 1111111106,
+  ]);
+  const dataColumnsConfig = [
+    { key: "buyPrice", title: "Buy Price", metric: "USDC" },
+    { key: "deposits", title: "Total Supply", metric: "USDC" },
+    { key: "netAPY", title: "Net APY", metric: "%" },
+    { key: "utilization", title: "Utilization", metric: "%" },
+    { key: "mySupply", title: "My Supply", metric: "USDC" },
+  ];
 
-  const handleClick = (label: string) => {
-    //setSelectedBorrowTab(label);
-  };
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+  const sortedData = data.sort((a, b) => a.buyPrice - b.buyPrice);
 
   return (
     <div className="mt-20 ml-72 mr-4">
@@ -56,76 +71,70 @@ const Index = () => {
           border: "none",
         }}
       >
-        {/* <Box>
+        <Box>
           <div>
-            <Typography variant="h4" color="black" fontWeight="bold">
-              Inaki Test
+            <Typography variant="h4" color="black">
+              Inaki test
             </Typography>
-            <div className="flex mt-10"></div>
-            <Paper
-              elevation={4}
-              sx={{ borderRadius: 1, padding: 1, display: "inline-block" }}
-              className="flex flex-col"
-            >
-              <TabsCustom
-                labels={["As Lender", "As Borrower"]}
-                onClick={handleToggleCollateralClick}
+            <div className="flex mt-10">
+              <BarChart
+                dataset={sortedDataset}
+                xAxis={[{ scaleType: "band", dataKey: "limitPrice" }]}
+                series={[
+                  {
+                    dataKey: "deposits",
+                    label: "Deposits",
+                    valueFormatter,
+                  },
+                  {
+                    dataKey: "borrows",
+                    label: "Borrows",
+                    valueFormatter,
+                  },
+                ]}
+                {...chartSetting}
               />
-            </Paper>
+            </div>
+
+            <div className="flex mt-5">
+              <Paper
+                elevation={4}
+                sx={{
+                  borderRadius: 1,
+                  padding: 1,
+                  display: "inline-block",
+                  //backgroundColor: theme.palette.background.default,
+                }}
+                className="flex flex-col"
+              >
+                <BarChart
+                  dataset={sortedData}
+                  xAxis={[{ scaleType: "band", dataKey: "buyPrice" }]}
+                  tooltip={{ trigger: "axis" }}
+                  series={[
+                    {
+                      dataKey: "deposits",
+                      label: "Total Supply",
+                      valueFormatter,
+                    },
+                    {
+                      dataKey: "availableSupply",
+                      label: "Available Supply",
+                      valueFormatter,
+                    },
+                    {
+                      dataKey: "borrows",
+                      label: "Total Borrow",
+                      valueFormatter,
+                    },
+                  ]}
+                  {...chartSetting}
+                />
+              </Paper>
+            </div>
           </div>
-        </Box> */}
-      </Card>
-      <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            textColor="primary"
-            indicatorColor="primary"
-            aria-label="basic tabs example"
-          >
-            <Tab
-              label="Deposit collateral"
-              {...a11yProps(0)}
-              sx={{
-                fontWeight: value === 0 ? "bold" : "normal",
-                textTransform: "none",
-              }}
-            />
-            <Tab
-              label="Withdraw collateral"
-              {...a11yProps(1)}
-              sx={{
-                fontWeight: value === 1 ? "bold" : "normal",
-                textTransform: "none",
-              }}
-            />
-            <Tab
-              label="Item Three"
-              {...a11yProps(2)}
-              sx={{
-                fontWeight: value === 2 ? "bold" : "normal",
-                textTransform: "none",
-              }}
-            />
-          </Tabs>
         </Box>
-        <CustomTabPanel value={value} index={0}>
-          Item One
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          Item Two
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={2}>
-          Item Three
-        </CustomTabPanel>
-      </Box>
-      <Box>
-        <TabsCustomV2
-          labels={["As Lender", "As Borrower"]}
-          //onClick={handleClick}
-        />
-      </Box>
+      </Card>
     </div>
   );
 };

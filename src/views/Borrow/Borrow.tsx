@@ -45,7 +45,12 @@ const Borrow = () => {
     },
   ];
 
-  const displayedData = showAll ? orderMergedData : orderMergedData.slice(0, 3);
+  const filteredData = orderMergedData.filter((item) => {
+    return (
+      item.availableSupply !== undefined && Number(item.availableSupply) > 0
+    );
+  });
+  const displayedData = showAll ? filteredData : filteredData.slice(0, 3);
 
   const updateButtonClickable = (borrowedQuantity: number, price: string) => {
     const isClickable = borrowedQuantity > 0 && price !== "";

@@ -88,7 +88,7 @@ export default function MetricCustom<T extends string>({
                 <Typography
                   variant="body1"
                   style={{
-                    color: theme.palette.primary.main,
+                    color: theme.palette.text.primary,
                     fontWeight: "bold",
                   }}
                 >

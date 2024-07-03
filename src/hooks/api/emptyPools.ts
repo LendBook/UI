@@ -48,7 +48,7 @@ function generatePriceData(
   const idStep = 2;
 
   // 5 = nombre de pool en dessous ou au dessus de endPrice
-  const count = 5;
+  const count = 10;
   const finalPrice = isIncreasing
     ? marketPrice * Math.pow(step, count)
     : marketPrice / Math.pow(step, count);

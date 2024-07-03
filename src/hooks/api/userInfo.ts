@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { ethers } from "ethers";
 
 export interface UserDepositOrdersData {
   id: number;
-  orderId: number;
+  orderLenderId: number;
   poolId: number;
   maker: string;
   mySupply: number;
@@ -13,14 +13,17 @@ export interface UserDepositOrdersData {
 
 export interface UserBorrowsData {
   id: number;
-  orderId: number;
+  orderBorrowerId: number;
   poolId: number;
   borrower: string;
   myBorrowingPositions: number;
   [key: string]: string | number;
 }
 
-export const useFetchUserInfo = (provider: any, walletAddress: string | undefined) => {
+export const useFetchUserInfo = (
+  provider: any,
+  walletAddress: string | undefined
+) => {
   const [userInfo, setUserInfo] = useState({
     totalDepositsQuote: "",
     totalDepositsBase: "",
@@ -101,7 +104,7 @@ export const useFetchUserInfo = (provider: any, walletAddress: string | undefine
 
           return {
             id: depositOrdersId,
-            orderId: depositOrdersId,
+            orderLenderId: depositOrdersId,
             poolId: poolId,
             maker: makerAddress,
             mySupply: quantity,
@@ -142,7 +145,7 @@ export const useFetchUserInfo = (provider: any, walletAddress: string | undefine
 
           return {
             id: borrowsId,
-            orderId: borrowsId,
+            orderBorrowerId: borrowsId,
             poolId: poolId,
             borrower: borrowerAddress,
             myBorrowingPositions: quantity,

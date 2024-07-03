@@ -1,4 +1,4 @@
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Card, Paper, Typography } from "@mui/material";
 import CustomTable from "../../components/CustomTable";
 import AmountCustom from "../../components/AmountCustom";
 import { useState } from "react";
@@ -50,7 +50,7 @@ const Index = () => {
       >
         <Box>
           <div>
-            <Typography variant="h4" color="black" fontWeight="bold">
+            <Typography variant="h4" color="black">
               Template
             </Typography>
             <div className="flex flex-col md-plus:flex-row space-between items-baseline">
@@ -60,12 +60,23 @@ const Index = () => {
             </div>
 
             <div className="flex mt-10">
-              <CustomTable
-                title="Template"
-                columnsConfig={templateDataTableColumnsConfig}
-                data={templateDataTable}
-                clickableRows={true}
-              />
+              <Paper
+                elevation={4}
+                sx={{
+                  borderRadius: 1,
+                  padding: 1,
+                  display: "inline-block",
+                  //backgroundColor: theme.palette.background.default,
+                }}
+                className="flex flex-col"
+              >
+                <CustomTable
+                  title="Template"
+                  columnsConfig={templateDataTableColumnsConfig}
+                  data={templateDataTable}
+                  clickableRows={true}
+                />
+              </Paper>
             </div>
           </div>
         </Box>

@@ -1,4 +1,4 @@
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Card, Paper, Typography } from "@mui/material";
 import CustomTable from "../../components/CustomTable";
 import AmountCustom from "../../components/AmountCustom";
 import { useState } from "react";
@@ -46,18 +46,28 @@ const Markets = () => {
       >
         <Box>
           <div>
-            <Typography variant="h4" color="black" fontWeight="bold">
+            <Typography variant="h4" color="black">
               Isolated markets
             </Typography>
-
-            <div className="flex mt-10">
+            <div className="flex mt-5"></div>
+            <Paper
+              elevation={4}
+              sx={{
+                borderRadius: 1,
+                padding: 1,
+                display: "inline-block",
+                width: "100%",
+                //backgroundColor: theme.palette.background.default,
+              }}
+              className="flex flex-col"
+            >
               <CustomTable
                 title="List of available isolated markets"
                 columnsConfig={templateDataTableColumnsConfig}
                 data={templateDataTable}
                 clickableRows={true}
               />
-            </div>
+            </Paper>
           </div>
         </Box>
       </Card>
