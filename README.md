@@ -6,6 +6,14 @@ yarn install
 yarn start
 ```
 
+## prod deployment
+
+Need to specify the .env file when you deploy on Vercel
+
+Important :
+
+REACT_APP_API_URL="https://api.lendbook.org"
+
 ## Available Scripts
 
 In the project directory, you can run:
