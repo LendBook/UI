@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import theme from "../theme";
 
@@ -25,40 +25,52 @@ export default function CustomButton({
 
   return (
     <div className="flex-shrink-0 mr-4">
-      <Button
-        style={{
-          //textTransform: "none",
-          width: typeof buttonWidth === "number" ? `${buttonWidth}px` : "auto",
-          padding: "6px 10px",
-          border: `1px solid ${theme.palette.primary.main}`,
-          alignItems: "center",
-          textTransform: "none",
-          borderRadius:
-            typeof borderRadius === "number" ? `${borderRadius}px` : "5px",
-          outline: "none",
-          backgroundColor: isHovered
-            ? clickable
-              ? theme.palette.primary.dark
-              : theme.palette.error.main
-            : clickable
-            ? theme.palette.primary.main
-            : theme.palette.error.main,
-
-          color: clickable
-            ? theme.palette.common.white
-            : theme.palette.primary.main,
-        }}
-        onClick={handleClick}
-        //disabled={!clickable}
+      <Tooltip
+        open={!clickable && isHovered}
+        disableHoverListener={clickable}
+        title={textNotClickable}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {clickable
-          ? textClickable
-          : isHovered
-          ? textNotClickable
-          : textClickable}
-      </Button>
+        <div>
+          <Button
+            style={{
+              //textTransform: "none",
+              width:
+                typeof buttonWidth === "number" ? `${buttonWidth}px` : "auto",
+              padding: "6px 10px",
+              border: `1px solid ${theme.palette.primary.main}`,
+              alignItems: "center",
+              textTransform: "none",
+              borderRadius:
+                typeof borderRadius === "number" ? `${borderRadius}px` : "5px",
+              outline: "none",
+              backgroundColor: isHovered
+                ? clickable
+                  ? theme.palette.primary.dark
+                  : theme.palette.error.main
+                : clickable
+                ? theme.palette.primary.main
+                : theme.palette.error.main,
+
+              color: clickable
+                ? theme.palette.common.white
+                : theme.palette.primary.main,
+            }}
+            onClick={handleClick}
+            disabled={!clickable}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            {/* {clickable
+              ? textClickable
+              : isHovered
+              ? textNotClickable
+              : textClickable} */}
+            {textClickable}
+          </Button>
+        </div>
+      </Tooltip>
       <div className="flex justify-between items-center max-w-full overflow-hidden">
         <span className="text-[red] text-[12px]">{textAfterClick}</span>
       </div>

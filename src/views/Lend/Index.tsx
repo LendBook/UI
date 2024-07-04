@@ -1,149 +1,37 @@
-import { Box, Card, Typography, Button, Skeleton } from "@mui/material";
-import CustomTable from "../../components/CustomTable";
-import AmountCustom from "../../components/AmountCustom";
-import { useEffect, useState } from "react";
+import { Box, Card, Paper, Typography } from "@mui/material";
+import { useState } from "react";
+import TabsCustom from "../../components/TabsCustom";
+import theme from "../../theme";
 import MetricCustom from "../../components/MetricCustom";
-import CustomButton from "../../components/CustomButton";
-import { useFetchLendOrder } from "../../hooks/api/lend";
-import { useFetchUserInfo } from "../../hooks/api/userInfo";
-import { useFetchPriceForEmptyPools } from "../../hooks/api/emptyPools";
-import { ethers } from "ethers";
-import TransactionSummary from "../../components/TransactionSummary";
-import { formatNumber, mergeObjects } from "../../components/GlobalFunctions";
-import { error } from "console";
-import { useDeposit } from "../../hooks/useDeposit";
 import { useDataContext } from "../../context/DataContext";
+import TabsCustomV2 from "../../components/TabsCustomV2";
+import Supply from "./Supply";
+import Withdraw from "./Withdraw";
 
 const Index = () => {
-  const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
-  const [buyPrice, setBuyPrice] = useState<string>("");
-  const [poolId, setPoolId] = useState<string>("");
-  const [buttonClickable, setButtonClickable] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
-  const [showAll, setShowAll] = useState<boolean>(false);
-  const [provider, setProvider] =
-    useState<ethers.providers.Web3Provider | null>(null);
-  const [walletAddress, setWalletAddress] = useState<string>("");
+  const [selectedTab, setSelectedTab] = useState<string>("");
 
-  const {
-    userInfo,
-    userDeposits,
-    loadingUser,
-    pricePoolId,
-    pricePoolIdLoading,
-    pricePoolIdError,
-    orderData,
-    orderLoading,
-    orderError,
-    orderMergedData,
-  } = useDataContext();
-
-  // const { pricePoolId, pricePoolIdLoading, pricePoolIdError } =
-  //   useFetchPriceForEmptyPools();
-
-  // const poolIds = pricePoolId.map((item) => item.poolId);
-  // console.log(`poolIds : ${poolIds}`);
-  // // const { data, loading, error } = useFetchLendOrder([
-  // //   1111111110, 1111111108, 1111111106,
-  // // ]); // useFetchLendOrder(poolIds); TODO mettre ça a la place quand on n'a plus de prblm d'api
-  // const { data, loading, error } = useFetchLendOrder(poolIds);
-
-  const dataColumnsConfig = [
-    { key: "buyPrice", title: "Buy Price", metric: "USDC" },
-    { key: "deposits", title: "Total Supply", metric: "USDC" },
-    { key: "lendingRate", title: "Net APY", metric: "%" },
-    { key: "utilizationRate", title: "Utilization", metric: "%" },
-    { key: "mySupply", title: "My Supply", metric: "USDC" },
-  ];
-
-  // let mergedData = mergeObjects(orderData, userDeposits);
-  // mergedData = mergeObjects(mergedData, pricePoolId);
-
-  const displayedData = showAll ? orderMergedData : orderMergedData.slice(0, 3);
-
-  // useEffect(() => {
-  //   const initProvider = () => {
-  //     if (window.ethereum) {
-  //       const providerTemp = new ethers.providers.Web3Provider(window.ethereum);
-  //       setProvider(providerTemp);
-  //       providerTemp
-  //         .getSigner()
-  //         .getAddress()
-  //         .then(setWalletAddress)
-  //         .catch(console.error);
-  //     } else {
-  //       console.error("Please install MetaMask!");
-  //     }
-  //   };
-
-  //   initProvider();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!loading && !error && lendOrderData) {
-  //     console.log("Fetched data:", lendOrderData);
-  //   }
-  // }, [data, loading, error]);
-
-  const updateButtonClickable = (
-    quantity: number,
-    price: string,
-    poolId: string
-  ) => {
-    const isClickable = quantity > 0 && price !== "";
-    setButtonClickable(isClickable);
-    setMessage(
-      `Transaction parameters: supply=${quantity} AND buy price=${price} AND poolID=${poolId}`
-    );
+  const handleToggleClick = (label: string) => {
+    setSelectedTab(label);
   };
 
-  const handleQuantityChange = (newQuantity: string) => {
-    setSupplyAmountQuantity(parseFloat(newQuantity));
-    updateButtonClickable(parseFloat(newQuantity), buyPrice, poolId);
-  };
+  const { userInfo, loadingUser } = useDataContext();
 
-  const handleRowClick = (rowData: any) => {
-    const newBuyPrice = rowData.buyPrice;
-    setBuyPrice(newBuyPrice);
-    const newPoolId = rowData.poolId;
-    setPoolId(newPoolId);
-    updateButtonClickable(supplyAmountQuantity, newBuyPrice, newPoolId);
-  };
-
-  const deposit = useDeposit();
-
-  const handleButtonClick = async () => {
-    setMessage("Button clicked!");
-
-    await deposit(
-      Number(poolId),
-      String(supplyAmountQuantity),
-      Number(poolId) + 1
-    );
-  };
-
-  const toggleShowAll = () => {
-    setShowAll(!showAll);
-  };
-
-  //if (error) return <Typography>Error: {error}</Typography>;
-
-  const transactionData = [
+  const metricsData = [
     {
-      title: "Supplied Amount",
-      value:
-        supplyAmountQuantity === 0 || isNaN(supplyAmountQuantity)
-          ? ""
-          : `${formatNumber(supplyAmountQuantity)} USDC`,
+      title: "My total supply",
+      value: userInfo.totalDepositsQuote,
+      unit: "USDC",
     },
     {
-      title: "Selected buy price",
-      value: formatNumber(buyPrice),
+      title: "My sell orders which can be withdraw",
+      value: 0,
+      unit: "WETH",
     },
   ];
 
   return (
-    <div className="mt-20 ml-72 mr-4">
+    <div className="mt-20 ml-72 mr-4 mb-20">
       <Card
         sx={{
           maxWidth: "1100px",
@@ -154,59 +42,37 @@ const Index = () => {
         }}
       >
         <Box>
-          <Typography variant="h4" color="black" fontWeight="bold">
-            Lend to Earn
-          </Typography>
-          <div className="flex flex-col md-plus:flex-row space-between items-baseline mt-10 ">
-            <div className="container" style={{ marginBottom: "10px" }}>
-              <AmountCustom
-                title="Supply Amount"
-                tokenWalletBalance={11320}
-                selectedToken="USDC"
-                ratioToUSD={1.01}
-                onQuantityChange={handleQuantityChange}
+          <div>
+            <Typography variant="h4" color="black">
+              Lend to earn
+            </Typography>
+            <div className="flex mt-5"></div>
+
+            <div className="flex">
+              <MetricCustom data={metricsData} isLoading={loadingUser} />
+            </div>
+
+            <div className="flex mt-10"></div>
+            <Paper
+              elevation={4}
+              sx={{
+                borderRadius: 1,
+                padding: 1,
+                display: "inline-block",
+                width: "100%",
+                //backgroundColor: theme.palette.background.default,
+              }}
+              className="flex flex-col"
+            >
+              <TabsCustomV2
+                labels={["Supply", "Withdraw"]}
+                onClick={handleToggleClick}
               />
-            </div>
-            <div className="flex mt-10 md-plus:ml-10 md-plus:mt-0">
-              <div className="container">
-                <MetricCustom
-                  data={[
-                    {
-                      title: "My amount already supplied",
-                      value: userInfo.totalDepositsQuote,
-                      unit: "USDC",
-                    },
-                  ]}
-                  isLoading={loadingUser}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex mt-10">
-            <CustomTable
-              title="Select a Buy Price"
-              columnsConfig={dataColumnsConfig}
-              data={displayedData}
-              clickableRows={true}
-              onRowClick={handleRowClick}
-              isLoading={orderLoading}
-            />
-          </div>
-          <Button onClick={toggleShowAll}>
-            {showAll ? "Show Less" : "Show More"}
-          </Button>
-          <div className="flex mt-10">
-            <CustomButton
-              clickable={buttonClickable}
-              handleClick={handleButtonClick}
-              textClickable="Finalize transaction"
-              textNotClickable="Finalize transaction"
-              buttonWidth={300}
-              borderRadius={50}
-            />
-          </div>
-          <div className="flex mt-5">
-            <TransactionSummary data={transactionData} />
+              <div className="flex mt-5"></div>
+              {selectedTab === "Supply" && <Supply />}
+              {selectedTab === "Withdraw" && <Withdraw />}
+              <div className="flex mt-2"></div>
+            </Paper>
           </div>
         </Box>
       </Card>

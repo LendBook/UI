@@ -15,12 +15,10 @@ const Home = lazy(() => import("./views/Markets/Index"));
 const Borrow = lazy(() => import("./views/Borrow/Index"));
 const Trade = lazy(() => import("./views/Trade/Index"));
 const Markets = lazy(() => import("./views/Markets/Index"));
-const Dashboard = lazy(() => import("./views/Dashboard/Index"));
 const AnalyticsPage = lazy(() => import("./views/Analytics/Index"));
 const InakiTest = lazy(() => import("./views/InakiTest/Index"));
 const Lend = lazy(() => import("./views/Lend/Index"));
 const Template = lazy(() => import("./views/Template/Index"));
-const BorrowNew = lazy(() => import("./views/BorrowNew/Index"));
 
 const App = () => {
   const { address: walletAddress } = useAccount();
@@ -81,14 +79,6 @@ const App = () => {
                 }
               />
               <Route
-                path="dashboard"
-                element={
-                  <Suspense fallback={<Loading />}>
-                    <Dashboard />
-                  </Suspense>
-                }
-              />
-              <Route
                 path="inakitest"
                 element={
                   <Suspense fallback={<Loading />}>
@@ -101,14 +91,6 @@ const App = () => {
                 element={
                   <Suspense fallback={<Loading />}>
                     <Template />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="borrownew"
-                element={
-                  <Suspense fallback={<Loading />}>
-                    <BorrowNew />
                   </Suspense>
                 }
               />

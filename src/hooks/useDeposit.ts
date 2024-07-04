@@ -5,20 +5,33 @@ import { useOrderbook } from "./useOrderbook";
 export const useDeposit = () => {
   const { contract } = useOrderbook();
 
-  return async (poolId: number, quantity: string, pairedPoolId: number) => {
-    if (!contract) return;
+  return async (
+    poolId: number,
+    quantity: string,
+    pairedPoolId: number
+  ): Promise<string> => {
+    if (!contract) return "Contract not found";
 
     try {
-      const tx = await contract.deposit(poolId, ethers.utils.parseUnits(quantity, 18), pairedPoolId);
+      const tx = await contract.deposit(
+        poolId,
+        ethers.utils.parseUnits(quantity, 18),
+        pairedPoolId
+      );
       await tx.wait();
-      NotificationManager.success("Deposit successful!");
+      const successMessage = "Deposit successful!";
+      NotificationManager.success(successMessage);
+      return successMessage;
     } catch (error: any) {
+      let errorMessage;
       if (error.code === "ACTION_REJECTED") {
-        NotificationManager.error("User rejected the transaction.");
+        errorMessage = "User rejected the transaction.";
       } else {
-        NotificationManager.error("Error: " + error.message);
+        errorMessage = "Error: " + error.message;
       }
+      NotificationManager.error(errorMessage);
       console.error("error ----------->", error);
+      return errorMessage;
     }
   };
 };

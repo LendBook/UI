@@ -1,4 +1,11 @@
-import { Box, Card, IconButton, Typography, styled } from "@mui/material";
+import {
+  Box,
+  Card,
+  IconButton,
+  Paper,
+  Typography,
+  styled,
+} from "@mui/material";
 import AmountCustom from "../../components/AmountCustom";
 import { useState } from "react";
 import SwapVertRoundedIcon from "@mui/icons-material/SwapVertRounded";
@@ -131,63 +138,74 @@ const Index = () => {
       >
         <Box>
           <div>
-            <Typography variant="h4" color="black" fontWeight="bold">
+            <Typography variant="h4" color="black">
               Trade
             </Typography>
           </div>
-
-          <div className="flex flex-start">
-            <div className="flex flex-col items-center mt-10 ">
-              <div className="">
-                <AmountCustom
-                  title="Pay"
-                  tokenWalletBalance={sellTokenWalletBalance}
-                  selectedToken={sellTokenName}
-                  ratioToUSD={sellTokenRatioToUsd}
-                  initialQuantity={String(sellAmountQuantity)}
-                  onQuantityChange={handleSellQuantityChange}
-                />
-              </div>
-              {/* <SwapVertRoundedIcon
+          <div className="flex mt-5"></div>
+          <Paper
+            elevation={4}
+            sx={{
+              borderRadius: 1,
+              padding: 1,
+              display: "inline-block",
+              //backgroundColor: theme.palette.background.default,
+            }}
+            className="flex flex-col"
+          >
+            <div className="flex flex-start">
+              <div className="flex flex-col items-center ">
+                <div className="">
+                  <AmountCustom
+                    title="Pay"
+                    tokenWalletBalance={sellTokenWalletBalance}
+                    selectedToken={sellTokenName}
+                    ratioToUSD={sellTokenRatioToUsd}
+                    initialQuantity={String(sellAmountQuantity)}
+                    onQuantityChange={handleSellQuantityChange}
+                  />
+                </div>
+                {/* <SwapVertRoundedIcon
                 className="mt-5 text-info"
                 fontSize="large"
               /> */}
-              <Rotating_IconButton
-                aria-label="inverseSwap"
-                size="large"
-                className="mt-5"
-                onClick={handleIconButtonClick}
-              >
-                <SwapVertRoundedIcon
-                  fontSize="large"
-                  className="text-primary"
-                />
-              </Rotating_IconButton>
-              <div className="mt-2">
-                <AmountCustom
-                  title="Receive"
-                  tokenWalletBalance={baseTokenWalletBalance}
-                  selectedToken={buyTokenName}
-                  ratioToUSD={buyTokenRatioToUsd}
-                  initialQuantity={String(buyAmountQuantity)}
-                  onQuantityChange={handleBuyQuantityChange}
-                />
+                <Rotating_IconButton
+                  aria-label="inverseSwap"
+                  size="large"
+                  className="mt-5"
+                  onClick={handleIconButtonClick}
+                >
+                  <SwapVertRoundedIcon
+                    fontSize="large"
+                    className="text-primary"
+                  />
+                </Rotating_IconButton>
+                <div className="mt-2">
+                  <AmountCustom
+                    title="Receive"
+                    tokenWalletBalance={baseTokenWalletBalance}
+                    selectedToken={buyTokenName}
+                    ratioToUSD={buyTokenRatioToUsd}
+                    initialQuantity={String(buyAmountQuantity)}
+                    onQuantityChange={handleBuyQuantityChange}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex mt-10">
-            <CustomButton
-              clickable={buttonClickable}
-              handleClick={handleTransactionButtonClick}
-              textClickable="Finalize transaction"
-              textNotClickable="Finalize transaction"
-              buttonWidth={300}
-              borderRadius={50}
-            />
-          </div>
-          <div className="flex mt-5">
-            <TransactionSummary data={transactionData} />
-          </div>
+            <div className="flex mt-10">
+              <CustomButton
+                clickable={buttonClickable}
+                handleClick={handleTransactionButtonClick}
+                textClickable="Finalize transaction"
+                textNotClickable="Must enter an amount"
+                buttonWidth={300}
+                borderRadius={50}
+              />
+            </div>
+            <div className="flex mt-5">
+              <TransactionSummary data={transactionData} />
+            </div>
+          </Paper>
         </Box>
       </Card>
     </div>

@@ -5,6 +5,14 @@ import { id } from "ethers/lib/utils";
 import { step } from "@material-tailwind/react";
 import { usePriceOracle } from "./oraclePrice";
 
+let apiUrl = "";
+if (process.env.NODE_ENV === "development") {
+  apiUrl = "";
+} else {
+  apiUrl =
+    process.env.REACT_APP_API_URL || "https://lendbook-api-bis.vercel.app";
+}
+
 export interface PriceForPoolIdData {
   id: number;
   poolId: number;
@@ -48,7 +56,7 @@ function generatePriceData(
   const idStep = 2;
 
   // 5 = nombre de pool en dessous ou au dessus de endPrice
-  const count = 5;
+  const count = 10;
   const finalPrice = isIncreasing
     ? marketPrice * Math.pow(step, count)
     : marketPrice / Math.pow(step, count);
@@ -127,14 +135,18 @@ export const useFetchPriceForEmptyPools = () => {
     setLoading(true);
     try {
       console.log("STARTING GETTING NEW PRICE");
-      const priceStepResponse = await axios.get(`/v1/constant/priceStep`);
+      const priceStepResponse = await axios.get(
+        `${apiUrl}/v1/constant/priceStep`
+      );
       const priceStep = parseFloat(
         ethers.utils.formatUnits(priceStepResponse.data.priceStep, 18)
       );
 
       console.log("CONTINUE GETTING NEW PRICE");
       //FIXME: can be removed if we call usePriceOracle.ts from App and get access to the priceOracle.
-      const priceFeedResponse = await axios.get("/v1/constant/priceFeed");
+      const priceFeedResponse = await axios.get(
+        `${apiUrl}/v1/constant/priceFeed`
+      );
       const priceFeed = parseFloat(
         ethers.utils.formatUnits(priceFeedResponse.data.priceFeed, 18)
       );
@@ -143,7 +155,7 @@ export const useFetchPriceForEmptyPools = () => {
       //FIXME : need to call api when genesisPoolId is public in smartcontract
       const genesisPoolId = 1111111110;
       const limitPriceGenesisResponse = await axios.get(
-        `/v1/request/limitPrice/${genesisPoolId}`
+        `${apiUrl}/v1/request/limitPrice/${genesisPoolId}`
       );
       const limitPriceGenesis = parseFloat(
         ethers.utils.formatUnits(limitPriceGenesisResponse.data.result, 18)

@@ -1,64 +1,55 @@
-import { Box, Card, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  Checkbox,
+  FormControlLabel,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { formatNumber } from "../../components/GlobalFunctions";
 import { useFetchLendOrder } from "../../hooks/api/lend";
-
-const dataset = [
-  {
-    poolId: 999,
-    limitPrice: 4000,
-    deposits: 10000,
-    borrows: 7000,
-  },
-  {
-    poolId: 997,
-    limitPrice: 3800,
-    deposits: 10000,
-    borrows: 7000,
-  },
-  {
-    poolId: 995,
-    limitPrice: 3600,
-    deposits: 20000,
-    borrows: 7000,
-  },
-];
-// Trier le dataset par ordre croissant de limitPrice
-const sortedDataset = dataset.sort((a, b) => a.limitPrice - b.limitPrice);
+import { useDataContext } from "../../context/DataContext";
+import { useState } from "react";
+import { axisClasses } from "@mui/x-charts/ChartsAxis";
 
 const valueFormatter = (value: number | null) =>
   `$${formatNumber(String(value))}`;
 
-const chartSetting = {
-  // yAxis: [
-  //   {
-  //     min: 0,
-  //     //max: 60000,
-  //     tickLabel: null,
-  //   },
-  // ],
-  width: 1000,
-  height: 300,
-  // sx: {
-  //   [`.${axisClasses.left} .${axisClasses.label}`]: {
-  //     transform: "translate(-20px, 0)",
-  //   },
-  // },
-};
-
 const Index = () => {
-  const { data, loading, error } = useFetchLendOrder([
-    1111111110, 1111111108, 1111111106,
-  ]);
-  const dataColumnsConfig = [
-    { key: "buyPrice", title: "Buy Price", metric: "USDC" },
-    { key: "deposits", title: "Total Supply", metric: "USDC" },
-    { key: "netAPY", title: "Net APY", metric: "%" },
-    { key: "utilization", title: "Utilization", metric: "%" },
-    { key: "mySupply", title: "My Supply", metric: "USDC" },
-  ];
+  // const { data, loading, error } = useFetchLendOrder([
+  //   1111111110, 1111111108, 1111111106,
+  // ]);
+  const [fixMargin, setFixMargin] = useState(true);
+  const [fixLabel, setFixLabel] = useState(true);
 
-  const sortedData = data.sort((a, b) => a.buyPrice - b.buyPrice);
+  // const sortedData = data.sort((a, b) => a.buyPrice - b.buyPrice);
+
+  const {
+    userInfo,
+    userDeposits,
+    loadingUser,
+    pricePoolId,
+    pricePoolIdLoading,
+    pricePoolIdError,
+    orderData,
+    orderLoading,
+    orderError,
+    orderMergedData,
+  } = useDataContext();
+
+  let sortedData = orderMergedData.sort(
+    (a, b) => Number(a.buyPrice) - Number(b.buyPrice)
+  );
+
+  sortedData = sortedData.map((item) => {
+    return {
+      ...item,
+      buyPrice: formatNumber(item.buyPrice).toString(),
+    };
+  });
 
   return (
     <div className="mt-20 ml-72 mr-4">
@@ -73,53 +64,73 @@ const Index = () => {
       >
         <Box>
           <div>
-            <Typography variant="h4" color="black" fontWeight="bold">
+            <Typography variant="h4" color="black">
               Analytics
             </Typography>
-            {/* <div className="flex mt-10">
-              <BarChart
-                dataset={sortedDataset}
-                xAxis={[{ scaleType: "band", dataKey: "limitPrice" }]}
-                series={[
-                  {
-                    dataKey: "deposits",
-                    label: "Deposits",
-                    valueFormatter,
-                  },
-                  {
-                    dataKey: "borrows",
-                    label: "Borrows",
-                    valueFormatter,
-                  },
-                ]}
-                {...chartSetting}
-              />
-            </div> */}
 
-            <div className="flex mt-10">
-              <BarChart
-                dataset={sortedData}
-                xAxis={[{ scaleType: "band", dataKey: "buyPrice" }]}
-                tooltip={{ trigger: "axis" }}
-                series={[
-                  {
-                    dataKey: "deposits",
-                    label: "Total Supply",
-                    valueFormatter,
-                  },
-                  {
-                    dataKey: "availableSupply",
-                    label: "Available Supply",
-                    valueFormatter,
-                  },
-                  {
-                    dataKey: "borrows",
-                    label: "Total Borrow",
-                    valueFormatter,
-                  },
-                ]}
-                {...chartSetting}
-              />
+            <div className="flex mt-5">
+              <Paper
+                elevation={4}
+                sx={{
+                  borderRadius: 1,
+                  padding: 1,
+                  display: "inline-block",
+                  //backgroundColor: theme.palette.background.default,
+                }}
+                className="flex flex-col"
+              >
+                <Box sx={{ width: "100%" }}>
+                  <BarChart
+                    dataset={sortedData}
+                    sx={{
+                      [`.${axisClasses.left} .${axisClasses.label}`]: {
+                        // Move the y-axis label with CSS
+                        transform: "translateX(-35px)",
+                      },
+                    }}
+                    xAxis={[
+                      {
+                        scaleType: "band",
+                        dataKey: "buyPrice",
+                        label: "Limit prices of pools of orders (USDC)",
+                        labelStyle: {
+                          fontSize: 14,
+                          transform: "translateY(30px)", // Décaler le label de l'axe X vers le bas
+                        },
+                        tickLabelStyle: {
+                          angle: 45, //-45
+                          textAnchor: "start", //"end"
+                          fontSize: 12,
+                        },
+                      },
+                    ]}
+                    yAxis={[
+                      {
+                        label: "Amount (USDC)",
+                        labelStyle: {
+                          fontSize: 14,
+                        },
+                      },
+                    ]}
+                    width={1000}
+                    height={400}
+                    margin={{ top: 40, right: 5, bottom: 80, left: 100 }}
+                    tooltip={{ trigger: "axis" }}
+                    series={[
+                      {
+                        dataKey: "deposits",
+                        label: "Total supply per pool",
+                        valueFormatter,
+                      },
+                      {
+                        dataKey: "borrows",
+                        label: "Total borrow per pool",
+                        valueFormatter,
+                      },
+                    ]}
+                  />
+                </Box>
+              </Paper>
             </div>
           </div>
         </Box>

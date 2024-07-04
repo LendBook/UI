@@ -15,7 +15,7 @@ const Repay = () => {
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [showAll, setShowAll] = useState<boolean>(false);
   const [poolId, setPoolId] = useState<string>("");
-  const [orderId, setOrderId] = useState<string>("");
+  const [orderBorrowerId, setOrderBorrowerId] = useState<string>("");
   const [textAfterClick, setTextAfterClick] = useState<string>("");
   const [textNotClickable, setTextNotClickable] = useState<string>(
     "Must enter an amount to repay"
@@ -47,7 +47,11 @@ const Repay = () => {
     },
   ];
 
-  const displayedData = showAll ? orderMergedData : orderMergedData.slice(0, 3);
+  const filteredData = orderMergedData.filter(
+    (item) => item.orderBorrowerId !== undefined
+  );
+
+  const displayedData = showAll ? filteredData : filteredData.slice(0, 3);
 
   const updateButtonClickable = (borrowedQuantity: number, price: string) => {
     const isClickable = borrowedQuantity > 0 && price !== "";
@@ -70,8 +74,8 @@ const Repay = () => {
     setLiquidationPrice(newliquidationPrice);
     const newPoolId = rowData.poolId;
     setPoolId(newPoolId);
-    const newOrderId = rowData.orderId;
-    setOrderId(newOrderId);
+    const newOrderId = rowData.orderBorrowerId;
+    setOrderBorrowerId(newOrderId);
     updateButtonClickable(repayQuantity, newliquidationPrice);
   };
 
@@ -80,13 +84,11 @@ const Repay = () => {
   const handleButtonClick = async () => {
     //setMessage("Button clicked!");
     if (buttonClickable) {
-      setTextAfterClick(
-        "Transaction sent ..." +
-          String(Number(orderId)) +
-          " " +
-          String(repayQuantity)
+      setTextAfterClick("Transaction sent ...");
+      const result = await repay(
+        Number(orderBorrowerId),
+        String(repayQuantity)
       );
-      const result = await repay(Number(orderId), String(repayQuantity));
       setTextAfterClick(result);
     }
   };

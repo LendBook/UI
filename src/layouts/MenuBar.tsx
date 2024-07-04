@@ -1,7 +1,7 @@
 // MenuBar.tsx
 import { Link } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
-import { Fragment, useState } from "react";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Fragment, useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import pairs from "../config/constants/pair.json";
 import MENU_LINKS from "../config/constants/menu";
@@ -18,13 +18,24 @@ function classNames(...classes: string[]) {
 export default function MenuBar() {
   const { darkMode } = useTheme();
   const [selectedPair, setSelectedPair] = useState(pairs[0]);
-  const [selectedMenu, setSelectedMenu] = useState(MENU_LINKS[0].id);
+  const location = useLocation(); //useLocation to get current path
+  const [selectedMenu, setSelectedMenu] = useState<number | null>(null);
+
+  useEffect(() => {
+    // find the link to the current path
+    const currentMenu = MENU_LINKS.find(
+      (menu) => menu.to === location.pathname
+    );
+    if (currentMenu) {
+      setSelectedMenu(currentMenu.id);
+    }
+  }, [location.pathname]);
 
   const StyledButton = styled(StyledRouterButton)(({ theme }) => ({
     marginBottom: theme.spacing(1), // Equivalent to Tailwind's mb-4
     width: "90%", // Make the button take full width
     justifyContent: "flex-start", // Align text to the left
-    padding: theme.spacing(1), // Equivalent to Tailwind's p-4
+    padding: theme.spacing(0.5), // Equivalent to Tailwind's p-4
     borderRadius: theme.shape.borderRadius, // Default border radius
     textTransform: "none",
     border: "1px solid transparent",

@@ -8,7 +8,7 @@ const tailwindColors = {
   warning: "#ffc107",
   info: "#59748d",
   light: "#f8f9fa",
-  dark: "#677785", //"#343a40",
+  dark: "#343a40", //"#677785", //"#343a40",
 
   black: "#333333",
   white: "#ffffff",
