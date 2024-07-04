@@ -3,6 +3,14 @@ import axios from "axios";
 import { ethers } from "ethers";
 import { formatNumber } from "../../components/GlobalFunctions";
 
+let apiUrl = "";
+if (process.env.NODE_ENV === "development") {
+  apiUrl = "";
+} else {
+  apiUrl =
+    process.env.REACT_APP_API_URL || "https://lendbook-api-bis.vercel.app";
+}
+
 export interface LendOrderData {
   id: number;
   poolId: number;
@@ -29,11 +37,11 @@ export const useFetchLendOrder = (poolIds: number[]) => {
           console.log(`poolIdspoolIds ${poolId}`);
           // Fetch data from the API
           const apiResponses = await Promise.all([
-            axios.get(`/v1/request/pools/${poolId}`),
-            axios.get(`/v1/request/viewLendingRate/${poolId}`),
-            axios.get(`/v1/request/viewUtilizationRate/${poolId}`),
-            axios.get(`/v1/request/limitPrice/${poolId}`),
-            axios.get(`/v1/request/viewBorrowingRate/${poolId}`),
+            axios.get(`${apiUrl}/v1/request/pools/${poolId}`),
+            axios.get(`${apiUrl}/v1/request/viewLendingRate/${poolId}`),
+            axios.get(`${apiUrl}/v1/request/viewUtilizationRate/${poolId}`),
+            axios.get(`${apiUrl}/v1/request/limitPrice/${poolId}`),
+            axios.get(`${apiUrl}/v1/request/viewBorrowingRate/${poolId}`),
           ]);
 
           const resultsAvailableAssets = apiResponses[0].data.result.split(",");

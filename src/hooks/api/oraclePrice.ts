@@ -2,6 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ethers } from "ethers";
 
+let apiUrl = "";
+if (process.env.NODE_ENV === "development") {
+  apiUrl = "";
+} else {
+  apiUrl =
+    process.env.REACT_APP_API_URL || "https://lendbook-api-bis.vercel.app";
+}
+
 interface PriceFeedData {
   priceFeed: string;
 }
@@ -13,7 +21,7 @@ export const usePriceOracle = () => {
 
   const fetchPrice = async () => {
     try {
-      const response = await axios.get("/v1/constant/priceFeed");
+      const response = await axios.get(`${apiUrl}/v1/constant/priceFeed`);
       const priceData: PriceFeedData = response.data;
       const priceInUSDC = parseFloat(
         ethers.utils.formatUnits(priceData.priceFeed, 18)

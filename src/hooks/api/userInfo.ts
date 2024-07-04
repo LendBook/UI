@@ -2,6 +2,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ethers } from "ethers";
 
+let apiUrl = "";
+if (process.env.NODE_ENV === "development") {
+  apiUrl = "";
+} else {
+  apiUrl =
+    process.env.REACT_APP_API_URL || "https://lendbook-api-bis.vercel.app";
+}
+
 export interface UserDepositOrdersData {
   id: number;
   orderLenderId: number;
@@ -46,21 +54,21 @@ export const useFetchUserInfo = (
     setLoading(true);
     try {
       const responseQuote = await axios.get(
-        `/v1/request/viewUserTotalDeposits/${address}/true`
+        `${apiUrl}/v1/request/viewUserTotalDeposits/${address}/true`
       );
       const formattedTotalQuote = ethers.utils.formatEther(
         responseQuote.data.result
       );
 
       const responseBase = await axios.get(
-        `/v1/request/viewUserTotalDeposits/${address}/false`
+        `${apiUrl}/v1/request/viewUserTotalDeposits/${address}/false`
       );
       const formattedTotalBase = ethers.utils.formatEther(
         responseBase.data.result
       );
 
       const responseExcessCollateral = await axios.get(
-        `/v1/request/viewUserExcessCollateral/${address}/0`
+        `${apiUrl}/v1/request/viewUserExcessCollateral/${address}/0`
       );
       const excessCollateral = ethers.utils.formatUnits(
         responseExcessCollateral.data.result.split(",")[1],
@@ -83,7 +91,7 @@ export const useFetchUserInfo = (
     setLoading(true);
     try {
       const depositOrdersIdResponse = await axios.get(
-        `/v1/request/getUserDepositIds/${address}`
+        `${apiUrl}/v1/request/getUserDepositIds/${address}`
       );
 
       let depositOrdersId_l = depositOrdersIdResponse.data.result.split(",");
@@ -92,7 +100,7 @@ export const useFetchUserInfo = (
       const results = await Promise.all(
         depositOrdersId_l.map(async (depositOrdersId: Number) => {
           const orderResponse = await axios.get(
-            `/v1/request/orders/${depositOrdersId}`
+            `${apiUrl}/v1/request/orders/${depositOrdersId}`
           );
 
           const orderObject = orderResponse.data.result.split(",");
@@ -124,7 +132,7 @@ export const useFetchUserInfo = (
     setLoading(true);
     try {
       const borrowsIdResponse = await axios.get(
-        `/v1/request/getUserBorrowFromIds/${address}`
+        `${apiUrl}/v1/request/getUserBorrowFromIds/${address}`
       );
 
       let borrowsId_l = borrowsIdResponse.data.result.split(",");
