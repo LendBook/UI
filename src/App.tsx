@@ -19,6 +19,7 @@ const AnalyticsPage = lazy(() => import("./views/Analytics/Index"));
 const InakiTest = lazy(() => import("./views/InakiTest/Index"));
 const Lend = lazy(() => import("./views/Lend/Index"));
 const Template = lazy(() => import("./views/Template/Index"));
+const Mint = lazy(() => import("./views/Mint/Index"));
 
 const App = () => {
   const { address: walletAddress } = useAccount();
@@ -75,6 +76,14 @@ const App = () => {
                 element={
                   <Suspense fallback={<Loading />}>
                     <AnalyticsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="mint"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <Mint />
                   </Suspense>
                 }
               />
