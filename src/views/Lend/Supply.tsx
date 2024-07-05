@@ -9,6 +9,7 @@ import CustomTable from "../../components/CustomTable";
 import theme from "../../theme";
 import { ethers } from "ethers";
 import { useDeposit } from "../../hooks/useDeposit";
+import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
 
 const Supply = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -70,12 +71,19 @@ const Supply = () => {
     updateButtonClickable(supplyAmountQuantity, newBuyPrice);
   };
 
+  const approveQuoteToken = useApproveQuoteToken();
   const deposit = useDeposit();
 
   const handleButtonClick = async () => {
     //setMessage("Button clicked!");
     if (buttonClickable) {
-      setTextAfterClick("Transaction sent ...");
+      setTextAfterClick("Transaction approval sent ...");
+      const resultApproval = await approveQuoteToken(
+        String(supplyAmountQuantity)
+      );
+      setTextAfterClick(resultApproval);
+
+      setTextAfterClick("Transaction deposit sent ...");
       const result = await deposit(
         Number(poolId),
         String(supplyAmountQuantity),
