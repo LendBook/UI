@@ -3,6 +3,7 @@ import AmountCustom from "../../components/AmountCustom";
 import CustomButton from "../../components/CustomButton";
 import { useDataContext } from "../../context/DataContext";
 import { useDepositInCollateralAccount } from "../../hooks/UseDepositInCollateralAccount";
+import { useApproveBaseToken } from "../../hooks/useApproveBaseToken";
 
 const CollateralDeposit = () => {
   const [collateralQuantity, setCollateralQuantity] = useState<number>(0);
@@ -20,12 +21,17 @@ const CollateralDeposit = () => {
     updateButtonClickable(newQuantity);
   };
 
+  const approveBaseToken = useApproveBaseToken();
   const depositInCollateralAccount = useDepositInCollateralAccount();
 
   const handleButtonClick = async () => {
     //setMessage("Button clicked!");
     if (buttonClickable) {
-      setTextAfterClick("Transaction sent ...");
+      setTextAfterClick("Transaction approval sent ...");
+      const resultApproval = await approveBaseToken(String(collateralQuantity));
+      setTextAfterClick(resultApproval);
+
+      setTextAfterClick("Transaction deposit sent ...");
       const result = await depositInCollateralAccount(
         String(collateralQuantity)
       );

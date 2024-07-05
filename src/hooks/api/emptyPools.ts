@@ -9,7 +9,8 @@ let apiUrl = "";
 if (process.env.NODE_ENV === "development") {
   apiUrl = "";
 } else {
-  apiUrl = process.env.REACT_APP_API_URL || "https://api.lendbook.org";
+  apiUrl =
+    process.env.REACT_APP_API_URL || "https://lendbook-api-bis.vercel.app"; //"https://api.lendbook.org";
 }
 
 export interface PriceForPoolIdData {
