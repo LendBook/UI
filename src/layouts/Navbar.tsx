@@ -60,7 +60,7 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center flex-grow justify-center">
-            <span
+            {/* <span
               className={`text-info text-sm font-medium ${
                 darkMode ? "text-white" : "text-black"
               }`}
@@ -68,7 +68,7 @@ export default function Navbar() {
               Oracle Price: 1 WETH ={" "}
               {priceLoading ? "Loading..." : price ? formatNumber(price) : "0"}{" "}
               USDC
-            </span>
+            </span> */}
             <input
               type="number"
               placeholder="Enter amount"
