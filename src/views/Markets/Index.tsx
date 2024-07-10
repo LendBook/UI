@@ -78,7 +78,7 @@ const Markets = () => {
               className="flex flex-col"
             >
               <CustomTable
-                title="List of available markets"
+                title="Select a market to lend or borrow"
                 columnsConfig={templateDataTableColumnsConfig}
                 data={templateDataTable}
                 clickableRows={true}
