@@ -61,6 +61,10 @@ export const DataProvider: React.FC<DataProviderProps> = ({
   let orderMergedData = mergeObjects(orderData, userDeposits);
   orderMergedData = mergeObjects(orderMergedData, userBorrows);
   orderMergedData = mergeObjects(orderMergedData, pricePoolId);
+  //order the data based on buyPrice
+  orderMergedData = orderMergedData.sort(
+    (a, b) => Number(b.buyPrice) - Number(a.buyPrice)
+  );
 
   return (
     <DataContext.Provider
