@@ -1,4 +1,5 @@
 export const formatNumber = (num: string | number): string => {
+  num = num ? num : 0;
   if (num === "") {
     return "";
   }

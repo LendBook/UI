@@ -24,7 +24,7 @@ const Supply = () => {
     "Must enter an amount to borrow"
   );
 
-  const {
+  let {
     userInfo,
     userDeposits,
     loadingUser,
@@ -99,14 +99,15 @@ const Supply = () => {
 
   return (
     <div>
-      <AmountCustom
-        title="Amount to supply"
-        tokenWalletBalance={376}
-        selectedToken="USDC"
-        ratioToUSD={1.01}
-        onQuantityChange={handleQuantityChange}
-      />
-
+      <div className="flex ">
+        <AmountCustom
+          title="Amount to supply"
+          tokenWalletBalance={376}
+          selectedToken="USDC"
+          ratioToUSD={1.01}
+          onQuantityChange={handleQuantityChange}
+        />
+      </div>
       <div className="flex mt-5">
         <CustomTable
           title="Select a buy price associated with your lending position"
