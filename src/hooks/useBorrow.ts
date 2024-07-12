@@ -14,7 +14,7 @@ export const useBorrow = () => {
         ethers.utils.parseUnits(quantity, 18)
       );
       await tx.wait();
-      const successMessage = "Borrow successful!";
+      const successMessage = "Transaction successful!";
       NotificationManager.success(successMessage);
       return successMessage;
     } catch (error: any) {

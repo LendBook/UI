@@ -12,7 +12,7 @@ export const useDepositInCollateralAccount = () => {
         ethers.utils.parseUnits(quantity, 18)
       );
       await tx.wait();
-      const successMessage = "Deposit collateral successful!";
+      const successMessage = "Transaction successful!";
       NotificationManager.success(successMessage);
       return successMessage;
     } catch (error: any) {

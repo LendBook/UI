@@ -27,7 +27,7 @@ const Index = () => {
   const metricsData = [
     {
       title: "My total collateral",
-      value: userInfo.totalDepositsQuote,
+      value: "ToBeDone", //userInfo.totalDepositsQuote,
       unit: "WETH",
     },
     {
@@ -37,7 +37,7 @@ const Index = () => {
     },
     {
       title: "My total borrows",
-      value: userInfo.totalDepositsBase,
+      value: "ToBeDone", //userInfo.totalDepositsBase,
       unit: "USDC",
     },
   ];

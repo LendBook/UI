@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { ethers } from "ethers";
 
@@ -28,27 +28,26 @@ export interface UserBorrowsData {
   [key: string]: string | number;
 }
 
+export interface UserInfoData {
+  totalDepositsQuote: string;
+  totalDepositsBase: string;
+  excessCollateral: string;
+}
+
 export const useFetchUserInfo = (
   provider: any,
   walletAddress: string | undefined
 ) => {
-  const [userInfo, setUserInfo] = useState({
+  const initialUserInfo: UserInfoData = {
     totalDepositsQuote: "",
     totalDepositsBase: "",
     excessCollateral: "",
-  });
+  };
+  const [userInfo, setUserInfo] = useState<UserInfoData>(initialUserInfo);
   const [userDeposits, setUserDeposits] = useState<UserDepositOrdersData[]>([]);
   const [userBorrows, setUserBorrows] = useState<UserBorrowsData[]>([]);
   const [loadingUser, setLoading] = useState(true);
   const [errorUser, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (walletAddress && provider) {
-      fetchGlobalUserInfo(walletAddress).catch(console.error);
-      fetchDepositOrdersInfo(walletAddress).catch(console.error);
-      fetchBorrowsInfo(walletAddress).catch(console.error);
-    }
-  }, [walletAddress, provider]);
 
   const fetchGlobalUserInfo = async (address: string) => {
     setLoading(true);
@@ -169,5 +168,29 @@ export const useFetchUserInfo = (
     }
   };
 
-  return { userInfo, userDeposits, userBorrows, loadingUser, errorUser };
+  const refetchUserData = useCallback(() => {
+    console.log("yeuyeuh");
+    if (walletAddress && provider) {
+      fetchGlobalUserInfo(walletAddress).catch(console.error);
+      fetchDepositOrdersInfo(walletAddress).catch(console.error);
+      fetchBorrowsInfo(walletAddress).catch(console.error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (walletAddress && provider) {
+      fetchGlobalUserInfo(walletAddress).catch(console.error);
+      fetchDepositOrdersInfo(walletAddress).catch(console.error);
+      fetchBorrowsInfo(walletAddress).catch(console.error);
+    }
+  }, [walletAddress, provider]);
+
+  return {
+    userInfo,
+    userDeposits,
+    userBorrows,
+    loadingUser,
+    errorUser,
+    refetchUserData,
+  };
 };

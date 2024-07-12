@@ -10,7 +10,7 @@ import { useChangePriceFeed } from "../hooks/useChangePriceFeed";
 import { useDataContext } from "../context/DataContext";
 
 export default function Navbar() {
-  const { price, priceLoading } = useDataContext();
+  const { price, priceLoading, refetchData } = useDataContext();
   const [previousPrice, setPreviousPrice] = useState<number | null>(null);
   const { darkMode, toggleDarkMode } = useTheme();
 
@@ -40,6 +40,9 @@ export default function Navbar() {
     console.log("clicked");
     if (updatedOraclePrice) {
       await changePriceFeed(updatedOraclePrice.toString());
+      refetchData();
+      refetchData();
+      refetchData();
     } else {
       console.log("Please enter a price.");
     }

@@ -14,7 +14,7 @@ export const useWithdrawFromAccount = () => {
         inQuote
       );
       await tx.wait();
-      const successMessage = "Withdraw from Account successful!";
+      const successMessage = "Transaction successful!";
       NotificationManager.success(successMessage);
       return successMessage;
     } catch (error: any) {

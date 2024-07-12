@@ -2,13 +2,9 @@ import { useState } from "react";
 import AmountCustom from "../../components/AmountCustom";
 import CustomButton from "../../components/CustomButton";
 import { useDataContext } from "../../context/DataContext";
-import { useBorrow } from "../../hooks/useBorrow";
-import { useDepositInCollateralAccount } from "../../hooks/UseDepositInCollateralAccount";
 import { Box, Button, Paper } from "@mui/material";
 import CustomTable from "../../components/CustomTable";
 import theme from "../../theme";
-import { ethers } from "ethers";
-import { useDeposit } from "../../hooks/useDeposit";
 import { useWithdraw } from "../../hooks/useWithdraw";
 
 const Withdraw = () => {
@@ -26,18 +22,8 @@ const Withdraw = () => {
     "Must enter an amount to withdraw"
   );
 
-  const {
-    userInfo,
-    userDeposits,
-    loadingUser,
-    pricePoolId,
-    pricePoolIdLoading,
-    pricePoolIdError,
-    orderData,
-    orderLoading,
-    orderError,
-    orderMergedData,
-  } = useDataContext();
+  const { poolLoading, orderMergedData, poolData, refetchData } =
+    useDataContext();
 
   const customDataColumnsConfig = [
     { key: "buyPrice", title: "Buy Price", metric: "USDC" },
@@ -115,6 +101,13 @@ const Withdraw = () => {
         String(withdrawAmountQuantity)
       );
       setTextAfterClick(result);
+      if (result == "Transaction successful!") {
+        refetchData();
+        // FIXEME j'appelle une deuxieme fois car ya un prblm et on ne recupere pas le nvx poolData
+        // à cause de la mise a jour asynchrone il me semble et car ya pas de synchronisation entre poolData
+        // et les user data (userDeposits et userBorrows)
+        refetchData();
+      }
     }
   };
 
@@ -164,7 +157,7 @@ const Withdraw = () => {
           data={displayedData}
           clickableRows={true}
           onRowClick={handleRowClick}
-          isLoading={orderLoading}
+          isLoading={poolLoading}
         />
       </div>
       <Button
