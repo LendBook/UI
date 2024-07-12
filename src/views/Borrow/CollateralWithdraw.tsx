@@ -9,18 +9,7 @@ const CollateralWithdraw = () => {
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [textAfterClick, setTextAfterClick] = useState<string>("");
 
-  const {
-    userInfo,
-    userDeposits,
-    loadingUser,
-    pricePoolId,
-    pricePoolIdLoading,
-    pricePoolIdError,
-    orderData,
-    orderLoading,
-    orderError,
-    orderMergedData,
-  } = useDataContext();
+  const { userInfo, refetchData } = useDataContext();
 
   const updateButtonClickable = (collateralQuantity: number) => {
     const isClickable = collateralQuantity > 0;
@@ -44,6 +33,13 @@ const CollateralWithdraw = () => {
         false
       );
       setTextAfterClick(result);
+      if (result == "Transaction successful!") {
+        refetchData();
+        // FIXEME j'appelle une deuxieme fois car ya un prblm et on ne recupere pas le nvx poolData
+        // à cause de la mise a jour asynchrone il me semble et car ya pas de synchronisation entre poolData
+        // et les user data (userDeposits et userBorrows)
+        refetchData();
+      }
     }
   };
   return (

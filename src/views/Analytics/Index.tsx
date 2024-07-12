@@ -27,22 +27,10 @@ const Index = () => {
 
   // const sortedData = data.sort((a, b) => a.buyPrice - b.buyPrice);
 
-  const {
-    userInfo,
-    userDeposits,
-    loadingUser,
-    pricePoolId,
-    pricePoolIdLoading,
-    pricePoolIdError,
-    orderData,
-    orderLoading,
-    orderError,
-    orderMergedData,
-  } = useDataContext();
+  const { orderMergedData } = useDataContext();
 
-  let sortedData = orderMergedData.sort(
-    (a, b) => Number(a.buyPrice) - Number(b.buyPrice)
-  );
+  let sortedData = [...orderMergedData];
+  sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
 
   sortedData = sortedData.map((item) => {
     return {

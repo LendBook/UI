@@ -1,13 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AmountCustom from "../../components/AmountCustom";
 import CustomButton from "../../components/CustomButton";
 import { useDataContext } from "../../context/DataContext";
-import { useBorrow } from "../../hooks/useBorrow";
-import { useDepositInCollateralAccount } from "../../hooks/UseDepositInCollateralAccount";
 import { Button } from "@mui/material";
 import CustomTable from "../../components/CustomTable";
 import theme from "../../theme";
-import { ethers } from "ethers";
 import { useDeposit } from "../../hooks/useDeposit";
 import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
 
@@ -24,18 +21,8 @@ const Supply = () => {
     "Must enter an amount to borrow"
   );
 
-  let {
-    userInfo,
-    userDeposits,
-    loadingUser,
-    pricePoolId,
-    pricePoolIdLoading,
-    pricePoolIdError,
-    orderData,
-    orderLoading,
-    orderError,
-    orderMergedData,
-  } = useDataContext();
+  const { poolLoading, orderMergedData, poolData, refetchData } =
+    useDataContext();
 
   const customDataColumnsConfig = [
     { key: "buyPrice", title: "Buy Price", metric: "USDC" },
@@ -46,6 +33,7 @@ const Supply = () => {
   ];
 
   const displayedData = showAll ? orderMergedData : orderMergedData.slice(0, 3);
+  //const displayedData = showAll ? poolData : poolData.slice(0, 3);
 
   const updateButtonClickable = (quantity: number, price: string) => {
     const isClickable = quantity > 0 && price !== "";
@@ -90,8 +78,21 @@ const Supply = () => {
         Number(poolId) + 1
       );
       setTextAfterClick(result);
+      if (result == "Transaction successful!") {
+        refetchData();
+        // FIXEME j'appelle une deuxieme fois car ya un prblm et on ne recupere pas le nvx poolData
+        // à cause de la mise a jour asynchrone il me semble et car ya pas de synchronisation entre poolData
+        // et les user data (userDeposits et userBorrows)
+        refetchData();
+      }
     }
   };
+
+  useEffect(() => {
+    // Cette fonction sera appelée chaque fois que poolData change
+    console.log("poolData a changé :", poolData);
+    // Ici vous pouvez effectuer toute action nécessaire après la mise à jour de poolData
+  }, [poolData]); // Mettez à jour lorsque poolData change
 
   const toggleShowAll = () => {
     setShowAll(!showAll);
@@ -115,7 +116,7 @@ const Supply = () => {
           data={displayedData}
           clickableRows={true}
           onRowClick={handleRowClick}
-          isLoading={orderLoading}
+          isLoading={poolLoading}
         />
       </div>
       <Button

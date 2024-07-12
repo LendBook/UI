@@ -74,7 +74,7 @@ function generatePriceData(
     (isIncreasing && currentPrice < finalPrice) ||
     (!isIncreasing && currentPrice > finalPrice)
   ) {
-    console.log(`create buy price ${currentPrice}`);
+    //console.log(`create buy price ${currentPrice}`);
 
     priceData.push({
       id: currentId,
@@ -134,7 +134,7 @@ export const useFetchPriceForEmptyPools = () => {
   async function fetchPricePoolIdInfo() {
     setLoading(true);
     try {
-      console.log("STARTING GETTING NEW PRICE");
+      //console.log("STARTING GETTING NEW PRICE");
       const priceStepResponse = await axios.get(
         `${apiUrl}/v1/constant/priceStep`
       );
@@ -142,7 +142,7 @@ export const useFetchPriceForEmptyPools = () => {
         ethers.utils.formatUnits(priceStepResponse.data.priceStep, 18)
       );
 
-      console.log("CONTINUE GETTING NEW PRICE");
+      //console.log("CONTINUE GETTING NEW PRICE");
       //FIXME: can be removed if we call usePriceOracle.ts from App and get access to the priceOracle.
       const priceFeedResponse = await axios.get(
         `${apiUrl}/v1/constant/priceFeed`
@@ -167,7 +167,7 @@ export const useFetchPriceForEmptyPools = () => {
         priceFeed,
         priceStep
       );
-      console.log(priceData);
+      //console.log(priceData);
 
       setPricePoolId(priceData);
     } catch (err: any) {

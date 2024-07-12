@@ -14,7 +14,7 @@ export const useWithdraw = () => {
         ethers.utils.parseUnits(quantity, 18)
       );
       await tx.wait();
-      const successMessage = "Withdraw successful!";
+      const successMessage = "Transaction successful!";
       NotificationManager.success(successMessage);
       return successMessage;
     } catch (error: any) {

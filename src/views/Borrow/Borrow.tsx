@@ -19,18 +19,7 @@ const Borrow = () => {
     "Must enter an amount to borrow"
   );
 
-  const {
-    userInfo,
-    userDeposits,
-    loadingUser,
-    pricePoolId,
-    pricePoolIdLoading,
-    pricePoolIdError,
-    orderData,
-    orderLoading,
-    orderError,
-    orderMergedData,
-  } = useDataContext();
+  const { poolLoading, orderMergedData, refetchData } = useDataContext();
 
   const customDataColumnsConfig = [
     { key: "buyPrice", title: "Liquidation Price", metric: "USDC" },
@@ -84,6 +73,13 @@ const Borrow = () => {
       setTextAfterClick("Transaction sent ...");
       const result = await borrow(Number(poolId), String(borrowedQuantity));
       setTextAfterClick(result);
+      if (result == "Transaction successful!") {
+        refetchData();
+        // FIXEME j'appelle une deuxieme fois car ya un prblm et on ne recupere pas le nvx poolData
+        // à cause de la mise a jour asynchrone il me semble et car ya pas de synchronisation entre poolData
+        // et les user data (userDeposits et userBorrows)
+        refetchData();
+      }
     }
   };
 
@@ -118,7 +114,7 @@ const Borrow = () => {
           data={displayedData}
           clickableRows={true}
           onRowClick={handleRowClick}
-          isLoading={orderLoading}
+          isLoading={poolLoading}
         />
       </div>
       <Button
