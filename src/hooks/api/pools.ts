@@ -140,10 +140,10 @@ export const useFetchPools = () => {
 
       console.log("getting price feed");
       const priceFeedResponse = await axios.get(
-        `${apiUrl}/v1/constant/priceFeed`
+        `${apiUrl}/v1/constant/viewPriceFeed`
       );
       const priceFeed = parseFloat(
-        ethers.utils.formatUnits(priceFeedResponse.data.priceFeed, 18)
+        ethers.utils.formatUnits(priceFeedResponse.data.viewPriceFeed, 8)
       );
       //const { price: priceFeed, loading: loadingPriceFeed } = usePriceOracle();
 

@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 interface PriceFeedData {
-  priceFeed: string;
+  viewPriceFeed: string;
 }
 
 export const usePriceOracle = () => {
@@ -21,10 +21,11 @@ export const usePriceOracle = () => {
 
   const fetchPrice = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/v1/constant/priceFeed`);
+      const response = await axios.get(`${apiUrl}/v1/constant/viewPriceFeed`);
       const priceData: PriceFeedData = response.data;
+      console.log("priceData.viewPriceFeed ", priceData.viewPriceFeed);
       const priceInUSDC = parseFloat(
-        ethers.utils.formatUnits(priceData.priceFeed, 18)
+        ethers.utils.formatUnits(priceData.viewPriceFeed, 8)
       );
       setPrice(priceInUSDC);
     } catch (err) {

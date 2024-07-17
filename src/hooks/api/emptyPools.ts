@@ -145,10 +145,10 @@ export const useFetchPriceForEmptyPools = () => {
       //console.log("CONTINUE GETTING NEW PRICE");
       //FIXME: can be removed if we call usePriceOracle.ts from App and get access to the priceOracle.
       const priceFeedResponse = await axios.get(
-        `${apiUrl}/v1/constant/priceFeed`
+        `${apiUrl}/v1/constant/viewPriceFeed`
       );
       const priceFeed = parseFloat(
-        ethers.utils.formatUnits(priceFeedResponse.data.priceFeed, 18)
+        ethers.utils.formatUnits(priceFeedResponse.data.viewPriceFeed, 8)
       );
       //const { price: priceFeed, loading: loadingPriceFeed } = usePriceOracle();
 

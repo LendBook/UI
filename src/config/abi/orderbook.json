@@ -935,12 +935,25 @@
   },
   {
     "inputs": [],
-    "name": "viewChainlinkPriceFeedLatestAnswer",
+    "name": "viewChainlinkPriceFeed",
     "outputs": [
       {
-        "internalType": "int256",
+        "internalType": "uint256",
+        "name": "chainlinkPrice256",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "viewDecimals",
+    "outputs": [
+      {
+        "internalType": "uint8",
         "name": "",
-        "type": "int256"
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
