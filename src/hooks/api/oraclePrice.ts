@@ -25,7 +25,7 @@ export const usePriceOracle = () => {
       const priceData: PriceFeedData = response.data;
       console.log("priceData.viewPriceFeed ", priceData.viewPriceFeed);
       const priceInUSDC = parseFloat(
-        ethers.utils.formatUnits(priceData.viewPriceFeed, 8)
+        ethers.utils.formatUnits(priceData.viewPriceFeed, 18)
       );
       setPrice(priceInUSDC);
     } catch (err) {

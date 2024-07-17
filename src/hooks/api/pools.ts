@@ -143,7 +143,7 @@ export const useFetchPools = () => {
         `${apiUrl}/v1/constant/viewPriceFeed`
       );
       const priceFeed = parseFloat(
-        ethers.utils.formatUnits(priceFeedResponse.data.viewPriceFeed, 8)
+        ethers.utils.formatUnits(priceFeedResponse.data.viewPriceFeed, 18)
       );
       //const { price: priceFeed, loading: loadingPriceFeed } = usePriceOracle();
 
