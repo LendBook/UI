@@ -47,7 +47,8 @@ export default function MenuBar() {
     border: "1px solid transparent",
     "&:hover": {
       //border: "1px solid transparent", // Ensure border remains transparent on hover
-      backgroundColor: darkMode ? "grey.600" : `${theme.palette.error.main}`, // Example of hover background color change
+      backgroundColor: `${theme.palette.primary.main}`, // Example of hover background color change
+      color: "black",
     },
     color: darkMode ? "white" : "black",
     "&.MuiButton-containedPrimary": {
@@ -60,9 +61,9 @@ export default function MenuBar() {
 
   return (
     <div
-      className={`w-64 fixed top-16 left-0 h-full z-10 shadow-md ${
-        darkMode ? "bg-black text-white" : "bg-white text-black"
-      }`}
+      className={`w-64 fixed top-16 left-0 h-full z-10 shadow-md 
+        ${darkMode ? "bg-black text-white" : "bg-white text-black"}
+      `}
     >
       <div className="flex flex-col pt-2">
         <nav className="flex flex-col items-center justify-center">
@@ -80,25 +81,25 @@ export default function MenuBar() {
                   selectedMenu === menu.id
                     ? menu.label === "Markets"
                       ? `${theme.palette.primary.main}`
-                      : `${theme.palette.error.main}`
+                      : `${theme.palette.primary.main}`
                     : menu.label === "Markets"
-                    ? `${theme.palette.error.main}`
+                    ? undefined //`${theme.palette.background.default}`
                     : undefined,
                 fontWeight: selectedMenu === menu.id ? "bold" : "normal",
                 color:
-                  selectedMenu === menu.id && menu.label === "Markets"
-                    ? "white"
+                  selectedMenu === menu.id //&& menu.label === "Markets"
+                    ? `${theme.palette.common.black}`
                     : undefined,
                 border:
                   menu.label === "Markets"
-                    ? `1px solid ${theme.palette.primary.main}`
+                    ? `2px solid ${theme.palette.primary.main}`
                     : "1px solid transparent",
                 "&:hover": {
                   backgroundColor:
                     menu.label === "Markets"
                       ? `${theme.palette.primary.main}`
                       : undefined, // Example of hover background color change
-                  color: menu.label === "Markets" ? "white" : undefined,
+                  //color: menu.label === "Markets" ? "white" : undefined,
                 },
               }}
             >

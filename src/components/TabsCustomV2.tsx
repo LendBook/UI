@@ -45,9 +45,14 @@ export default function TabsCustom({ labels, onClick }: TabProps) {
         <Tabs
           value={value}
           onChange={handleChange}
-          textColor="primary"
+          textColor="inherit"
           indicatorColor="primary"
           aria-label="basic tabs example"
+          TabIndicatorProps={{
+            style: {
+              height: "3px",
+            },
+          }}
           //variant="fullWidth"
         >
           {labels.map((label, index) => (

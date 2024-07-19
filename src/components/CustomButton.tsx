@@ -39,7 +39,11 @@ export default function CustomButton({
               width:
                 typeof buttonWidth === "number" ? `${buttonWidth}px` : "auto",
               padding: "6px 10px",
-              border: `1px solid ${theme.palette.primary.main}`,
+              border: isHovered
+                ? clickable
+                  ? `2px solid ${theme.palette.primary.dark}`
+                  : `2px solid ${theme.palette.primary.main}`
+                : `2px solid ${theme.palette.primary.main}`,
               alignItems: "center",
               textTransform: "none",
               borderRadius:
@@ -51,11 +55,12 @@ export default function CustomButton({
                   : theme.palette.error.main
                 : clickable
                 ? theme.palette.primary.main
-                : theme.palette.error.main,
+                : theme.palette.background.default,
 
               color: clickable
-                ? theme.palette.common.white
-                : theme.palette.primary.main,
+                ? theme.palette.common.black
+                : theme.palette.common.black,
+              fontWeight: clickable ? "bold" : undefined,
             }}
             onClick={handleClick}
             disabled={!clickable}

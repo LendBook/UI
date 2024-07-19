@@ -1,7 +1,8 @@
 // Navbar.tsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import logoImg from "../asserts/images/logo.png";
+//import logoImg from "../asserts/images/logo.png";
+import logoImg from "../asserts/images/LogoSimpleLendBook_green4.png";
 import { formatNumber } from "../components/GlobalFunctions";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useTheme } from "../context/ThemeContext";
@@ -47,7 +48,6 @@ export default function Navbar() {
       console.log("Please enter a price.");
     }
   };
-
   return (
     <nav
       className={`w-full fixed top-0 left-0 z-30 shadow-md ${
@@ -56,10 +56,17 @@ export default function Navbar() {
     >
       <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
+          <div className="flex items-center justify-center">
             <Link to="/">
               <img className="h-10 w-auto" src={logoImg} alt="Logo" />
             </Link>
+            <span
+              className={`font-bold ${
+                darkMode ? "text-primary" : "text-black"
+              } text-xl ml-2`}
+            >
+              LendBook
+            </span>
           </div>
 
           <div className="flex items-center flex-grow justify-center">

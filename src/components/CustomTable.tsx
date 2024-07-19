@@ -60,7 +60,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const HoverTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   "&:hover": {
-    backgroundColor: theme.palette.error.main, //theme.palette.primary.main, //theme.palette.background.default, //theme.palette.action.hover, //theme.palette.background.default,
+    backgroundColor: theme.palette.warning.main, //theme.palette.error.main,
   },
 }));
 
@@ -92,7 +92,7 @@ export default function CustomTable<T extends string | number>({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <span className="text-primary font-bold">{title}</span>
+      <span className="text-black font-bold">{title}</span>
       <div className="container relative z-2 mt-10">
         <Box
           component={Paper}
@@ -130,7 +130,7 @@ export default function CustomTable<T extends string | number>({
                     "& .MuiTableCell-root":
                       rowIndex === activeRow
                         ? {
-                            color: theme.palette.common.white,
+                            color: theme.palette.common.black,
                             backgroundColor: theme.palette.primary.main,
                           }
                         : "inherit",
