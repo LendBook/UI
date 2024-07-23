@@ -55,7 +55,7 @@ export default function CustomButton({
                   : theme.palette.error.main
                 : clickable
                 ? theme.palette.primary.main
-                : theme.palette.background.default,
+                : "white", //theme.palette.background.default,
 
               color: clickable
                 ? theme.palette.common.black

@@ -1,7 +1,7 @@
 import { Box, Card, Paper, Typography } from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { formatNumber } from "../../components/GlobalFunctions";
-import { useFetchLendOrder } from "../../hooks/api/lend";
+import { useDataContext } from "../../context/DataContext";
 
 const dataset = [
   {
@@ -47,9 +47,8 @@ const chartSetting = {
 };
 
 const Index = () => {
-  const { data, loading, error } = useFetchLendOrder([
-    1111111110, 1111111108, 1111111106,
-  ]);
+  const { orderMergedData } = useDataContext();
+
   const dataColumnsConfig = [
     { key: "buyPrice", title: "Buy Price", metric: "USDC" },
     { key: "deposits", title: "Total Supply", metric: "USDC" },
@@ -57,8 +56,6 @@ const Index = () => {
     { key: "utilization", title: "Utilization", metric: "%" },
     { key: "mySupply", title: "My Supply", metric: "USDC" },
   ];
-
-  const sortedData = data.sort((a, b) => a.buyPrice - b.buyPrice);
 
   return (
     <div className="mt-20 ml-72 mr-4">
@@ -108,7 +105,7 @@ const Index = () => {
                 className="flex flex-col"
               >
                 <BarChart
-                  dataset={sortedData}
+                  dataset={orderMergedData}
                   xAxis={[{ scaleType: "band", dataKey: "buyPrice" }]}
                   tooltip={{ trigger: "axis" }}
                   series={[

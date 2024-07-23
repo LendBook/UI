@@ -121,7 +121,12 @@ export default function AmountCustom({
 
   return (
     <Box className="max-w-[300px]">
-      <span className="text-black font-bold">{title}</span>
+      <span
+        className="text-black font-bold"
+        //style={{ backgroundColor: theme.palette.primary.main }}
+      >
+        {title}
+      </span>
       <Paper
         elevation={0}
         style={{ padding: "0px", width: "100%" }}
@@ -140,7 +145,7 @@ export default function AmountCustom({
           InputProps={{
             style: {
               color: theme.palette.text.primary,
-              backgroundColor: theme.palette.background.default, //theme.palette.common.white,
+              backgroundColor: theme.palette.warning.main, //"white", //theme.palette.background.default, //theme.palette.common.white,
             },
             endAdornment: (
               <InputAdornment position="end">
@@ -149,7 +154,10 @@ export default function AmountCustom({
             ),
           }}
           sx={{
-            fieldset: { borderColor: theme.palette.background.default }, //"transparent"
+            fieldset: {
+              borderWidth: "1px",
+              borderColor: theme.palette.warning.main,
+            }, //theme.palette.background.default theme.palette.primary.main "transparent"
           }}
           variant="outlined"
         />

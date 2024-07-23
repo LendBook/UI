@@ -49,12 +49,12 @@ export default function MetricCustom<T extends string>({
 
   return (
     <Paper
-      elevation={1}
+      elevation={0}
       sx={{
         borderRadius: 1,
         padding: 1,
         display: "inline-block",
-        border: `1px solid ${theme.palette.background.default}`,
+        border: `1px solid ${theme.palette.error.main}`, //border: `1px solid ${theme.palette.background.default}`,
       }}
       className="flex flex-col"
     >

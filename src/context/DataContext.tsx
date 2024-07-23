@@ -5,11 +5,6 @@ import {
   UserDepositOrdersData,
   UserBorrowsData,
 } from "../hooks/api/userInfo";
-import {
-  PriceForPoolIdData,
-  useFetchPriceForEmptyPools,
-} from "../hooks/api/emptyPools";
-import { LendOrderData, useFetchLendOrder } from "../hooks/api/lend";
 import { ObjectWithId, mergeObjects } from "../components/GlobalFunctions";
 import { PoolData, useFetchPools } from "../hooks/api/pools";
 
@@ -24,9 +19,11 @@ interface DataContextType {
   errorUser: string | null;
   poolLoading: boolean;
   orderMergedData: ObjectWithId[];
+  orderMergedDataUnderMarketPrice: ObjectWithId[];
   poolData: PoolData[];
   refetchData: () => void; // Add this line
   refetchUserData: () => void;
+  closestPoolIdUnderPriceFeed: number;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -52,6 +49,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({
   // } = useFetchLendOrder(poolIds);
 
   const { price, loading: priceLoading, error: priceError } = usePriceOracle();
+  console.log("fucking price : ", price);
 
   const {
     userInfo,
@@ -62,7 +60,13 @@ export const DataProvider: React.FC<DataProviderProps> = ({
     refetchUserData,
   } = useFetchUserInfo(provider, walletAddress);
 
-  const { poolData, poolLoading, poolError, refetchPoolData } = useFetchPools();
+  const {
+    poolData,
+    poolLoading,
+    poolError,
+    refetchPoolData,
+    closestPoolIdUnderPriceFeed,
+  } = useFetchPools();
 
   let orderMergedData = mergeObjects(poolData, userDeposits);
   orderMergedData = mergeObjects(orderMergedData, userBorrows);
@@ -70,6 +74,14 @@ export const DataProvider: React.FC<DataProviderProps> = ({
   orderMergedData = orderMergedData.sort(
     (a, b) => Number(b.buyPrice) - Number(a.buyPrice)
   );
+
+  // // Filtrer les données
+  const orderMergedDataUnderMarketPrice = orderMergedData.filter((item) => {
+    if (typeof item.poolId === "number") {
+      return item.poolId <= closestPoolIdUnderPriceFeed;
+    }
+    return false;
+  });
 
   const refetchData = useCallback(() => {
     // FIXEME j'appelle une deuxieme fois car ya un prblm et on ne recupere pas le nvx poolData
@@ -94,9 +106,11 @@ export const DataProvider: React.FC<DataProviderProps> = ({
         errorUser,
         poolLoading,
         orderMergedData,
+        orderMergedDataUnderMarketPrice,
         poolData,
         refetchData, // Add this line
         refetchUserData,
+        closestPoolIdUnderPriceFeed,
       }}
     >
       {children}

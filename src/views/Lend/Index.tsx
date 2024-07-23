@@ -54,13 +54,14 @@ const Index = () => {
 
             <div className="flex mt-10"></div>
             <Paper
-              elevation={4}
+              elevation={0}
               sx={{
                 borderRadius: 1,
                 padding: 1,
                 display: "inline-block",
                 width: "100%",
-                //backgroundColor: theme.palette.background.default,
+                backgroundColor: "white", //theme.palette.warning.main, //theme.palette.background.default, "white", //
+                border: `1px solid ${theme.palette.error.main}`,
               }}
               className="flex flex-col"
             >

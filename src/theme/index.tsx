@@ -5,19 +5,19 @@ const tailwindColors = {
   secondary: "#677785", //"#002347",
   success: "#28a745",
   error: "#d8dfe5", //"#c9dae9",
-  warning: "#f0f2f5", //"#ffc107",
+  warning: "#f0f2f5", //"#ffc107", f6f8fc
   info: "#59748d",
   light: "#f0f2f5", //"#f8f9fa",
   dark: "#343a40", //"#677785", //"#343a40",
 
-  black: "#333333",
+  black: "#111111",
   white: "#ffffff",
 
   bgBtn: "#003F7D",
   bgBtnHover: "#002347",
   borderColor: "#4ACFFF",
 
-  bgLight: "#f9fafb", //"#e9f4ff",
+  bgLight: "#f9fafb", //"#f9fafb", f0f2f5 //"#e9f4ff",
 };
 // const tailwindColors = {
 //   primary: "#003F7D",

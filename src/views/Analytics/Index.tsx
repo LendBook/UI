@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { formatNumber } from "../../components/GlobalFunctions";
-import { useFetchLendOrder } from "../../hooks/api/lend";
 import { useDataContext } from "../../context/DataContext";
 import { useState } from "react";
 import { axisClasses } from "@mui/x-charts/ChartsAxis";
