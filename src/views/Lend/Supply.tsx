@@ -30,7 +30,6 @@ const Supply = () => {
   } = useDataContext();
 
   const customDataColumnsConfig = [
-    { key: "poolId", title: "poolId" },
     { key: "buyPrice", title: "Buy Price", metric: "USDC" },
     { key: "deposits", title: "Total Supply", metric: "USDC" },
     { key: "lendingRate", title: "Net APY", metric: "%" },
