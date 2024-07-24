@@ -38,9 +38,7 @@ export interface UserInfoData {
 
 export const useFetchUserInfo = (
   provider: any,
-  walletAddress: string | undefined,
-  baseTokenAddress: string | undefined,
-  quoteTokenAddress: string | undefined
+  walletAddress: string | undefined
 ) => {
   const initialUserInfo: UserInfoData = {
     totalDepositsQuote: "",
@@ -79,6 +77,17 @@ export const useFetchUserInfo = (
         responseExcessCollateral.data.result.split(",")[1],
         "ether"
       );
+
+      //tokens part (FIXEME repetition with pools.ts)
+      const responseBaseTokenAddress = await axios.get(
+        `${apiUrl}/v1/constant/baseToken`
+      );
+      const baseTokenAddress = responseBaseTokenAddress.data.baseToken;
+
+      const responseQuoteTokenAddress = await axios.get(
+        `${apiUrl}/v1/constant/quoteToken`
+      );
+      const quoteTokenAddress = responseQuoteTokenAddress.data.quoteToken;
 
       const responseBaseTokenBalance = await axios.get(
         `${apiUrl}/v1/balance/${baseTokenAddress}/${address}`

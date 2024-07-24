@@ -10,8 +10,6 @@ import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
 import TradeBox from "./TradeBox";
 
 const BaseToQuote = () => {
-  const base = "ETH";
-  const quote = "USDC";
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
   const [buyPrice, setBuyPrice] = useState<string>("");
   const [poolId, setPoolId] = useState<string>("");
@@ -31,14 +29,19 @@ const BaseToQuote = () => {
     poolData,
     closestPoolIdUnderPriceFeed,
     refetchData,
+    marketInfo,
   } = useDataContext();
 
   const customDataColumnsConfig = [
-    { key: "buyPrice", title: "Limit Price", metric: quote },
+    {
+      key: "buyPrice",
+      title: "Limit Price",
+      metric: marketInfo.quoteTokenSymbol,
+    },
     {
       key: "availableSupply",
       title: "Available supply for trading",
-      metric: quote,
+      metric: marketInfo.quoteTokenSymbol,
     },
   ];
 
@@ -132,10 +135,10 @@ const BaseToQuote = () => {
           <TradeBox
             poolId={poolId}
             sellToken="Base"
-            sellTokenName="WETH"
+            sellTokenName={marketInfo.baseTokenSymbol}
             sellTokenWalletBalance={911}
             sellTokenRatioToUsd={price ?? 0}
-            buyTokenName="USDC"
+            buyTokenName={marketInfo.quoteTokenSymbol}
             buyTokenWalletBalance={911}
             buyTokenRatioToUsd={1}
             buyTokenMaxSupply={parseFloat(availableSupply)}

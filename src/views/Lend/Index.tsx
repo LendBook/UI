@@ -16,18 +16,18 @@ const Index = () => {
     setSelectedTab(label);
   };
 
-  const { userInfo, loadingUser } = useDataContext();
+  const { userInfo, loadingUser, marketInfo } = useDataContext();
 
   const metricsData = [
     {
       title: "My total supply",
       value: userInfo.totalDepositsQuote,
-      unit: "USDC",
+      unit: marketInfo.quoteTokenSymbol,
     },
     {
       title: "My sell orders to withdraw",
       value: 0,
-      unit: "WETH",
+      unit: marketInfo.baseTokenSymbol,
     },
   ];
 

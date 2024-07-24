@@ -23,7 +23,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function MenuBar() {
-  const { price, priceLoading } = useDataContext();
+  const { price, priceLoading, marketInfo } = useDataContext();
   const { darkMode } = useTheme();
   const [selectedPair, setSelectedPair] = useState(pairs[0]);
   const location = useLocation(); //useLocation to get current path
@@ -162,13 +162,13 @@ export default function MenuBar() {
                   </div>
                   <div className="flex items-center flex-grow justify-start">
                     <span className={` text-[0.7rem] text-dark `}>
-                      Price: 1 WETH ={" "}
+                      Price: 1 {marketInfo.baseTokenSymbol} ={" "}
                       {priceLoading
                         ? "Loading..."
                         : price
                         ? formatNumber(price)
                         : "0"}{" "}
-                      USDC
+                      {marketInfo.quoteTokenSymbol}
                     </span>
                   </div>
                 </div>

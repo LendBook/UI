@@ -22,23 +22,23 @@ const Index = () => {
     setSelectedBorrowTab(label);
   };
 
-  const { userInfo, userDeposits, loadingUser } = useDataContext();
+  const { userInfo, userDeposits, loadingUser, marketInfo } = useDataContext();
 
   const metricsData = [
     {
       title: "My total collateral",
       value: "ToBeDone", //userInfo.totalDepositsQuote,
-      unit: "WETH",
+      unit: marketInfo.baseTokenSymbol,
     },
     {
       title: "My free collateral",
       value: userInfo.excessCollateral,
-      unit: "WETH",
+      unit: marketInfo.baseTokenSymbol,
     },
     {
       title: "My total borrows",
       value: userInfo.totalDepositsBase, //userInfo.totalDepositsBase,
-      unit: "USDC",
+      unit: marketInfo.quoteTokenSymbol,
     },
   ];
 

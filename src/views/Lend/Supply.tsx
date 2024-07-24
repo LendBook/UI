@@ -28,14 +28,27 @@ const Supply = () => {
     orderMergedDataUnderMarketPrice,
     poolData,
     refetchData,
+    marketInfo,
   } = useDataContext();
 
   const customDataColumnsConfig = [
-    { key: "buyPrice", title: "Buy Price", metric: "USDC" },
-    { key: "deposits", title: "Total Supply", metric: "USDC" },
+    {
+      key: "buyPrice",
+      title: "Buy Price",
+      metric: marketInfo.quoteTokenSymbol,
+    },
+    {
+      key: "deposits",
+      title: "Total Supply",
+      metric: marketInfo.quoteTokenSymbol,
+    },
     { key: "lendingRate", title: "Net APY", metric: "%" },
     { key: "utilizationRate", title: "Utilization", metric: "%" },
-    { key: "mySupply", title: "My Supply", metric: "USDC" },
+    {
+      key: "mySupply",
+      title: "My Supply",
+      metric: marketInfo.quoteTokenSymbol,
+    },
   ];
 
   const displayedData = showAll
@@ -112,7 +125,7 @@ const Supply = () => {
         <AmountCustom
           title="Amount to supply"
           tokenWalletBalance={userInfo.quoteTokenBalance}
-          selectedToken="USDC"
+          selectedToken={marketInfo.quoteTokenSymbol}
           ratioToUSD={1.01}
           onQuantityChange={handleQuantityChange}
         />

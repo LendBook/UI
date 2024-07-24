@@ -6,11 +6,7 @@ import {
   UserBorrowsData,
 } from "../hooks/api/userInfo";
 import { ObjectWithId, mergeObjects } from "../components/GlobalFunctions";
-import { PoolData, useFetchPools } from "../hooks/api/pools";
-import {
-  getBaseTokenAddress,
-  getQuoteTokenAddress,
-} from "../utils/addressHelpers";
+import { PoolData, MarketInfoData, useFetchPools } from "../hooks/api/pools";
 
 interface DataContextType {
   price: number | null;
@@ -28,9 +24,7 @@ interface DataContextType {
   refetchData: () => void; // Add this line
   refetchUserData: () => void;
   closestPoolIdUnderPriceFeed: number;
-  totalDeposit: number;
-  totalBorrow: number;
-  maxLendingRate: number;
+  marketInfo: MarketInfoData;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -58,9 +52,6 @@ export const DataProvider: React.FC<DataProviderProps> = ({
   const { price, loading: priceLoading, error: priceError } = usePriceOracle();
   console.log("fucking price : ", price);
 
-  const baseTokenAddress = getBaseTokenAddress();
-  const quoteTokenAddress = getQuoteTokenAddress();
-
   const {
     userInfo,
     userDeposits,
@@ -68,12 +59,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({
     loadingUser,
     errorUser,
     refetchUserData,
-  } = useFetchUserInfo(
-    provider,
-    walletAddress,
-    baseTokenAddress,
-    quoteTokenAddress
-  );
+  } = useFetchUserInfo(provider, walletAddress);
 
   const {
     poolData,
@@ -81,9 +67,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({
     poolError,
     refetchPoolData,
     closestPoolIdUnderPriceFeed,
-    totalDeposit,
-    totalBorrow,
-    maxLendingRate,
+    marketInfo,
   } = useFetchPools();
 
   let orderMergedData = mergeObjects(poolData, userDeposits);
@@ -129,9 +113,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({
         refetchData, // Add this line
         refetchUserData,
         closestPoolIdUnderPriceFeed,
-        totalDeposit,
-        totalBorrow,
-        maxLendingRate,
+        marketInfo,
       }}
     >
       {children}

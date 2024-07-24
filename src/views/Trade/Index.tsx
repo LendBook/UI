@@ -15,7 +15,7 @@ const Index = () => {
     setSelectedTab(label);
   };
 
-  const { userInfo, loadingUser } = useDataContext();
+  const { marketInfo } = useDataContext();
 
   return (
     <div className="mt-20 ml-72 mr-4 mb-20">
@@ -48,12 +48,21 @@ const Index = () => {
               className="flex flex-col"
             >
               <TabsCustomV2
-                labels={["ETH to USDC", "USDC to ETH"]}
+                labels={[
+                  `${marketInfo.baseTokenSymbol} to ${marketInfo.quoteTokenSymbol}`,
+                  `${marketInfo.quoteTokenSymbol} to ${marketInfo.baseTokenSymbol}`,
+                ]}
                 onClick={handleToggleClick}
               />
               <div className="flex mt-5"></div>
-              {selectedTab === "ETH to USDC" && <BaseToQuote />}
-              {selectedTab === "USDC to ETH" && <QuoteToBase />}
+              {selectedTab ===
+                `${marketInfo.baseTokenSymbol} to ${marketInfo.quoteTokenSymbol}` && (
+                <BaseToQuote />
+              )}
+              {selectedTab ===
+                `${marketInfo.quoteTokenSymbol} to ${marketInfo.baseTokenSymbol}` && (
+                <QuoteToBase />
+              )}
               <div className="flex mt-2"></div>
             </Paper>
           </div>

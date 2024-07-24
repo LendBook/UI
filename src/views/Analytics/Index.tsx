@@ -26,7 +26,7 @@ const Index = () => {
 
   // const sortedData = data.sort((a, b) => a.buyPrice - b.buyPrice);
 
-  const { orderMergedData } = useDataContext();
+  const { orderMergedData, marketInfo } = useDataContext();
 
   let sortedData = [...orderMergedData];
   sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
@@ -79,7 +79,7 @@ const Index = () => {
                       {
                         scaleType: "band",
                         dataKey: "buyPrice",
-                        label: "Limit prices of pools of orders (USDC)",
+                        label: `Limit prices of pools of orders (${marketInfo.quoteTokenSymbol})`,
                         labelStyle: {
                           fontSize: 14,
                           transform: "translateY(30px)", // Décaler le label de l'axe X vers le bas
@@ -93,7 +93,7 @@ const Index = () => {
                     ]}
                     yAxis={[
                       {
-                        label: "Amount (USDC)",
+                        label: `Amount (${marketInfo.quoteTokenSymbol})`,
                         labelStyle: {
                           fontSize: 14,
                         },

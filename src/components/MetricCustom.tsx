@@ -44,10 +44,6 @@ export default function MetricCustom<T extends string>({
   data,
   isLoading = false,
 }: MetricCustomProps<T>) {
-  // const [tokenWalletBalance, settokenWalletBalance] = useState("15232");
-  // const [selectedToken, setSelectedToken] = useState("USDC");
-  // const ratioToUSD = 1.01;
-
   return (
     <Paper
       elevation={0}

@@ -19,17 +19,17 @@ import { useDataContext } from "../../context/DataContext";
 const Markets = () => {
   const navigate = useNavigate(); // ou useNavigate() si tu utilises React Router 6
 
-  const { totalDeposit, totalBorrow, maxLendingRate } = useDataContext();
+  const { marketInfo } = useDataContext();
 
   const templateDataTable = [
     {
       id: 1,
-      asset: "USDC",
-      collateral: "WETH",
+      asset: marketInfo.quoteTokenSymbol,
+      collateral: marketInfo.baseTokenSymbol,
       network: "Sepolia tesnet",
-      apy: maxLendingRate,
-      supply: totalDeposit,
-      borrow: totalBorrow,
+      apy: marketInfo.maxLendingRate,
+      supply: marketInfo.totalDeposit,
+      borrow: marketInfo.totalBorrow,
     },
     // {
     //   id: 2,
@@ -44,8 +44,16 @@ const Markets = () => {
   const templateDataTableColumnsConfig = [
     { key: "asset", title: "Asset" },
     { key: "collateral", title: "Collateral" },
-    { key: "supply", title: "Total supply", metric: "USDC" },
-    { key: "borrow", title: "Total borrow", metric: "USDC" },
+    {
+      key: "supply",
+      title: "Total supply",
+      metric: marketInfo.quoteTokenSymbol,
+    },
+    {
+      key: "borrow",
+      title: "Total borrow",
+      metric: marketInfo.quoteTokenSymbol,
+    },
     { key: "apy", title: "Max APY", metric: "%" },
     { key: "network", title: "Network" },
   ];
