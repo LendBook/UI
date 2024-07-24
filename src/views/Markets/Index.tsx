@@ -6,33 +6,7 @@ import MetricCustom from "../../components/MetricCustom";
 import { Index } from "viem";
 import { Link, LinkProps } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
-const templateDataTableColumnsConfig = [
-  { key: "asset", title: "Asset" },
-  { key: "collateral", title: "Collateral" },
-  { key: "supply", title: "Supply", metric: "$" },
-  { key: "apy", title: "APY", metric: "%" },
-  { key: "network", title: "Network" },
-];
-
-const templateDataTable = [
-  {
-    id: 1,
-    asset: "USDC",
-    collateral: "WETH",
-    network: "Sepolia tesnet",
-    apy: 3.1,
-    supply: 11000000,
-  },
-  // {
-  //   id: 2,
-  //   asset: "ETH",
-  //   collateral: "stETH",
-  //   network: "Sepolia tesnet",
-  //   apy: 2.1,
-  //   supply: 5200000,
-  // },
-];
+import { useDataContext } from "../../context/DataContext";
 
 // const handleRowClick = (rowData: any): LinkProps => ({
 //   component = { Link },
@@ -44,6 +18,37 @@ const templateDataTable = [
 
 const Markets = () => {
   const navigate = useNavigate(); // ou useNavigate() si tu utilises React Router 6
+
+  const { totalDeposit, totalBorrow, maxLendingRate } = useDataContext();
+
+  const templateDataTable = [
+    {
+      id: 1,
+      asset: "USDC",
+      collateral: "WETH",
+      network: "Sepolia tesnet",
+      apy: maxLendingRate,
+      supply: totalDeposit,
+      borrow: totalBorrow,
+    },
+    // {
+    //   id: 2,
+    //   asset: "ETH",
+    //   collateral: "stETH",
+    //   network: "Sepolia tesnet",
+    //   apy: 2.1,
+    //   supply: 5200000,
+    // },
+  ];
+
+  const templateDataTableColumnsConfig = [
+    { key: "asset", title: "Asset" },
+    { key: "collateral", title: "Collateral" },
+    { key: "supply", title: "Total supply", metric: "USDC" },
+    { key: "borrow", title: "Total borrow", metric: "USDC" },
+    { key: "apy", title: "Max APY", metric: "%" },
+    { key: "network", title: "Network" },
+  ];
 
   const handleRowClick = (rowData: any) => {
     // Utilisation de history pour naviguer vers une autre route

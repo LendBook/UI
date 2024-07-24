@@ -37,7 +37,7 @@ const Index = () => {
     },
     {
       title: "My total borrows",
-      value: "ToBeDone", //userInfo.totalDepositsBase,
+      value: userInfo.totalDepositsBase, //userInfo.totalDepositsBase,
       unit: "USDC",
     },
   ];

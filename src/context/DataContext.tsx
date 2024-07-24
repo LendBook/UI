@@ -24,6 +24,9 @@ interface DataContextType {
   refetchData: () => void; // Add this line
   refetchUserData: () => void;
   closestPoolIdUnderPriceFeed: number;
+  totalDeposit: number;
+  totalBorrow: number;
+  maxLendingRate: number;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -66,6 +69,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({
     poolError,
     refetchPoolData,
     closestPoolIdUnderPriceFeed,
+    totalDeposit,
+    totalBorrow,
+    maxLendingRate,
   } = useFetchPools();
 
   let orderMergedData = mergeObjects(poolData, userDeposits);
@@ -111,6 +117,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({
         refetchData, // Add this line
         refetchUserData,
         closestPoolIdUnderPriceFeed,
+        totalDeposit,
+        totalBorrow,
+        maxLendingRate,
       }}
     >
       {children}

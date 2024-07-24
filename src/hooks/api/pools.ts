@@ -114,10 +114,12 @@ function calculatePricesForPools(
   // poolIdWithPriceData = poolIdWithPriceData.filter((item) =>
   //   idsToKeep.includes(item.id)
   // );
-
   // poolIdWithPriceData = [...poolIdWithPriceData].reverse(); //inverse the order of price list
 
-  return { poolIdWithPriceData, closestPoolIdUnderPriceFeed };
+  return {
+    poolIdWithPriceData,
+    closestPoolIdUnderPriceFeed,
+  };
 }
 
 export const useFetchPools = () => {
@@ -130,6 +132,10 @@ export const useFetchPools = () => {
   const [poolError, setPoolError] = useState<string>("");
   const [closestPoolIdUnderPriceFeed, setClosestPoolIdUnderPriceFeed] =
     useState<number>(1111111110);
+
+  const [totalDeposit, setTotalDeposit] = useState<number>(0);
+  const [totalBorrow, setTotalBorrow] = useState<number>(0);
+  const [maxLendingRate, setMaxLendingRate] = useState<number>(0);
 
   async function fetchPoolIdWithPrice() {
     setPoolLoading(true);
@@ -176,6 +182,9 @@ export const useFetchPools = () => {
 
       console.log(poolIds);
 
+      let _totalDeposit = 0;
+      let _totalBorrow = 0;
+      let _maxLendingRate = 0;
       //on a les id des pools qui nous interessent, maintenant on s'occupe de recuperer les data liées aux pools
       const results = await Promise.all(
         poolIds.map(async (poolId) => {
@@ -212,6 +221,12 @@ export const useFetchPools = () => {
           );
           //console.log(`poolIdspoolIdslendingRate ${lendingRate}`);
 
+          _totalDeposit = _totalDeposit + deposits;
+          _totalBorrow = _totalBorrow + borrows;
+          if (_maxLendingRate < lendingRate) {
+            _maxLendingRate = lendingRate;
+          }
+
           return {
             id: poolId,
             poolId: poolId,
@@ -230,6 +245,9 @@ export const useFetchPools = () => {
       const mergedData = mergeObjects(results, poolIdWithPriceData);
       setPoolData(mergedData);
       console.log(mergedData);
+      setTotalDeposit(_totalDeposit);
+      setTotalBorrow(_totalBorrow);
+      setMaxLendingRate(_maxLendingRate);
     } catch (err: any) {
       const errorMessage = `Failed to fetch user info: ${err.message}`;
       setPoolError(errorMessage);
@@ -259,5 +277,8 @@ export const useFetchPools = () => {
     poolError,
     refetchPoolData,
     closestPoolIdUnderPriceFeed,
+    totalDeposit,
+    totalBorrow,
+    maxLendingRate,
   };
 };

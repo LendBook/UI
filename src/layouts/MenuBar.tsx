@@ -8,7 +8,7 @@ import MENU_LINKS from "../config/constants/menu";
 import { Icon } from "@iconify/react";
 import { useTheme } from "../context/ThemeContext";
 import { styled } from "@mui/material/styles";
-import { Button } from "@mui/material";
+import { Box, Button, Paper } from "@mui/material";
 import StyledRouterButton from "../components/buttons/StyledRouterButton";
 import theme from "../theme";
 import { menu } from "@material-tailwind/react";
@@ -39,7 +39,7 @@ export default function MenuBar() {
 
   const StyledButton = styled(StyledRouterButton)(({ theme }) => ({
     marginBottom: theme.spacing(1), // Equivalent to Tailwind's mb-4
-    width: "90%", // Make the button take full width
+    width: "70%", // Make the button take full width
     justifyContent: "flex-start", // Align text to the left
     padding: theme.spacing(0.5), // Equivalent to Tailwind's p-4
     borderRadius: theme.shape.borderRadius, // Default border radius
@@ -67,13 +67,71 @@ export default function MenuBar() {
     >
       <div className="flex flex-col pt-2">
         <nav className="flex flex-col items-center justify-center">
+          {/* <Box
+            className="mt-5"
+            component={Paper}
+            elevation={0} //1
+            sx={{
+              borderRadius: 0,
+              padding: 1, //0.5, //1
+              border: `2px solid ${theme.palette.common.black}`,
+              backgroundColor: "inherite",
+              width: "80%",
+              color: "black",
+            }}
+          >
+            <div className="flex flex-col items-center">
+              <div className="flex font-bold">
+                {selectedPair ? (
+                  <>
+                    <img
+                      src={selectedPair.logourlB}
+                      alt={selectedPair.tokenB}
+                      style={{
+                        height: "20px",
+                        width: "20px",
+                        marginRight: "4px",
+                      }}
+                    />
+                    {selectedPair.tokenB} /
+                    <img
+                      src={selectedPair.logourlA}
+                      alt={selectedPair.tokenA}
+                      style={{
+                        height: "20px",
+                        width: "20px",
+                        marginLeft: "4px",
+                        marginRight: "4px",
+                      }}
+                    />
+                    {selectedPair.tokenA}
+                  </>
+                ) : (
+                  "Select Pair"
+                )}
+              </div>
+              <div className="flex items-center flex-grow justify-center">
+                <span className={` text-[0.7rem]  `}>
+                  Price: 1 WETH ={" "}
+                  {priceLoading
+                    ? "Loading..."
+                    : price
+                    ? formatNumber(price)
+                    : "0"}{" "}
+                  USDC
+                </span>
+              </div>
+            </div>
+          </Box>
+          <div className="mt-5"></div> */}
+
           {MENU_LINKS.map((menu) => (
             <StyledButton
               key={menu.id}
               to={menu.to}
               onClick={() => setSelectedMenu(menu.id)}
               sx={{
-                borderRadius: menu.label === "Markets" ? 5 : undefined,
+                //borderRadius: menu.label === "Markets" ? 5 : undefined,
                 display: "flex",
                 justifyContent: menu.label === "Markets" ? "center" : undefined,
 
@@ -107,54 +165,7 @@ export default function MenuBar() {
                 <span style={{ marginRight: "8px" }}>{menu.icon}</span>
               )}
 
-              {menu.label === "Markets" ? (
-                <div className="flex flex-col items-center">
-                  Market
-                  <br />
-                  <div className="flex font-bold">
-                    {selectedPair ? (
-                      <>
-                        <img
-                          src={selectedPair.logourlB}
-                          alt={selectedPair.tokenB}
-                          style={{
-                            height: "20px",
-                            width: "20px",
-                            marginRight: "4px",
-                          }}
-                        />
-                        {selectedPair.tokenB} /
-                        <img
-                          src={selectedPair.logourlA}
-                          alt={selectedPair.tokenA}
-                          style={{
-                            height: "20px",
-                            width: "20px",
-                            marginLeft: "4px",
-                            marginRight: "4px",
-                          }}
-                        />
-                        {selectedPair.tokenA}
-                      </>
-                    ) : (
-                      "Select Pair"
-                    )}
-                  </div>
-                  <div className="flex items-center flex-grow justify-center">
-                    <span className={` text-[0.7rem]  `}>
-                      Price: 1 WETH ={" "}
-                      {priceLoading
-                        ? "Loading..."
-                        : price
-                        ? formatNumber(price)
-                        : "0"}{" "}
-                      USDC
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                menu.label
-              )}
+              {menu.label}
             </StyledButton>
           ))}
         </nav>
