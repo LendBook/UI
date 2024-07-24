@@ -13,6 +13,7 @@ import {
 import theme from "../theme";
 import { title } from "process";
 import { formatNumber } from "./GlobalFunctions";
+import MarketComponent from "../components/MarketComponent";
 
 //valeur à recuperer
 //price feed indiquatif in USD
@@ -33,9 +34,9 @@ const Container = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     flexDirection: "column",
   },
-  [theme.breakpoints.up("md")]: {
-    flexDirection: "column", //"row"
-  },
+  // [theme.breakpoints.up("md")]: {
+  //   flexDirection: "column", //"row"
+  // },
 }));
 
 // Composant TableCustom
@@ -52,13 +53,15 @@ export default function MetricCustom<T extends string>({
       elevation={0}
       sx={{
         borderRadius: 1,
-        padding: 1,
+        padding: 0, //1
         display: "inline-block",
-        border: `1px solid ${theme.palette.error.main}`, //border: `1px solid ${theme.palette.background.default}`,
+        border: `0px solid ${theme.palette.error.main}`, //border: `1px solid ${theme.palette.background.default}`,
+        backgroundColor: theme.palette.background.default,
       }}
-      className="flex flex-col"
+      className="flex"
     >
       <Container>
+        {/* <MarketComponent /> */}
         {data.map((row, rowIndex) => (
           <div
             key={rowIndex} //className="min-w-[300px]"
@@ -68,14 +71,20 @@ export default function MetricCustom<T extends string>({
               style={{
                 borderRadius: 1,
                 padding: 2,
-                //backgroundColor: theme.palette.background.default,
+                backgroundColor: theme.palette.background.default,
                 //marginRight: rowIndex !== data.length - 1 ? 10 : 0,
                 //marginBottom: rowIndex !== data.length - 1 ? 10 : 0,
-                width: "300px",
+                //width: "100px",
               }}
               className="flex flex-col"
             >
-              <div style={{ marginLeft: 10 }}>
+              <div
+                style={
+                  {
+                    //marginLeft: 10
+                  }
+                }
+              >
                 <Typography
                   variant="body2"
                   style={{

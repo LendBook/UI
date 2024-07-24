@@ -15,6 +15,8 @@ import { menu } from "@material-tailwind/react";
 import { inherits } from "util";
 import { formatNumber } from "../components/GlobalFunctions";
 import { useDataContext } from "../context/DataContext";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -39,7 +41,7 @@ export default function MenuBar() {
 
   const StyledButton = styled(StyledRouterButton)(({ theme }) => ({
     marginBottom: theme.spacing(1), // Equivalent to Tailwind's mb-4
-    width: "70%", // Make the button take full width
+    width: "90%", // Make the button take full width
     justifyContent: "flex-start", // Align text to the left
     padding: theme.spacing(0.5), // Equivalent to Tailwind's p-4
     borderRadius: theme.shape.borderRadius, // Default border radius
@@ -66,65 +68,7 @@ export default function MenuBar() {
       `}
     >
       <div className="flex flex-col pt-2">
-        <nav className="flex flex-col items-center justify-center">
-          {/* <Box
-            className="mt-5"
-            component={Paper}
-            elevation={0} //1
-            sx={{
-              borderRadius: 0,
-              padding: 1, //0.5, //1
-              border: `2px solid ${theme.palette.common.black}`,
-              backgroundColor: "inherite",
-              width: "80%",
-              color: "black",
-            }}
-          >
-            <div className="flex flex-col items-center">
-              <div className="flex font-bold">
-                {selectedPair ? (
-                  <>
-                    <img
-                      src={selectedPair.logourlB}
-                      alt={selectedPair.tokenB}
-                      style={{
-                        height: "20px",
-                        width: "20px",
-                        marginRight: "4px",
-                      }}
-                    />
-                    {selectedPair.tokenB} /
-                    <img
-                      src={selectedPair.logourlA}
-                      alt={selectedPair.tokenA}
-                      style={{
-                        height: "20px",
-                        width: "20px",
-                        marginLeft: "4px",
-                        marginRight: "4px",
-                      }}
-                    />
-                    {selectedPair.tokenA}
-                  </>
-                ) : (
-                  "Select Pair"
-                )}
-              </div>
-              <div className="flex items-center flex-grow justify-center">
-                <span className={` text-[0.7rem]  `}>
-                  Price: 1 WETH ={" "}
-                  {priceLoading
-                    ? "Loading..."
-                    : price
-                    ? formatNumber(price)
-                    : "0"}{" "}
-                  USDC
-                </span>
-              </div>
-            </div>
-          </Box>
-          <div className="mt-5"></div> */}
-
+        <nav className="flex flex-col items-center justify-center mt-5">
           {MENU_LINKS.map((menu) => (
             <StyledButton
               key={menu.id}
@@ -133,7 +77,7 @@ export default function MenuBar() {
               sx={{
                 //borderRadius: menu.label === "Markets" ? 5 : undefined,
                 display: "flex",
-                justifyContent: menu.label === "Markets" ? "center" : undefined,
+                //justifyContent: menu.label === "Markets" ? "center" : undefined,
 
                 backgroundColor:
                   selectedMenu === menu.id
@@ -143,14 +87,14 @@ export default function MenuBar() {
                     : menu.label === "Markets"
                     ? undefined //`${theme.palette.background.default}`
                     : undefined,
-                fontWeight: selectedMenu === menu.id ? "bold" : "normal",
+                //fontWeight: selectedMenu === menu.id ? "bold" : "normal",
                 color:
                   selectedMenu === menu.id //&& menu.label === "Markets"
                     ? `${theme.palette.common.black}`
                     : undefined,
                 border:
                   menu.label === "Markets"
-                    ? `2px solid ${theme.palette.primary.main}`
+                    ? `0px solid ${theme.palette.text.primary}`
                     : "1px solid transparent",
                 "&:hover": {
                   backgroundColor:
@@ -165,7 +109,72 @@ export default function MenuBar() {
                 <span style={{ marginRight: "8px" }}>{menu.icon}</span>
               )}
 
-              {menu.label}
+              {menu.label === "Markets" ? (
+                <div className="flex flex-col justify-start">
+                  <br />
+                  <div
+                    className="flex mt-1"
+                    style={{
+                      fontSize: "120%",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {selectedPair ? (
+                      <>
+                        <img
+                          src={selectedPair.logourlA}
+                          alt={selectedPair.tokenA}
+                          style={{
+                            height: "20px",
+                            width: "20px",
+                            marginRight: "4px",
+                            marginTop: "3px",
+                          }}
+                        />
+                        {selectedPair.tokenA} /
+                        <img
+                          src={selectedPair.logourlB}
+                          alt={selectedPair.tokenB}
+                          style={{
+                            height: "20px",
+                            width: "20px",
+                            marginLeft: "4px",
+                            marginRight: "4px",
+                            marginTop: "3px",
+                          }}
+                        />
+                        {selectedPair.tokenB}
+                        {"  "}
+                        <span
+                          className="flex "
+                          style={{
+                            verticalAlign: "middle",
+                            marginTop: "-4px",
+                            marginLeft: "4px",
+                          }}
+                        >
+                          <ExpandMoreIcon sx={{ fontSize: "200%" }} />
+                        </span>
+                      </>
+                    ) : (
+                      "Select Pair"
+                    )}
+                  </div>
+                  <div className="flex items-center flex-grow justify-start">
+                    <span className={` text-[0.7rem] text-dark `}>
+                      Price: 1 WETH ={" "}
+                      {priceLoading
+                        ? "Loading..."
+                        : price
+                        ? formatNumber(price)
+                        : "0"}{" "}
+                      USDC
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                menu.label
+              )}
             </StyledButton>
           ))}
         </nav>

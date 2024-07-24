@@ -7,6 +7,7 @@ import { useDataContext } from "../../context/DataContext";
 import TabsCustomV2 from "../../components/TabsCustomV2";
 import Supply from "./Supply";
 import Withdraw from "./Withdraw";
+import MarketComponent from "../../components/MarketComponent";
 
 const Index = () => {
   const [selectedTab, setSelectedTab] = useState<string>("");
@@ -24,7 +25,7 @@ const Index = () => {
       unit: "USDC",
     },
     {
-      title: "My sell orders which can be withdraw",
+      title: "My sell orders to withdraw",
       value: 0,
       unit: "WETH",
     },
@@ -46,8 +47,8 @@ const Index = () => {
             <Typography variant="h4" color="black">
               Lend to earn
             </Typography>
-            <div className="flex mt-5"></div>
 
+            <div className="flex mt-5"></div>
             <div className="flex">
               <MetricCustom data={metricsData} isLoading={loadingUser} />
             </div>

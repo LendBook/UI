@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { useAccount } from "wagmi";
-import { getUsdcAddress } from "../utils/addressHelpers";
+import { getQuoteTokenAddress } from "../utils/addressHelpers";
 import QuoteTokenABI from "../config/abi/usdc.json";
 
 export const useQuoteToken = () => {
@@ -17,7 +17,7 @@ export const useQuoteToken = () => {
       const signer = provider.getSigner();
       setSigner(signer);
 
-      const quoteTokenAddress = getUsdcAddress();
+      const quoteTokenAddress = getQuoteTokenAddress();
       const quoteTokenContract = new ethers.Contract(
         quoteTokenAddress,
         QuoteTokenABI,

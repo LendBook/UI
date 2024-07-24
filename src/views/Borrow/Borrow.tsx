@@ -20,6 +20,7 @@ const Borrow = () => {
   );
 
   const {
+    userInfo,
     poolLoading,
     orderMergedData,
     orderMergedDataUnderMarketPrice,

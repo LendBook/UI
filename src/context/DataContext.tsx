@@ -7,6 +7,10 @@ import {
 } from "../hooks/api/userInfo";
 import { ObjectWithId, mergeObjects } from "../components/GlobalFunctions";
 import { PoolData, useFetchPools } from "../hooks/api/pools";
+import {
+  getBaseTokenAddress,
+  getQuoteTokenAddress,
+} from "../utils/addressHelpers";
 
 interface DataContextType {
   price: number | null;
@@ -54,6 +58,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({
   const { price, loading: priceLoading, error: priceError } = usePriceOracle();
   console.log("fucking price : ", price);
 
+  const baseTokenAddress = getBaseTokenAddress();
+  const quoteTokenAddress = getQuoteTokenAddress();
+
   const {
     userInfo,
     userDeposits,
@@ -61,7 +68,12 @@ export const DataProvider: React.FC<DataProviderProps> = ({
     loadingUser,
     errorUser,
     refetchUserData,
-  } = useFetchUserInfo(provider, walletAddress);
+  } = useFetchUserInfo(
+    provider,
+    walletAddress,
+    baseTokenAddress,
+    quoteTokenAddress
+  );
 
   const {
     poolData,

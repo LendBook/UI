@@ -22,6 +22,7 @@ const Supply = () => {
   );
 
   const {
+    userInfo,
     poolLoading,
     orderMergedData,
     orderMergedDataUnderMarketPrice,
@@ -110,7 +111,7 @@ const Supply = () => {
       <div className="flex ">
         <AmountCustom
           title="Amount to supply"
-          tokenWalletBalance={376}
+          tokenWalletBalance={userInfo.quoteTokenBalance}
           selectedToken="USDC"
           ratioToUSD={1.01}
           onQuantityChange={handleQuantityChange}
