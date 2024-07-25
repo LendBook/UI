@@ -31,8 +31,7 @@ const MENU_LINKS = [
     icon: <AlignVerticalBottomIcon fontSize="small" />,
   },
   { id: 6, label: "(Mint tokens)", to: "/mint" },
-  { id: 7, label: "[Inaki Test]", to: "/inakitest" },
-  { id: 8, label: "[Template]", to: "/template" },
+  { id: 7, label: "(Change Price Feed)", to: "/updateprice" },
 ];
 
 export default MENU_LINKS;

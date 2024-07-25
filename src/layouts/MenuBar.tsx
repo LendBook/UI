@@ -63,7 +63,7 @@ export default function MenuBar() {
 
   return (
     <div
-      className={`w-64 fixed top-16 left-0 h-full z-10 shadow-md 
+      className={`w-72 fixed top-16 left-0 h-full z-10 shadow-md 
         ${darkMode ? "bg-black text-white" : "bg-white text-black"}
       `}
     >
@@ -131,7 +131,7 @@ export default function MenuBar() {
                             marginTop: "3px",
                           }}
                         />
-                        {selectedPair.tokenA} /
+                        {marketInfo.baseTokenSymbol} /
                         <img
                           src={selectedPair.logourlB}
                           alt={selectedPair.tokenB}
@@ -143,7 +143,7 @@ export default function MenuBar() {
                             marginTop: "3px",
                           }}
                         />
-                        {selectedPair.tokenB}
+                        {marketInfo.quoteTokenSymbol}
                         {"  "}
                         <span
                           className="flex "

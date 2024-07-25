@@ -32,6 +32,10 @@ const BaseToQuote = () => {
     marketInfo,
   } = useDataContext();
 
+  const sellOrdersWithdrawClick = (id: number) => {
+    console.log(`Button clicked! ${id}`);
+  };
+
   const customDataColumnsConfig = [
     {
       key: "buyPrice",
@@ -43,6 +47,12 @@ const BaseToQuote = () => {
       title: "Available supply for trading",
       metric: marketInfo.quoteTokenSymbol,
     },
+    {
+      key: "action",
+      title: "",
+      isButton: true,
+      onButtonClick: sellOrdersWithdrawClick,
+    },
   ];
 
   const filteredData = orderMergedData.filter(
@@ -50,13 +60,17 @@ const BaseToQuote = () => {
   );
 
   //take only the pools which are above price feed
-  const refilteredData = filteredData.filter((item) => {
+  let refilteredData = filteredData.filter((item) => {
     if (typeof item.poolId === "number") {
       return item.poolId > closestPoolIdUnderPriceFeed;
     }
     return false;
   });
   console.log("refilteredData ", refilteredData);
+
+  refilteredData = refilteredData.map((objet) => {
+    return { ...objet, action: "Trade" };
+  });
 
   const updateButtonClickable = (quantity: number, price: string) => {
     const isClickable = quantity > 0 && price !== "";

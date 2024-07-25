@@ -16,10 +16,9 @@ const Borrow = lazy(() => import("./views/Borrow/Index"));
 const Trade = lazy(() => import("./views/Trade/Index"));
 const Markets = lazy(() => import("./views/Markets/Index"));
 const AnalyticsPage = lazy(() => import("./views/Analytics/Index"));
-const InakiTest = lazy(() => import("./views/InakiTest/Index"));
 const Lend = lazy(() => import("./views/Lend/Index"));
-const Template = lazy(() => import("./views/Template/Index"));
 const Mint = lazy(() => import("./views/Mint/Index"));
+const UpdatePrice = lazy(() => import("./views/UpdatePrice/Index"));
 
 const App = () => {
   const { address: walletAddress } = useAccount();
@@ -88,18 +87,10 @@ const App = () => {
                 }
               />
               <Route
-                path="inakitest"
+                path="updateprice"
                 element={
                   <Suspense fallback={<Loading />}>
-                    <InakiTest />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="template"
-                element={
-                  <Suspense fallback={<Loading />}>
-                    <Template />
+                    <UpdatePrice />
                   </Suspense>
                 }
               />
