@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { ethers } from "ethers";
-import { LendOrderData } from "./lend";
 import { mergeObjects } from "../../components/GlobalFunctions";
+import { count } from "console";
 
 let apiUrl = "";
 if (process.env.NODE_ENV === "development") {
@@ -33,8 +33,8 @@ export interface PoolData {
 }
 
 function calculatePricesForPools(
-  startPrice: number,
-  startId: number,
+  genesisPrice: number,
+  genesisId: number,
   marketPrice: number,
   step: number
 ): {
@@ -42,34 +42,53 @@ function calculatePricesForPools(
   closestPoolIdUnderPriceFeed: number;
 } {
   let poolIdWithPriceData: PoolIdWithPriceData[] = [];
-  let currentPrice = startPrice;
-  let currentId = startId;
 
   let closestPoolIdUnderPriceFeed = 1111111110;
 
   // Determine the increment direction
-  const isIncreasing = marketPrice > startPrice;
-  const idStep = 2;
+  const isIncreasing = marketPrice > genesisPrice;
+  const idStep = 2; // 2 because for each buy order pool, there is a sell order pool linked to it (odd number)
 
-  // 5 = nombre de pool en dessous ou au dessus de endPrice
-  const count = 10;
-  const finalPrice = isIncreasing
-    ? marketPrice * Math.pow(step, count)
-    : marketPrice / Math.pow(step, count);
+  ///////////////////////////new code
+  // const gapPrice = isIncreasing
+  //   ? marketPrice - genesisPrice
+  //   : genesisPrice - marketPrice;
 
-  // demarrage à partir de 5 en dessous du prix initial
-  currentPrice = isIncreasing
-    ? currentPrice / Math.pow(step, count)
-    : currentPrice * Math.pow(step, count);
-  currentId = isIncreasing ? currentId - 2 * count : currentId + 2 * count;
+  //get a pool close (under or above) to the current market price
+  const gapStep = Math.round(
+    Math.abs(Math.log(genesisPrice / marketPrice) / Math.log(step))
+  );
+  const closeToMarketPoolId = isIncreasing
+    ? genesisId + gapStep * idStep
+    : genesisId - gapStep * idStep;
 
-  let distPrice = 0;
+  const nbrPoolsUnder = 10;
+  const nbrPoolsAbove = 10;
 
+  const startPoolId = closeToMarketPoolId - nbrPoolsUnder * idStep;
+  const endPoolId = closeToMarketPoolId + nbrPoolsAbove * idStep;
+
+  let currentPrice = genesisPrice; // if startPoolId==genesisId
+
+  if (startPoolId > genesisId) {
+    currentPrice = genesisPrice * Math.pow(step, gapStep - nbrPoolsUnder);
+  } else if (startPoolId < genesisId) {
+    if (isIncreasing) {
+      currentPrice = genesisPrice / Math.pow(step, nbrPoolsUnder - gapStep);
+    } else {
+      currentPrice = genesisPrice / Math.pow(step, gapStep + nbrPoolsUnder);
+    }
+  }
+
+  console.log("isIncreasing ", isIncreasing);
+  console.log("idStep ", idStep);
+  console.log("gapStep ", gapStep);
+  console.log("nbrPoolsUnder ", nbrPoolsUnder);
+  console.log("genesisPrice ", genesisPrice);
+  console.log("currentPrice ", currentPrice);
+  let currentId = startPoolId;
   // Generate data
-  while (
-    (isIncreasing && currentPrice < finalPrice) ||
-    (!isIncreasing && currentPrice > finalPrice)
-  ) {
+  while (currentId <= endPoolId) {
     //console.log(`create buy price ${currentPrice}`);
 
     poolIdWithPriceData.push({
@@ -78,42 +97,25 @@ function calculatePricesForPools(
       buyPrice: currentPrice,
     });
 
-    if (isIncreasing) {
-      if (currentPrice < marketPrice) {
-        closestPoolIdUnderPriceFeed = currentId;
-      }
-      currentPrice *= step;
-      currentId += idStep;
-    } else {
-      if (currentPrice > marketPrice) {
-        closestPoolIdUnderPriceFeed = currentId - 2; //because we want the one under
-      }
-      currentPrice /= step;
-      currentId -= idStep;
+    if (currentPrice < marketPrice) {
+      closestPoolIdUnderPriceFeed = currentId;
     }
+    currentPrice *= step;
+    currentId += idStep;
   }
 
-  // Add the final step if it has crossed the finalPrice
-  if (
-    (isIncreasing && currentPrice >= finalPrice) ||
-    (!isIncreasing && currentPrice <= finalPrice)
-  ) {
-    poolIdWithPriceData.push({
-      id: currentId,
-      poolId: currentId,
-      buyPrice: currentPrice,
-    });
-  }
-  // Filtrer les données
-  const idsToKeep: number[] = [];
-  for (let i = 0; i < count; i++) {
-    idsToKeep.push(closestPoolIdUnderPriceFeed - 2 * i);
-  }
-  poolIdWithPriceData = poolIdWithPriceData.filter((item) =>
-    idsToKeep.includes(item.id)
-  );
+  ///////////////////////////end code
 
-  poolIdWithPriceData = [...poolIdWithPriceData].reverse(); //inverse the order of price list
+  // // Filtrer les données
+  // const idsToKeep: number[] = [];
+  // for (let i = 0; i < count; i++) {
+  //   idsToKeep.push(closestPoolIdUnderPriceFeed - 2 * i);
+  // }
+  // poolIdWithPriceData = poolIdWithPriceData.filter((item) =>
+  //   idsToKeep.includes(item.id)
+  // );
+
+  // poolIdWithPriceData = [...poolIdWithPriceData].reverse(); //inverse the order of price list
 
   return { poolIdWithPriceData, closestPoolIdUnderPriceFeed };
 }
@@ -126,6 +128,8 @@ export const useFetchPools = () => {
 
   const [poolLoading, setPoolLoading] = useState(false);
   const [poolError, setPoolError] = useState<string>("");
+  const [closestPoolIdUnderPriceFeed, setClosestPoolIdUnderPriceFeed] =
+    useState<number>(1111111110);
 
   async function fetchPoolIdWithPrice() {
     setPoolLoading(true);
@@ -163,6 +167,7 @@ export const useFetchPools = () => {
           priceFeed,
           priceStep
         );
+      setClosestPoolIdUnderPriceFeed(closestPoolIdUnderPriceFeed);
       console.log(poolIdWithPriceData);
       setPoolIdWithPrice(poolIdWithPriceData);
       console.log(poolIdWithPrice);
@@ -248,5 +253,11 @@ export const useFetchPools = () => {
   //     fetchPoolIdWithPrice();
   //   }, [fetchPoolIdWithPrice]);
 
-  return { poolData, poolLoading, poolError, refetchPoolData };
+  return {
+    poolData,
+    poolLoading,
+    poolError,
+    refetchPoolData,
+    closestPoolIdUnderPriceFeed,
+  };
 };

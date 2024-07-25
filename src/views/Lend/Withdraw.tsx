@@ -22,8 +22,13 @@ const Withdraw = () => {
     "Must enter an amount to withdraw"
   );
 
-  const { poolLoading, orderMergedData, poolData, refetchData } =
-    useDataContext();
+  const {
+    poolLoading,
+    orderMergedData,
+    orderMergedDataUnderMarketPrice,
+    poolData,
+    refetchData,
+  } = useDataContext();
 
   const customDataColumnsConfig = [
     { key: "buyPrice", title: "Buy Price", metric: "USDC" },
@@ -34,7 +39,7 @@ const Withdraw = () => {
     { key: "mySupply", title: "My Supply", metric: "USDC" },
   ];
 
-  const filteredData = orderMergedData.filter(
+  const filteredData = orderMergedDataUnderMarketPrice.filter(
     (item) => item.orderLenderId !== undefined
   );
 

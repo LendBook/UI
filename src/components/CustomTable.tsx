@@ -37,30 +37,32 @@ type TableProps<T extends string | number> = {
 // Style des cellules
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
+    fontSize: 12,
+    fontWeight: "bold",
     //backgroundColor: theme.palette.background.default,
-    color: theme.palette.info.main,
+    color: theme.palette.secondary.main,
     //fontWeight: "bold",
     borderBottom: "1px solid", //"0px",
-    borderColor: "white", //theme.palette.background.default, //theme.palette.background.default,
+    borderColor: theme.palette.error.main, //theme.palette.primary.main, //"white", //theme.palette.background.default, //theme.palette.background.default,
     paddingTop: "5px",
     paddingBottom: "5px",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     fontWeight: "bold",
-    color: theme.palette.info.main,
+    color: theme.palette.text.primary, //theme.palette.secondary.main, //theme.palette.common.black, // theme.palette.info.main,
     borderBottom: "1px solid",
     paddingTop: "8px",
     paddingBottom: "8px",
-    borderColor: "white", //theme.palette.background.default, //theme.palette.background.default,
+    borderColor: theme.palette.error.main, //theme.palette.primary.main, //"white", //theme.palette.background.default, //theme.palette.background.default,
   },
 }));
 
 // Style pour la ligne au survol
 const HoverTableRow = styled(TableRow)(({ theme }) => ({
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: theme.palette.warning.main, //"white", //theme.palette.background.default, //theme.palette.warning.main, //"white", //theme.palette.background.default,
   "&:hover": {
-    backgroundColor: theme.palette.warning.main, //theme.palette.error.main,
+    backgroundColor: theme.palette.error.main, //theme.palette.error.main,
   },
 }));
 
@@ -92,19 +94,32 @@ export default function CustomTable<T extends string | number>({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <span className="text-black font-bold">{title}</span>
+      <span
+        className="text-black font-bold"
+        //style={{ backgroundColor: theme.palette.primary.main }}
+      >
+        {title}
+      </span>
       <div className="container relative z-2 mt-10">
         <Box
           component={Paper}
           elevation={0} //1
           sx={{
             borderRadius: 1,
-            padding: 0, //1
-            //border: `1px solid ${theme.palette.background.default}`,
+            padding: 0, //0.5, //1
+            border: `0px solid ${theme.palette.warning.main}`,
+            backgroundColor: theme.palette.warning.main,
           }}
         >
           <TableContainer component={Paper} elevation={0}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Table
+              sx={{
+                minWidth: 650,
+                // border: "1px solid",
+                // borderCollapse: "collapse",
+              }}
+              aria-label="simple table"
+            >
               <TableHead>
                 <TableRow>
                   {columnsConfig.map((column, index) => (

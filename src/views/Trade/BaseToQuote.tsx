@@ -7,40 +7,53 @@ import CustomTable from "../../components/CustomTable";
 import theme from "../../theme";
 import { useDeposit } from "../../hooks/useDeposit";
 import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
+import TradeBox from "./TradeBox";
 
-const Supply = () => {
+const BaseToQuote = () => {
+  const base = "ETH";
+  const quote = "USDC";
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
   const [buyPrice, setBuyPrice] = useState<string>("");
   const [poolId, setPoolId] = useState<string>("");
+  const [availableSupply, setAvailableSupply] = useState<string>("");
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
-  const [showAll, setShowAll] = useState<boolean>(false);
+  const [buyPriceSelected, SetBuyPriceSelected] = useState<boolean>(false);
 
   const [textAfterClick, setTextAfterClick] = useState<string>("");
   const [textNotClickable, setTextNotClickable] = useState<string>(
-    "Must enter an amount to borrow"
+    "Must select a limit price"
   );
 
   const {
+    price,
     poolLoading,
     orderMergedData,
-    orderMergedDataUnderMarketPrice,
     poolData,
+    closestPoolIdUnderPriceFeed,
     refetchData,
   } = useDataContext();
 
   const customDataColumnsConfig = [
-    { key: "buyPrice", title: "Buy Price", metric: "USDC" },
-    { key: "deposits", title: "Total Supply", metric: "USDC" },
-    { key: "lendingRate", title: "Net APY", metric: "%" },
-    { key: "utilizationRate", title: "Utilization", metric: "%" },
-    { key: "mySupply", title: "My Supply", metric: "USDC" },
+    { key: "buyPrice", title: "Limit Price", metric: quote },
+    {
+      key: "availableSupply",
+      title: "Available supply for trading",
+      metric: quote,
+    },
   ];
 
-  const displayedData = showAll
-    ? orderMergedDataUnderMarketPrice
-    : orderMergedDataUnderMarketPrice.slice(0, 3);
-  //const displayedData = showAll ? poolData : poolData.slice(0, 3);
+  const filteredData = orderMergedData.filter(
+    (item) => item.availableSupply !== 0
+  );
+
+  //take only the pools which are above price feed
+  const refilteredData = filteredData.filter((item) => {
+    if (typeof item.poolId === "number") {
+      return item.poolId > closestPoolIdUnderPriceFeed;
+    }
+    return false;
+  });
+  console.log("refilteredData ", refilteredData);
 
   const updateButtonClickable = (quantity: number, price: string) => {
     const isClickable = quantity > 0 && price !== "";
@@ -64,34 +77,15 @@ const Supply = () => {
     const newPoolId = rowData.poolId;
     setPoolId(newPoolId);
     updateButtonClickable(supplyAmountQuantity, newBuyPrice);
+    const newAvailableSupply = rowData.availableSupply;
+    setAvailableSupply(newAvailableSupply);
+    SetBuyPriceSelected(true);
   };
-
-  const approveQuoteToken = useApproveQuoteToken();
-  const deposit = useDeposit();
 
   const handleButtonClick = async () => {
     //setMessage("Button clicked!");
     if (buttonClickable) {
       setTextAfterClick("Transaction approval sent ...");
-      const resultApproval = await approveQuoteToken(
-        String(supplyAmountQuantity)
-      );
-      setTextAfterClick(resultApproval);
-
-      setTextAfterClick("Transaction deposit sent ...");
-      const result = await deposit(
-        Number(poolId),
-        String(supplyAmountQuantity),
-        Number(poolId) + 1
-      );
-      setTextAfterClick(result);
-      if (result == "Transaction successful!") {
-        refetchData();
-        // FIXEME j'appelle une deuxieme fois car ya un prblm et on ne recupere pas le nvx poolData
-        // à cause de la mise a jour asynchrone il me semble et car ya pas de synchronisation entre poolData
-        // et les user data (userDeposits et userBorrows)
-        refetchData();
-      }
     }
   };
 
@@ -101,54 +95,56 @@ const Supply = () => {
     // Ici vous pouvez effectuer toute action nécessaire après la mise à jour de poolData
   }, [poolData]); // Mettez à jour lorsque poolData change
 
-  const toggleShowAll = () => {
-    setShowAll(!showAll);
-  };
-
   return (
     <div>
-      <div className="flex ">
-        <AmountCustom
-          title="Amount to supply"
-          tokenWalletBalance={376}
-          selectedToken="USDC"
-          ratioToUSD={1.01}
-          onQuantityChange={handleQuantityChange}
-        />
-      </div>
       <div className="flex mt-5">
         <CustomTable
-          title="Select a buy price associated with your lending position"
+          title="Select a limit price for the trade"
           columnsConfig={customDataColumnsConfig}
-          data={displayedData}
+          data={refilteredData}
           clickableRows={true}
           onRowClick={handleRowClick}
           isLoading={poolLoading}
         />
       </div>
-      <Button
-        onClick={toggleShowAll}
-        style={{
-          float: "right", // Aligner à droite
-          textTransform: "none",
-          color: theme.palette.text.primary,
-        }}
-      >
-        {showAll ? "show less" : "show more"}
-      </Button>
+      {/* <div className="flex mt-5">
+        <AmountCustom
+          title="Amount to supply"
+          tokenWalletBalance={376}
+          selectedToken={quote}
+          ratioToUSD={1.01}
+          onQuantityChange={handleQuantityChange}
+        />
+      </div>
       <div className="flex mt-10">
         <CustomButton
           clickable={buttonClickable}
           handleClick={handleButtonClick}
           textAfterClick={textAfterClick}
-          textClickable="Supply"
+          textClickable="Finalize trade"
           textNotClickable={textNotClickable}
           buttonWidth={300}
           borderRadius={50}
         />
-      </div>
+      </div> */}
+      {buyPriceSelected && (
+        <div className="flex justify-content align-items mt-10">
+          <TradeBox
+            poolId={poolId}
+            sellToken="Base"
+            sellTokenName="WETH"
+            sellTokenWalletBalance={911}
+            sellTokenRatioToUsd={price ?? 0}
+            buyTokenName="USDC"
+            buyTokenWalletBalance={911}
+            buyTokenRatioToUsd={1}
+            buyTokenMaxSupply={parseFloat(availableSupply)}
+            buyPrice={parseFloat(buyPrice)}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
-export default Supply;
+export default BaseToQuote;

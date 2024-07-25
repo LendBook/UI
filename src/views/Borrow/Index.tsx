@@ -62,11 +62,12 @@ const Index = () => {
 
             <div className="flex flex-row items-start  justify-between ">
               <Paper
-                elevation={4}
+                elevation={0} //4
                 sx={{
                   borderRadius: 1,
                   padding: 1,
                   display: "inline-block",
+                  border: `1px solid ${theme.palette.error.main}`, //
                   //flexGrow: 1,
                   //backgroundColor: "#f6fbff", //theme.palette.background.default,
                 }}
@@ -95,12 +96,13 @@ const Index = () => {
 
             <div className="flex mt-10"></div>
             <Paper
-              elevation={4}
+              elevation={0} //4
               sx={{
                 borderRadius: 1,
                 padding: 1,
                 display: "inline-block",
                 width: "100%",
+                border: `1px solid ${theme.palette.error.main}`, //
                 //backgroundColor: theme.palette.background.default,
               }}
               className="flex flex-col"

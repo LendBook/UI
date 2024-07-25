@@ -19,7 +19,12 @@ const Borrow = () => {
     "Must enter an amount to borrow"
   );
 
-  const { poolLoading, orderMergedData, refetchData } = useDataContext();
+  const {
+    poolLoading,
+    orderMergedData,
+    orderMergedDataUnderMarketPrice,
+    refetchData,
+  } = useDataContext();
 
   const customDataColumnsConfig = [
     { key: "buyPrice", title: "Liquidation Price", metric: "USDC" },
@@ -34,7 +39,7 @@ const Borrow = () => {
     },
   ];
 
-  const filteredData = orderMergedData.filter((item) => {
+  const filteredData = orderMergedDataUnderMarketPrice.filter((item) => {
     return (
       item.availableSupply !== undefined && Number(item.availableSupply) > 0
     );

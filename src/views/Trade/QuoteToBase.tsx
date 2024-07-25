@@ -8,7 +8,7 @@ import theme from "../../theme";
 import { useDeposit } from "../../hooks/useDeposit";
 import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
 
-const Supply = () => {
+const QuoteToBase = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
   const [buyPrice, setBuyPrice] = useState<string>("");
   const [poolId, setPoolId] = useState<string>("");
@@ -21,13 +21,8 @@ const Supply = () => {
     "Must enter an amount to borrow"
   );
 
-  const {
-    poolLoading,
-    orderMergedData,
-    orderMergedDataUnderMarketPrice,
-    poolData,
-    refetchData,
-  } = useDataContext();
+  const { poolLoading, orderMergedData, poolData, refetchData } =
+    useDataContext();
 
   const customDataColumnsConfig = [
     { key: "buyPrice", title: "Buy Price", metric: "USDC" },
@@ -37,9 +32,7 @@ const Supply = () => {
     { key: "mySupply", title: "My Supply", metric: "USDC" },
   ];
 
-  const displayedData = showAll
-    ? orderMergedDataUnderMarketPrice
-    : orderMergedDataUnderMarketPrice.slice(0, 3);
+  const displayedData = showAll ? orderMergedData : orderMergedData.slice(0, 3);
   //const displayedData = showAll ? poolData : poolData.slice(0, 3);
 
   const updateButtonClickable = (quantity: number, price: string) => {
@@ -105,50 +98,7 @@ const Supply = () => {
     setShowAll(!showAll);
   };
 
-  return (
-    <div>
-      <div className="flex ">
-        <AmountCustom
-          title="Amount to supply"
-          tokenWalletBalance={376}
-          selectedToken="USDC"
-          ratioToUSD={1.01}
-          onQuantityChange={handleQuantityChange}
-        />
-      </div>
-      <div className="flex mt-5">
-        <CustomTable
-          title="Select a buy price associated with your lending position"
-          columnsConfig={customDataColumnsConfig}
-          data={displayedData}
-          clickableRows={true}
-          onRowClick={handleRowClick}
-          isLoading={poolLoading}
-        />
-      </div>
-      <Button
-        onClick={toggleShowAll}
-        style={{
-          float: "right", // Aligner à droite
-          textTransform: "none",
-          color: theme.palette.text.primary,
-        }}
-      >
-        {showAll ? "show less" : "show more"}
-      </Button>
-      <div className="flex mt-10">
-        <CustomButton
-          clickable={buttonClickable}
-          handleClick={handleButtonClick}
-          textAfterClick={textAfterClick}
-          textClickable="Supply"
-          textNotClickable={textNotClickable}
-          buttonWidth={300}
-          borderRadius={50}
-        />
-      </div>
-    </div>
-  );
+  return <div></div>;
 };
 
-export default Supply;
+export default QuoteToBase;
