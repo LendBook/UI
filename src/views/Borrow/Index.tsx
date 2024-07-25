@@ -27,7 +27,7 @@ const Index = () => {
   const metricsData = [
     {
       title: "My total collateral",
-      value: "ToBeDone", //userInfo.totalDepositsQuote,
+      value: userInfo.totalDepositsBase,
       unit: marketInfo.baseTokenSymbol,
     },
     {

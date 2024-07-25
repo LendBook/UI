@@ -15,39 +15,6 @@ export default function Navbar() {
   const [previousPrice, setPreviousPrice] = useState<number | null>(null);
   const { darkMode, toggleDarkMode } = useTheme();
 
-  // Oracle update
-  const [buttonClickable, setButtonClickable] = useState<boolean>(false);
-  const [updatedOraclePrice, setUpdatedOraclePrice] = useState<number>(0);
-  const handleOraclePriceChange = (newPrice: string) => {
-    setUpdatedOraclePrice(parseFloat(newPrice));
-    updateButtonPriceClickable(parseFloat(newPrice));
-  };
-
-  const updateButtonPriceClickable = (newPrice: number) => {
-    if (price) {
-      if (newPrice === 0 || isNaN(newPrice)) {
-        setButtonClickable(false);
-      } else {
-        setButtonClickable(false);
-        if (newPrice !== parseFloat(formatNumber(price))) {
-          setButtonClickable(true);
-        }
-      }
-    }
-  };
-  const changePriceFeed = useChangePriceFeed();
-
-  const handleButtonClick = async () => {
-    console.log("clicked");
-    if (updatedOraclePrice) {
-      await changePriceFeed(updatedOraclePrice.toString());
-      refetchData();
-      refetchData();
-      refetchData();
-    } else {
-      console.log("Please enter a price.");
-    }
-  };
   return (
     <nav
       className={`w-full fixed top-0 left-0 z-30 shadow-md ${
@@ -68,41 +35,6 @@ export default function Navbar() {
               LendBook
             </span>
           </div>
-
-          <div className="flex items-center flex-grow justify-center">
-            {/* <span
-              className={`text-info text-sm font-medium ${
-                darkMode ? "text-white" : "text-black"
-              }`}
-            >
-              Oracle Price: 1 WETH ={" "}
-              {priceLoading ? "Loading..." : price ? formatNumber(price) : "0"}{" "}
-              USDC
-            </span> */}
-            <input
-              type="number"
-              placeholder="Enter amount"
-              value={updatedOraclePrice}
-              onChange={(e) => handleOraclePriceChange(e.target.value)}
-              className={`ml-4 p-2 border rounded ${
-                darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
-              }`}
-              style={{ width: "200px", height: "40px" }}
-            />
-            <button
-              onClick={handleButtonClick}
-              disabled={!buttonClickable}
-              className={`ml-2 p-2 border border-gray-300 rounded ${
-                buttonClickable
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-300 text-gray-500"
-              }`}
-              style={{ height: "40px" }}
-            >
-              Update
-            </button>
-          </div>
-
           <div className="flex items-center space-x-4">
             <Switch
               checked={darkMode}
