@@ -49,14 +49,6 @@ const chartSetting = {
 const Index = () => {
   const { orderMergedData } = useDataContext();
 
-  const dataColumnsConfig = [
-    { key: "buyPrice", title: "Buy Price", metric: "USDC" },
-    { key: "deposits", title: "Total Supply", metric: "USDC" },
-    { key: "netAPY", title: "Net APY", metric: "%" },
-    { key: "utilization", title: "Utilization", metric: "%" },
-    { key: "mySupply", title: "My Supply", metric: "USDC" },
-  ];
-
   return (
     <div className="mt-20 ml-72 mr-4">
       <Card

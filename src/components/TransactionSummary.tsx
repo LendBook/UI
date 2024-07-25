@@ -29,10 +29,6 @@ export default function MetricCustom<T extends string>({
   title = "Transaction summary :",
   data,
 }: MetricCustomProps<T>) {
-  // const [tokenWalletBalance, settokenWalletBalance] = useState("15232");
-  // const [selectedToken, setSelectedToken] = useState("USDC");
-  // const ratioToUSD = 1.01;
-
   const allValuesEmpty = data.every((row) => {
     if ("value" in row) {
       return row.value === 0 || row.value === "";

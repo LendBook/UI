@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { useAccount } from "wagmi";
-import { getWethAddress } from "../utils/addressHelpers";
+import { getBaseTokenAddress } from "../utils/addressHelpers";
 import BaseTokenABI from "../config/abi/weth.json";
 
 export const useBaseToken = () => {
@@ -17,7 +17,7 @@ export const useBaseToken = () => {
       const signer = provider.getSigner();
       setSigner(signer);
 
-      const baseTokenAddress = getWethAddress();
+      const baseTokenAddress = getBaseTokenAddress();
       const baseTokenContract = new ethers.Contract(
         baseTokenAddress,
         BaseTokenABI,

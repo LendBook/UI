@@ -10,7 +10,7 @@ const CollateralDeposit = () => {
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [textAfterClick, setTextAfterClick] = useState<string>("");
 
-  const { refetchData } = useDataContext();
+  const { userInfo, refetchData, marketInfo } = useDataContext();
 
   const updateButtonClickable = (collateralQuantity: number) => {
     const isClickable = collateralQuantity > 0;
@@ -51,8 +51,8 @@ const CollateralDeposit = () => {
     <div>
       <AmountCustom
         title="Amount to deposit"
-        tokenWalletBalance={12.42}
-        selectedToken="WETH"
+        tokenWalletBalance={userInfo.baseTokenBalance}
+        selectedToken={marketInfo.baseTokenSymbol}
         ratioToUSD={3010}
         onQuantityChange={handleCollateralQuantityChange}
       />

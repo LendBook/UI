@@ -28,15 +28,28 @@ const Withdraw = () => {
     orderMergedDataUnderMarketPrice,
     poolData,
     refetchData,
+    marketInfo,
   } = useDataContext();
 
   const customDataColumnsConfig = [
-    { key: "buyPrice", title: "Buy Price", metric: "USDC" },
+    {
+      key: "buyPrice",
+      title: "Buy Price",
+      metric: marketInfo.quoteTokenSymbol,
+    },
     //{ key: "orderLenderId", title: "orderLenderId" },
-    { key: "deposits", title: "Total Supply", metric: "USDC" },
+    {
+      key: "deposits",
+      title: "Total Supply",
+      metric: marketInfo.quoteTokenSymbol,
+    },
     { key: "lendingRate", title: "Net APY", metric: "%" },
     { key: "utilizationRate", title: "Utilization", metric: "%" },
-    { key: "mySupply", title: "My Supply", metric: "USDC" },
+    {
+      key: "mySupply",
+      title: "My Supply",
+      metric: marketInfo.quoteTokenSymbol,
+    },
   ];
 
   const filteredData = orderMergedDataUnderMarketPrice.filter(
@@ -150,7 +163,7 @@ const Withdraw = () => {
       <AmountCustom
         title="Amount to withdraw"
         tokenWalletBalance={376}
-        selectedToken="USDC"
+        selectedToken={marketInfo.quoteTokenSymbol}
         ratioToUSD={1.01}
         onQuantityChange={handleQuantityChange}
       />

@@ -21,18 +21,31 @@ const Repay = () => {
     "Must enter an amount to repay"
   );
 
-  const { poolLoading, orderMergedData, refetchData } = useDataContext();
+  const { poolLoading, orderMergedData, refetchData, marketInfo } =
+    useDataContext();
 
   const customDataColumnsConfig = [
-    { key: "buyPrice", title: "Liquidation Price", metric: "USDC" },
-    { key: "deposits", title: "Total Supply", metric: "USDC" },
-    { key: "availableSupply", title: "Available Supply", metric: "USDC" },
+    {
+      key: "buyPrice",
+      title: "Liquidation Price",
+      metric: marketInfo.quoteTokenSymbol,
+    },
+    {
+      key: "deposits",
+      title: "Total Supply",
+      metric: marketInfo.quoteTokenSymbol,
+    },
+    {
+      key: "availableSupply",
+      title: "Available Supply",
+      metric: marketInfo.quoteTokenSymbol,
+    },
     { key: "borrowingRate", title: "Borrow APY", metric: "%" },
     { key: "utilizationRate", title: "Utilization", metric: "%" },
     {
       key: "myBorrowingPositions",
       title: "My Borrowing Positions",
-      metric: "USDC",
+      metric: marketInfo.quoteTokenSymbol,
     },
   ];
 
@@ -98,7 +111,7 @@ const Repay = () => {
       <AmountCustom
         title="Amount to repay"
         tokenWalletBalance={376}
-        selectedToken="USDC"
+        selectedToken={marketInfo.quoteTokenSymbol}
         ratioToUSD={1.01}
         onQuantityChange={handleQuantityChange}
       />

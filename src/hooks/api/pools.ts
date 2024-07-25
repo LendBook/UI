@@ -32,6 +32,16 @@ export interface PoolData {
   [key: string]: string | number;
 }
 
+export interface MarketInfoData {
+  baseTokenAddress: string;
+  quoteTokenAddress: string;
+  baseTokenSymbol: string;
+  quoteTokenSymbol: string;
+  totalDeposit: number;
+  totalBorrow: number;
+  maxLendingRate: number;
+}
+
 function calculatePricesForPools(
   genesisPrice: number,
   genesisId: number,
@@ -114,13 +124,27 @@ function calculatePricesForPools(
   // poolIdWithPriceData = poolIdWithPriceData.filter((item) =>
   //   idsToKeep.includes(item.id)
   // );
-
   // poolIdWithPriceData = [...poolIdWithPriceData].reverse(); //inverse the order of price list
 
-  return { poolIdWithPriceData, closestPoolIdUnderPriceFeed };
+  return {
+    poolIdWithPriceData,
+    closestPoolIdUnderPriceFeed,
+  };
 }
 
 export const useFetchPools = () => {
+  const initialMarketInfo: MarketInfoData = {
+    baseTokenAddress: "",
+    quoteTokenAddress: "",
+    baseTokenSymbol: "",
+    quoteTokenSymbol: "",
+    totalDeposit: 0,
+    totalBorrow: 0,
+    maxLendingRate: 0,
+  };
+  const [marketInfo, setMarketInfo] =
+    useState<MarketInfoData>(initialMarketInfo);
+
   const [poolIdWithPrice, setPoolIdWithPrice] = useState<PoolIdWithPriceData[]>(
     []
   );
@@ -134,6 +158,30 @@ export const useFetchPools = () => {
   async function fetchPoolIdWithPrice() {
     setPoolLoading(true);
     try {
+      //tokens part
+      const responseBaseTokenAddress = await axios.get(
+        `${apiUrl}/v1/constant/baseToken`
+      );
+      const baseTokenAddress = responseBaseTokenAddress.data.baseToken;
+
+      const responseQuoteTokenAddress = await axios.get(
+        `${apiUrl}/v1/constant/quoteToken`
+      );
+      const quoteTokenAddress = responseQuoteTokenAddress.data.quoteToken;
+
+      console.log("responseBaseTokenAddress ", responseBaseTokenAddress);
+      const responseBaseTokenSymbol = await axios.get(
+        `${apiUrl}/v1/symbol/${baseTokenAddress}`
+      );
+      const baseTokenSymbol = responseBaseTokenSymbol.data.symbol;
+      console.log("responseBaseTokenSymbol ", responseBaseTokenSymbol);
+      console.log("baseTokenSymbol ", baseTokenSymbol);
+
+      const responseQuoteTokenSymbol = await axios.get(
+        `${apiUrl}/v1/symbol/${quoteTokenAddress}`
+      );
+      const quoteTokenSymbol = responseQuoteTokenSymbol.data.symbol;
+
       console.log("Getting price step");
       const priceStepResponse = await axios.get(
         `${apiUrl}/v1/constant/priceStep`
@@ -176,6 +224,9 @@ export const useFetchPools = () => {
 
       console.log(poolIds);
 
+      let _totalDeposit = 0;
+      let _totalBorrow = 0;
+      let _maxLendingRate = 0;
       //on a les id des pools qui nous interessent, maintenant on s'occupe de recuperer les data liées aux pools
       const results = await Promise.all(
         poolIds.map(async (poolId) => {
@@ -212,6 +263,12 @@ export const useFetchPools = () => {
           );
           //console.log(`poolIdspoolIdslendingRate ${lendingRate}`);
 
+          _totalDeposit = _totalDeposit + deposits;
+          _totalBorrow = _totalBorrow + borrows;
+          if (_maxLendingRate < lendingRate) {
+            _maxLendingRate = lendingRate;
+          }
+
           return {
             id: poolId,
             poolId: poolId,
@@ -230,6 +287,16 @@ export const useFetchPools = () => {
       const mergedData = mergeObjects(results, poolIdWithPriceData);
       setPoolData(mergedData);
       console.log(mergedData);
+
+      setMarketInfo({
+        baseTokenAddress: baseTokenAddress,
+        quoteTokenAddress: quoteTokenAddress,
+        baseTokenSymbol: baseTokenSymbol,
+        quoteTokenSymbol: quoteTokenSymbol,
+        totalDeposit: _totalDeposit,
+        totalBorrow: _totalBorrow,
+        maxLendingRate: _maxLendingRate,
+      });
     } catch (err: any) {
       const errorMessage = `Failed to fetch user info: ${err.message}`;
       setPoolError(errorMessage);
@@ -259,5 +326,6 @@ export const useFetchPools = () => {
     poolError,
     refetchPoolData,
     closestPoolIdUnderPriceFeed,
+    marketInfo,
   };
 };

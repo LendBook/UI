@@ -32,6 +32,8 @@ export interface UserInfoData {
   totalDepositsQuote: string;
   totalDepositsBase: string;
   excessCollateral: string;
+  baseTokenBalance: string;
+  quoteTokenBalance: string;
 }
 
 export const useFetchUserInfo = (
@@ -42,6 +44,8 @@ export const useFetchUserInfo = (
     totalDepositsQuote: "",
     totalDepositsBase: "",
     excessCollateral: "",
+    baseTokenBalance: "",
+    quoteTokenBalance: "",
   };
   const [userInfo, setUserInfo] = useState<UserInfoData>(initialUserInfo);
   const [userDeposits, setUserDeposits] = useState<UserDepositOrdersData[]>([]);
@@ -58,6 +62,7 @@ export const useFetchUserInfo = (
       const formattedTotalQuote = ethers.utils.formatEther(
         responseQuote.data.result
       );
+      console.log("responseQuote ", responseQuote);
 
       const responseBase = await axios.get(
         `${apiUrl}/v1/request/viewUserTotalDeposits/${address}/false`
@@ -73,10 +78,36 @@ export const useFetchUserInfo = (
         responseExcessCollateral.data.result.split(",")[1],
         "ether"
       );
+
+      //tokens part (FIXEME repetition with pools.ts)
+      const responseBaseTokenAddress = await axios.get(
+        `${apiUrl}/v1/constant/baseToken`
+      );
+      const baseTokenAddress = responseBaseTokenAddress.data.baseToken;
+
+      const responseQuoteTokenAddress = await axios.get(
+        `${apiUrl}/v1/constant/quoteToken`
+      );
+      const quoteTokenAddress = responseQuoteTokenAddress.data.quoteToken;
+
+      const responseBaseTokenBalance = await axios.get(
+        `${apiUrl}/v1/balance/${baseTokenAddress}/${address}`
+      );
+      const baseTokenBalance = responseBaseTokenBalance.data.balance;
+      console.log("baseTokenBalance ", baseTokenBalance);
+
+      const responseQuoteTokenBalance = await axios.get(
+        `${apiUrl}/v1/balance/${quoteTokenAddress}/${address}`
+      );
+      const quoteTokenBalance = responseQuoteTokenBalance.data.balance;
+      console.log("quoteTokenBalance ", quoteTokenBalance);
+
       setUserInfo({
         totalDepositsQuote: formattedTotalQuote,
         totalDepositsBase: formattedTotalBase,
         excessCollateral: excessCollateral,
+        baseTokenBalance: baseTokenBalance,
+        quoteTokenBalance: quoteTokenBalance,
       });
     } catch (err: any) {
       const errorMessage = `Failed to fetch user info: ${err.message}`;

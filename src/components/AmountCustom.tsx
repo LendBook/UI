@@ -29,15 +29,11 @@ type AmountCustomProps = {
 export default function AmountCustom({
   title = "Collateral Amount",
   tokenWalletBalance = 0,
-  selectedToken = "USDC",
+  selectedToken = "quoteToken",
   ratioToUSD = 1.01,
   initialQuantity = "",
   onQuantityChange, // Fonction de gestion du changement de quantité passée en prop
 }: AmountCustomProps) {
-  // const [tokenWalletBalance, settokenWalletBalance] = useState("15232");
-  // const [selectedToken, setSelectedToken] = useState("USDC");
-  // const ratioToUSD = 1.01;
-
   const [label, setLabel] = useState("Enter Amount");
 
   // ORDER VARIABLE

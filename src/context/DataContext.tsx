@@ -6,7 +6,7 @@ import {
   UserBorrowsData,
 } from "../hooks/api/userInfo";
 import { ObjectWithId, mergeObjects } from "../components/GlobalFunctions";
-import { PoolData, useFetchPools } from "../hooks/api/pools";
+import { PoolData, MarketInfoData, useFetchPools } from "../hooks/api/pools";
 
 interface DataContextType {
   price: number | null;
@@ -24,6 +24,7 @@ interface DataContextType {
   refetchData: () => void; // Add this line
   refetchUserData: () => void;
   closestPoolIdUnderPriceFeed: number;
+  marketInfo: MarketInfoData;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -66,6 +67,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({
     poolError,
     refetchPoolData,
     closestPoolIdUnderPriceFeed,
+    marketInfo,
   } = useFetchPools();
 
   let orderMergedData = mergeObjects(poolData, userDeposits);
@@ -111,6 +113,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({
         refetchData, // Add this line
         refetchUserData,
         closestPoolIdUnderPriceFeed,
+        marketInfo,
       }}
     >
       {children}
