@@ -13,6 +13,7 @@ import { formatNumber } from "../../components/GlobalFunctions";
 import { useDataContext } from "../../context/DataContext";
 import { useState } from "react";
 import { axisClasses } from "@mui/x-charts/ChartsAxis";
+import AnalyticsButtons from "../../components/AnalyticsButtons";
 
 const valueFormatter = (value: number | null) =>
   `$${formatNumber(String(value))}`;
@@ -26,7 +27,7 @@ const Index = () => {
 
   // const sortedData = data.sort((a, b) => a.buyPrice - b.buyPrice);
 
-  const { orderMergedData, marketInfo } = useDataContext();
+  const { orderMergedData, poolLoading, marketInfo } = useDataContext();
 
   let sortedData = [...orderMergedData];
   sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
@@ -37,6 +38,31 @@ const Index = () => {
       buyPrice: formatNumber(item.buyPrice).toString(),
     };
   });
+
+  const customDataColumnsConfig = [
+    {
+      key: "buyPrice",
+      title: "Liquidation Price",
+      metric: marketInfo.quoteTokenSymbol,
+    },
+    {
+      key: "deposits",
+      title: "Total Supply",
+      metric: marketInfo.quoteTokenSymbol,
+    },
+    {
+      key: "availableSupply",
+      title: "Available Supply",
+      metric: marketInfo.quoteTokenSymbol,
+    },
+    { key: "borrowingRate", title: "Borrow APY", metric: "%" },
+    { key: "utilizationRate", title: "Utilization", metric: "%" },
+    {
+      key: "myBorrowingPositions",
+      title: "My Borrowing Positions",
+      metric: marketInfo.quoteTokenSymbol,
+    },
+  ];
 
   return (
     <div className="mt-20 ml-72 mr-4">
@@ -54,8 +80,15 @@ const Index = () => {
             <Typography variant="h4" color="black">
               Analytics
             </Typography>
-
-            <div className="flex mt-5">
+            <div className="flex mt-20 mb-20">
+              <AnalyticsButtons
+                title="Analytics via button!"
+                columnsConfig={customDataColumnsConfig}
+                data={sortedData}
+                isLoading={poolLoading}
+              />
+            </div>
+            <div className="flex mt-5 mb-5">
               <Paper
                 elevation={4}
                 sx={{
