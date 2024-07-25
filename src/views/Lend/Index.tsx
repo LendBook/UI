@@ -50,7 +50,7 @@ const Index = () => {
 
             <div className="flex mt-5"></div>
             <div className="flex">
-              <MetricCustom data={metricsData} isLoading={loadingUser} />
+              <MetricCustom data={metricsData} isLoading={false} />
             </div>
 
             <div className="flex mt-10"></div>

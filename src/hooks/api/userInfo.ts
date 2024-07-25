@@ -62,6 +62,7 @@ export const useFetchUserInfo = (
       const formattedTotalQuote = ethers.utils.formatEther(
         responseQuote.data.result
       );
+      console.log("responseQuote ", responseQuote);
 
       const responseBase = await axios.get(
         `${apiUrl}/v1/request/viewUserTotalDeposits/${address}/false`
