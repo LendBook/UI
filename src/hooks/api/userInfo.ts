@@ -32,6 +32,7 @@ export interface UserInfoData {
   totalDepositsQuote: string;
   totalDepositsBase: string;
   excessCollateral: string;
+  totalBorrow: number;
   baseTokenBalance: string;
   quoteTokenBalance: string;
 }
@@ -44,6 +45,7 @@ export const useFetchUserInfo = (
     totalDepositsQuote: "",
     totalDepositsBase: "",
     excessCollateral: "",
+    totalBorrow: 0,
     baseTokenBalance: "",
     quoteTokenBalance: "",
   };
@@ -102,13 +104,14 @@ export const useFetchUserInfo = (
       const quoteTokenBalance = responseQuoteTokenBalance.data.balance;
       console.log("quoteTokenBalance ", quoteTokenBalance);
 
-      setUserInfo({
+      setUserInfo((prevUserInfo) => ({
+        ...prevUserInfo,
         totalDepositsQuote: formattedTotalQuote,
         totalDepositsBase: formattedTotalBase,
         excessCollateral: excessCollateral,
         baseTokenBalance: baseTokenBalance,
         quoteTokenBalance: quoteTokenBalance,
-      });
+      }));
     } catch (err: any) {
       const errorMessage = `Failed to fetch user info: ${err.message}`;
       setError(errorMessage);
@@ -168,6 +171,8 @@ export const useFetchUserInfo = (
       let borrowsId_l = borrowsIdResponse.data.result.split(",");
       borrowsId_l = borrowsId_l.map(Number);
 
+      let _totalBorrow = 0;
+
       const results = await Promise.all(
         borrowsId_l.map(async (borrowsId: Number) => {
           const orderResponse = await axios.get(
@@ -181,6 +186,8 @@ export const useFetchUserInfo = (
             ethers.utils.formatUnits(orderObject[2], "ether")
           );
 
+          _totalBorrow = _totalBorrow + quantity;
+
           return {
             id: borrowsId,
             orderBorrowerId: borrowsId,
@@ -191,6 +198,10 @@ export const useFetchUserInfo = (
         })
       );
       setUserBorrows(results);
+      setUserInfo((prevUserInfo) => ({
+        ...prevUserInfo,
+        totalBorrow: _totalBorrow,
+      }));
     } catch (err: any) {
       const errorMessage = `Failed to fetch user info: ${err.message}`;
       setError(errorMessage);

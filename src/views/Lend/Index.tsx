@@ -24,11 +24,11 @@ const Index = () => {
       value: userInfo.totalDepositsQuote,
       unit: marketInfo.quoteTokenSymbol,
     },
-    {
-      title: "My sell orders to withdraw",
-      value: 0,
-      unit: marketInfo.baseTokenSymbol,
-    },
+    // {
+    //   title: "My sell orders to withdraw",
+    //   value: 0,
+    //   unit: marketInfo.baseTokenSymbol,
+    // },
   ];
 
   return (

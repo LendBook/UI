@@ -37,7 +37,7 @@ const Index = () => {
     },
     {
       title: "My total borrows",
-      value: "Tobedone", //userInfo.totalDepositsBase,
+      value: userInfo.totalBorrow,
       unit: marketInfo.quoteTokenSymbol,
     },
   ];
@@ -60,7 +60,7 @@ const Index = () => {
             </Typography>
             <div className="flex mt-5"></div>
             <div className="flex">
-              <MetricCustom data={metricsData} isLoading={false} />
+              <MetricCustom data={metricsData} isLoading={loadingUser} />
             </div>
             <div className="flex flex-row items-start  justify-between mt-5">
               <Paper

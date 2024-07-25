@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import theme from "../theme";
 import { formatNumber } from "../components/GlobalFunctions";
 import { Skeleton } from "@mui/material";
+import CustomButton from "./CustomButton";
 
 // Type générique pour une ligne de données
 type RowData<T extends string | number> = Record<T, string | number> & {
@@ -44,16 +45,16 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     //fontWeight: "bold",
     borderBottom: "1px solid", //"0px",
     borderColor: theme.palette.error.main, //theme.palette.primary.main, //"white", //theme.palette.background.default, //theme.palette.background.default,
-    paddingTop: "5px",
-    paddingBottom: "5px",
+    paddingTop: "10px",
+    paddingBottom: "3px",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     fontWeight: "bold",
     color: theme.palette.text.primary, //theme.palette.secondary.main, //theme.palette.common.black, // theme.palette.info.main,
     borderBottom: "1px solid",
-    paddingTop: "8px",
-    paddingBottom: "8px",
+    paddingTop: "15px",
+    paddingBottom: "15px",
     borderColor: theme.palette.error.main, //theme.palette.primary.main, //"white", //theme.palette.background.default, //theme.palette.background.default,
   },
 }));
@@ -158,7 +159,62 @@ export default function CustomTable<T extends string | number>({
                         onClick={() => handleClick(rowIndex, row)}
                         sx={rowStyles}
                       >
-                        {columns.map((column, colIndex) => (
+                        {columns.map((column, colIndex) => {
+                          const columnConfig = columnsConfig.find(
+                            (config) => config.key === column
+                          );
+                          if (columnConfig && columnConfig.isButton) {
+                            // Si la colonne est configurée comme étant un bouton
+                            return (
+                              <StyledTableCell key={colIndex} align="left">
+                                {/* <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() =>
+                                    columnConfig.onButtonClick &&
+                                    columnConfig.onButtonClick(row.id as number)
+                                  }
+                                > 
+                                  {row[column as keyof RowData<T>]}
+                                </Button>*/}
+                                <CustomButton
+                                  clickable={true}
+                                  handleClick={() =>
+                                    columnConfig.onButtonClick &&
+                                    columnConfig.onButtonClick(row.id as number)
+                                  }
+                                  textClickable={
+                                    row[column as keyof RowData<T>] as string
+                                  }
+                                  textNotClickable={
+                                    row[column as keyof RowData<T>] as string
+                                  }
+                                  textAfterClick=""
+                                  buttonWidth={150}
+                                  borderRadius={50}
+                                />
+                              </StyledTableCell>
+                            );
+                          } else {
+                            return (
+                              <StyledTableCell key={colIndex} align="left">
+                                {isLoading ? (
+                                  <Skeleton variant="text" />
+                                ) : (
+                                  <>
+                                    {columnsConfig[colIndex].metric !==
+                                    undefined
+                                      ? `${formatNumber(
+                                          row[column as keyof RowData<T>]
+                                        )} ${columnsConfig[colIndex].metric}`
+                                      : `${row[column as keyof RowData<T>]}`}
+                                  </>
+                                )}
+                              </StyledTableCell>
+                            );
+                          }
+                        })}
+                        {/* {columns.map((column, colIndex) => (
                           <StyledTableCell key={colIndex} align="left">
                             {isLoading ? (
                               <Skeleton variant="text" />
@@ -172,7 +228,7 @@ export default function CustomTable<T extends string | number>({
                               </>
                             )}
                           </StyledTableCell>
-                        ))}
+                        ))} */}
                       </HoverTableRow>
                     );
                   } else {
@@ -186,7 +242,23 @@ export default function CustomTable<T extends string | number>({
                             // Si la colonne est configurée comme étant un bouton
                             return (
                               <StyledTableCell key={colIndex} align="left">
-                                <Button
+                                <CustomButton
+                                  clickable={true}
+                                  handleClick={() =>
+                                    columnConfig.onButtonClick &&
+                                    columnConfig.onButtonClick(row.id as number)
+                                  }
+                                  textClickable={
+                                    row[column as keyof RowData<T>] as string
+                                  }
+                                  textNotClickable={
+                                    row[column as keyof RowData<T>] as string
+                                  }
+                                  textAfterClick=""
+                                  buttonWidth={150}
+                                  borderRadius={50}
+                                />
+                                {/* <Button
                                   variant="contained"
                                   color="primary"
                                   onClick={() =>
@@ -195,7 +267,7 @@ export default function CustomTable<T extends string | number>({
                                   }
                                 >
                                   {row[column as keyof RowData<T>]}
-                                </Button>
+                                </Button> */}
                               </StyledTableCell>
                             );
                           } else {
