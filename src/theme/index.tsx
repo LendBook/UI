@@ -3,7 +3,7 @@ import { createTheme } from "@mui/material/styles";
 const tailwindColors = {
   primary: "#6cc6a7", //"#98ff98", "#c5ebdf",
   secondary: "#677785", //"#002347",
-  success: "#28a745",
+  success: "#b07df0",
   error: "#d8dfe5", //"#c9dae9",
   warning: "#f0f2f5", //"#ffc107", f6f8fc
   info: "#59748d",
