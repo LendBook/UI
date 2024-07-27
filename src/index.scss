@@ -68,3 +68,12 @@ body {
   box-shadow: 0 4px 6px -1px rgba(152, 255, 152, 0.4),
     0 2px 4px -1px rgba(152, 255, 152, 0.06);
 }
+
+.diagonal-text {
+  position: absolute;
+  top: 100%; /* Positionne le texte en dessous de l'élément principal */
+  left: 0;
+  transform: rotate(45deg);
+  transform-origin: top left; /* Point d'origine de la rotation */
+  white-space: nowrap; /* Empêche le texte de se briser sur plusieurs lignes */
+}

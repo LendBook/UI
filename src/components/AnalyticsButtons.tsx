@@ -57,6 +57,8 @@ export default function AnalyticsButtons<T extends string | number>({
             padding: 0, //0.5, //1
             border: `0px solid ${theme.palette.warning.main}`,
             backgroundColor: theme.palette.background.default, //"white", //
+            position: "relative",
+            paddingBottom: "100px",
           }}
         >
           <div
@@ -68,23 +70,73 @@ export default function AnalyticsButtons<T extends string | number>({
               gap: "10px",
             }}
           >
+            {/* {data.map((pool, poolIndex) => {
+              return (
+                <AnalyticButton
+                  clickable={true} // Ajustez cette valeur selon vos besoins
+                  buttonHeight={20}
+                  buttonWidth={50}
+                  borderRadius={5}
+                  price={pool.buyPrice} // Utilisez 'price' de chaque objet
+                  lendAPY={"4"}
+                  borrowAPY={"3.8"}
+                />
+              );
+            })} */}
+            <AnalyticButton
+              clickable={true}
+              buttonHeight={20}
+              buttonWidth={50}
+              borderRadius={5}
+              price={2000}
+              lendAPY={""}
+              borrowAPY={"3.8"}
+            />
+            <AnalyticButton
+              clickable={true}
+              buttonHeight={50}
+              buttonWidth={50}
+              boxLendHeightRatio={1}
+              boxBorrowHeightRatio={0}
+              borderRadius={5}
+              price={2800}
+              lendAPY={"0%"}
+              borrowAPY={"3.8"}
+            />
             <AnalyticButton
               clickable={true}
               buttonHeight={300}
               buttonWidth={50}
+              boxLendHeightRatio={0.6}
+              boxBorrowHeightRatio={0.4}
               borderRadius={5}
+              userBoxHeight={4}
+              price={3000}
+              lendAPY={"4.2%"}
+              borrowAPY={"3.8"}
             />
             <AnalyticButton
               clickable={true}
               buttonHeight={200}
               buttonWidth={50}
+              boxLendHeightRatio={0.8}
+              boxBorrowHeightRatio={0.2}
               borderRadius={5}
+              price={3200}
+              lendAPY={"4.2%"}
+              borrowAPY={"3.8"}
             />
             <AnalyticButton
               clickable={true}
               buttonHeight={240}
               buttonWidth={50}
+              boxLendHeightRatio={0.9}
+              boxBorrowHeightRatio={0.1}
               borderRadius={5}
+              userBoxHeight={10}
+              price={3400}
+              lendAPY={"3.8%"}
+              borrowAPY={"3.8"}
             />
           </div>
         </Box>
