@@ -75,11 +75,10 @@ export default function MetricCustom<T extends string>({
               className="flex flex-col"
             >
               <div
-                style={
-                  {
-                    //marginLeft: 10
-                  }
-                }
+                style={{
+                  //marginLeft: 10
+                  marginRight: 10,
+                }}
               >
                 <Typography
                   variant="body2"

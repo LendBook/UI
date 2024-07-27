@@ -14,6 +14,9 @@ import { formatNumber } from "../components/GlobalFunctions";
 import { Skeleton } from "@mui/material";
 import CustomButton from "./CustomButton";
 import AnalyticButton from "./AnalyticButton";
+import MetricCustom from "./MetricCustom";
+import { userInfo } from "os";
+import { useDataContext } from "../context/DataContext";
 
 type RowData<T extends string | number> = Record<T, string | number> & {
   id: number;
@@ -41,6 +44,8 @@ export default function AnalyticsButtons<T extends string | number>({
 }: AnalyticsButtonsProps<T>) {
   const columns = columnsConfig.map((config) => config.key);
 
+  const { marketInfo } = useDataContext();
+
   let updatedData: RowData<T>[] = data.map((item) => {
     const deposits = item.deposits as number;
     const borrows = item.borrows as number;
@@ -61,6 +66,44 @@ export default function AnalyticsButtons<T extends string | number>({
   });
   console.log("maxTotal", maxTotal);
   console.log("updatedData", updatedData);
+
+  const [metricsData, setMetricsData] = useState([
+    {
+      title: "Buy Price",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+    },
+    {
+      title: "Total Lend",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+    },
+    {
+      title: "Total Borrow",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+    },
+  ]);
+
+  const handleMouseEnter = (
+    buyPrice: number,
+    deposits: number,
+    borrows: number
+  ) => {
+    setMetricsData((prevMetricsData) => {
+      return prevMetricsData.map((metric) => {
+        if (metric.title === "Buy Price") {
+          return { ...metric, value: buyPrice.toString() };
+        } else if (metric.title === "Total Lend") {
+          return { ...metric, value: deposits.toString() };
+        } else if (metric.title === "Total Borrow") {
+          return { ...metric, value: borrows.toString() };
+        }
+        return metric;
+      });
+    });
+  };
+
   return (
     <Box sx={{ width: "100%" }}>
       <span
@@ -69,6 +112,10 @@ export default function AnalyticsButtons<T extends string | number>({
       >
         {title}
       </span>
+
+      <div className="flex">
+        <MetricCustom data={metricsData} isLoading={false} />
+      </div>
       <div className="container relative z-2 mt-10">
         <Box
           component={Paper}
@@ -80,6 +127,7 @@ export default function AnalyticsButtons<T extends string | number>({
             backgroundColor: theme.palette.background.default, //"white", //
             position: "relative",
             paddingBottom: "100px",
+            paddingTop: "40px",
           }}
         >
           <div
@@ -103,6 +151,13 @@ export default function AnalyticsButtons<T extends string | number>({
                   price={pool.buyPrice as number} // Utilisez 'price' de chaque objet
                   lendAPY={pool.lendingRate as number}
                   borrowAPY={pool.borrowingRate as number}
+                  onMouseEnter={() =>
+                    handleMouseEnter(
+                      pool.buyPrice as number,
+                      pool.deposits as number,
+                      pool.borrows as number
+                    )
+                  }
                 />
               );
             })}
