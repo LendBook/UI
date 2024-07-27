@@ -32,7 +32,16 @@ const Index = () => {
   let sortedData = [...orderMergedData];
   sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
 
-  sortedData = sortedData.map((item) => {
+  // sortedData = sortedData.map((item) => {
+  //   return {
+  //     ...item,
+  //     buyPrice: formatNumber(item.buyPrice).toString(),
+  //   };
+  // });
+
+  sortedData = sortedData.slice(5, 15);
+
+  let stringSortedData = sortedData.map((item) => {
     return {
       ...item,
       buyPrice: formatNumber(item.buyPrice).toString(),
@@ -101,7 +110,7 @@ const Index = () => {
               >
                 <Box sx={{ width: "100%" }}>
                   <BarChart
-                    dataset={sortedData}
+                    dataset={stringSortedData}
                     sx={{
                       [`.${axisClasses.left} .${axisClasses.label}`]: {
                         // Move the y-axis label with CSS

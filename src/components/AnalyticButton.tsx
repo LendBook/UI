@@ -13,8 +13,8 @@ type AnalyticButtonProps = {
   boxBorrowHeightRatio?: number;
   userBoxHeight?: number;
   price: number;
-  lendAPY: string;
-  borrowAPY: string;
+  lendAPY: number;
+  borrowAPY: number;
 };
 
 export default function AnalyticButton({
@@ -127,19 +127,23 @@ export default function AnalyticButton({
                 {formatNumber(price)}
               </Box>
             </Box>
-            <Box
-              sx={{
-                position: "absolute",
-                top: "0px", // Positionne le texte en dessous de l'élément principal
-                //left: "50%", // Positionne le début du texte au milieu horizontalement
-                color: isHovered
-                  ? theme.palette.error.main
-                  : theme.palette.secondary.main,
-                transition: "color 0.3s ease, transform 0.3s ease",
-              }}
-            >
-              {lendAPY}
-            </Box>
+            {lendAPY != 0 ? (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "0px", // Positionne le texte en dessous de l'élément principal
+                  //left: "50%", // Positionne le début du texte au milieu horizontalement
+                  color: isHovered
+                    ? theme.palette.error.main
+                    : theme.palette.secondary.main,
+                  transition: "color 0.3s ease, transform 0.3s ease",
+                }}
+              >
+                {formatNumber(lendAPY)}%
+              </Box>
+            ) : (
+              ""
+            )}
           </Button>
         </div>
       </Tooltip>
