@@ -44,16 +44,16 @@ const Index = () => {
       >
         <Box>
           <div>
-            <Typography variant="h4" color="black">
-              Lend to earn
-            </Typography>
+            <div className="flex ">
+              <Typography variant="h4" color="black">
+                Lend to earn
+              </Typography>
 
-            <div className="flex mt-5"></div>
-            <div className="flex">
-              <MetricCustom data={metricsData} isLoading={false} />
+              <div className="flex ml-10">
+                <MetricCustom data={metricsData} isLoading={false} />
+              </div>
             </div>
-
-            <div className="flex mt-10"></div>
+            <div className="flex mt-5"></div>
             <Paper
               elevation={0}
               sx={{
@@ -62,7 +62,7 @@ const Index = () => {
                 display: "inline-block",
                 width: "100%",
                 backgroundColor: "white", //theme.palette.warning.main, //theme.palette.background.default, "white", //
-                border: `1px solid ${theme.palette.error.main}`,
+                border: `0px solid ${theme.palette.error.main}`,
               }}
               className="flex flex-col"
             >

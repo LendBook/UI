@@ -14,7 +14,7 @@ module.exports = {
         primary: "#6cc6a7", //"#98ff98", "#c5ebdf",
         secondary: "#677785", //"#002347",
         success: "#cc88ff",
-        error: "#d8dfe5", //"#c9dae9", //"#bebebe",
+        error: "#c1cbd6", //"#d8dfe5", //"#c9dae9", //"#bebebe",
         warning: "#f0f2f5", //"#ffc107",
         info: "#59748d",
         light: "#f0f2f5", //"#f8f9fa",

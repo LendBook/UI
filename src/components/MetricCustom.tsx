@@ -25,6 +25,7 @@ type RowData<T extends string> = Record<T, string>;
 type MetricCustomProps<T extends string> = {
   data: RowData<T>[];
   isLoading?: boolean;
+  backgroundColorChosen?: string;
 };
 
 const Container = styled(Box)(({ theme }) => ({
@@ -34,15 +35,16 @@ const Container = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     flexDirection: "column",
   },
-  // [theme.breakpoints.up("md")]: {
-  //   flexDirection: "column", //"row"
-  // },
+  [theme.breakpoints.up("md")]: {
+    flexDirection: "column", //"row"
+  },
 }));
 
 // Composant TableCustom
 export default function MetricCustom<T extends string>({
   data,
   isLoading = false,
+  backgroundColorChosen = theme.palette.background.default,
 }: MetricCustomProps<T>) {
   return (
     <Paper
@@ -52,7 +54,9 @@ export default function MetricCustom<T extends string>({
         padding: 0, //1
         display: "inline-block",
         border: `0px solid ${theme.palette.error.main}`, //border: `1px solid ${theme.palette.background.default}`,
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: backgroundColorChosen
+          ? backgroundColorChosen
+          : theme.palette.background.default,
       }}
       className="flex"
     >
@@ -67,7 +71,9 @@ export default function MetricCustom<T extends string>({
               style={{
                 borderRadius: 1,
                 padding: 2,
-                backgroundColor: theme.palette.background.default,
+                backgroundColor: backgroundColorChosen
+                  ? backgroundColorChosen
+                  : theme.palette.background.default,
                 //marginRight: rowIndex !== data.length - 1 ? 10 : 0,
                 //marginBottom: rowIndex !== data.length - 1 ? 10 : 0,
                 //width: "100px",
@@ -75,11 +81,10 @@ export default function MetricCustom<T extends string>({
               className="flex flex-col"
             >
               <div
-                style={
-                  {
-                    //marginLeft: 10
-                  }
-                }
+                style={{
+                  //marginLeft: 10
+                  marginRight: 10,
+                }}
               >
                 <Typography
                   variant="body2"
@@ -93,7 +98,9 @@ export default function MetricCustom<T extends string>({
                 <Typography
                   variant="body1"
                   style={{
-                    color: theme.palette.text.primary,
+                    color: row["color" as keyof RowData<T>]
+                      ? row["color" as keyof RowData<T>]
+                      : theme.palette.info.main,
                     fontWeight: "bold",
                   }}
                 >

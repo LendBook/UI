@@ -32,7 +32,16 @@ const Index = () => {
   let sortedData = [...orderMergedData];
   sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
 
-  sortedData = sortedData.map((item) => {
+  // sortedData = sortedData.map((item) => {
+  //   return {
+  //     ...item,
+  //     buyPrice: formatNumber(item.buyPrice).toString(),
+  //   };
+  // });
+
+  sortedData = sortedData.slice(5, 15);
+
+  let stringSortedData = sortedData.map((item) => {
     return {
       ...item,
       buyPrice: formatNumber(item.buyPrice).toString(),
@@ -81,12 +90,12 @@ const Index = () => {
               Analytics
             </Typography>
             <div className="flex mt-20 mb-20">
-              <AnalyticsButtons
-                title="Analytics via button!"
+              {/* <AnalyticsButtons
+                title="Please select a pool to supply"
                 columnsConfig={customDataColumnsConfig}
                 data={sortedData}
                 isLoading={poolLoading}
-              />
+              /> */}
             </div>
             <div className="flex mt-5 mb-5">
               <Paper
@@ -101,7 +110,7 @@ const Index = () => {
               >
                 <Box sx={{ width: "100%" }}>
                   <BarChart
-                    dataset={sortedData}
+                    dataset={stringSortedData}
                     sx={{
                       [`.${axisClasses.left} .${axisClasses.label}`]: {
                         // Move the y-axis label with CSS

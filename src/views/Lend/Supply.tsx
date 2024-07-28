@@ -7,6 +7,8 @@ import CustomTable from "../../components/CustomTable";
 import theme from "../../theme";
 import { useDeposit } from "../../hooks/useDeposit";
 import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
+import AnalyticsButtons from "../../components/AnalyticsButtons";
+import { userInfo } from "os";
 
 const Supply = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -51,10 +53,58 @@ const Supply = () => {
     },
   ];
 
+  const [metricsData, setMetricsData] = useState([
+    {
+      key: "buyPrice",
+      title: "Buy Price",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.info.main,
+    },
+    {
+      key: "deposits",
+      title: "Supply",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.primary.main,
+    },
+    {
+      key: "mySupply",
+      title: "My supply",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.primary.main,
+    },
+    {
+      key: "lendingRate",
+      title: "Net APY",
+      value: "0",
+      unit: "%",
+      color: theme.palette.info.main,
+    },
+    {
+      key: "borrows",
+      title: "Total Borrow",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.success.main,
+    },
+    {
+      key: "utilizationRate",
+      title: "Utilization",
+      value: "0",
+      unit: "%",
+      color: theme.palette.success.main,
+    },
+  ]);
+
   const displayedData = showAll
     ? orderMergedDataUnderMarketPrice
-    : orderMergedDataUnderMarketPrice.slice(0, 3);
+    : orderMergedDataUnderMarketPrice.slice(0, 5);
   //const displayedData = showAll ? poolData : poolData.slice(0, 3);
+
+  let sortedData = [...displayedData];
+  sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
 
   const updateButtonClickable = (quantity: number, price: string) => {
     const isClickable = quantity > 0 && price !== "";
@@ -73,6 +123,7 @@ const Supply = () => {
   };
 
   const handleRowClick = (rowData: any) => {
+    console.log("handleRowClick clicked!");
     const newBuyPrice = rowData.buyPrice;
     setBuyPrice(newBuyPrice);
     const newPoolId = rowData.poolId;
@@ -121,7 +172,17 @@ const Supply = () => {
 
   return (
     <div>
-      <div className="flex ">
+      <div className="flex mt-0 mb-15">
+        <AnalyticsButtons
+          title="Please select a pool to supply"
+          columnsConfig={customDataColumnsConfig}
+          data={sortedData}
+          metrics={metricsData}
+          isLoading={poolLoading}
+          onRowClick={handleRowClick}
+        />
+      </div>
+      <div className="flex justify-center mt-5">
         <AmountCustom
           title="Amount to supply"
           tokenWalletBalance={userInfo.quoteTokenBalance}
@@ -130,7 +191,7 @@ const Supply = () => {
           onQuantityChange={handleQuantityChange}
         />
       </div>
-      <div className="flex mt-5">
+      {/* <div className="flex mt-5">
         <CustomTable
           title="Select a buy price associated with your lending position"
           columnsConfig={customDataColumnsConfig}
@@ -149,8 +210,8 @@ const Supply = () => {
         }}
       >
         {showAll ? "show less" : "show more"}
-      </Button>
-      <div className="flex mt-10">
+      </Button> */}
+      <div className="flex justify-center  mt-10">
         <CustomButton
           clickable={buttonClickable}
           handleClick={handleButtonClick}
