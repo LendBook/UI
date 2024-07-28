@@ -188,7 +188,7 @@ export default function AnalyticsButtons<T extends string | number>({
             </div>
           </Box>
         </div>
-        <div className="flex" style={{ width: "300px", height: "50px" }}>
+        <div className="flex" style={{ width: "250px", height: "50px" }}>
           {buyPrice != "0" ? (
             <MetricCustom
               data={metricsData}
