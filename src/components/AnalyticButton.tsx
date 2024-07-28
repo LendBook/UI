@@ -13,6 +13,7 @@ type AnalyticButtonProps = {
   boxLendHeightRatio?: number;
   boxBorrowHeightRatio?: number;
   userBoxHeight?: number;
+  userBoxColor: string;
   price: number;
   lendAPY: number;
   borrowAPY: number;
@@ -30,6 +31,7 @@ export default function AnalyticButton({
   boxLendHeightRatio,
   boxBorrowHeightRatio,
   userBoxHeight,
+  userBoxColor,
   price,
   lendAPY,
   borrowAPY,
@@ -144,9 +146,7 @@ export default function AnalyticButton({
                       ? `${userBoxHeight}px`
                       : "0px",
                   borderRadius: 0.5,
-                  bgcolor: isHovered
-                    ? theme.palette.primary.main
-                    : theme.palette.primary.main,
+                  bgcolor: isHovered ? userBoxColor : userBoxColor,
                   transition: "background-color 0.3s ease, transform 0.3s ease",
                 }}
               >

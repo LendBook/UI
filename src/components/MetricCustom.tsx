@@ -35,9 +35,9 @@ const Container = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     flexDirection: "column",
   },
-  // [theme.breakpoints.up("md")]: {
-  //   flexDirection: "column", //"row"
-  // },
+  [theme.breakpoints.up("md")]: {
+    flexDirection: "column", //"row"
+  },
 }));
 
 // Composant TableCustom

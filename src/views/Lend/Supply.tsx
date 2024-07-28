@@ -8,6 +8,7 @@ import theme from "../../theme";
 import { useDeposit } from "../../hooks/useDeposit";
 import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
 import AnalyticsButtons from "../../components/AnalyticsButtons";
+import { userInfo } from "os";
 
 const Supply = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -51,6 +52,51 @@ const Supply = () => {
       metric: marketInfo.quoteTokenSymbol,
     },
   ];
+
+  const [metricsData, setMetricsData] = useState([
+    {
+      key: "buyPrice",
+      title: "Buy Price",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.info.main,
+    },
+    {
+      key: "deposits",
+      title: "Supply",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.primary.main,
+    },
+    {
+      key: "mySupply",
+      title: "My supply",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.primary.main,
+    },
+    {
+      key: "lendingRate",
+      title: "Net APY",
+      value: "0",
+      unit: "%",
+      color: theme.palette.info.main,
+    },
+    {
+      key: "borrows",
+      title: "Total Borrow",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.success.main,
+    },
+    {
+      key: "utilizationRate",
+      title: "Utilization",
+      value: "0",
+      unit: "%",
+      color: theme.palette.success.main,
+    },
+  ]);
 
   const displayedData = showAll
     ? orderMergedDataUnderMarketPrice
@@ -131,11 +177,12 @@ const Supply = () => {
           title="Please select a pool to supply"
           columnsConfig={customDataColumnsConfig}
           data={sortedData}
+          metrics={metricsData}
           isLoading={poolLoading}
           onRowClick={handleRowClick}
         />
       </div>
-      <div className="flex mt-5">
+      <div className="flex justify-center mt-5">
         <AmountCustom
           title="Amount to supply"
           tokenWalletBalance={userInfo.quoteTokenBalance}
@@ -164,7 +211,7 @@ const Supply = () => {
       >
         {showAll ? "show less" : "show more"}
       </Button> */}
-      <div className="flex mt-10">
+      <div className="flex justify-center  mt-10">
         <CustomButton
           clickable={buttonClickable}
           handleClick={handleButtonClick}

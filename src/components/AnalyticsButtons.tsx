@@ -17,6 +17,7 @@ import AnalyticButton from "./AnalyticButton";
 import MetricCustom from "./MetricCustom";
 import { userInfo } from "os";
 import { useDataContext } from "../context/DataContext";
+import { title } from "process";
 
 type RowData<T extends string | number> = Record<T, string | number> & {
   id: number;
@@ -33,6 +34,13 @@ type AnalyticsButtonsProps<T extends string | number> = {
     onButtonClick?: (id: number) => void;
   }[];
   data: RowData<T>[]; //data object needs to have at least "id" as one of his key
+  metrics: {
+    key: string;
+    title: string;
+    value: string;
+    unit: string;
+    color: string;
+  }[];
   isLoading?: boolean;
   onRowClick?: (row: RowData<T>) => void;
 };
@@ -41,6 +49,7 @@ export default function AnalyticsButtons<T extends string | number>({
   title = "Analytics figure",
   columnsConfig,
   data,
+  metrics,
   isLoading = false,
   onRowClick,
 }: AnalyticsButtonsProps<T>) {
@@ -71,62 +80,31 @@ export default function AnalyticsButtons<T extends string | number>({
   console.log("maxTotal", maxTotal);
   console.log("updatedData", updatedData);
 
-  const [metricsData, setMetricsData] = useState([
-    {
-      title: "Buy Price",
-      value: "0",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.info.main,
-    },
-    {
-      title: "Total Lend",
-      value: "0",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.primary.main,
-    },
-    {
-      title: "Total Borrow",
-      value: "0",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.success.main,
-    },
-  ]);
+  const [metricsData, setMetricsData] = useState(metrics);
 
   const [metricsDataClicked, setMetricsDataClicked] = useState(metricsData);
-  const handleMouseEnter = (
-    buyPrice: number,
-    deposits: number,
-    borrows: number
-  ) => {
+  const handleMouseEnter = (row: RowData<T>) => {
     setMetricsData((prevMetricsData) => {
+      // Obtenir toutes les clés uniques de prevMetricsData
+      const keysToUpdate: { [key: string]: boolean } = {};
+      prevMetricsData.forEach((metric) => {
+        keysToUpdate[metric.key] = true;
+      });
+
       return prevMetricsData.map((metric) => {
-        if (metric.title === "Buy Price") {
-          return { ...metric, value: buyPrice.toString() };
-        } else if (metric.title === "Total Lend") {
-          return { ...metric, value: deposits.toString() };
-        } else if (metric.title === "Total Borrow") {
-          return { ...metric, value: borrows.toString() };
+        if (keysToUpdate[metric.key] && row.hasOwnProperty(metric.key)) {
+          return { ...metric, value: row[metric.key].toString() };
         }
         return metric;
       });
     });
   };
 
-  const handleMouseLeave = (
-    buyPrice: number,
-    deposits: number,
-    borrows: number
-  ) => {
+  const handleMouseLeave = () => {
     setMetricsData(metricsDataClicked);
   };
 
-  const handleClick = (
-    poolIndex: number,
-    row: RowData<T>,
-    buyPrice: number,
-    deposits: number,
-    borrows: number
-  ) => {
+  const handleClick = (poolIndex: number, row: RowData<T>) => {
     if (onRowClick) {
       onRowClick(row);
     }
@@ -134,13 +112,15 @@ export default function AnalyticsButtons<T extends string | number>({
     setClickedButton(poolIndex);
     console.log(data);
     setMetricsDataClicked((prevMetricsData) => {
+      // Obtenir toutes les clés uniques de prevMetricsData
+      const keysToUpdate: { [key: string]: boolean } = {};
+      prevMetricsData.forEach((metric) => {
+        keysToUpdate[metric.key] = true;
+      });
+
       return prevMetricsData.map((metric) => {
-        if (metric.title === "Buy Price") {
-          return { ...metric, value: buyPrice.toString() };
-        } else if (metric.title === "Total Lend") {
-          return { ...metric, value: deposits.toString() };
-        } else if (metric.title === "Total Borrow") {
-          return { ...metric, value: borrows.toString() };
+        if (keysToUpdate[metric.key] && row.hasOwnProperty(metric.key)) {
+          return { ...metric, value: row[metric.key].toString() };
         }
         return metric;
       });
@@ -155,81 +135,70 @@ export default function AnalyticsButtons<T extends string | number>({
   return (
     <Box sx={{ width: "100%" }}>
       <span
-        className="text-black font-bold"
+        className="flex justify-center text-black font-bold"
         //style={{ backgroundColor: theme.palette.primary.main }}
       >
         {title}
       </span>
-      <div className="flex" style={{ height: "50px" }}>
-        {buyPrice != "0" ? (
-          <MetricCustom
-            data={metricsData}
-            isLoading={false}
-            backgroundColorChosen={"white"}
-          />
-        ) : (
-          <div></div>
-        )}
-      </div>
-
-      <div className="container relative z-2 mt-10">
-        <Box
-          component={Paper}
-          elevation={0} //1
-          sx={{
-            borderRadius: 1,
-            padding: 0, //0.5, //1
-            border: `0px solid ${theme.palette.warning.main}`,
-            //backgroundColor: theme.palette.background.default, //"white", //
-            position: "relative",
-            paddingBottom: "100px",
-            paddingTop: "40px",
-          }}
-        >
-          <div
-            className="flex"
-            style={{
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "center",
-              gap: "10px",
+      <div className="flex">
+        <div className="container relative z-2 mt-10">
+          <Box
+            component={Paper}
+            elevation={0} //1
+            sx={{
+              borderRadius: 1,
+              padding: 0, //0.5, //1
+              border: `0px solid ${theme.palette.warning.main}`,
+              //backgroundColor: theme.palette.background.default, //"white", //
+              position: "relative",
+              paddingBottom: "100px",
+              paddingTop: "40px",
             }}
           >
-            {updatedData.map((pool, poolIndex) => {
-              return (
-                <AnalyticButton
-                  clickable={true} // Ajustez cette valeur selon vos besoins
-                  clicked={poolIndex == clickedButton ? true : false}
-                  buttonWidth={50}
-                  buttonHeight={pool.totalRatio as number}
-                  borderRadius={5}
-                  boxLendHeightRatio={pool.lendRatio as number}
-                  boxBorrowHeightRatio={pool.borrowRatio as number}
-                  price={pool.buyPrice as number} // Utilisez 'price' de chaque objet
-                  lendAPY={pool.lendingRate as number}
-                  borrowAPY={pool.borrowingRate as number}
-                  onMouseEnter={() =>
-                    handleMouseEnter(
-                      pool.buyPrice as number,
-                      pool.deposits as number,
-                      pool.borrows as number
-                    )
-                  }
-                  onMouseLeave={() => handleMouseLeave(0, 0, 0)}
-                  handleClick={() =>
-                    handleClick(
-                      poolIndex,
-                      pool,
-                      pool.buyPrice as number,
-                      pool.deposits as number,
-                      pool.borrows as number
-                    )
-                  }
-                />
-              );
-            })}
-          </div>
-        </Box>
+            <div
+              className="flex"
+              style={{
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "center",
+                gap: "10px",
+              }}
+            >
+              {updatedData.map((pool, poolIndex) => {
+                return (
+                  <AnalyticButton
+                    clickable={true} // Ajustez cette valeur selon vos besoins
+                    clicked={poolIndex == clickedButton ? true : false}
+                    buttonWidth={50}
+                    buttonHeight={pool.totalRatio as number}
+                    borderRadius={5}
+                    boxLendHeightRatio={pool.lendRatio as number}
+                    boxBorrowHeightRatio={pool.borrowRatio as number}
+                    userBoxHeight={(pool.mySupply as number) > 0 ? 6 : 0}
+                    userBoxColor={theme.palette.primary.main}
+                    price={pool.buyPrice as number} // Utilisez 'price' de chaque objet
+                    lendAPY={pool.lendingRate as number}
+                    borrowAPY={pool.borrowingRate as number}
+                    onMouseEnter={() => handleMouseEnter(pool)}
+                    onMouseLeave={() => handleMouseLeave()}
+                    handleClick={() => handleClick(poolIndex, pool)}
+                  />
+                );
+              })}
+            </div>
+          </Box>
+        </div>
+        <div className="flex" style={{ width: "300px", height: "50px" }}>
+          {buyPrice != "0" ? (
+            <MetricCustom
+              data={metricsData}
+              isLoading={false}
+              backgroundColorChosen={"white"}
+            />
+          ) : (
+            <div></div>
+          )}
+        </div>
       </div>
     </Box>
   );
