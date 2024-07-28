@@ -53,7 +53,7 @@ const Index = () => {
               <MetricCustom data={metricsData} isLoading={false} />
             </div>
 
-            <div className="flex mt-10"></div>
+            <div className="flex mt-5"></div>
             <Paper
               elevation={0}
               sx={{

@@ -34,6 +34,7 @@ type AnalyticsButtonsProps<T extends string | number> = {
   }[];
   data: RowData<T>[]; //data object needs to have at least "id" as one of his key
   isLoading?: boolean;
+  onRowClick?: (row: RowData<T>) => void;
 };
 
 export default function AnalyticsButtons<T extends string | number>({
@@ -41,7 +42,10 @@ export default function AnalyticsButtons<T extends string | number>({
   columnsConfig,
   data,
   isLoading = false,
+  onRowClick,
 }: AnalyticsButtonsProps<T>) {
+  const [clickedButton, setClickedButton] = useState<number | null>(null);
+
   const columns = columnsConfig.map((config) => config.key);
 
   const { marketInfo } = useDataContext();
@@ -61,7 +65,7 @@ export default function AnalyticsButtons<T extends string | number>({
     const total = item.total as number;
     return {
       ...item, // Copie toutes les propriétés existantes
-      totalRatio: (total / maxTotal) * 300,
+      totalRatio: (total / maxTotal) * 250,
     };
   });
   console.log("maxTotal", maxTotal);
@@ -72,19 +76,23 @@ export default function AnalyticsButtons<T extends string | number>({
       title: "Buy Price",
       value: "0",
       unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.info.main,
     },
     {
       title: "Total Lend",
       value: "0",
       unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.primary.main,
     },
     {
       title: "Total Borrow",
       value: "0",
       unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.success.main,
     },
   ]);
 
+  const [metricsDataClicked, setMetricsDataClicked] = useState(metricsData);
   const handleMouseEnter = (
     buyPrice: number,
     deposits: number,
@@ -104,6 +112,46 @@ export default function AnalyticsButtons<T extends string | number>({
     });
   };
 
+  const handleMouseLeave = (
+    buyPrice: number,
+    deposits: number,
+    borrows: number
+  ) => {
+    setMetricsData(metricsDataClicked);
+  };
+
+  const handleClick = (
+    poolIndex: number,
+    row: RowData<T>,
+    buyPrice: number,
+    deposits: number,
+    borrows: number
+  ) => {
+    if (onRowClick) {
+      onRowClick(row);
+    }
+
+    setClickedButton(poolIndex);
+    console.log(data);
+    setMetricsDataClicked((prevMetricsData) => {
+      return prevMetricsData.map((metric) => {
+        if (metric.title === "Buy Price") {
+          return { ...metric, value: buyPrice.toString() };
+        } else if (metric.title === "Total Lend") {
+          return { ...metric, value: deposits.toString() };
+        } else if (metric.title === "Total Borrow") {
+          return { ...metric, value: borrows.toString() };
+        }
+        return metric;
+      });
+    });
+  };
+
+  const buyPriceMetric = metricsData.find(
+    (metric) => metric.title === "Buy Price"
+  );
+  const buyPrice = buyPriceMetric?.value || "default value";
+
   return (
     <Box sx={{ width: "100%" }}>
       <span
@@ -112,10 +160,18 @@ export default function AnalyticsButtons<T extends string | number>({
       >
         {title}
       </span>
-
-      <div className="flex">
-        <MetricCustom data={metricsData} isLoading={false} />
+      <div className="flex" style={{ height: "50px" }}>
+        {buyPrice != "0" ? (
+          <MetricCustom
+            data={metricsData}
+            isLoading={false}
+            backgroundColorChosen={"white"}
+          />
+        ) : (
+          <div></div>
+        )}
       </div>
+
       <div className="container relative z-2 mt-10">
         <Box
           component={Paper}
@@ -124,7 +180,7 @@ export default function AnalyticsButtons<T extends string | number>({
             borderRadius: 1,
             padding: 0, //0.5, //1
             border: `0px solid ${theme.palette.warning.main}`,
-            backgroundColor: theme.palette.background.default, //"white", //
+            //backgroundColor: theme.palette.background.default, //"white", //
             position: "relative",
             paddingBottom: "100px",
             paddingTop: "40px",
@@ -143,6 +199,7 @@ export default function AnalyticsButtons<T extends string | number>({
               return (
                 <AnalyticButton
                   clickable={true} // Ajustez cette valeur selon vos besoins
+                  clicked={poolIndex == clickedButton ? true : false}
                   buttonWidth={50}
                   buttonHeight={pool.totalRatio as number}
                   borderRadius={5}
@@ -153,6 +210,16 @@ export default function AnalyticsButtons<T extends string | number>({
                   borrowAPY={pool.borrowingRate as number}
                   onMouseEnter={() =>
                     handleMouseEnter(
+                      pool.buyPrice as number,
+                      pool.deposits as number,
+                      pool.borrows as number
+                    )
+                  }
+                  onMouseLeave={() => handleMouseLeave(0, 0, 0)}
+                  handleClick={() =>
+                    handleClick(
+                      poolIndex,
+                      pool,
                       pool.buyPrice as number,
                       pool.deposits as number,
                       pool.borrows as number

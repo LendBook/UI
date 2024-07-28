@@ -5,7 +5,8 @@ import { formatNumber } from "./GlobalFunctions";
 
 type AnalyticButtonProps = {
   clickable: boolean;
-  handleClick?: () => void;
+  clicked: boolean;
+  handleClick: () => void;
   borderRadius?: number;
   buttonHeight?: number;
   buttonWidth?: number;
@@ -16,10 +17,12 @@ type AnalyticButtonProps = {
   lendAPY: number;
   borrowAPY: number;
   onMouseEnter: () => void;
+  onMouseLeave: () => void;
 };
 
 export default function AnalyticButton({
   clickable,
+  clicked,
   handleClick,
   borderRadius,
   buttonHeight,
@@ -31,12 +34,18 @@ export default function AnalyticButton({
   lendAPY,
   borrowAPY,
   onMouseEnter,
+  onMouseLeave,
 }: AnalyticButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnterLocal = () => {
     setIsHovered(true);
     onMouseEnter(); // Appel de la fonction de rappel
+  };
+
+  const handleMouseLeaveLocal = () => {
+    setIsHovered(false);
+    onMouseLeave(); // Appel de la fonction de rappel
   };
 
   return (
@@ -52,12 +61,12 @@ export default function AnalyticButton({
           <Button
             style={{
               //textTransform: "none",
-              height: "300px",
+              height: "250px",
               width:
                 typeof buttonWidth === "number" ? `${buttonWidth}px` : "auto",
               borderRadius:
                 typeof borderRadius === "number" ? `${borderRadius}px` : "5px",
-              backgroundColor: theme.palette.background.default,
+              //backgroundColor: theme.palette.background.default,
               display: "flex", // Aligner les Box en ligne
               justifyContent: "center", // Centrer horizontalement
               alignItems: "flex-end", // center
@@ -67,7 +76,7 @@ export default function AnalyticButton({
             onClick={handleClick}
             disabled={!clickable}
             onMouseEnter={handleMouseEnterLocal}
-            onMouseLeave={() => setIsHovered(false)}
+            onMouseLeave={handleMouseLeaveLocal}
           >
             <Button
               style={{
@@ -84,6 +93,8 @@ export default function AnalyticButton({
                     ? `${borderRadius}px`
                     : "5px",
                 backgroundColor: isHovered
+                  ? theme.palette.secondary.main
+                  : clicked
                   ? theme.palette.secondary.main
                   : theme.palette.error.main,
                 display: "flex", // Aligner les Box en ligne
@@ -148,8 +159,16 @@ export default function AnalyticButton({
                     transformOrigin: "0 0", // Point d'origine de la rotation
                     whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
                     color: theme.palette.secondary.main,
-                    fontWeight: isHovered ? "bold" : "inherite",
-                    fontSize: isHovered ? "110%" : "inherite",
+                    fontWeight: isHovered
+                      ? "bold"
+                      : clicked
+                      ? "bold"
+                      : "inherite",
+                    fontSize: isHovered
+                      ? "110%"
+                      : clicked
+                      ? "110%"
+                      : "inherite",
                     transition: "font-weight 0.3s ease, transform 0.3s ease",
                   }}
                 >
@@ -162,12 +181,14 @@ export default function AnalyticButton({
                     position: "absolute",
                     top: "-24px", // Positionne le texte en dessous de l'élément principal
                     //left: "50%", // Positionne le début du texte au milieu horizontalement
-                    color: isHovered
-                      ? theme.palette.primary.dark
-                      : theme.palette.primary.main,
+                    color: theme.palette.secondary.main,
                     transition: "color 0.3s ease, transform 0.3s ease",
-                    fontWeight: "bold",
-                    fontSize: "110%",
+                    fontWeight: isHovered
+                      ? "bold"
+                      : clicked
+                      ? "bold"
+                      : "inherite",
+                    fontSize: "100%",
                   }}
                 >
                   {formatNumber(lendAPY)}%
