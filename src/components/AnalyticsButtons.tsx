@@ -212,8 +212,8 @@ export default function AnalyticsButtons<T extends string | number>({
                           width: "5px",
                           height: "260px",
                           borderRadius: 1,
-                          marginLeft: 1,
-                          marginRight: 1.2,
+                          marginLeft: 2,
+                          marginRight: 2.2,
                           bgcolor: theme.palette.common.black,
                         }}
                       >
@@ -260,8 +260,8 @@ export default function AnalyticsButtons<T extends string | number>({
                           width: "5px",
                           height: "260px",
                           borderRadius: 1,
-                          marginLeft: 1,
-                          marginRight: 1.2,
+                          marginLeft: 2,
+                          marginRight: 2.2,
                           bgcolor: theme.palette.common.black,
                         }}
                       >
