@@ -57,7 +57,7 @@ export default function AnalyticsButtons<T extends string | number>({
 
   const columns = columnsConfig.map((config) => config.key);
 
-  const { marketInfo } = useDataContext();
+  const { price, marketInfo } = useDataContext();
 
   let updatedData: RowData<T>[] = data.map((item) => {
     const deposits = item.deposits as number;
@@ -72,11 +72,17 @@ export default function AnalyticsButtons<T extends string | number>({
   const maxTotal = Math.max(...updatedData.map((item) => item.total as number));
   updatedData = updatedData.map((item) => {
     const total = item.total as number;
+    let total_ratio = (total / maxTotal) * 250; // 250px is the maxHeight of the box in the plot
+    if (total_ratio !== 0 && total_ratio < 20) {
+      // 20px is the minimum height of the box in the plot in order to be correctly visible
+      total_ratio = 20;
+    }
     return {
       ...item, // Copie toutes les propriétés existantes
-      totalRatio: (total / maxTotal) * 250,
+      totalRatio: total_ratio,
     };
   });
+
   console.log("maxTotal", maxTotal);
   console.log("updatedData", updatedData);
 
@@ -132,6 +138,8 @@ export default function AnalyticsButtons<T extends string | number>({
   );
   const buyPrice = buyPriceMetric?.value || "default value";
 
+  console.log("updatedData , ", updatedData);
+
   return (
     <Box sx={{ width: "100%" }}>
       <span
@@ -165,24 +173,118 @@ export default function AnalyticsButtons<T extends string | number>({
               }}
             >
               {updatedData.map((pool, poolIndex) => {
+                const currentBuyPrice = pool.buyPrice as number;
+                const marketPrice = price as number;
+
+                let previousBuyPrice = updatedData[0].buyPrice as number;
+                if (poolIndex > 0) {
+                  previousBuyPrice = updatedData[poolIndex - 1]
+                    .buyPrice as number;
+                }
+                let goodPositionForMarketPrice_b = false;
+                let goodPositionForMarketPriceAtTheEnd_b = false;
+                if (poolIndex == 0 && marketPrice < currentBuyPrice) {
+                  goodPositionForMarketPrice_b = true;
+                } else if (
+                  previousBuyPrice < marketPrice &&
+                  marketPrice < currentBuyPrice
+                ) {
+                  goodPositionForMarketPrice_b = true;
+                } else if (
+                  updatedData.length == poolIndex + 1 &&
+                  currentBuyPrice < marketPrice
+                ) {
+                  goodPositionForMarketPriceAtTheEnd_b = true;
+                }
                 return (
-                  <AnalyticButton
-                    clickable={true} // Ajustez cette valeur selon vos besoins
-                    clicked={poolIndex == clickedButton ? true : false}
-                    buttonWidth={50}
-                    buttonHeight={pool.totalRatio as number}
-                    borderRadius={5}
-                    boxLendHeightRatio={pool.lendRatio as number}
-                    boxBorrowHeightRatio={pool.borrowRatio as number}
-                    userBoxHeight={(pool.mySupply as number) > 0 ? 6 : 0}
-                    userBoxColor={theme.palette.primary.main}
-                    price={pool.buyPrice as number} // Utilisez 'price' de chaque objet
-                    lendAPY={pool.lendingRate as number}
-                    borrowAPY={pool.borrowingRate as number}
-                    onMouseEnter={() => handleMouseEnter(pool)}
-                    onMouseLeave={() => handleMouseLeave()}
-                    handleClick={() => handleClick(poolIndex, pool)}
-                  />
+                  <div
+                    className="flex"
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-end",
+                      justifyContent: "center",
+                      gap: "0px",
+                    }}
+                  >
+                    {goodPositionForMarketPrice_b ? (
+                      <Box
+                        sx={{
+                          width: "5px",
+                          height: "260px",
+                          borderRadius: 1,
+                          marginLeft: 1,
+                          marginRight: 1.2,
+                          bgcolor: theme.palette.common.black,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: "relative",
+                            top: "100%", // Positionne le texte en dessous de l'élément principal
+                            left: "200%", // Positionne le début du texte au milieu horizontalement
+                            transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
+                            transformOrigin: "0 0", // Point d'origine de la rotation
+                            whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
+                            color: theme.palette.common.black,
+                            //fontWeight: "bold",
+                            fontSize: "100%",
+                          }}
+                        >
+                          {formatNumber(price as number)}
+                        </Box>
+                      </Box>
+                    ) : (
+                      <div></div>
+                    )}
+
+                    <AnalyticButton
+                      clickable={true} // Ajustez cette valeur selon vos besoins
+                      clicked={poolIndex == clickedButton ? true : false}
+                      buttonWidth={50}
+                      buttonHeight={pool.totalRatio as number}
+                      borderRadius={5}
+                      boxLendHeightRatio={pool.lendRatio as number}
+                      boxBorrowHeightRatio={pool.borrowRatio as number}
+                      userBoxHeight={(pool.mySupply as number) > 0 ? 6 : 0}
+                      userBoxColor={theme.palette.primary.main}
+                      price={pool.buyPrice as number} // Utilisez 'price' de chaque objet
+                      lendAPY={pool.lendingRate as number}
+                      borrowAPY={pool.borrowingRate as number}
+                      onMouseEnter={() => handleMouseEnter(pool)}
+                      onMouseLeave={() => handleMouseLeave()}
+                      handleClick={() => handleClick(poolIndex, pool)}
+                    />
+                    {goodPositionForMarketPriceAtTheEnd_b ? (
+                      <Box
+                        sx={{
+                          width: "5px",
+                          height: "260px",
+                          borderRadius: 1,
+                          marginLeft: 1,
+                          marginRight: 1.2,
+                          bgcolor: theme.palette.common.black,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: "relative",
+                            top: "100%", // Positionne le texte en dessous de l'élément principal
+                            left: "200%", // Positionne le début du texte au milieu horizontalement
+                            transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
+                            transformOrigin: "0 0", // Point d'origine de la rotation
+                            whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
+                            color: theme.palette.common.black,
+                            //fontWeight: "bold",
+                            fontSize: "100%",
+                          }}
+                        >
+                          {formatNumber(price as number)}
+                        </Box>
+                      </Box>
+                    ) : (
+                      <div></div>
+                    )}
+                  </div>
                 );
               })}
             </div>
