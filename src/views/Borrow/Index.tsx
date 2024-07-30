@@ -55,12 +55,13 @@ const Index = () => {
       >
         <Box>
           <div>
-            <Typography variant="h4" color="black">
-              Borrow
-            </Typography>
-            <div className="flex mt-5"></div>
-            <div className="flex">
-              <MetricCustom data={metricsData} isLoading={loadingUser} />
+            <div className="flex ">
+              <Typography variant="h4" color="black">
+                Borrow
+              </Typography>
+              <div className="flex ml-10">
+                <MetricCustom data={metricsData} isLoading={false} />
+              </div>
             </div>
             <div className="flex flex-row items-start  justify-between mt-5">
               <Paper
@@ -69,7 +70,7 @@ const Index = () => {
                   borderRadius: 1,
                   padding: 1,
                   display: "inline-block",
-                  border: `1px solid ${theme.palette.error.main}`, //
+                  border: `0px solid ${theme.palette.error.main}`, //
                   //flexGrow: 1,
                   //backgroundColor: "#f6fbff", //theme.palette.background.default,
                 }}
@@ -104,7 +105,7 @@ const Index = () => {
                 padding: 1,
                 display: "inline-block",
                 width: "100%",
-                border: `1px solid ${theme.palette.error.main}`, //
+                border: `0px solid ${theme.palette.error.main}`, //
                 //backgroundColor: theme.palette.background.default,
               }}
               className="flex flex-col"

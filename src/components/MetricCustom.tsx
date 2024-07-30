@@ -9,11 +9,13 @@ import {
   Paper,
   TableProps,
   Skeleton,
+  Container,
 } from "@mui/material";
 import theme from "../theme";
 import { title } from "process";
 import { formatNumber } from "./GlobalFunctions";
 import MarketComponent from "../components/MarketComponent";
+import { menu } from "@material-tailwind/react";
 
 //valeur à recuperer
 //price feed indiquatif in USD
@@ -26,26 +28,28 @@ type MetricCustomProps<T extends string> = {
   data: RowData<T>[];
   isLoading?: boolean;
   backgroundColorChosen?: string;
+  displayedInColumn?: boolean;
 };
-
-const Container = styled(Box)(({ theme }) => ({
-  display: "inline-flex",
-  flexWrap: "wrap",
-  gap: theme.spacing(1),
-  [theme.breakpoints.down("sm")]: {
-    flexDirection: "column",
-  },
-  [theme.breakpoints.up("md")]: {
-    flexDirection: "column", //"row"
-  },
-}));
 
 // Composant TableCustom
 export default function MetricCustom<T extends string>({
   data,
   isLoading = false,
-  backgroundColorChosen = theme.palette.background.default,
+  backgroundColorChosen = theme.palette.warning.main,
+  displayedInColumn = false,
 }: MetricCustomProps<T>) {
+  const Container = styled(Box)(({ theme }) => ({
+    display: "inline-flex",
+    flexWrap: "wrap",
+    gap: theme.spacing(1),
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+    },
+    [theme.breakpoints.up("md")]: {
+      flexDirection: displayedInColumn ? "column" : "row", //"row"
+    },
+  }));
+
   return (
     <Paper
       elevation={0}
@@ -86,21 +90,37 @@ export default function MetricCustom<T extends string>({
                   marginRight: 10,
                 }}
               >
-                <Typography
-                  variant="body2"
-                  style={{
-                    //fontWeight: "bold",
-                    color: theme.palette.info.main,
-                  }}
-                >
-                  {row["title" as keyof RowData<T>]}
-                </Typography>
+                <div className="flex">
+                  {row["icon" as keyof RowData<T>] && (
+                    <span
+                      style={{
+                        verticalAlign: "middle",
+                        marginTop: "-3px",
+                        marginRight: "4px",
+                        color: row["color" as keyof RowData<T>]
+                          ? row["color" as keyof RowData<T>]
+                          : theme.palette.info.main,
+                      }}
+                    >
+                      {row["icon" as keyof RowData<T>]}
+                    </span>
+                  )}
+                  <Typography
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "90%",
+                      color: row["color" as keyof RowData<T>]
+                        ? row["color" as keyof RowData<T>]
+                        : theme.palette.info.main,
+                    }}
+                  >
+                    {row["title" as keyof RowData<T>]}
+                  </Typography>
+                </div>
                 <Typography
                   variant="body1"
                   style={{
-                    color: row["color" as keyof RowData<T>]
-                      ? row["color" as keyof RowData<T>]
-                      : theme.palette.info.main,
+                    color: theme.palette.common.black,
                     fontWeight: "bold",
                   }}
                 >

@@ -12,7 +12,7 @@ type AnalyticButtonProps = {
   buttonWidth?: number;
   boxLendHeightRatio?: number;
   boxBorrowHeightRatio?: number;
-  userBoxHeight?: number;
+  userBoxHeight: number;
   userBoxColor: string;
   price: number;
   lendAPY: number;
@@ -85,6 +85,10 @@ export default function AnalyticButton({
               : clicked
               ? theme.palette.secondary.main
               : theme.palette.error.main,
+            border:
+              userBoxHeight != 0
+                ? `${userBoxHeight}px solid ${theme.palette.primary.main}`
+                : `0px solid ${theme.palette.error.main}`,
             display: "flex", // Aligner les Box en ligne
             justifyContent: "center", // Centrer horizontalement
             alignItems: "flex-end", // center
@@ -122,7 +126,7 @@ export default function AnalyticButton({
               transition: "background-color 0.3s ease, transform 0.3s ease",
             }}
           />
-          <Box
+          {/* <Box
             sx={{
               position: "absolute",
               top: "calc(100% + 4px)", // Ajoute une marge de 4px en dessous de l'élément principal
@@ -135,25 +139,25 @@ export default function AnalyticButton({
               bgcolor: isHovered ? userBoxColor : userBoxColor,
               transition: "background-color 0.3s ease, transform 0.3s ease",
             }}
+          > */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: "calc(100% + 2px)", // Positionne le texte en dessous de l'élément principal
+              left: "50%", // Positionne le début du texte au milieu horizontalement
+              transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
+              transformOrigin: "0 0", // Point d'origine de la rotation
+              whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
+              color: theme.palette.secondary.main,
+              fontWeight: isHovered ? "bold" : clicked ? "bold" : "inherite",
+              fontSize: isHovered ? "110%" : clicked ? "110%" : "inherite",
+              transition: "font-weight 0.3s ease, transform 0.3s ease",
+            }}
           >
-            <Box
-              sx={{
-                position: "absolute",
-                top: "100%", // Positionne le texte en dessous de l'élément principal
-                left: "50%", // Positionne le début du texte au milieu horizontalement
-                transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
-                transformOrigin: "0 0", // Point d'origine de la rotation
-                whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
-                color: theme.palette.secondary.main,
-                fontWeight: isHovered ? "bold" : clicked ? "bold" : "inherite",
-                fontSize: isHovered ? "110%" : clicked ? "110%" : "inherite",
-                transition: "font-weight 0.3s ease, transform 0.3s ease",
-              }}
-            >
-              {formatNumber(price)}
-            </Box>
+            {formatNumber(price)}
           </Box>
-          {lendAPY != 0 ? (
+          {/* </Box> */}
+          {/* {lendAPY != 0 ? (
             <Box
               sx={{
                 position: "absolute",
@@ -169,7 +173,7 @@ export default function AnalyticButton({
             </Box>
           ) : (
             ""
-          )}
+          )} */}
         </Button>
       </Button>
     </div>

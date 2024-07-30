@@ -6,6 +6,10 @@ import { Box, Button, Paper } from "@mui/material";
 import CustomTable from "../../components/CustomTable";
 import theme from "../../theme";
 import { useWithdraw } from "../../hooks/useWithdraw";
+import AnalyticsButtons from "../../components/AnalyticsButtons";
+
+import SquareRoundedIcon from "@mui/icons-material/SquareRounded";
+import CropDinRoundedIcon from "@mui/icons-material/CropDinRounded";
 
 const Withdraw = () => {
   const [withdrawAmountQuantity, setWithdrawAmountQuantity] =
@@ -52,11 +56,62 @@ const Withdraw = () => {
     },
   ];
 
+  const [metricsData, setMetricsData] = useState([
+    {
+      key: "buyPrice",
+      title: "Buy Price",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.info.main,
+    },
+    {
+      key: "deposits",
+      title: "Supply",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.primary.main,
+      icon: <SquareRoundedIcon fontSize="small" />,
+    },
+    {
+      key: "borrows",
+      title: "Borrow",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.success.main,
+      icon: <SquareRoundedIcon fontSize="small" />,
+    },
+    {
+      key: "mySupply",
+      title: "My supply",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.primary.main,
+      icon: <CropDinRoundedIcon fontSize="small" />,
+    },
+    {
+      key: "lendingRate",
+      title: "Net APY",
+      value: "0",
+      unit: "%",
+      color: theme.palette.info.main,
+    },
+    {
+      key: "utilizationRate",
+      title: "Utilization",
+      value: "0",
+      unit: "%",
+      color: theme.palette.info.main,
+    },
+  ]);
+
   const filteredData = orderMergedDataUnderMarketPrice.filter(
     (item) => item.orderLenderId !== undefined
   );
 
-  const displayedData = showAll ? filteredData : filteredData.slice(0, 3);
+  //const displayedData = showAll ? filteredData : filteredData.slice(0, 3);
+
+  let sortedData = [...filteredData];
+  sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
 
   const sellOrdersWithdrawClick = (id: number) => {
     console.log(`Button clicked! ${id}`);
@@ -135,7 +190,17 @@ const Withdraw = () => {
 
   return (
     <div>
-      <Box
+      <div className="flex mt-0 mb-15">
+        <AnalyticsButtons
+          title="Select a pool to supply"
+          columnsConfig={customDataColumnsConfig}
+          data={sortedData}
+          metrics={metricsData}
+          isLoading={poolLoading}
+          onRowClick={handleRowClick}
+        />
+      </div>
+      {/* <Box
         sx={{
           width: "75%",
         }}
@@ -158,7 +223,7 @@ const Withdraw = () => {
             clickableRows={false}
           />
         </Paper>
-      </Box>
+      </Box> */}
       <div className="flex mt-10"></div>
       <AmountCustom
         title="Amount to withdraw"
@@ -172,7 +237,7 @@ const Withdraw = () => {
         <CustomTable
           title="Select a lending position to withdraw"
           columnsConfig={customDataColumnsConfig}
-          data={displayedData}
+          data={filteredData}
           clickableRows={true}
           onRowClick={handleRowClick}
           isLoading={poolLoading}

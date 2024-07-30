@@ -10,6 +10,9 @@ import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
 import AnalyticsButtons from "../../components/AnalyticsButtons";
 import { userInfo } from "os";
 
+import SquareRoundedIcon from "@mui/icons-material/SquareRounded";
+import CropDinRoundedIcon from "@mui/icons-material/CropDinRounded";
+
 const Supply = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
   const [buyPrice, setBuyPrice] = useState<string>("");
@@ -67,6 +70,15 @@ const Supply = () => {
       value: "0",
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.primary.main,
+      icon: <SquareRoundedIcon fontSize="small" />,
+    },
+    {
+      key: "borrows",
+      title: "Borrow",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.success.main,
+      icon: <SquareRoundedIcon fontSize="small" />,
     },
     {
       key: "mySupply",
@@ -74,6 +86,7 @@ const Supply = () => {
       value: "0",
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.primary.main,
+      icon: <CropDinRoundedIcon fontSize="small" />,
     },
     {
       key: "lendingRate",
@@ -83,18 +96,11 @@ const Supply = () => {
       color: theme.palette.info.main,
     },
     {
-      key: "borrows",
-      title: "Total Borrow",
-      value: "0",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.success.main,
-    },
-    {
       key: "utilizationRate",
       title: "Utilization",
       value: "0",
       unit: "%",
-      color: theme.palette.success.main,
+      color: theme.palette.info.main,
     },
   ]);
 
@@ -174,7 +180,7 @@ const Supply = () => {
     <div>
       <div className="flex mt-0 mb-15">
         <AnalyticsButtons
-          title="Please select a pool to supply"
+          title="Select a pool to supply"
           columnsConfig={customDataColumnsConfig}
           data={sortedData}
           metrics={metricsData}
