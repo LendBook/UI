@@ -171,7 +171,7 @@ export default function AnalyticsButtons<T extends string | number>({
         {title}
       </span>
       <div className="flex justify-center">
-        <div className="flex justify-center items-center gap-10">
+        <div className="flex justify-center items-center gap-2">
           {" "}
           {/* Wrapper div to center both components */}
           <div className="container relative z-2 mt-10">
@@ -322,7 +322,7 @@ export default function AnalyticsButtons<T extends string | number>({
           <div
             className="flex"
             style={{
-              width: "300px",
+              width: "350px",
               //height: "50px"
             }}
           >

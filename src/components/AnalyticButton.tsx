@@ -157,7 +157,7 @@ export default function AnalyticButton({
             {formatNumber(price)}
           </Box>
           {/* </Box> */}
-          {/* {lendAPY != 0 ? (
+          {lendAPY != 0 ? (
             <Box
               sx={{
                 position: "absolute",
@@ -166,14 +166,14 @@ export default function AnalyticButton({
                 color: theme.palette.secondary.main,
                 transition: "color 0.3s ease, transform 0.3s ease",
                 fontWeight: isHovered ? "bold" : clicked ? "bold" : "inherite",
-                fontSize: "100%",
+                fontSize: "90%",
               }}
             >
               {formatNumber(lendAPY)}%
             </Box>
           ) : (
             ""
-          )} */}
+          )}
         </Button>
       </Button>
     </div>
