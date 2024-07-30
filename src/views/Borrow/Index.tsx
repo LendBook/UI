@@ -27,14 +27,17 @@ const Index = () => {
   const metricsData = [
     {
       title: "Total supply",
-      value: marketInfo.totalDeposit,
+      value: marketInfo.totalDeposit.toString() as string,
       unit: marketInfo.quoteTokenSymbol,
     },
     {
       title: "Total borrow",
-      value: marketInfo.totalBorrow,
+      value: marketInfo.totalBorrow.toString() as string,
       unit: marketInfo.quoteTokenSymbol,
     },
+  ];
+
+  const userMetricsData = [
     {
       title: "My total collateral",
       value: userInfo.totalDepositsBase,
@@ -73,7 +76,7 @@ const Index = () => {
                 <MetricCustom data={metricsData} isLoading={false} />
               </div>
             </div>
-            <div className="flex flex-row items-start  justify-between mt-5">
+            <div className="flex flex-row items-start  mt-5">
               <Paper
                 elevation={0} //4
                 sx={{
@@ -99,9 +102,13 @@ const Index = () => {
                 )}
                 <div className="flex mt-2"></div>
               </Paper>
-              {/* <div className="flex" style={{ marginLeft: "10px" }}>
-                <MetricCustom data={metricsData} isLoading={loadingUser} />
-              </div> */}
+              <div className="flex" style={{ marginLeft: "30px" }}>
+                <MetricCustom
+                  data={userMetricsData}
+                  isLoading={loadingUser}
+                  displayedInColumn={true}
+                />
+              </div>
             </div>
             {/* <div className="flex" style={{ marginLeft: "10px" }}>
               <MetricCustom data={metricsData} />
