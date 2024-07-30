@@ -322,7 +322,7 @@ export default function AnalyticsButtons<T extends string | number>({
           <div
             className="flex"
             style={{
-              width: "250px",
+              width: "300px",
               //height: "50px"
             }}
           >
