@@ -87,7 +87,7 @@ export default function AnalyticButton({
               : theme.palette.error.main,
             border:
               userBoxHeight != 0
-                ? `${userBoxHeight}px solid ${theme.palette.primary.main}`
+                ? `${userBoxHeight}px solid ${userBoxColor}`
                 : `0px solid ${theme.palette.error.main}`,
             display: "flex", // Aligner les Box en ligne
             justifyContent: "center", // Centrer horizontalement

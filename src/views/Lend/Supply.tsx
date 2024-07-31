@@ -186,6 +186,8 @@ const Supply = () => {
           metrics={metricsData}
           isLoading={poolLoading}
           onRowClick={handleRowClick}
+          userMetricBorder={"mySupply"}
+          userMetricBorderColor={theme.palette.primary.main}
         />
       </div>
       <div className="flex justify-center mt-5">

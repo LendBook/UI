@@ -43,6 +43,8 @@ type AnalyticsButtonsProps<T extends string | number> = {
   }[];
   isLoading?: boolean;
   onRowClick?: (row: RowData<T>) => void;
+  userMetricBorder: string;
+  userMetricBorderColor: string;
 };
 
 export default function AnalyticsButtons<T extends string | number>({
@@ -52,6 +54,8 @@ export default function AnalyticsButtons<T extends string | number>({
   metrics,
   isLoading = false,
   onRowClick,
+  userMetricBorder,
+  userMetricBorderColor,
 }: AnalyticsButtonsProps<T>) {
   const [clickedButton, setClickedButton] = useState<number | null>(null);
 
@@ -85,7 +89,7 @@ export default function AnalyticsButtons<T extends string | number>({
     ...updatedData.map((item) => item.totalDeposits as number)
   );
   const maxMyQty = Math.max(
-    ...updatedData.map((item) => item.mySupply as number)
+    ...updatedData.map((item) => item[userMetricBorder] as number)
   );
   updatedData = updatedData.map((item) => {
     const total = item.totalDeposits as number;
@@ -95,7 +99,7 @@ export default function AnalyticsButtons<T extends string | number>({
       total_ratio = 20;
     }
 
-    const myQty = item.mySupply as number;
+    const myQty = item[userMetricBorder] as number;
     let myQtyRatio = (myQty / maxMyQty) * 4; // 4px for the max border
 
     return {
@@ -275,7 +279,7 @@ export default function AnalyticsButtons<T extends string | number>({
                             ? (pool.myQtyRatio as number)
                             : 0
                         }
-                        userBoxColor={theme.palette.primary.main}
+                        userBoxColor={userMetricBorderColor}
                         price={pool.buyPrice as number} // Utilisez 'price' de chaque objet
                         lendAPY={pool.lendingRate as number}
                         borrowAPY={pool.borrowingRate as number}

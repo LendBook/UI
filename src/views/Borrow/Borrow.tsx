@@ -22,6 +22,7 @@ const Borrow = () => {
   const [textNotClickable, setTextNotClickable] = useState<string>(
     "Must enter an amount to borrow"
   );
+  const [clickedRowData, setClickedRowData] = useState<any>();
 
   const {
     userInfo,
@@ -90,8 +91,8 @@ const Borrow = () => {
       icon: <CropDinRoundedIcon fontSize="small" />,
     },
     {
-      key: "lendingRate",
-      title: "Net APY",
+      key: "borrowingRate",
+      title: "Borrow APY",
       value: "0",
       unit: "%",
       color: theme.palette.info.main,
@@ -132,6 +133,7 @@ const Borrow = () => {
   };
 
   const handleRowClick = (rowData: any) => {
+    setClickedRowData(rowData);
     const newliquidationPrice = rowData.buyPrice;
     setLiquidationPrice(newliquidationPrice);
     const newPoolId = rowData.poolId;
@@ -181,12 +183,21 @@ const Borrow = () => {
           metrics={metricsData}
           isLoading={poolLoading}
           onRowClick={handleRowClick}
+          userMetricBorder={"myBorrowingPositions"}
+          userMetricBorderColor={theme.palette.success.main}
         />
       </div>
       <div className="flex justify-center mt-5">
         <AmountCustom
           title="Amount to borrow"
-          tokenWalletBalance={376}
+          tokenWalletBalance={
+            clickedRowData
+              ? clickedRowData.availableSupply <
+                userInfo.excessCollateral * clickedRowData.buyPrice
+                ? clickedRowData.availableSupply
+                : userInfo.excessCollateral * clickedRowData.buyPrice
+              : 0
+          }
           selectedToken={marketInfo.quoteTokenSymbol}
           ratioToUSD={1.01}
           onQuantityChange={handleQuantityChange}

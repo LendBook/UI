@@ -20,6 +20,7 @@ const Withdraw = () => {
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [showAll, setShowAll] = useState<boolean>(false);
+  const [clickedRowData, setClickedRowData] = useState<any>();
 
   const [textAfterClick, setTextAfterClick] = useState<string>("");
   const [textNotClickable, setTextNotClickable] = useState<string>(
@@ -154,6 +155,7 @@ const Withdraw = () => {
   };
 
   const handleRowClick = (rowData: any) => {
+    setClickedRowData(rowData);
     const newBuyPrice = rowData.buyPrice;
     setBuyPrice(newBuyPrice);
     const newPoolId = rowData.poolId;
@@ -198,13 +200,15 @@ const Withdraw = () => {
           metrics={metricsData}
           isLoading={poolLoading}
           onRowClick={handleRowClick}
+          userMetricBorder={"mySupply"}
+          userMetricBorderColor={theme.palette.primary.main}
         />
       </div>
       {/* <div className="flex mt-10"></div> */}
       <div className="flex justify-center mt-5">
         <AmountCustom
           title="Amount to withdraw"
-          tokenWalletBalance={376}
+          tokenWalletBalance={clickedRowData ? clickedRowData.mySupply : 0}
           selectedToken={marketInfo.quoteTokenSymbol}
           ratioToUSD={1.01}
           onQuantityChange={handleQuantityChange}
