@@ -8,6 +8,10 @@ import { Button } from "@mui/material";
 import CustomTable from "../../components/CustomTable";
 import theme from "../../theme";
 
+import SquareRoundedIcon from "@mui/icons-material/SquareRounded";
+import CropDinRoundedIcon from "@mui/icons-material/CropDinRounded";
+import AnalyticsButtons from "../../components/AnalyticsButtons";
+
 const Borrow = () => {
   const [borrowedQuantity, setBorrowedQuantity] = useState<number>(0);
   const [liquidationPrice, setLiquidationPrice] = useState<string>("");
@@ -18,6 +22,7 @@ const Borrow = () => {
   const [textNotClickable, setTextNotClickable] = useState<string>(
     "Must enter an amount to borrow"
   );
+  const [clickedRowData, setClickedRowData] = useState<any>();
 
   const {
     userInfo,
@@ -53,12 +58,63 @@ const Borrow = () => {
     },
   ];
 
+  const [metricsData, setMetricsData] = useState([
+    {
+      key: "buyPrice",
+      title: "Buy Price",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.info.main,
+    },
+    {
+      key: "deposits",
+      title: "Supply",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.primary.main,
+      icon: <SquareRoundedIcon fontSize="small" />,
+    },
+    {
+      key: "borrows",
+      title: "Borrow",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.success.main,
+      icon: <SquareRoundedIcon fontSize="small" />,
+    },
+    {
+      key: "myBorrowingPositions",
+      title: "My borrow",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.success.main,
+      icon: <CropDinRoundedIcon fontSize="small" />,
+    },
+    {
+      key: "borrowingRate",
+      title: "Borrow APY",
+      value: "0",
+      unit: "%",
+      color: theme.palette.info.main,
+    },
+    {
+      key: "utilizationRate",
+      title: "Utilization",
+      value: "0",
+      unit: "%",
+      color: theme.palette.info.main,
+    },
+  ]);
+
   const filteredData = orderMergedDataUnderMarketPrice.filter((item) => {
     return (
       item.availableSupply !== undefined && Number(item.availableSupply) > 0
     );
   });
-  const displayedData = showAll ? filteredData : filteredData.slice(0, 3);
+  //const displayedData = showAll ? filteredData : filteredData.slice(0, 3);
+
+  let sortedData = [...filteredData];
+  sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
 
   const updateButtonClickable = (borrowedQuantity: number, price: string) => {
     const isClickable = borrowedQuantity > 0 && price !== "";
@@ -77,6 +133,7 @@ const Borrow = () => {
   };
 
   const handleRowClick = (rowData: any) => {
+    setClickedRowData(rowData);
     const newliquidationPrice = rowData.buyPrice;
     setLiquidationPrice(newliquidationPrice);
     const newPoolId = rowData.poolId;
@@ -118,15 +175,36 @@ const Borrow = () => {
 
   return (
     <div>
-      <AmountCustom
-        title="Amount to borrow"
-        tokenWalletBalance={376}
-        selectedToken={marketInfo.quoteTokenSymbol}
-        ratioToUSD={1.01}
-        onQuantityChange={handleQuantityChange}
-      />
+      <div className="flex mt-0 mb-15">
+        <AnalyticsButtons
+          title="Select a pool to borrow"
+          columnsConfig={customDataColumnsConfig}
+          data={sortedData}
+          metrics={metricsData}
+          isLoading={poolLoading}
+          onRowClick={handleRowClick}
+          userMetricBorder={"myBorrowingPositions"}
+          userMetricBorderColor={theme.palette.success.main}
+        />
+      </div>
+      <div className="flex justify-center mt-5">
+        <AmountCustom
+          title="Amount to borrow"
+          tokenWalletBalance={
+            clickedRowData
+              ? clickedRowData.availableSupply <
+                userInfo.excessCollateral * clickedRowData.buyPrice
+                ? clickedRowData.availableSupply
+                : userInfo.excessCollateral * clickedRowData.buyPrice
+              : 0
+          }
+          selectedToken={marketInfo.quoteTokenSymbol}
+          ratioToUSD={1.01}
+          onQuantityChange={handleQuantityChange}
+        />
+      </div>
 
-      <div className="flex mt-5">
+      {/* <div className="flex mt-5">
         <CustomTable
           title="Select a liquidation price"
           columnsConfig={customDataColumnsConfig}
@@ -145,8 +223,8 @@ const Borrow = () => {
         }}
       >
         {showAll ? "show less" : "show more"}
-      </Button>
-      <div className="flex mt-10">
+      </Button> */}
+      <div className="flex justify-center  mt-10">
         <CustomButton
           clickable={buttonClickable}
           handleClick={handleButtonClick}

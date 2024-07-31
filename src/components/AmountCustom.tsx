@@ -168,7 +168,7 @@ export default function AmountCustom({
               className="text-dark text-[10px] underline font-bold"
               onClick={handleMaxClick}
             >
-              Available : {formatNumber(tokenWalletBalance)}
+              Max : {formatNumber(tokenWalletBalance)}
             </button>
           )}
         </div>

@@ -24,12 +24,11 @@ type TradeBoxProps = {
   poolId: string;
   sellToken: string;
   sellTokenName: string;
-  sellTokenWalletBalance: number;
   sellTokenRatioToUsd: number;
   buyTokenName: string;
-  buyTokenWalletBalance: number;
   buyTokenRatioToUsd: number;
   buyTokenMaxSupply: number;
+  sellTokenMaxSupply: number;
   buyPrice: number;
 };
 
@@ -37,12 +36,11 @@ export default function TradeBox({
   poolId,
   sellToken,
   sellTokenName,
-  sellTokenWalletBalance,
   sellTokenRatioToUsd,
   buyTokenName,
-  buyTokenWalletBalance,
   buyTokenRatioToUsd,
   buyTokenMaxSupply,
+  sellTokenMaxSupply,
   buyPrice,
 }: TradeBoxProps) {
   const [sellAmountQuantity, setSellAmountQuantity] = useState<number>(0);
@@ -157,7 +155,7 @@ export default function TradeBox({
             <div className="">
               <AmountCustom
                 title="Pay"
-                tokenWalletBalance={sellTokenWalletBalance}
+                tokenWalletBalance={sellTokenMaxSupply}
                 selectedToken={sellTokenName}
                 ratioToUSD={sellTokenRatioToUsd}
                 initialQuantity={String(sellAmountQuantity)}

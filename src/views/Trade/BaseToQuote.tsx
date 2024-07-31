@@ -8,6 +8,7 @@ import theme from "../../theme";
 import { useDeposit } from "../../hooks/useDeposit";
 import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
 import TradeBox from "./TradeBox";
+import AnalyticsButtons from "../../components/AnalyticsButtons";
 
 const BaseToQuote = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -23,6 +24,7 @@ const BaseToQuote = () => {
   );
 
   const {
+    userInfo,
     price,
     poolLoading,
     orderMergedData,
@@ -55,6 +57,23 @@ const BaseToQuote = () => {
     },
   ];
 
+  const [metricsData, setMetricsData] = useState([
+    {
+      key: "buyPrice",
+      title: "Buy Price",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.info.main,
+    },
+    {
+      key: "availableSupply",
+      title: "Available supply for trading",
+      value: "0",
+      unit: marketInfo.quoteTokenSymbol, // FIXEME need to changet the metric
+      color: theme.palette.info.main,
+    },
+  ]);
+
   const filteredData = orderMergedData.filter(
     (item) => item.availableSupply !== 0
   );
@@ -71,6 +90,9 @@ const BaseToQuote = () => {
   refilteredData = refilteredData.map((objet) => {
     return { ...objet, action: "Trade" };
   });
+
+  let sortedData = [...refilteredData];
+  sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
 
   const updateButtonClickable = (quantity: number, price: string) => {
     const isClickable = quantity > 0 && price !== "";
@@ -114,7 +136,19 @@ const BaseToQuote = () => {
 
   return (
     <div>
-      <div className="flex mt-5">
+      <div className="flex mt-0 mb-15">
+        <AnalyticsButtons
+          title="Select a limit price to trade"
+          columnsConfig={customDataColumnsConfig}
+          data={sortedData}
+          metrics={metricsData}
+          isLoading={poolLoading}
+          onRowClick={handleRowClick}
+          userMetricBorder={"mySupply"}
+          userMetricBorderColor={theme.palette.primary.main}
+        />
+      </div>
+      {/* <div className="flex mt-5">
         <CustomTable
           title="Select a limit price for the trade"
           columnsConfig={customDataColumnsConfig}
@@ -123,26 +157,6 @@ const BaseToQuote = () => {
           onRowClick={handleRowClick}
           isLoading={poolLoading}
         />
-      </div>
-      {/* <div className="flex mt-5">
-        <AmountCustom
-          title="Amount to supply"
-          tokenWalletBalance={376}
-          selectedToken={quote}
-          ratioToUSD={1.01}
-          onQuantityChange={handleQuantityChange}
-        />
-      </div>
-      <div className="flex mt-10">
-        <CustomButton
-          clickable={buttonClickable}
-          handleClick={handleButtonClick}
-          textAfterClick={textAfterClick}
-          textClickable="Finalize trade"
-          textNotClickable={textNotClickable}
-          buttonWidth={300}
-          borderRadius={50}
-        />
       </div> */}
       {buyPriceSelected && (
         <div className="flex justify-content align-items mt-10">
@@ -150,12 +164,20 @@ const BaseToQuote = () => {
             poolId={poolId}
             sellToken="Base"
             sellTokenName={marketInfo.baseTokenSymbol}
-            sellTokenWalletBalance={911}
             sellTokenRatioToUsd={price ?? 0}
             buyTokenName={marketInfo.quoteTokenSymbol}
-            buyTokenWalletBalance={911}
             buyTokenRatioToUsd={1}
-            buyTokenMaxSupply={parseFloat(availableSupply)}
+            sellTokenMaxSupply={
+              parseFloat(availableSupply) / parseFloat(buyPrice) <
+              userInfo.baseTokenBalance
+                ? parseFloat(availableSupply) / parseFloat(buyPrice)
+                : userInfo.baseTokenBalance
+            }
+            buyTokenMaxSupply={
+              parseFloat(availableSupply) < userInfo.baseTokenBalance
+                ? parseFloat(availableSupply)
+                : userInfo.baseTokenBalance
+            }
             buyPrice={parseFloat(buyPrice)}
           />
         </div>

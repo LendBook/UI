@@ -20,6 +20,16 @@ const Index = () => {
 
   const metricsData = [
     {
+      title: "Total supply",
+      value: marketInfo.totalDeposit,
+      unit: marketInfo.quoteTokenSymbol,
+    },
+    {
+      title: "Total borrow",
+      value: marketInfo.totalBorrow,
+      unit: marketInfo.quoteTokenSymbol,
+    },
+    {
       title: "My total supply",
       value: userInfo.totalDepositsQuote,
       unit: marketInfo.quoteTokenSymbol,

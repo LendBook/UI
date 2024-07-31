@@ -20,6 +20,7 @@ const Withdraw = () => {
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [showAll, setShowAll] = useState<boolean>(false);
+  const [clickedRowData, setClickedRowData] = useState<any>();
 
   const [textAfterClick, setTextAfterClick] = useState<string>("");
   const [textNotClickable, setTextNotClickable] = useState<string>(
@@ -154,6 +155,7 @@ const Withdraw = () => {
   };
 
   const handleRowClick = (rowData: any) => {
+    setClickedRowData(rowData);
     const newBuyPrice = rowData.buyPrice;
     setBuyPrice(newBuyPrice);
     const newPoolId = rowData.poolId;
@@ -192,48 +194,27 @@ const Withdraw = () => {
     <div>
       <div className="flex mt-0 mb-15">
         <AnalyticsButtons
-          title="Select a pool to supply"
+          title="Select a pool to withdraw"
           columnsConfig={customDataColumnsConfig}
           data={sortedData}
           metrics={metricsData}
           isLoading={poolLoading}
           onRowClick={handleRowClick}
+          userMetricBorder={"mySupply"}
+          userMetricBorderColor={theme.palette.primary.main}
         />
       </div>
-      {/* <Box
-        sx={{
-          width: "75%",
-        }}
-      >
-        <Paper
-          elevation={0}
-          sx={{
-            borderRadius: 1,
-            padding: 1,
-            display: "inline-block",
-            border: `1px solid ${theme.palette.primary.main}`,
-            width: "100%",
-          }}
-          className="flex"
-        >
-          <CustomTable
-            title="Sell orders to withdraw (no earnings)"
-            columnsConfig={sellOrdersDataColumnsConfig}
-            data={sellOrdersData}
-            clickableRows={false}
-          />
-        </Paper>
-      </Box> */}
-      <div className="flex mt-10"></div>
-      <AmountCustom
-        title="Amount to withdraw"
-        tokenWalletBalance={376}
-        selectedToken={marketInfo.quoteTokenSymbol}
-        ratioToUSD={1.01}
-        onQuantityChange={handleQuantityChange}
-      />
-
-      <div className="flex mt-5">
+      {/* <div className="flex mt-10"></div> */}
+      <div className="flex justify-center mt-5">
+        <AmountCustom
+          title="Amount to withdraw"
+          tokenWalletBalance={clickedRowData ? clickedRowData.mySupply : 0}
+          selectedToken={marketInfo.quoteTokenSymbol}
+          ratioToUSD={1.01}
+          onQuantityChange={handleQuantityChange}
+        />
+      </div>
+      {/* <div className="flex mt-5">
         <CustomTable
           title="Select a lending position to withdraw"
           columnsConfig={customDataColumnsConfig}
@@ -252,8 +233,8 @@ const Withdraw = () => {
         }}
       >
         {showAll ? "show less" : "show more"}
-      </Button>
-      <div className="flex mt-10">
+      </Button> */}
+      <div className="flex justify-center   mt-10">
         <CustomButton
           clickable={buttonClickable}
           handleClick={handleButtonClick}
