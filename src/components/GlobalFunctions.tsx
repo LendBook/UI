@@ -17,6 +17,25 @@ export const formatNumber = (num: string | number): string => {
   }
 };
 
+export const formatNumberPriceFig = (num: string | number): string => {
+  num = num ? num : 0;
+  if (num === "") {
+    return "";
+  }
+  if (typeof num === "string") {
+    num = parseFloat(num);
+  }
+  if (num >= 1000000000) {
+    return (num / 1000000000).toFixed(2) + "B";
+  } else if (num >= 1000000) {
+    return (num / 1000000).toFixed(2) + "M";
+  } else if (num >= 1000) {
+    return num.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Ajoute une virgule après les trois premiers chiffres
+  } else {
+    return num.toFixed(2);
+  }
+};
+
 // /////////////////////////////////////////////////////////////
 // function used to update some elements inside an object
 // /////////////////////////////////////////////////////////////

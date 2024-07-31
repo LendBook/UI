@@ -10,7 +10,10 @@ import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import theme from "../theme";
-import { formatNumber } from "../components/GlobalFunctions";
+import {
+  formatNumber,
+  formatNumberPriceFig,
+} from "../components/GlobalFunctions";
 import { Skeleton } from "@mui/material";
 import CustomButton from "./CustomButton";
 import AnalyticButton from "./AnalyticButton";
@@ -238,28 +241,30 @@ export default function AnalyticsButtons<T extends string | number>({
                       {goodPositionForMarketPrice_b ? (
                         <Box
                           sx={{
-                            width: "5px",
-                            height: "260px",
+                            position: "relative",
+                            top: "20px",
+                            width: "8px",
+                            height: "300px",
                             borderRadius: 1,
                             marginLeft: 2,
                             marginRight: 2.2,
-                            bgcolor: theme.palette.common.black,
+                            bgcolor: theme.palette.secondary.main,
                           }}
                         >
                           <Box
                             sx={{
-                              position: "relative",
+                              position: "absolute",
                               top: "100%", // Positionne le texte en dessous de l'élément principal
-                              left: "200%", // Positionne le début du texte au milieu horizontalement
-                              transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
-                              transformOrigin: "0 0", // Point d'origine de la rotation
+                              left: "-15px", // Positionne le début du texte au milieu horizontalement
+                              //transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
+                              //transformOrigin: "0 0", // Point d'origine de la rotation
                               whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
-                              color: theme.palette.common.black,
+                              color: theme.palette.secondary.main,
                               //fontWeight: "bold",
                               fontSize: "100%",
                             }}
                           >
-                            {formatNumber(price as number)}
+                            {formatNumberPriceFig(price as number)}
                           </Box>
                         </Box>
                       ) : (
@@ -290,28 +295,30 @@ export default function AnalyticsButtons<T extends string | number>({
                       {goodPositionForMarketPriceAtTheEnd_b ? (
                         <Box
                           sx={{
-                            width: "5px",
-                            height: "260px",
+                            position: "relative",
+                            top: "20px",
+                            width: "8px",
+                            height: "300px",
                             borderRadius: 1,
                             marginLeft: 2,
                             marginRight: 2.2,
-                            bgcolor: theme.palette.common.black,
+                            bgcolor: theme.palette.secondary.main,
                           }}
                         >
                           <Box
                             sx={{
-                              position: "relative",
+                              position: "absolute",
                               top: "100%", // Positionne le texte en dessous de l'élément principal
-                              left: "200%", // Positionne le début du texte au milieu horizontalement
-                              transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
-                              transformOrigin: "0 0", // Point d'origine de la rotation
+                              left: "-15px", // Positionne le début du texte au milieu horizontalement
+                              //transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
+                              //transformOrigin: "0 0", // Point d'origine de la rotation
                               whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
-                              color: theme.palette.common.black,
+                              color: theme.palette.secondary.main,
                               //fontWeight: "bold",
                               fontSize: "100%",
                             }}
                           >
-                            {formatNumber(price as number)}
+                            {formatNumberPriceFig(price as number)}
                           </Box>
                         </Box>
                       ) : (

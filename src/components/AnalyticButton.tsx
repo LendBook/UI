@@ -1,7 +1,7 @@
 import { Box, Button, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import theme from "../theme";
-import { formatNumber } from "./GlobalFunctions";
+import { formatNumber, formatNumberPriceFig } from "./GlobalFunctions";
 
 type AnalyticButtonProps = {
   clickable: boolean;
@@ -144,6 +144,20 @@ export default function AnalyticButton({
             sx={{
               position: "absolute",
               top: "calc(100% + 2px)", // Positionne le texte en dessous de l'élément principal
+              //left: "50%", // Positionne le début du texte au milieu horizontalement
+              //transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
+              //transformOrigin: "0 0", // Point d'origine de la rotation
+              whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
+              color: theme.palette.secondary.main,
+              fontWeight: isHovered ? "bold" : clicked ? "bold" : "inherite",
+              fontSize: isHovered ? "110%" : clicked ? "110%" : "inherite",
+              transition: "font-weight 0.3s ease, transform 0.3s ease",
+            }}
+          >
+            {/* <Box
+            sx={{
+              position: "absolute",
+              top: "calc(100% + 2px)", // Positionne le texte en dessous de l'élément principal
               left: "50%", // Positionne le début du texte au milieu horizontalement
               transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
               transformOrigin: "0 0", // Point d'origine de la rotation
@@ -153,8 +167,8 @@ export default function AnalyticButton({
               fontSize: isHovered ? "110%" : clicked ? "110%" : "inherite",
               transition: "font-weight 0.3s ease, transform 0.3s ease",
             }}
-          >
-            {formatNumber(price)}
+          > */}
+            {formatNumberPriceFig(price)}
           </Box>
           {/* </Box> */}
           {lendAPY != 0 ? (
