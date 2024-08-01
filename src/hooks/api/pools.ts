@@ -73,7 +73,7 @@ function calculatePricesForPools(
     : genesisId - gapStep * idStep;
 
   const nbrPoolsUnder = 10;
-  const nbrPoolsAbove = 10;
+  const nbrPoolsAbove = 5;
 
   const startPoolId = closeToMarketPoolId - nbrPoolsUnder * idStep;
   const endPoolId = closeToMarketPoolId + nbrPoolsAbove * idStep;

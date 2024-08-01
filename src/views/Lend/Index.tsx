@@ -23,16 +23,19 @@ const Index = () => {
       title: "Total supply",
       value: marketInfo.totalDeposit,
       unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.info.main,
     },
     {
       title: "Total borrow",
       value: marketInfo.totalBorrow,
       unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.info.main,
     },
     {
       title: "My total supply",
       value: userInfo.totalDepositsQuote,
       unit: marketInfo.quoteTokenSymbol,
+      color: theme.palette.primary.main,
     },
     // {
     //   title: "My sell orders to withdraw",
@@ -55,7 +58,7 @@ const Index = () => {
         <Box>
           <div>
             <div className="flex ">
-              <Typography variant="h4" color="black">
+              <Typography variant="h3" color="black">
                 Lend to earn
               </Typography>
 

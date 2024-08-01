@@ -35,7 +35,7 @@ type MetricCustomProps<T extends string> = {
 export default function MetricCustom<T extends string>({
   data,
   isLoading = false,
-  backgroundColorChosen = theme.palette.warning.main,
+  backgroundColorChosen = "white", //theme.palette.warning.main,
   displayedInColumn = false,
 }: MetricCustomProps<T>) {
   const Container = styled(Box)(({ theme }) => ({
@@ -55,7 +55,7 @@ export default function MetricCustom<T extends string>({
       elevation={0}
       sx={{
         borderRadius: 1,
-        padding: 0, //1
+        padding: 1, //1
         display: "inline-block",
         border: `0px solid ${theme.palette.error.main}`, //border: `1px solid ${theme.palette.background.default}`,
         backgroundColor: backgroundColorChosen
@@ -128,9 +128,7 @@ export default function MetricCustom<T extends string>({
                     <Skeleton variant="text" width="50%" />
                   ) : (
                     <>
-                      {formatNumber(
-                        parseFloat(row["value" as keyof RowData<T>])
-                      )}{" "}
+                      {formatNumber(row["value" as keyof RowData<T>])}{" "}
                       {row["unit" as keyof RowData<T>]}
                     </>
                   )}

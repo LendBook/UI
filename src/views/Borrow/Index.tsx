@@ -69,7 +69,7 @@ const Index = () => {
         <Box>
           <div>
             <div className="flex ">
-              <Typography variant="h4" color="black">
+              <Typography variant="h3" color="black">
                 Borrow
               </Typography>
               <div className="flex ml-10">
