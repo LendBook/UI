@@ -61,14 +61,14 @@ const BaseToQuote = () => {
     {
       key: "buyPrice",
       title: "Buy Price",
-      value: "0",
+      value: "-",
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.info.main,
     },
     {
       key: "availableSupply",
       title: "Available supply for trading",
-      value: "0",
+      value: "-",
       unit: marketInfo.quoteTokenSymbol, // FIXEME need to changet the metric
       color: theme.palette.info.main,
     },

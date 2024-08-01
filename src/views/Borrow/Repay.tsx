@@ -59,14 +59,14 @@ const Repay = () => {
     {
       key: "buyPrice",
       title: "Buy Price",
-      value: "0",
+      value: "-",
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.info.main,
     },
     {
       key: "deposits",
       title: "Supply",
-      value: "0",
+      value: "-",
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.primary.main,
       icon: <SquareRoundedIcon fontSize="small" />,
@@ -74,7 +74,7 @@ const Repay = () => {
     {
       key: "borrows",
       title: "Borrow",
-      value: "0",
+      value: "-",
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.success.main,
       icon: <SquareRoundedIcon fontSize="small" />,
@@ -82,7 +82,7 @@ const Repay = () => {
     {
       key: "myBorrowingPositions",
       title: "My borrow",
-      value: "0",
+      value: "-",
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.success.main,
       icon: <CropDinRoundedIcon fontSize="small" />,
@@ -90,14 +90,14 @@ const Repay = () => {
     {
       key: "lendingRate",
       title: "Net APY",
-      value: "0",
+      value: "-",
       unit: "%",
       color: theme.palette.info.main,
     },
     {
       key: "utilizationRate",
       title: "Utilization",
-      value: "0",
+      value: "-",
       unit: "%",
       color: theme.palette.info.main,
     },

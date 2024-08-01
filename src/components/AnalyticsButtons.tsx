@@ -337,16 +337,12 @@ export default function AnalyticsButtons<T extends string | number>({
               //height: "50px"
             }}
           >
-            {buyPrice != "0" ? (
-              <MetricCustom
-                data={metricsData}
-                isLoading={false}
-                backgroundColorChosen={"white"}
-                displayedInColumn={true}
-              />
-            ) : (
-              <div></div>
-            )}
+            <MetricCustom
+              data={metricsData}
+              isLoading={false}
+              backgroundColorChosen={"white"}
+              displayedInColumn={true}
+            />
           </div>
         </div>
       </div>

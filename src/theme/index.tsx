@@ -4,7 +4,7 @@ const tailwindColors = {
   primary: "#6cc6a7", //"#98ff98", "#c5ebdf",
   secondary: "#677785", //"#002347",
   success: "#b07df0",
-  error: "#d8dfe5", //"#c9dae9",
+  error: "#d9dfe6", //"#d8dfe5", //"#c9dae9",
   warning: "#f0f2f5", //"#ffc107", f6f8fc
   info: "#59748d",
   light: "#f0f2f5", //"#f8f9fa",
@@ -17,7 +17,7 @@ const tailwindColors = {
   bgBtnHover: "#002347",
   borderColor: "#4ACFFF",
 
-  bgLight: "#f9fafb", //"#f9fafb", f0f2f5 //"#e9f4ff",
+  bgLight: "#c1cbd6", //"#f9fafb", f0f2f5 //"#e9f4ff",
 };
 // const tailwindColors = {
 //   primary: "#003F7D",

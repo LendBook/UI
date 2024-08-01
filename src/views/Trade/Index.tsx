@@ -30,7 +30,7 @@ const Index = () => {
       >
         <Box>
           <div>
-            <Typography variant="h4" color="black">
+            <Typography variant="h3" color="black">
               Trade
             </Typography>
 

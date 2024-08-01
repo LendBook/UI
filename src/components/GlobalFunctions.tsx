@@ -2,6 +2,8 @@ export const formatNumber = (num: string | number): string => {
   num = num ? num : 0;
   if (num === "") {
     return "";
+  } else if (num === "-") {
+    return "-";
   }
   if (typeof num === "string") {
     num = parseFloat(num);

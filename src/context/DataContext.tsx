@@ -77,6 +77,14 @@ export const DataProvider: React.FC<DataProviderProps> = ({
     (a, b) => Number(b.buyPrice) - Number(a.buyPrice)
   );
 
+  orderMergedData = orderMergedData.map((item) => {
+    const buyPrice = item.buyPrice as number;
+    return {
+      ...item,
+      maxLTV: (buyPrice / price) * 100,
+    };
+  });
+
   // // Filtrer les données
   const orderMergedDataUnderMarketPrice = orderMergedData.filter((item) => {
     if (typeof item.poolId === "number") {

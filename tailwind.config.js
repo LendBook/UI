@@ -14,7 +14,7 @@ module.exports = {
         primary: "#6cc6a7", //"#98ff98", "#c5ebdf",
         secondary: "#677785", //"#002347",
         success: "#cc88ff",
-        error: "#c1cbd6", //"#d8dfe5", //"#c9dae9", //"#bebebe",
+        error: "#d9dfe6", //"#c1cbd6", //"#d8dfe5", //"#c9dae9", //"#bebebe",
         warning: "#f0f2f5", //"#ffc107",
         info: "#59748d",
         light: "#f0f2f5", //"#f8f9fa",
@@ -27,7 +27,7 @@ module.exports = {
         bgBtnHover: "#002347",
         borderColor: "#4ACFFF",
 
-        bgLight: "#f9fafb", //"#f9fafb", //"#f0f2f5", //"#e9f4ff",
+        bgLight: "#a7b5c3", //"#f9fafb", //"#f0f2f5", //"#e9f4ff",
       },
       // colors: {
       //   primary: "#003F7D",
