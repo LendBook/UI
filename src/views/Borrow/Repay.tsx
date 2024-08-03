@@ -13,6 +13,7 @@ import SquareRoundedIcon from "@mui/icons-material/SquareRounded";
 import CropDinRoundedIcon from "@mui/icons-material/CropDinRounded";
 import AnalyticsButtons from "../../components/AnalyticsButtons";
 import { userInfo } from "os";
+import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
 
 const Repay = () => {
   const [repayQuantity, setRepayQuantity] = useState<number>(0);
@@ -139,12 +140,19 @@ const Repay = () => {
     updateButtonClickable(repayQuantity, newliquidationPrice);
   };
 
+  const approveQuoteToken = useApproveQuoteToken();
   const repay = useRepay();
 
   const handleButtonClick = async () => {
     //setMessage("Button clicked!");
     if (buttonClickable) {
+      setTextAfterClick("Transaction approval sent ...");
+      const resultApproval = await approveQuoteToken(String(repayQuantity));
+      setTextAfterClick(resultApproval);
+
       setTextAfterClick("Transaction sent ...");
+      console.log("REPAY orderBorrowerId ", Number(orderBorrowerId));
+      console.log("REPAY repayQuantity ", String(repayQuantity));
       const result = await repay(
         Number(orderBorrowerId),
         String(repayQuantity)
