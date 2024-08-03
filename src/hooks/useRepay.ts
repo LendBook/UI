@@ -26,6 +26,7 @@ export const useRepay = () => {
       }
       NotificationManager.error(errorMessage);
       console.error("error ----------->", error);
+      console.error("error -----------Message>", error.message);
       return errorMessage;
     }
   };
