@@ -170,182 +170,198 @@ export default function AnalyticsButtons<T extends string | number>({
   console.log("updatedData , ", updatedData);
 
   return (
-    <Box sx={{ width: "100%" }}>
+    // <Box sx={{ width: "100%" }}>
+    <div>
       <span
         className="flex justify-center text-black font-bold"
         //style={{ backgroundColor: theme.palette.primary.main }}
       >
         {title}
       </span>
-      <div className="flex justify-center">
-        <div className="flex justify-center items-center gap-2">
-          {" "}
-          {/* Wrapper div to center both components */}
-          <div className="container relative z-2 mt-10">
-            <Box
-              component={Paper}
-              elevation={0} //1
-              sx={{
-                borderRadius: 1,
-                padding: 0, //0.5, //1
-                border: `0px solid ${theme.palette.warning.main}`,
-                //backgroundColor: theme.palette.background.default, //"white", //
-                position: "relative",
-                paddingBottom: "100px",
-                paddingTop: "40px",
-              }}
-            >
-              <div
-                className="flex"
-                style={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "center",
-                  gap: "10px",
+      <Box
+        component={Paper}
+        elevation={0} //1
+        sx={{
+          borderRadius: 1,
+          padding: 0, //0.5, //1
+          border: `1px solid ${theme.palette.warning.main}`,
+          backgroundColor: theme.palette.warning.main, //"white", //
+          position: "relative",
+          //paddingBottom: "100px",
+          //paddingTop: "40px",
+          //width: "100%",
+        }}
+      >
+        <div className="flex justify-center">
+          <div className="flex justify-center items-center gap-2">
+            {" "}
+            {/* Wrapper div to center both components */}
+            <div className="container relative z-2 mt-10">
+              <Box
+                component={Paper}
+                elevation={0} //1
+                sx={{
+                  borderRadius: 1,
+                  padding: 0, //0.5, //1
+                  border: `0px solid ${theme.palette.error.main}`,
+                  backgroundColor: theme.palette.warning.main, //"white", //
+                  position: "relative",
+                  paddingBottom: "100px",
+                  paddingTop: "40px",
                 }}
               >
-                {updatedData.map((pool, poolIndex) => {
-                  const currentBuyPrice = pool.buyPrice as number;
-                  const marketPrice = price as number;
+                <div
+                  className="flex"
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "center",
+                    gap: "10px",
+                  }}
+                >
+                  {updatedData.map((pool, poolIndex) => {
+                    const currentBuyPrice = pool.buyPrice as number;
+                    const marketPrice = price as number;
 
-                  let previousBuyPrice = updatedData[0].buyPrice as number;
-                  if (poolIndex > 0) {
-                    previousBuyPrice = updatedData[poolIndex - 1]
-                      .buyPrice as number;
-                  }
-                  let goodPositionForMarketPrice_b = false;
-                  let goodPositionForMarketPriceAtTheEnd_b = false;
-                  if (poolIndex == 0 && marketPrice < currentBuyPrice) {
-                    goodPositionForMarketPrice_b = true;
-                  } else if (
-                    previousBuyPrice < marketPrice &&
-                    marketPrice < currentBuyPrice
-                  ) {
-                    goodPositionForMarketPrice_b = true;
-                  } else if (
-                    updatedData.length == poolIndex + 1 &&
-                    currentBuyPrice < marketPrice
-                  ) {
-                    goodPositionForMarketPriceAtTheEnd_b = true;
-                  }
-                  return (
-                    <div
-                      className="flex"
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-end",
-                        justifyContent: "center",
-                        gap: "0px",
-                      }}
-                    >
-                      {goodPositionForMarketPrice_b ? (
-                        <Box
-                          sx={{
-                            position: "relative",
-                            top: "20px",
-                            width: "8px",
-                            height: "300px",
-                            borderRadius: 1,
-                            marginLeft: 2,
-                            marginRight: 2.2,
-                            bgcolor: theme.palette.secondary.main,
-                          }}
-                        >
+                    let previousBuyPrice = updatedData[0].buyPrice as number;
+                    if (poolIndex > 0) {
+                      previousBuyPrice = updatedData[poolIndex - 1]
+                        .buyPrice as number;
+                    }
+                    let goodPositionForMarketPrice_b = false;
+                    let goodPositionForMarketPriceAtTheEnd_b = false;
+                    if (poolIndex == 0 && marketPrice < currentBuyPrice) {
+                      goodPositionForMarketPrice_b = true;
+                    } else if (
+                      previousBuyPrice < marketPrice &&
+                      marketPrice < currentBuyPrice
+                    ) {
+                      goodPositionForMarketPrice_b = true;
+                    } else if (
+                      updatedData.length == poolIndex + 1 &&
+                      currentBuyPrice < marketPrice
+                    ) {
+                      goodPositionForMarketPriceAtTheEnd_b = true;
+                    }
+                    return (
+                      <div
+                        className="flex"
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-end",
+                          justifyContent: "center",
+                          gap: "0px",
+                        }}
+                      >
+                        {goodPositionForMarketPrice_b ? (
                           <Box
                             sx={{
-                              position: "absolute",
-                              top: "100%", // Positionne le texte en dessous de l'élément principal
-                              left: "-15px", // Positionne le début du texte au milieu horizontalement
-                              //transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
-                              //transformOrigin: "0 0", // Point d'origine de la rotation
-                              whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
-                              color: theme.palette.secondary.main,
-                              //fontWeight: "bold",
-                              fontSize: "100%",
+                              position: "relative",
+                              top: "20px",
+                              width: "8px",
+                              height: "300px",
+                              borderRadius: 1,
+                              marginLeft: 2,
+                              marginRight: 2.2,
+                              bgcolor: theme.palette.secondary.main,
                             }}
                           >
-                            {formatNumberPriceFig(price as number)}
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                top: "100%", // Positionne le texte en dessous de l'élément principal
+                                left: "-15px", // Positionne le début du texte au milieu horizontalement
+                                //transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
+                                //transformOrigin: "0 0", // Point d'origine de la rotation
+                                whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
+                                color: theme.palette.secondary.main,
+                                //fontWeight: "bold",
+                                fontSize: "100%",
+                              }}
+                            >
+                              {formatNumberPriceFig(price as number)}
+                            </Box>
                           </Box>
-                        </Box>
-                      ) : (
-                        <div></div>
-                      )}
+                        ) : (
+                          <div></div>
+                        )}
 
-                      <AnalyticButton
-                        clickable={true} // Ajustez cette valeur selon vos besoins
-                        clicked={poolIndex == clickedButton ? true : false}
-                        buttonWidth={50}
-                        buttonHeight={pool.totalRatio as number}
-                        borderRadius={5}
-                        boxLendHeightRatio={pool.lendRatio as number}
-                        boxBorrowHeightRatio={pool.borrowRatio as number}
-                        userBoxHeight={
-                          (pool.myQtyRatio as number) > 0
-                            ? (pool.myQtyRatio as number)
-                            : 0
-                        }
-                        userBoxColor={userMetricBorderColor}
-                        price={pool.buyPrice as number} // Utilisez 'price' de chaque objet
-                        lendAPY={pool.lendingRate as number}
-                        borrowAPY={pool.borrowingRate as number}
-                        onMouseEnter={() => handleMouseEnter(pool)}
-                        onMouseLeave={() => handleMouseLeave()}
-                        handleClick={() => handleClick(poolIndex, pool)}
-                      />
-                      {goodPositionForMarketPriceAtTheEnd_b ? (
-                        <Box
-                          sx={{
-                            position: "relative",
-                            top: "20px",
-                            width: "8px",
-                            height: "300px",
-                            borderRadius: 1,
-                            marginLeft: 2,
-                            marginRight: 2.2,
-                            bgcolor: theme.palette.secondary.main,
-                          }}
-                        >
+                        <AnalyticButton
+                          clickable={true} // Ajustez cette valeur selon vos besoins
+                          clicked={poolIndex == clickedButton ? true : false}
+                          buttonWidth={50}
+                          buttonHeight={pool.totalRatio as number}
+                          borderRadius={5}
+                          boxLendHeightRatio={pool.lendRatio as number}
+                          boxBorrowHeightRatio={pool.borrowRatio as number}
+                          userBoxHeight={
+                            (pool.myQtyRatio as number) > 0
+                              ? (pool.myQtyRatio as number)
+                              : 0
+                          }
+                          userBoxColor={userMetricBorderColor}
+                          price={pool.buyPrice as number} // Utilisez 'price' de chaque objet
+                          lendAPY={pool.lendingRate as number}
+                          borrowAPY={pool.borrowingRate as number}
+                          onMouseEnter={() => handleMouseEnter(pool)}
+                          onMouseLeave={() => handleMouseLeave()}
+                          handleClick={() => handleClick(poolIndex, pool)}
+                        />
+                        {goodPositionForMarketPriceAtTheEnd_b ? (
                           <Box
                             sx={{
-                              position: "absolute",
-                              top: "100%", // Positionne le texte en dessous de l'élément principal
-                              left: "-15px", // Positionne le début du texte au milieu horizontalement
-                              //transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
-                              //transformOrigin: "0 0", // Point d'origine de la rotation
-                              whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
-                              color: theme.palette.secondary.main,
-                              //fontWeight: "bold",
-                              fontSize: "100%",
+                              position: "relative",
+                              top: "20px",
+                              width: "8px",
+                              height: "300px",
+                              borderRadius: 1,
+                              marginLeft: 2,
+                              marginRight: 2.2,
+                              bgcolor: theme.palette.secondary.main,
                             }}
                           >
-                            {formatNumberPriceFig(price as number)}
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                top: "100%", // Positionne le texte en dessous de l'élément principal
+                                left: "-15px", // Positionne le début du texte au milieu horizontalement
+                                //transform: "rotate(45deg) ", // Incline le texte et ajuste la position de son point de départ
+                                //transformOrigin: "0 0", // Point d'origine de la rotation
+                                whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
+                                color: theme.palette.secondary.main,
+                                //fontWeight: "bold",
+                                fontSize: "100%",
+                              }}
+                            >
+                              {formatNumberPriceFig(price as number)}
+                            </Box>
                           </Box>
-                        </Box>
-                      ) : (
-                        <div></div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </Box>
-          </div>
-          <div
-            className="flex"
-            style={{
-              width: "350px",
-              //height: "50px"
-            }}
-          >
-            <MetricCustom
-              data={metricsData}
-              isLoading={false}
-              backgroundColorChosen={"white"}
-              displayedInColumn={true}
-            />
+                        ) : (
+                          <div></div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </Box>
+            </div>
+            <div
+              className="flex"
+              style={{
+                width: "350px",
+                //height: "50px"
+              }}
+            >
+              <MetricCustom
+                data={metricsData}
+                isLoading={false}
+                backgroundColorChosen={theme.palette.warning.main}
+                displayedInColumn={true}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </Box>
+      </Box>
+    </div>
   );
 }

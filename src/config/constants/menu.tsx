@@ -24,12 +24,12 @@ const MENU_LINKS = [
     to: "/trade",
     icon: <SwapHorizIcon fontSize="small" />,
   },
-  {
-    id: 5,
-    label: "Analytics",
-    to: "/analytics",
-    icon: <AlignVerticalBottomIcon fontSize="small" />,
-  },
+  // {
+  //   id: 5,
+  //   label: "Analytics",
+  //   to: "/analytics",
+  //   icon: <AlignVerticalBottomIcon fontSize="small" />,
+  // },
   { id: 6, label: "(Mint tokens)", to: "/mint" },
   { id: 7, label: "(Change Price Feed)", to: "/updateprice" },
 ];

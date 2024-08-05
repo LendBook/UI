@@ -62,7 +62,12 @@ export default function CustomButton({
                 : theme.palette.common.black,
               fontWeight: clickable ? "bold" : undefined,
             }}
-            onClick={handleClick}
+            onClick={(e) => {
+              e.stopPropagation(); // Empêche la propagation de l'événement
+              if (handleClick) {
+                handleClick();
+              }
+            }}
             disabled={!clickable}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}

@@ -136,7 +136,7 @@ const BaseToQuote = () => {
 
   return (
     <div>
-      <div className="flex mt-0 mb-15">
+      <div className="flex justify-center mt-0 mb-15">
         <AnalyticsButtons
           title="Select a limit price to trade"
           columnsConfig={customDataColumnsConfig}

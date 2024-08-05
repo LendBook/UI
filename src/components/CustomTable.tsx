@@ -190,7 +190,7 @@ export default function CustomTable<T extends string | number>({
                                     row[column as keyof RowData<T>] as string
                                   }
                                   textAfterClick=""
-                                  buttonWidth={150}
+                                  buttonWidth={120}
                                   borderRadius={50}
                                 />
                               </StyledTableCell>
