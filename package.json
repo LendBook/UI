@@ -93,5 +93,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://lendbook-api-bis.vercel.app"
+  "proxy": "https://api-v2-neon.vercel.app"
 }

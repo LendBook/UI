@@ -21,9 +21,9 @@ export const usePriceOracle = () => {
 
   const fetchPrice = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/v1/constant/viewPriceFeed`);
+      const response = await axios.get(`${apiUrl}/api/v1/book/viewPriceFeed`);
       const priceData: PriceFeedData = response.data;
-      console.log("priceData.viewPriceFeed ", priceData.viewPriceFeed);
+      //console.log("priceData.viewPriceFeed ", priceData.viewPriceFeed);
       const priceInUSDC = parseFloat(
         ethers.utils.formatUnits(priceData.viewPriceFeed, 18)
       );
