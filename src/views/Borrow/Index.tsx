@@ -73,7 +73,11 @@ const Index = () => {
                 Borrow
               </Typography>
               <div className="flex ml-10">
-                <MetricCustom data={metricsData} isLoading={false} />
+                <MetricCustom
+                  data={metricsData}
+                  isLoading={false}
+                  backgroundColorChosen={theme.palette.warning.main}
+                />
               </div>
             </div>
             <div className="flex flex-row items-start  mt-5">

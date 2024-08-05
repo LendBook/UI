@@ -184,7 +184,7 @@ export default function AnalyticsButtons<T extends string | number>({
         sx={{
           borderRadius: 1,
           padding: 0, //0.5, //1
-          border: `1px solid ${theme.palette.warning.main}`,
+          border: `0px solid ${theme.palette.common.black}`,
           backgroundColor: theme.palette.warning.main, //"white", //
           position: "relative",
           //paddingBottom: "100px",
