@@ -160,31 +160,31 @@ export const useFetchPools = () => {
     try {
       //tokens part
       const responseBaseTokenAddress = await axios.get(
-        `${apiUrl}/v1/constant/baseToken`
+        `${apiUrl}/api/v1/book/baseToken`
       );
       const baseTokenAddress = responseBaseTokenAddress.data.baseToken;
 
       const responseQuoteTokenAddress = await axios.get(
-        `${apiUrl}/v1/constant/quoteToken`
+        `${apiUrl}/api/v1/book/quoteToken`
       );
       const quoteTokenAddress = responseQuoteTokenAddress.data.quoteToken;
 
       console.log("responseBaseTokenAddress ", responseBaseTokenAddress);
       const responseBaseTokenSymbol = await axios.get(
-        `${apiUrl}/v1/symbol/${baseTokenAddress}`
+        `${apiUrl}/api/v1/symbol/${baseTokenAddress}`
       );
       const baseTokenSymbol = responseBaseTokenSymbol.data.symbol;
       console.log("responseBaseTokenSymbol ", responseBaseTokenSymbol);
       console.log("baseTokenSymbol ", baseTokenSymbol);
 
       const responseQuoteTokenSymbol = await axios.get(
-        `${apiUrl}/v1/symbol/${quoteTokenAddress}`
+        `${apiUrl}/api/v1/symbol/${quoteTokenAddress}`
       );
       const quoteTokenSymbol = responseQuoteTokenSymbol.data.symbol;
 
       console.log("Getting price step");
       const priceStepResponse = await axios.get(
-        `${apiUrl}/v1/constant/priceStep`
+        `${apiUrl}/api/v1/book/priceStep`
       );
       const priceStep = parseFloat(
         ethers.utils.formatUnits(priceStepResponse.data.priceStep, 18)
@@ -192,7 +192,7 @@ export const useFetchPools = () => {
 
       console.log("getting price feed");
       const priceFeedResponse = await axios.get(
-        `${apiUrl}/v1/constant/viewPriceFeed`
+        `${apiUrl}/api/v1/book/viewPriceFeed`
       );
       const priceFeed = parseFloat(
         ethers.utils.formatUnits(priceFeedResponse.data.viewPriceFeed, 18)
@@ -202,11 +202,12 @@ export const useFetchPools = () => {
       //FIXME : need to call api when genesisPoolId is public in smartcontract
       const genesisPoolId = 1111111110;
       const limitPriceGenesisResponse = await axios.get(
-        `${apiUrl}/v1/request/limitPrice/${genesisPoolId}`
+        `${apiUrl}/api/v1/book/limitPrice?poolId=${genesisPoolId}`
       );
       const limitPriceGenesis = parseFloat(
-        ethers.utils.formatUnits(limitPriceGenesisResponse.data.result, 18)
+        ethers.utils.formatUnits(limitPriceGenesisResponse.data.limitPrice, 18)
       );
+      console.log("limitPriceGenesis", limitPriceGenesis);
 
       const { poolIdWithPriceData, closestPoolIdUnderPriceFeed } =
         calculatePricesForPools(
@@ -222,7 +223,7 @@ export const useFetchPools = () => {
 
       const poolIds = poolIdWithPriceData.map((item) => item.poolId);
 
-      console.log(poolIds);
+      //console.log(poolIds);
 
       let _totalDeposit = 0;
       let _totalBorrow = 0;
@@ -232,34 +233,68 @@ export const useFetchPools = () => {
         poolIds.map(async (poolId) => {
           //console.log(`poolIdspoolIds ${poolId}`);
           // Fetch data from the API
-          const apiResponses = await Promise.all([
-            axios.get(`${apiUrl}/v1/request/pools/${poolId}`),
-            axios.get(`${apiUrl}/v1/request/viewLendingRate/${poolId}`),
-            axios.get(`${apiUrl}/v1/request/viewUtilizationRate/${poolId}`),
-            axios.get(`${apiUrl}/v1/request/limitPrice/${poolId}`),
-            axios.get(`${apiUrl}/v1/request/viewBorrowingRate/${poolId}`),
-          ]);
 
-          const resultsAvailableAssets = apiResponses[0].data.result.split(",");
+          // const apiResponses = await Promise.all([
+          //   axios.get(`${apiUrl}/api/v1/book/pools?poolId=${poolId}`),
+          //   axios.get(
+          //     `${apiUrl}/api/v1/book/viewLendingRate?_poolId=${poolId}`
+          //   ),
+          //   axios.get(
+          //     `${apiUrl}/api/v1/book/viewUtilizationRate?_poolId=${poolId}`
+          //   ),
+          //   axios.get(`${apiUrl}/api/v1/book/limitPrice?poolId=${poolId}`),
+          //   axios.get(
+          //     `${apiUrl}/api/v1/book/viewBorrowingRate?_poolId=${poolId}`
+          //   ),
+          // ]);
+          const poolsResponse = await axios.get(
+            `${apiUrl}/api/v1/book/pools?poolId=${poolId}`
+          );
+          const viewLendingRateResponse = await axios.get(
+            `${apiUrl}/api/v1/book/viewLendingRate?_poolId=${poolId}`
+          );
+          const viewUtilizationRateResponse = await axios.get(
+            `${apiUrl}/api/v1/book/viewUtilizationRate?_poolId=${poolId}`
+          );
+          const viewLimitPriceResponse = await axios.get(
+            `${apiUrl}/api/v1/book/limitPrice?poolId=${poolId}`
+          );
+          const viewBorrowingRateResponse = await axios.get(
+            `${apiUrl}/api/v1/book/viewBorrowingRate?_poolId=${poolId}`
+          );
+
+          const poolsData = poolsResponse.data.pools.split(",");
           const deposits = parseFloat(
-            ethers.utils.formatUnits(resultsAvailableAssets[0], "ether")
+            ethers.utils.formatUnits(poolsData[0], "ether")
           );
           const lendingRate =
             parseFloat(
-              ethers.utils.formatUnits(apiResponses[1].data.result, "ether")
+              ethers.utils.formatUnits(
+                viewLendingRateResponse.data.viewLendingRate,
+                "ether"
+              )
             ) * 100;
           const utilizationRate =
             parseFloat(
-              ethers.utils.formatUnits(apiResponses[2].data.result, "ether")
+              ethers.utils.formatUnits(
+                viewUtilizationRateResponse.data.viewUtilizationRate,
+                "ether"
+              )
             ) * 100;
           const buyPrice = parseFloat(
-            ethers.utils.formatUnits(apiResponses[3].data.result, "ether")
+            ethers.utils.formatUnits(
+              viewLimitPriceResponse.data.limitPrice,
+              "ether"
+            )
           );
           const borrowingRate = parseFloat(
-            ethers.utils.formatUnits(apiResponses[4].data.result, "ether")
+            ethers.utils.formatUnits(
+              viewBorrowingRateResponse.data.viewBorrowingRate,
+              "ether"
+            )
           );
           const borrows = parseFloat(
-            ethers.utils.formatUnits(resultsAvailableAssets[1], "ether")
+            ethers.utils.formatUnits(poolsData[1], "ether")
           );
           //console.log(`poolIdspoolIdslendingRate ${lendingRate}`);
 

@@ -7,6 +7,7 @@ import { Index } from "viem";
 import { Link, LinkProps } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDataContext } from "../../context/DataContext";
+import { title } from "process";
 
 // const handleRowClick = (rowData: any): LinkProps => ({
 //   component = { Link },
@@ -30,6 +31,8 @@ const Markets = () => {
       apy: marketInfo.maxLendingRate,
       supply: marketInfo.totalDeposit,
       borrow: marketInfo.totalBorrow,
+      actionLend: "Lend",
+      actionBorrow: "Borrow",
     },
     // {
     //   id: 2,
@@ -40,6 +43,21 @@ const Markets = () => {
     //   supply: 5200000,
     // },
   ];
+
+  const handleRowClick = (rowData: any) => {
+    // Utilisation de history pour naviguer vers une autre route
+    navigate("/lend");
+  };
+
+  const handleLendClick = (rowData: any) => {
+    // Utilisation de history pour naviguer vers une autre route
+    navigate("/lend");
+  };
+
+  const handleBorrowClick = (rowData: any) => {
+    // Utilisation de history pour naviguer vers une autre route
+    navigate("/borrow");
+  };
 
   const templateDataTableColumnsConfig = [
     { key: "asset", title: "Asset" },
@@ -56,12 +74,20 @@ const Markets = () => {
     },
     { key: "apy", title: "Max APY", metric: "%" },
     { key: "network", title: "Network" },
+    {
+      key: "actionLend",
+      title: " ",
+      isButton: true,
+      onButtonClick: handleLendClick,
+    },
+    {
+      key: "actionBorrow",
+      title: "",
+      isButton: true,
+      onButtonClick: handleBorrowClick,
+    },
   ];
 
-  const handleRowClick = (rowData: any) => {
-    // Utilisation de history pour naviguer vers une autre route
-    navigate("/lend");
-  };
   return (
     <div className="mt-20 ml-72 mr-4">
       <Card
