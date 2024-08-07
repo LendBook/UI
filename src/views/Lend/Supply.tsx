@@ -90,6 +90,7 @@ const Supply = () => {
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.primary.main,
       icon: <CropDinRoundedIcon fontSize="small" />,
+      tooltipText: "Your lending supply in the selected pool",
     },
     {
       key: "lendingRate",
@@ -97,6 +98,7 @@ const Supply = () => {
       value: "-",
       unit: "%",
       color: theme.palette.info.main,
+      tooltipText: "The APY linked to the selected pool",
     },
     {
       key: "utilizationRate",
@@ -104,6 +106,7 @@ const Supply = () => {
       value: "-",
       unit: "%",
       color: theme.palette.info.main,
+      tooltipText: "The utilization rate of the selected pool",
     },
   ]);
 

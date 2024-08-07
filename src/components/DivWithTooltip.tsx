@@ -67,7 +67,7 @@ const DivWithTooltip: React.FC<DivWithTooltipProps> = ({
           <div className="flex">
             {children}
             <div style={{ marginTop: "-10px" }}>
-              <InfoIcon sx={{ fontSize: "100%", color: iconColor }} />
+              <InfoIcon sx={{ fontSize: "80%", color: iconColor }} />
             </div>
           </div>
         </BootstrapTooltip>
