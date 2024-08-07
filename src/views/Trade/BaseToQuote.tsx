@@ -9,6 +9,7 @@ import { useDeposit } from "../../hooks/useDeposit";
 import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
 import TradeBox from "./TradeBox";
 import AnalyticsButtons from "../../components/AnalyticsButtons";
+import { getMetricsDataTrade } from "../../components/AnalyticsButtonsMetricLegend";
 
 const BaseToQuote = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -57,24 +58,9 @@ const BaseToQuote = () => {
     },
   ];
 
-  const [metricsData, setMetricsData] = useState([
-    {
-      key: "buyPrice",
-      title: "Buy Price",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.info.main,
-      tooltipText: "The buy price of the pool",
-    },
-    {
-      key: "availableSupply",
-      title: "Available supply for trading",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol, // FIXEME need to changet the metric
-      color: theme.palette.info.main,
-      tooltipText: "",
-    },
-  ]);
+  const [metricsData, setMetricsData] = useState(
+    getMetricsDataTrade(marketInfo)
+  );
 
   const filteredData = orderMergedData.filter(
     (item) => item.availableSupply !== 0

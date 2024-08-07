@@ -12,6 +12,7 @@ import { userInfo } from "os";
 
 import SquareRoundedIcon from "@mui/icons-material/SquareRounded";
 import CropDinRoundedIcon from "@mui/icons-material/CropDinRounded";
+import { getMetricsDataLending } from "../../components/AnalyticsButtonsMetricLegend";
 
 const Supply = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -56,59 +57,9 @@ const Supply = () => {
     },
   ];
 
-  const [metricsData, setMetricsData] = useState([
-    {
-      key: "buyPrice",
-      title: "Buy Price",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.info.main,
-      tooltipText: "The buy price linked to the selected pool of orders",
-    },
-    {
-      key: "deposits",
-      title: "Supply",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.primary.main,
-      icon: <SquareRoundedIcon fontSize="small" />,
-      tooltipText: "Sum of the lending supply in the selected pool",
-    },
-    {
-      key: "borrows",
-      title: "Borrow",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.success.main,
-      icon: <SquareRoundedIcon fontSize="small" />,
-      tooltipText: "Sum of the borrowing positions in the selected pool",
-    },
-    {
-      key: "mySupply",
-      title: "My supply",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.primary.main,
-      icon: <CropDinRoundedIcon fontSize="small" />,
-      tooltipText: "Your lending supply in the selected pool",
-    },
-    {
-      key: "lendingRate",
-      title: "Net APY",
-      value: "-",
-      unit: "%",
-      color: theme.palette.info.main,
-      tooltipText: "The APY linked to the selected pool",
-    },
-    {
-      key: "utilizationRate",
-      title: "Utilization",
-      value: "-",
-      unit: "%",
-      color: theme.palette.info.main,
-      tooltipText: "The utilization rate of the selected pool",
-    },
-  ]);
+  const [metricsData, setMetricsData] = useState(
+    getMetricsDataLending(marketInfo)
+  );
 
   const displayedData = showAll
     ? orderMergedDataUnderMarketPrice
