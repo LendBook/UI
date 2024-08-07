@@ -64,6 +64,7 @@ const BaseToQuote = () => {
       value: "-",
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.info.main,
+      tooltipText: "The buy price of the pool",
     },
     {
       key: "availableSupply",
@@ -71,6 +72,7 @@ const BaseToQuote = () => {
       value: "-",
       unit: marketInfo.quoteTokenSymbol, // FIXEME need to changet the metric
       color: theme.palette.info.main,
+      tooltipText: "",
     },
   ]);
 
@@ -119,6 +121,16 @@ const BaseToQuote = () => {
     const newAvailableSupply = rowData.availableSupply;
     setAvailableSupply(newAvailableSupply);
     SetBuyPriceSelected(true);
+
+    console.log(
+      "parseFloat(newAvailableSupply)",
+      parseFloat(newAvailableSupply)
+    );
+    console.log(
+      "parseFloat(newAvailableSupply) / parseFloat(newBuyPrice)",
+      parseFloat(newAvailableSupply) / parseFloat(newBuyPrice)
+    );
+    console.log("newPoolId", newPoolId);
   };
 
   const handleButtonClick = async () => {
@@ -174,9 +186,10 @@ const BaseToQuote = () => {
                 : userInfo.baseTokenBalance
             }
             buyTokenMaxSupply={
-              parseFloat(availableSupply) < userInfo.baseTokenBalance
+              parseFloat(availableSupply) / parseFloat(buyPrice) <
+              userInfo.baseTokenBalance
                 ? parseFloat(availableSupply)
-                : userInfo.baseTokenBalance
+                : userInfo.baseTokenBalance * parseFloat(buyPrice)
             }
             buyPrice={parseFloat(buyPrice)}
           />

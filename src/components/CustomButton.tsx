@@ -81,7 +81,7 @@ export default function CustomButton({
           </Button>
         </div>
       </Tooltip>
-      <div className="flex justify-between items-center max-w-full overflow-hidden">
+      <div className="flex justify-between items-center max-w-[500px] overflow-hidden">
         <span className="text-[red] text-[12px]">{textAfterClick}</span>
       </div>
     </div>

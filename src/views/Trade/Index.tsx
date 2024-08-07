@@ -7,6 +7,7 @@ import { useDataContext } from "../../context/DataContext";
 import TabsCustomV2 from "../../components/TabsCustomV2";
 import BaseToQuote from "./BaseToQuote";
 import QuoteToBase from "./QuoteToBase";
+import DivWithTooltip from "../../components/DivWithTooltip";
 
 const Index = () => {
   const [selectedTab, setSelectedTab] = useState<string>("");

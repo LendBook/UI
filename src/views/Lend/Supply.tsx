@@ -63,6 +63,7 @@ const Supply = () => {
       value: "-",
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.info.main,
+      tooltipText: "The buy price linked to the selected pool of orders",
     },
     {
       key: "deposits",
@@ -71,6 +72,7 @@ const Supply = () => {
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.primary.main,
       icon: <SquareRoundedIcon fontSize="small" />,
+      tooltipText: "Sum of the lending supply in the selected pool",
     },
     {
       key: "borrows",
@@ -79,6 +81,7 @@ const Supply = () => {
       unit: marketInfo.quoteTokenSymbol,
       color: theme.palette.success.main,
       icon: <SquareRoundedIcon fontSize="small" />,
+      tooltipText: "Sum of the borrowing positions in the selected pool",
     },
     {
       key: "mySupply",
