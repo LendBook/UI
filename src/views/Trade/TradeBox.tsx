@@ -89,9 +89,8 @@ export default function TradeBox({
 
   const handleTransactionButtonClick = async () => {
     if (buttonClickable) {
-      setTextAfterClick("Transaction approval sent ...");
-
       if (sellToken == "Base") {
+        setTextAfterClick("Transaction approval base sent ...");
         const resultApproval = await approveBaseToken(
           String(sellAmountQuantity)
         );
@@ -108,6 +107,7 @@ export default function TradeBox({
           refetchData();
         }
       } else if (sellToken == "Quote") {
+        setTextAfterClick("Transaction approval quote sent ...");
         const resultApproval = await approveQuoteToken(
           String(sellAmountQuantity)
         );
@@ -191,7 +191,7 @@ export default function TradeBox({
             borderRadius={50}
           />
         </div>
-        <div className="flex  justify-center mt-5">
+        <div className="flex  justify-center mt-5 ">
           <TransactionSummary data={transactionData} />
         </div>
       </Paper>

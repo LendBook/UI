@@ -16,6 +16,7 @@ import { title } from "process";
 import { formatNumber } from "./GlobalFunctions";
 import MarketComponent from "../components/MarketComponent";
 import { menu } from "@material-tailwind/react";
+import DivWithTooltip from "./DivWithTooltip";
 
 //valeur à recuperer
 //price feed indiquatif in USD
@@ -91,31 +92,44 @@ export default function MetricCustom<T extends string>({
                 }}
               >
                 <div className="flex">
-                  {row["icon" as keyof RowData<T>] && (
-                    <span
+                  <DivWithTooltip
+                    tooltipText={
+                      row["tooltipText" as keyof RowData<T>]
+                        ? row["tooltipText" as keyof RowData<T>]
+                        : ""
+                    }
+                    iconColor={
+                      row["color" as keyof RowData<T>]
+                        ? row["color" as keyof RowData<T>]
+                        : theme.palette.info.main
+                    }
+                  >
+                    {row["icon" as keyof RowData<T>] && (
+                      <span
+                        style={{
+                          verticalAlign: "middle",
+                          marginTop: "-3px",
+                          marginRight: "4px",
+                          color: row["color" as keyof RowData<T>]
+                            ? row["color" as keyof RowData<T>]
+                            : theme.palette.info.main,
+                        }}
+                      >
+                        {row["icon" as keyof RowData<T>]}
+                      </span>
+                    )}
+                    <Typography
                       style={{
-                        verticalAlign: "middle",
-                        marginTop: "-3px",
-                        marginRight: "4px",
+                        fontWeight: "bold",
+                        fontSize: "90%",
                         color: row["color" as keyof RowData<T>]
                           ? row["color" as keyof RowData<T>]
                           : theme.palette.info.main,
                       }}
                     >
-                      {row["icon" as keyof RowData<T>]}
-                    </span>
-                  )}
-                  <Typography
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "90%",
-                      color: row["color" as keyof RowData<T>]
-                        ? row["color" as keyof RowData<T>]
-                        : theme.palette.info.main,
-                    }}
-                  >
-                    {row["title" as keyof RowData<T>]}
-                  </Typography>
+                      {row["title" as keyof RowData<T>]}
+                    </Typography>
+                  </DivWithTooltip>
                 </div>
                 <Typography
                   variant="body1"

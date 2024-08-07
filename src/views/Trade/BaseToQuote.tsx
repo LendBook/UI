@@ -9,6 +9,7 @@ import { useDeposit } from "../../hooks/useDeposit";
 import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
 import TradeBox from "./TradeBox";
 import AnalyticsButtons from "../../components/AnalyticsButtons";
+import { getMetricsDataTrade } from "../../components/AnalyticsButtonsMetricLegend";
 
 const BaseToQuote = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -57,22 +58,9 @@ const BaseToQuote = () => {
     },
   ];
 
-  const [metricsData, setMetricsData] = useState([
-    {
-      key: "buyPrice",
-      title: "Buy Price",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.info.main,
-    },
-    {
-      key: "availableSupply",
-      title: "Available supply for trading",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol, // FIXEME need to changet the metric
-      color: theme.palette.info.main,
-    },
-  ]);
+  const [metricsData, setMetricsData] = useState(
+    getMetricsDataTrade(marketInfo)
+  );
 
   const filteredData = orderMergedData.filter(
     (item) => item.availableSupply !== 0
@@ -119,6 +107,16 @@ const BaseToQuote = () => {
     const newAvailableSupply = rowData.availableSupply;
     setAvailableSupply(newAvailableSupply);
     SetBuyPriceSelected(true);
+
+    console.log(
+      "parseFloat(newAvailableSupply)",
+      parseFloat(newAvailableSupply)
+    );
+    console.log(
+      "parseFloat(newAvailableSupply) / parseFloat(newBuyPrice)",
+      parseFloat(newAvailableSupply) / parseFloat(newBuyPrice)
+    );
+    console.log("newPoolId", newPoolId);
   };
 
   const handleButtonClick = async () => {
@@ -174,9 +172,10 @@ const BaseToQuote = () => {
                 : userInfo.baseTokenBalance
             }
             buyTokenMaxSupply={
-              parseFloat(availableSupply) < userInfo.baseTokenBalance
+              parseFloat(availableSupply) / parseFloat(buyPrice) <
+              userInfo.baseTokenBalance
                 ? parseFloat(availableSupply)
-                : userInfo.baseTokenBalance
+                : userInfo.baseTokenBalance * parseFloat(buyPrice)
             }
             buyPrice={parseFloat(buyPrice)}
           />

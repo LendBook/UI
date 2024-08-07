@@ -29,11 +29,15 @@ const Index = () => {
       title: "Total supply",
       value: marketInfo.totalDeposit.toString() as string,
       unit: marketInfo.quoteTokenSymbol,
+      tooltipText:
+        "Total supply for this isolated market (sum of all the lending supply of the pools)",
     },
     {
       title: "Total borrow",
       value: marketInfo.totalBorrow.toString() as string,
       unit: marketInfo.quoteTokenSymbol,
+      tooltipText:
+        "Total borrow for this isolated market (sum of all the borrowing positions of the pools)",
     },
   ];
 
@@ -42,16 +46,19 @@ const Index = () => {
       title: "My total collateral",
       value: userInfo.totalDepositsBase,
       unit: marketInfo.baseTokenSymbol,
+      tooltipText: "",
     },
     {
       title: "My free collateral",
       value: userInfo.excessCollateral,
       unit: marketInfo.baseTokenSymbol,
+      tooltipText: "Your collateral still available",
     },
     {
       title: "My total borrows",
       value: userInfo.totalBorrow,
       unit: marketInfo.quoteTokenSymbol,
+      tooltipText: "",
     },
   ];
 

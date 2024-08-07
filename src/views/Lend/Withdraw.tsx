@@ -10,6 +10,7 @@ import AnalyticsButtons from "../../components/AnalyticsButtons";
 
 import SquareRoundedIcon from "@mui/icons-material/SquareRounded";
 import CropDinRoundedIcon from "@mui/icons-material/CropDinRounded";
+import { getMetricsDataLending } from "../../components/AnalyticsButtonsMetricLegend";
 
 const Withdraw = () => {
   const [withdrawAmountQuantity, setWithdrawAmountQuantity] =
@@ -57,53 +58,9 @@ const Withdraw = () => {
     },
   ];
 
-  const [metricsData, setMetricsData] = useState([
-    {
-      key: "buyPrice",
-      title: "Buy Price",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.info.main,
-    },
-    {
-      key: "deposits",
-      title: "Supply",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.primary.main,
-      icon: <SquareRoundedIcon fontSize="small" />,
-    },
-    {
-      key: "borrows",
-      title: "Borrow",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.success.main,
-      icon: <SquareRoundedIcon fontSize="small" />,
-    },
-    {
-      key: "mySupply",
-      title: "My supply",
-      value: "-",
-      unit: marketInfo.quoteTokenSymbol,
-      color: theme.palette.primary.main,
-      icon: <CropDinRoundedIcon fontSize="small" />,
-    },
-    {
-      key: "lendingRate",
-      title: "Net APY",
-      value: "-",
-      unit: "%",
-      color: theme.palette.info.main,
-    },
-    {
-      key: "utilizationRate",
-      title: "Utilization",
-      value: "-",
-      unit: "%",
-      color: theme.palette.info.main,
-    },
-  ]);
+  const [metricsData, setMetricsData] = useState(
+    getMetricsDataLending(marketInfo)
+  );
 
   const filteredData = orderMergedData.filter(
     (item) => item.orderLenderId !== undefined
