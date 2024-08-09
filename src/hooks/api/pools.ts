@@ -89,12 +89,12 @@ function calculatePricesForPools(
     }
   }
 
-  console.log("isIncreasing ", isIncreasing);
-  console.log("idStep ", idStep);
-  console.log("gapStep ", gapStep);
-  console.log("nbrPoolsUnder ", nbrPoolsUnder);
-  console.log("genesisPrice ", genesisPrice);
-  console.log("currentPrice ", currentPrice);
+  // console.log("isIncreasing ", isIncreasing);
+  // console.log("idStep ", idStep);
+  // console.log("gapStep ", gapStep);
+  // console.log("nbrPoolsUnder ", nbrPoolsUnder);
+  // console.log("genesisPrice ", genesisPrice);
+  // console.log("currentPrice ", currentPrice);
   let currentId = startPoolId;
   // Generate data
   while (currentId <= endPoolId) {
@@ -168,20 +168,20 @@ export const useFetchPools = () => {
       );
       const quoteTokenAddress = responseQuoteTokenAddress.data.quoteToken;
 
-      console.log("responseBaseTokenAddress ", responseBaseTokenAddress);
+      //console.log("responseBaseTokenAddress ", responseBaseTokenAddress);
       const responseBaseTokenSymbol = await axios.get(
         `${apiUrl}/api/v1/symbol/${baseTokenAddress}`
       );
       const baseTokenSymbol = responseBaseTokenSymbol.data.symbol;
-      console.log("responseBaseTokenSymbol ", responseBaseTokenSymbol);
-      console.log("baseTokenSymbol ", baseTokenSymbol);
+      //console.log("responseBaseTokenSymbol ", responseBaseTokenSymbol);
+      //console.log("baseTokenSymbol ", baseTokenSymbol);
 
       const responseQuoteTokenSymbol = await axios.get(
         `${apiUrl}/api/v1/symbol/${quoteTokenAddress}`
       );
       const quoteTokenSymbol = responseQuoteTokenSymbol.data.symbol;
 
-      console.log("Getting price step");
+      //console.log("Getting price step");
       const priceStepResponse = await axios.get(
         `${apiUrl}/api/v1/book/priceStep`
       );
@@ -189,7 +189,7 @@ export const useFetchPools = () => {
         ethers.utils.formatUnits(priceStepResponse.data.priceStep, 18)
       );
 
-      console.log("getting price feed");
+      //console.log("getting price feed");
       const priceFeedResponse = await axios.get(
         `${apiUrl}/api/v1/book/viewPriceFeed`
       );
@@ -206,7 +206,7 @@ export const useFetchPools = () => {
       const limitPriceGenesis = parseFloat(
         ethers.utils.formatUnits(limitPriceGenesisResponse.data.limitPrice, 18)
       );
-      console.log("limitPriceGenesis", limitPriceGenesis);
+      //console.log("limitPriceGenesis", limitPriceGenesis);
 
       const { poolIdWithPriceData, closestPoolIdUnderPriceFeed } =
         calculatePricesForPools(
@@ -216,9 +216,9 @@ export const useFetchPools = () => {
           priceStep
         );
       setClosestPoolIdUnderPriceFeed(closestPoolIdUnderPriceFeed);
-      console.log(poolIdWithPriceData);
+      //console.log(poolIdWithPriceData);
       setPoolIdWithPrice(poolIdWithPriceData);
-      console.log(poolIdWithPrice);
+      //console.log(poolIdWithPrice);
 
       const poolIds = poolIdWithPriceData.map((item) => item.poolId);
 
@@ -320,7 +320,7 @@ export const useFetchPools = () => {
       );
       const mergedData = mergeObjects(results, poolIdWithPriceData);
       setPoolData(mergedData);
-      console.log(mergedData);
+      //console.log(mergedData);
 
       setMarketInfo({
         baseTokenAddress: baseTokenAddress,
@@ -340,14 +340,14 @@ export const useFetchPools = () => {
   }
 
   const refetchPoolData = useCallback(() => {
-    console.log("yeuyeuh");
+    //console.log("yeuyeuh");
     fetchPoolIdWithPrice();
   }, []);
 
   //FIXEME : mettre le priceFeed en argument de useEffect afin qu'il soit relancer à chaque fois que le prix change
   useEffect(() => {
     fetchPoolIdWithPrice();
-    console.log("on passe par ce useEffect");
+    //console.log("on passe par ce useEffect");
   }, []);
 
   //   useEffect(() => {

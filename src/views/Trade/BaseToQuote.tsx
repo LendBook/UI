@@ -73,12 +73,10 @@ const BaseToQuote = () => {
     }
     return false;
   });
-  console.log("refilteredData ", refilteredData);
 
   refilteredData = refilteredData.map((objet) => {
     return { ...objet, action: "Trade" };
   });
-
   let sortedData = [...refilteredData];
   sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
 
@@ -134,18 +132,25 @@ const BaseToQuote = () => {
 
   return (
     <div>
-      <div className="flex justify-center mt-0 mb-15">
-        <AnalyticsButtons
-          title="Select a limit price to trade"
-          columnsConfig={customDataColumnsConfig}
-          data={sortedData}
-          metrics={metricsData}
-          isLoading={poolLoading}
-          onRowClick={handleRowClick}
-          userMetricBorder={"mySupply"}
-          userMetricBorderColor={theme.palette.primary.main}
-        />
-      </div>
+      {sortedData.length !== 0 ? (
+        <div className="flex justify-center mt-0 mb-15">
+          <AnalyticsButtons
+            title="Select a limit price to trade"
+            columnsConfig={customDataColumnsConfig}
+            data={sortedData}
+            metrics={metricsData}
+            isLoading={poolLoading}
+            onRowClick={handleRowClick}
+            userMetricBorder={"mySupply"}
+            userMetricBorderColor={theme.palette.primary.main}
+          />
+        </div>
+      ) : (
+        <div className="flex mt-3 mb-5">
+          <span>No asset available for trading.</span>
+        </div>
+      )}
+
       {/* <div className="flex mt-5">
         <CustomTable
           title="Select a limit price for the trade"

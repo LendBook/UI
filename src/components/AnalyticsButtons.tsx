@@ -173,7 +173,8 @@ export default function AnalyticsButtons<T extends string | number>({
     // <Box sx={{ width: "100%" }}>
     <div>
       <span
-        className="flex justify-center text-black font-bold"
+        className="flex  text-black font-bold "
+        style={{ fontSize: "140%" }}
         //style={{ backgroundColor: theme.palette.primary.main }}
       >
         {title}
@@ -184,7 +185,7 @@ export default function AnalyticsButtons<T extends string | number>({
         sx={{
           borderRadius: 1,
           padding: 0, //0.5, //1
-          border: `0px solid ${theme.palette.common.black}`,
+          border: `0px solid ${theme.palette.background.default}`,
           backgroundColor: theme.palette.warning.main, //"white", //
           position: "relative",
           //paddingBottom: "100px",

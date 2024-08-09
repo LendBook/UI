@@ -50,7 +50,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({
   // } = useFetchLendOrder(poolIds);
 
   const { price, loading: priceLoading, error: priceError } = usePriceOracle();
-  console.log("fucking price : ", price);
+  //console.log("fucking price : ", price);
 
   const {
     userInfo,

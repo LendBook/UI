@@ -131,7 +131,7 @@ const Repay = () => {
 
   return (
     <div>
-      <div className="flex justify-center mt-0 mb-15">
+      <div className="flex mt-0 mb-15">
         <AnalyticsButtons
           title="Select a pool to repay"
           columnsConfig={customDataColumnsConfig}
@@ -144,7 +144,7 @@ const Repay = () => {
         />
       </div>
 
-      <div className="flex justify-center mt-5">
+      <div className="flex mt-5">
         <AmountCustom
           title="Amount to repay"
           tokenWalletBalance={
@@ -180,7 +180,7 @@ const Repay = () => {
       >
         {showAll ? "show less" : "show more"}
       </Button> */}
-      <div className="flex justify-center  mt-10">
+      <div className="flex mt-10">
         <CustomButton
           clickable={buttonClickable}
           handleClick={handleButtonClick}

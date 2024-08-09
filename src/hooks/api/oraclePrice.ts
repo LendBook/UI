@@ -29,7 +29,7 @@ export const usePriceOracle = () => {
       setPrice(priceInUSDC);
     } catch (err) {
       setError("Failed to fetch price data");
-      console.error(err);
+      //console.error(err);
     } finally {
       setLoading(false);
     }

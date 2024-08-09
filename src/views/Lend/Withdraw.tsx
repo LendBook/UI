@@ -149,7 +149,7 @@ const Withdraw = () => {
 
   return (
     <div>
-      <div className="flex justify-center mt-0 mb-15">
+      <div className="flex mt-0 mb-15">
         <AnalyticsButtons
           title="Select a pool to withdraw"
           columnsConfig={customDataColumnsConfig}
@@ -162,7 +162,7 @@ const Withdraw = () => {
         />
       </div>
       {/* <div className="flex mt-10"></div> */}
-      <div className="flex justify-center mt-5">
+      <div className="flex mt-5">
         <AmountCustom
           title="Amount to withdraw"
           tokenWalletBalance={clickedRowData ? clickedRowData.mySupply : 0}
@@ -191,7 +191,7 @@ const Withdraw = () => {
       >
         {showAll ? "show less" : "show more"}
       </Button> */}
-      <div className="flex justify-center   mt-10">
+      <div className="flex mt-10">
         <CustomButton
           clickable={buttonClickable}
           handleClick={handleButtonClick}

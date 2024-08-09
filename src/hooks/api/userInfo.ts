@@ -63,7 +63,7 @@ export const useFetchUserInfo = (
       const formattedTotalQuote = ethers.utils.formatEther(
         responseQuote.data.viewUserTotalDeposits
       );
-      console.log("responseQuote ", responseQuote);
+      //console.log("responseQuote ", responseQuote);
 
       const responseBase = await axios.get(
         `${apiUrl}/api/v1/book/viewUserTotalDeposits?_user=${address}&_inQuote=false`
@@ -94,13 +94,13 @@ export const useFetchUserInfo = (
         `${apiUrl}/api/v1/balanceToken/${address}/${baseTokenAddress}`
       );
       const baseTokenBalance = responseBaseTokenBalance.data.balance;
-      console.log("baseTokenBalance ", baseTokenBalance);
+      //console.log("baseTokenBalance ", baseTokenBalance);
 
       const responseQuoteTokenBalance = await axios.get(
         `${apiUrl}/api/v1/balanceToken/${address}/${quoteTokenAddress}`
       );
       const quoteTokenBalance = responseQuoteTokenBalance.data.balance;
-      console.log("quoteTokenBalance ", quoteTokenBalance);
+      //console.log("quoteTokenBalance ", quoteTokenBalance);
 
       setUserInfo((prevUserInfo) => ({
         ...prevUserInfo,
@@ -210,7 +210,7 @@ export const useFetchUserInfo = (
   };
 
   const refetchUserData = useCallback(() => {
-    console.log("yeuyeuh");
+    //console.log("yeuyeuh");
     if (walletAddress && provider) {
       fetchGlobalUserInfo(walletAddress).catch(console.error);
       fetchDepositOrdersInfo(walletAddress).catch(console.error);
