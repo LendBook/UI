@@ -40,7 +40,7 @@ export default function MarketComponent<T extends string>() {
           borderRadius: 0,
           padding: 1, //0.5, //1
           border: `2px solid ${theme.palette.common.black}`,
-          backgroundColor: "inherite",
+          backgroundColor: "inherit",
           width: "80%",
           color: "black",
         }}

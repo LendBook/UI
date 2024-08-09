@@ -59,12 +59,14 @@ export default function AnalyticButton({
           width: typeof buttonWidth === "number" ? `${buttonWidth}px` : "auto",
           borderRadius:
             typeof borderRadius === "number" ? `${borderRadius}px` : "5px",
-          //backgroundColor: theme.palette.background.default,
+          backgroundColor: isHovered ? theme.palette.error.main : "inherit",
           display: "flex", // Aligner les Box en ligne
           justifyContent: "center", // Centrer horizontalement
           alignItems: "flex-end", // center
           position: "relative",
           transition: "background-color 0.3s ease, transform 0.3s ease",
+          padding: 0, // Supprime le padding
+          margin: 0, // Supprime les marges
         }}
         onClick={handleClick}
         disabled={!clickable}
@@ -150,7 +152,7 @@ export default function AnalyticButton({
                 //left: "50%", // Positionne le début du texte au milieu horizontalement
                 color: theme.palette.secondary.main,
                 transition: "color 0.3s ease, transform 0.3s ease",
-                fontWeight: isHovered ? "bold" : clicked ? "bold" : "inherite",
+                fontWeight: isHovered ? "bold" : clicked ? "bold" : "inherit",
                 fontSize: "90%",
               }}
             >
@@ -169,8 +171,8 @@ export default function AnalyticButton({
             //transformOrigin: "0 0", // Point d'origine de la rotation
             whiteSpace: "nowrap", // Empêche le texte de se briser sur plusieurs lignes
             color: theme.palette.secondary.main,
-            fontWeight: isHovered ? "bold" : clicked ? "bold" : "inherite",
-            fontSize: isHovered ? "110%" : clicked ? "110%" : "inherite",
+            fontWeight: isHovered ? "bold" : clicked ? "bold" : "inherit",
+            fontSize: isHovered ? "110%" : clicked ? "110%" : "inherit",
             transition: "font-weight 0.3s ease, transform 0.3s ease",
           }}
         >

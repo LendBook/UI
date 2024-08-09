@@ -132,7 +132,7 @@ const Borrow = () => {
 
   return (
     <div>
-      <div className="flex justify-center mt-0 mb-15">
+      <div className="flex mt-0 mb-15">
         <AnalyticsButtons
           title="Select a pool to borrow"
           columnsConfig={customDataColumnsConfig}
@@ -144,7 +144,7 @@ const Borrow = () => {
           userMetricBorderColor={theme.palette.success.main}
         />
       </div>
-      <div className="flex justify-center mt-5">
+      <div className="flex mt-5">
         <AmountCustom
           title="Amount to borrow"
           tokenWalletBalance={
@@ -181,7 +181,7 @@ const Borrow = () => {
       >
         {showAll ? "show less" : "show more"}
       </Button> */}
-      <div className="flex justify-center  mt-10">
+      <div className="flex mt-10">
         <CustomButton
           clickable={buttonClickable}
           handleClick={handleButtonClick}

@@ -119,7 +119,10 @@ export default function AmountCustom({
     <Box className="max-w-[300px]">
       <span
         className="text-black font-bold"
-        //style={{ backgroundColor: theme.palette.primary.main }}
+        style={{
+          fontSize: "140%",
+          //backgroundColor: theme.palette.primary.main
+        }}
       >
         {title}
       </span>

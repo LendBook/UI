@@ -27,7 +27,7 @@ module.exports = {
         bgBtnHover: "#002347",
         borderColor: "#4ACFFF",
 
-        bgLight: "#a7b5c3", //"#f9fafb", //"#f0f2f5", //"#e9f4ff",
+        bgLight: "#c1cbd6", //"#a7b5c3", //"#f9fafb", //"#f0f2f5", //"#e9f4ff",
       },
       // colors: {
       //   primary: "#003F7D",

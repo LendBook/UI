@@ -105,6 +105,12 @@ const Markets = () => {
               Isolated markets
             </Typography>
             <div className="flex mt-5"></div>
+            <div className="flex mb-5">
+              <span>
+                In LendBook, each market is isolated and collateral assets are
+                not lent out to borrowers.
+              </span>
+            </div>
             <Paper
               elevation={4}
               sx={{
