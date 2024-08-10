@@ -101,7 +101,7 @@ const Markets = () => {
       >
         <Box>
           <div>
-            <Typography variant="h4" color="black">
+            <Typography variant="h3" color="black">
               Isolated markets
             </Typography>
             <div className="flex mt-5"></div>
