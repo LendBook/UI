@@ -286,12 +286,13 @@ export const useFetchPools = () => {
               "ether"
             )
           );
-          const borrowingRate = parseFloat(
-            ethers.utils.formatUnits(
-              viewBorrowingRateResponse.data.viewBorrowingRate,
-              "ether"
-            )
-          );
+          const borrowingRate =
+            parseFloat(
+              ethers.utils.formatUnits(
+                viewBorrowingRateResponse.data.viewBorrowingRate,
+                "ether"
+              )
+            ) * 100;
           const borrows = parseFloat(
             ethers.utils.formatUnits(poolsData[1], "ether")
           );
