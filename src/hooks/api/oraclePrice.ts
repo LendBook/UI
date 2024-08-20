@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ethers } from "ethers";
+import { useOrderbook } from "../useOrderbook";
 
 let apiUrl = "";
 if (process.env.NODE_ENV === "development") {
@@ -17,10 +18,14 @@ export const usePriceOracle = () => {
   const [price, setPrice] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  //const { contract: bookAddress } = useOrderbook();
+  const bookAddress = "0x5b0D0DDB7860eaEed42AE95b05A7d2df9877aD25";
 
   const fetchPrice = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/api/v1/book/viewPriceFeed`);
+      const response = await axios.get(
+        `${apiUrl}/api/v1/book/${bookAddress}/viewPriceFeed`
+      );
       const priceData: PriceFeedData = response.data;
       //console.log("priceData.viewPriceFeed ", priceData.viewPriceFeed);
       const priceInUSDC = parseFloat(
