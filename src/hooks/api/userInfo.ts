@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { ethers } from "ethers";
+import { useOrderbook } from "../useOrderbook";
 
 let apiUrl = "";
 if (process.env.NODE_ENV === "development") {
@@ -53,12 +54,14 @@ export const useFetchUserInfo = (
   const [userBorrows, setUserBorrows] = useState<UserBorrowsData[]>([]);
   const [loadingUser, setLoading] = useState(true);
   const [errorUser, setError] = useState<string | null>(null);
+  //const { contract: bookAddress } = useOrderbook();
+  const bookAddress = "0x5b0D0DDB7860eaEed42AE95b05A7d2df9877aD25";
 
   const fetchGlobalUserInfo = async (address: string) => {
     setLoading(true);
     try {
       const responseQuote = await axios.get(
-        `${apiUrl}/api/v1/book/viewUserTotalDeposits?_user=${address}&_inQuote=true`
+        `${apiUrl}/api/v1/book/${bookAddress}/viewUserTotalDeposits?_user=${address}&_inQuote=true`
       );
       const formattedTotalQuote = ethers.utils.formatEther(
         responseQuote.data.viewUserTotalDeposits
@@ -66,14 +69,14 @@ export const useFetchUserInfo = (
       //console.log("responseQuote ", responseQuote);
 
       const responseBase = await axios.get(
-        `${apiUrl}/api/v1/book/viewUserTotalDeposits?_user=${address}&_inQuote=false`
+        `${apiUrl}/api/v1/book/${bookAddress}/viewUserTotalDeposits?_user=${address}&_inQuote=false`
       );
       const formattedTotalBase = ethers.utils.formatEther(
         responseBase.data.viewUserTotalDeposits
       );
 
       const responseExcessCollateral = await axios.get(
-        `${apiUrl}/api/v1/book/viewUserExcessCollateral?_user=${address}&_minusCollateral=0`
+        `${apiUrl}/api/v1/book/${bookAddress}/viewUserExcessCollateral?_user=${address}&_minusCollateral=0`
       );
       const excessCollateral = ethers.utils.formatUnits(
         responseExcessCollateral.data.viewUserExcessCollateral.split(",")[1],
@@ -81,12 +84,12 @@ export const useFetchUserInfo = (
       );
       //tokens part (FIXEME repetition with pools.ts)
       const responseBaseTokenAddress = await axios.get(
-        `${apiUrl}/api/v1/book/baseToken`
+        `${apiUrl}/api/v1/book/${bookAddress}/baseToken`
       );
       const baseTokenAddress = responseBaseTokenAddress.data.baseToken;
 
       const responseQuoteTokenAddress = await axios.get(
-        `${apiUrl}/api/v1/book/quoteToken`
+        `${apiUrl}/api/v1/book/${bookAddress}/quoteToken`
       );
       const quoteTokenAddress = responseQuoteTokenAddress.data.quoteToken;
 
@@ -122,7 +125,7 @@ export const useFetchUserInfo = (
     setLoading(true);
     try {
       const depositOrdersIdResponse = await axios.get(
-        `${apiUrl}/api/v1/book/getUserDepositIds?_user=${address}`
+        `${apiUrl}/api/v1/book/${bookAddress}/getUserDepositIds?_user=${address}`
       );
 
       let depositOrdersId_l =
@@ -132,7 +135,7 @@ export const useFetchUserInfo = (
       const results = await Promise.all(
         depositOrdersId_l.map(async (depositOrdersId: Number) => {
           const orderResponse = await axios.get(
-            `${apiUrl}/api/v1/book/orders?orderId=${depositOrdersId}`
+            `${apiUrl}/api/v1/book/${bookAddress}/orders?orderId=${depositOrdersId}`
           );
 
           const orderObject = orderResponse.data.orders.split(",");
@@ -164,7 +167,7 @@ export const useFetchUserInfo = (
     setLoading(true);
     try {
       const borrowsIdResponse = await axios.get(
-        `${apiUrl}/api/v1/book/getUserBorrowFromIds?_user=${address}`
+        `${apiUrl}/api/v1/book/${bookAddress}/getUserBorrowFromIds?_user=${address}`
       );
 
       let borrowsId_l = borrowsIdResponse.data.getUserBorrowFromIds.split(",");
@@ -175,7 +178,7 @@ export const useFetchUserInfo = (
       const results = await Promise.all(
         borrowsId_l.map(async (borrowsId: Number) => {
           const orderResponse = await axios.get(
-            `/api/v1/book/positions?positionId=${borrowsId}`
+            `/api/v1/book/${bookAddress}/positions?positionId=${borrowsId}`
           );
 
           const orderObject = orderResponse.data.positions.split(",");

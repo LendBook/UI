@@ -3,6 +3,7 @@ import axios from "axios";
 import { ethers } from "ethers";
 import { mergeObjects } from "../../components/GlobalFunctions";
 import { count } from "console";
+import { useOrderbook } from "../useOrderbook";
 
 let apiUrl = "";
 if (process.env.NODE_ENV === "development") {
@@ -141,6 +142,8 @@ export const useFetchPools = () => {
     totalBorrow: 0,
     maxLendingRate: 0,
   };
+  //const { contract: bookAddress } = useOrderbook();
+  const bookAddress = "0x5b0D0DDB7860eaEed42AE95b05A7d2df9877aD25";
   const [marketInfo, setMarketInfo] =
     useState<MarketInfoData>(initialMarketInfo);
 
@@ -159,12 +162,12 @@ export const useFetchPools = () => {
     try {
       //tokens part
       const responseBaseTokenAddress = await axios.get(
-        `${apiUrl}/api/v1/book/baseToken`
+        `${apiUrl}/api/v1/book/${bookAddress}/baseToken`
       );
       const baseTokenAddress = responseBaseTokenAddress.data.baseToken;
 
       const responseQuoteTokenAddress = await axios.get(
-        `${apiUrl}/api/v1/book/quoteToken`
+        `${apiUrl}/api/v1/book/${bookAddress}/quoteToken`
       );
       const quoteTokenAddress = responseQuoteTokenAddress.data.quoteToken;
 
@@ -183,7 +186,7 @@ export const useFetchPools = () => {
 
       //console.log("Getting price step");
       const priceStepResponse = await axios.get(
-        `${apiUrl}/api/v1/book/priceStep`
+        `${apiUrl}/api/v1/book/${bookAddress}/priceStep`
       );
       const priceStep = parseFloat(
         ethers.utils.formatUnits(priceStepResponse.data.priceStep, 18)
@@ -191,7 +194,7 @@ export const useFetchPools = () => {
 
       //console.log("getting price feed");
       const priceFeedResponse = await axios.get(
-        `${apiUrl}/api/v1/book/viewPriceFeed`
+        `${apiUrl}/api/v1/book/${bookAddress}/viewPriceFeed`
       );
       const priceFeed = parseFloat(
         ethers.utils.formatUnits(priceFeedResponse.data.viewPriceFeed, 18)
@@ -201,7 +204,7 @@ export const useFetchPools = () => {
       //FIXME : need to call api when genesisPoolId is public in smartcontract
       const genesisPoolId = 1111111110;
       const limitPriceGenesisResponse = await axios.get(
-        `${apiUrl}/api/v1/book/limitPrice?poolId=${genesisPoolId}`
+        `${apiUrl}/api/v1/book/${bookAddress}/limitPrice?poolId=${genesisPoolId}`
       );
       const limitPriceGenesis = parseFloat(
         ethers.utils.formatUnits(limitPriceGenesisResponse.data.limitPrice, 18)
@@ -247,19 +250,19 @@ export const useFetchPools = () => {
           //   ),
           // ]);
           const poolsResponse = await axios.get(
-            `${apiUrl}/api/v1/book/pools?poolId=${poolId}`
+            `${apiUrl}/api/v1/book/${bookAddress}/pools?poolId=${poolId}`
           );
           const viewLendingRateResponse = await axios.get(
-            `${apiUrl}/api/v1/book/viewLendingRate?_poolId=${poolId}`
+            `${apiUrl}/api/v1/book/${bookAddress}/viewLendingRate?_poolId=${poolId}`
           );
           const viewUtilizationRateResponse = await axios.get(
-            `${apiUrl}/api/v1/book/viewUtilizationRate?_poolId=${poolId}`
+            `${apiUrl}/api/v1/book/${bookAddress}/viewUtilizationRate?_poolId=${poolId}`
           );
           const viewLimitPriceResponse = await axios.get(
-            `${apiUrl}/api/v1/book/limitPrice?poolId=${poolId}`
+            `${apiUrl}/api/v1/book/${bookAddress}/limitPrice?poolId=${poolId}`
           );
           const viewBorrowingRateResponse = await axios.get(
-            `${apiUrl}/api/v1/book/viewBorrowingRate?_poolId=${poolId}`
+            `${apiUrl}/api/v1/book/${bookAddress}/viewBorrowingRate?_poolId=${poolId}`
           );
 
           const poolsData = poolsResponse.data.pools.split(",");
