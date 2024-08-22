@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import { mergeObjects } from "../../components/GlobalFunctions";
 import { count } from "console";
 import { useOrderbook } from "../useOrderbook";
+import { id } from "ethers/lib/utils";
 
 let apiUrl = "";
 if (process.env.NODE_ENV === "development") {
@@ -252,22 +253,16 @@ export const useFetchPools = () => {
           const poolsResponse = await axios.get(
             `${apiUrl}/api/v1/book/${bookAddress}/pools?poolId=${poolId}`
           );
-          const viewLendingRateResponse = await axios.get(
-            `${apiUrl}/api/v1/book/${bookAddress}/viewLendingRate?_poolId=${poolId}`
-          );
-          const viewUtilizationRateResponse = await axios.get(
-            `${apiUrl}/api/v1/book/${bookAddress}/viewUtilizationRate?_poolId=${poolId}`
-          );
-          const viewLimitPriceResponse = await axios.get(
-            `${apiUrl}/api/v1/book/${bookAddress}/limitPrice?poolId=${poolId}`
-          );
-          const viewBorrowingRateResponse = await axios.get(
-            `${apiUrl}/api/v1/book/${bookAddress}/viewBorrowingRate?_poolId=${poolId}`
-          );
-
           const poolsData = poolsResponse.data.pools.split(",");
           const deposits = parseFloat(
             ethers.utils.formatUnits(poolsData[0], "ether")
+          );
+          const borrows = parseFloat(
+            ethers.utils.formatUnits(poolsData[1], "ether")
+          );
+
+          const viewLendingRateResponse = await axios.get(
+            `${apiUrl}/api/v1/book/${bookAddress}/viewLendingRate?_poolId=${poolId}`
           );
           const lendingRate =
             parseFloat(
@@ -276,6 +271,10 @@ export const useFetchPools = () => {
                 "ether"
               )
             ) * 100;
+
+          const viewUtilizationRateResponse = await axios.get(
+            `${apiUrl}/api/v1/book/${bookAddress}/viewUtilizationRate?_poolId=${poolId}`
+          );
           const utilizationRate =
             parseFloat(
               ethers.utils.formatUnits(
@@ -283,11 +282,19 @@ export const useFetchPools = () => {
                 "ether"
               )
             ) * 100;
+
+          const viewLimitPriceResponse = await axios.get(
+            `${apiUrl}/api/v1/book/${bookAddress}/limitPrice?poolId=${poolId}`
+          );
           const buyPrice = parseFloat(
             ethers.utils.formatUnits(
               viewLimitPriceResponse.data.limitPrice,
               "ether"
             )
+          );
+
+          const viewBorrowingRateResponse = await axios.get(
+            `${apiUrl}/api/v1/book/${bookAddress}/viewBorrowingRate?_poolId=${poolId}`
           );
           const borrowingRate =
             parseFloat(
@@ -296,9 +303,17 @@ export const useFetchPools = () => {
                 "ether"
               )
             ) * 100;
-          const borrows = parseFloat(
-            ethers.utils.formatUnits(poolsData[1], "ether")
+
+          const viewPoolAvailableAssetsResponse = await axios.get(
+            `${apiUrl}/api/v1/book/${bookAddress}/viewPoolAvailableAssets?_poolId=${poolId}`
           );
+          const poolAvailableAssets = parseFloat(
+            ethers.utils.formatUnits(
+              viewPoolAvailableAssetsResponse.data.viewPoolAvailableAssets,
+              "ether"
+            )
+          );
+
           //console.log(`poolIdspoolIdslendingRate ${lendingRate}`);
 
           _totalDeposit = _totalDeposit + deposits;
@@ -319,6 +334,7 @@ export const useFetchPools = () => {
             myBorrowingPositions: 0,
             borrows: borrows,
             availableSupply: deposits - borrows,
+            availableSupplyToBorrow: poolAvailableAssets,
           };
         })
       );

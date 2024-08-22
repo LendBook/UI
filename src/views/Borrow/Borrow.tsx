@@ -149,9 +149,9 @@ const Borrow = () => {
           title="Amount to borrow"
           tokenWalletBalance={
             clickedRowData
-              ? clickedRowData.availableSupply <
+              ? clickedRowData.availableSupplyToBorrow <
                 userInfo.excessCollateral * clickedRowData.buyPrice
-                ? clickedRowData.availableSupply
+                ? clickedRowData.availableSupplyToBorrow
                 : userInfo.excessCollateral * clickedRowData.buyPrice
               : 0
           }
