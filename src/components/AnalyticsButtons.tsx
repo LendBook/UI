@@ -112,8 +112,8 @@ export default function AnalyticsButtons<T extends string | number>({
     };
   });
 
-  console.log("maxTotal", maxTotal);
-  console.log("updatedData", updatedData);
+  //console.log("maxTotal", maxTotal);
+  //console.log("updatedData", updatedData);
 
   const [metricsData, setMetricsData] = useState(metrics);
 
@@ -167,7 +167,7 @@ export default function AnalyticsButtons<T extends string | number>({
   );
   const buyPrice = buyPriceMetric?.value || "default value";
 
-  console.log("updatedData , ", updatedData);
+  //console.log("updatedData , ", updatedData);
 
   return (
     // <Box sx={{ width: "100%" }}>

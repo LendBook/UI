@@ -8,10 +8,10 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useTheme } from "../context/ThemeContext";
 import { Switch } from "@headlessui/react";
 import { useChangePriceFeed } from "../hooks/useChangePriceFeed";
-import { useDataContext } from "../context/DataContext";
+//import { useDataContext } from "../context/DataContext";
 
 export default function Navbar() {
-  const { price, priceLoading, refetchData } = useDataContext();
+  //const { price, priceLoading, refetchData } = useDataContext();
   const [previousPrice, setPreviousPrice] = useState<number | null>(null);
   const { darkMode, toggleDarkMode } = useTheme();
 

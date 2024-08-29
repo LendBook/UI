@@ -126,7 +126,7 @@ const BaseToQuote = () => {
 
   useEffect(() => {
     // Cette fonction sera appelée chaque fois que poolData change
-    console.log("poolData a changé :", poolData);
+    console.log("poolData a changé ::", poolData);
     // Ici vous pouvez effectuer toute action nécessaire après la mise à jour de poolData
   }, [poolData]); // Mettez à jour lorsque poolData change
 

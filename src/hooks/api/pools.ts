@@ -234,22 +234,7 @@ export const useFetchPools = () => {
       //on a les id des pools qui nous interessent, maintenant on s'occupe de recuperer les data liées aux pools
       const results = await Promise.all(
         poolIds.map(async (poolId) => {
-          //console.log(`poolIdspoolIds ${poolId}`);
-          // Fetch data from the API
-
-          // const apiResponses = await Promise.all([
-          //   axios.get(`${apiUrl}/api/v1/book/pools?poolId=${poolId}`),
-          //   axios.get(
-          //     `${apiUrl}/api/v1/book/viewLendingRate?_poolId=${poolId}`
-          //   ),
-          //   axios.get(
-          //     `${apiUrl}/api/v1/book/viewUtilizationRate?_poolId=${poolId}`
-          //   ),
-          //   axios.get(`${apiUrl}/api/v1/book/limitPrice?poolId=${poolId}`),
-          //   axios.get(
-          //     `${apiUrl}/api/v1/book/viewBorrowingRate?_poolId=${poolId}`
-          //   ),
-          // ]);
+          //console.log("poolId", poolId);
           const poolsResponse = await axios.get(
             `${apiUrl}/api/v1/book/${bookAddress}/pools?poolId=${poolId}`
           );
