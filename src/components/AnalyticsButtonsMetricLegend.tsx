@@ -63,6 +63,60 @@ export const getMetricsDataLending = (marketInfo: MarketInfo) => [
   },
 ];
 
+export const getMetricsDataLendingWithdraw = (marketInfo: MarketInfo) => [
+  {
+    key: "buyPrice",
+    title: "Buy Price",
+    value: "-",
+    unit: marketInfo.quoteTokenSymbol,
+    color: theme.palette.info.main,
+    tooltipText: "The buy price linked to the selected pool of orders",
+  },
+  {
+    key: "deposits",
+    title: "Supply",
+    value: "-",
+    unit: marketInfo.quoteTokenSymbol,
+    color: theme.palette.primary.main,
+    icon: <SquareRoundedIcon fontSize="small" />,
+    tooltipText: "Sum of the lending supply in the selected pool",
+  },
+  {
+    key: "borrows",
+    title: "Borrow",
+    value: "-",
+    unit: marketInfo.quoteTokenSymbol,
+    color: theme.palette.success.main,
+    icon: <SquareRoundedIcon fontSize="small" />,
+    tooltipText: "Sum of the borrowing positions in the selected pool",
+  },
+  {
+    key: "mySupply",
+    title: "My supply",
+    value: "-",
+    unit: marketInfo.quoteTokenSymbol,
+    color: theme.palette.primary.main,
+    icon: <CropDinRoundedIcon fontSize="small" />,
+    tooltipText: "Your lending supply in the selected pool",
+  },
+  {
+    key: "lendingRate",
+    title: "Net APY",
+    value: "-",
+    unit: "%",
+    color: theme.palette.info.main,
+    tooltipText: "The APY linked to the selected pool",
+  },
+  {
+    key: "utilizationRate",
+    title: "Utilization",
+    value: "-",
+    unit: "%",
+    color: theme.palette.info.main,
+    tooltipText: "The utilization rate of the selected pool",
+  },
+];
+
 export const getMetricsDataBorrowing = (marketInfo: MarketInfo) => [
   {
     key: "buyPrice",

@@ -22,7 +22,13 @@ import DivWithTooltip from "./DivWithTooltip";
 //price feed indiquatif in USD
 
 // Type générique pour une ligne de données
-type RowData<T extends string> = Record<T, string>;
+//type RowData<T extends string> = Record<T, string>;
+// type RowData<T extends string> = {
+//   [K in T]: K extends "value" ? string | string[] : string;
+// };
+type RowData<T extends string> = {
+  [K in T]: string | string[]; // Accepte soit une chaîne unique, soit un tableau de chaînes.
+};
 
 // Définition des types pour les props de TableCustom
 type MetricCustomProps<T extends string> = {
@@ -56,9 +62,9 @@ export default function MetricCustom<T extends string>({
       elevation={0}
       sx={{
         borderRadius: 1,
-        padding: 1, //1
+        padding: 1,
         display: "inline-block",
-        border: `0px solid ${theme.palette.error.main}`, //border: `1px solid ${theme.palette.background.default}`,
+        border: `0px solid ${theme.palette.error.main}`,
         backgroundColor: backgroundColorChosen
           ? backgroundColorChosen
           : theme.palette.background.default,
@@ -66,11 +72,8 @@ export default function MetricCustom<T extends string>({
       className="flex"
     >
       <Container>
-        {/* <MarketComponent /> */}
         {data.map((row, rowIndex) => (
-          <div
-            key={rowIndex} //className="min-w-[300px]"
-          >
+          <div key={rowIndex}>
             <Paper
               elevation={0}
               style={{
@@ -79,29 +82,18 @@ export default function MetricCustom<T extends string>({
                 backgroundColor: backgroundColorChosen
                   ? backgroundColorChosen
                   : theme.palette.background.default,
-                //marginRight: rowIndex !== data.length - 1 ? 10 : 0,
-                //marginBottom: rowIndex !== data.length - 1 ? 10 : 0,
-                //width: "100px",
               }}
               className="flex flex-col"
             >
-              <div
-                style={{
-                  //marginLeft: 10
-                  marginRight: 10,
-                }}
-              >
+              <div style={{ marginRight: 10 }}>
                 <div className="flex">
                   <DivWithTooltip
                     tooltipText={
-                      row["tooltipText" as keyof RowData<T>]
-                        ? row["tooltipText" as keyof RowData<T>]
-                        : ""
+                      (row["tooltipText" as keyof RowData<T>] as string) ?? ""
                     }
                     iconColor={
-                      row["color" as keyof RowData<T>]
-                        ? row["color" as keyof RowData<T>]
-                        : theme.palette.info.main
+                      (row["color" as keyof RowData<T>] as string) ||
+                      theme.palette.info.main
                     }
                   >
                     {row["icon" as keyof RowData<T>] && (
@@ -110,8 +102,8 @@ export default function MetricCustom<T extends string>({
                           verticalAlign: "middle",
                           marginTop: "-3px",
                           marginRight: "4px",
-                          color: row["color" as keyof RowData<T>]
-                            ? row["color" as keyof RowData<T>]
+                          color: (row["color" as keyof RowData<T>] as string)
+                            ? (row["color" as keyof RowData<T>] as string)
                             : theme.palette.info.main,
                         }}
                       >
@@ -122,8 +114,8 @@ export default function MetricCustom<T extends string>({
                       style={{
                         fontWeight: "bold",
                         fontSize: "90%",
-                        color: row["color" as keyof RowData<T>]
-                          ? row["color" as keyof RowData<T>]
+                        color: (row["color" as keyof RowData<T>] as string)
+                          ? (row["color" as keyof RowData<T>] as string)
                           : theme.palette.info.main,
                       }}
                     >
@@ -140,11 +132,40 @@ export default function MetricCustom<T extends string>({
                 >
                   {isLoading ? (
                     <Skeleton variant="text" width="50%" />
+                  ) : Array.isArray(row["value" as keyof RowData<T>]) ? (
+                    // Affichage si value est un tableau de chaînes
+                    (row["value" as keyof RowData<T>] as string[]).map(
+                      (val, index) => (
+                        <div
+                          style={{
+                            fontSize:
+                              (row["fontSize" as keyof RowData<T>] as string[])[
+                                index
+                              ] || "100%",
+                          }}
+                          key={index}
+                        >
+                          {formatNumber(val)}{" "}
+                          {Array.isArray(row["unit" as keyof RowData<T>])
+                            ? (row["unit" as keyof RowData<T>] as string[])[
+                                index
+                              ] || ""
+                            : row["unit" as keyof RowData<T>]}
+                        </div>
+                      )
+                    )
                   ) : (
-                    <>
-                      {formatNumber(row["value" as keyof RowData<T>])}{" "}
+                    // Affichage si value est une chaîne unique
+                    <div
+                      style={{
+                        fontSize:
+                          (row["fontSize" as keyof RowData<T>] as string) ||
+                          "100%",
+                      }}
+                    >
+                      {formatNumber(row["value" as keyof RowData<T>] as string)}{" "}
                       {row["unit" as keyof RowData<T>]}
-                    </>
+                    </div>
                   )}
                 </Typography>
               </div>

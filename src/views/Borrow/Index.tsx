@@ -22,7 +22,8 @@ const Index = () => {
     setSelectedBorrowTab(label);
   };
 
-  const { userInfo, userDeposits, loadingUser, marketInfo } = useDataContext();
+  const { price, userInfo, userDeposits, loadingUser, marketInfo } =
+    useDataContext();
 
   const metricsData = [
     {
@@ -44,20 +45,32 @@ const Index = () => {
   const userMetricsData = [
     {
       title: "My total collateral",
-      value: userInfo.totalDepositsBase,
-      unit: marketInfo.baseTokenSymbol,
+      value: [
+        userInfo.totalDepositsBase,
+        (parseFloat(userInfo.totalDepositsBase) * (price as number)).toString(),
+      ],
+      unit: [marketInfo.baseTokenSymbol, "$"],
+      fontSize: ["100%", "70%"],
       tooltipText: "",
     },
     {
       title: "My free collateral",
-      value: userInfo.excessCollateral,
-      unit: marketInfo.baseTokenSymbol,
+      value: [
+        userInfo.excessCollateral,
+        (parseFloat(userInfo.excessCollateral) * (price as number)).toString(),
+      ],
+      unit: [marketInfo.baseTokenSymbol, "$"],
+      fontSize: ["100%", "70%"],
       tooltipText: "Your collateral still available",
     },
     {
       title: "My total borrows",
-      value: userInfo.totalBorrow,
-      unit: marketInfo.quoteTokenSymbol,
+      value: [
+        userInfo.totalBorrow,
+        (parseFloat(userInfo.totalBorrow) * 1).toString(),
+      ],
+      unit: [marketInfo.quoteTokenSymbol, "$"],
+      fontSize: ["100%", "70%"],
       tooltipText: "",
     },
   ];
