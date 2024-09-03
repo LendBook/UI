@@ -21,24 +21,27 @@ const Index = () => {
   const metricsData = [
     {
       title: "Total supply",
-      value: marketInfo.totalDeposit,
-      unit: marketInfo.quoteTokenSymbol,
+      value: [marketInfo.totalDeposit],
+      unit: [marketInfo.quoteTokenSymbol],
+      fontSize: ["100%"],
       color: theme.palette.info.main,
       tooltipText:
         "Total supply for this isolated market (sum of all the lending supply of the pools)",
     },
     {
       title: "Total borrow",
-      value: marketInfo.totalBorrow,
-      unit: marketInfo.quoteTokenSymbol,
+      value: [marketInfo.totalBorrow],
+      unit: [marketInfo.quoteTokenSymbol],
+      fontSize: ["100%"],
       color: theme.palette.info.main,
       tooltipText:
         "Total borrow for this isolated market (sum of all the borrowing positions of the pools)",
     },
     {
       title: "My total supply",
-      value: userInfo.totalDepositsQuote,
-      unit: marketInfo.quoteTokenSymbol,
+      value: [userInfo.totalDepositsQuote],
+      unit: [marketInfo.quoteTokenSymbol],
+      fontSize: ["100%"],
       color: theme.palette.primary.main,
       tooltipText: "The total supply linked to your wallet",
     },

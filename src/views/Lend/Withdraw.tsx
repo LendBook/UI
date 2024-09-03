@@ -10,7 +10,10 @@ import AnalyticsButtons from "../../components/AnalyticsButtons";
 
 import SquareRoundedIcon from "@mui/icons-material/SquareRounded";
 import CropDinRoundedIcon from "@mui/icons-material/CropDinRounded";
-import { getMetricsDataLending } from "../../components/AnalyticsButtonsMetricLegend";
+import {
+  getMetricsDataLending,
+  getMetricsDataLendingWithdraw,
+} from "../../components/AnalyticsButtonsMetricLegend";
 
 const Withdraw = () => {
   const [withdrawAmountQuantity, setWithdrawAmountQuantity] =
@@ -59,7 +62,7 @@ const Withdraw = () => {
   ];
 
   const [metricsData, setMetricsData] = useState(
-    getMetricsDataLending(marketInfo)
+    getMetricsDataLendingWithdraw(marketInfo)
   );
 
   const filteredData = orderMergedData.filter(
