@@ -40,27 +40,6 @@ const Withdraw = () => {
     marketInfo,
   } = useDataContext();
 
-  const customDataColumnsConfig = [
-    {
-      key: "buyPrice",
-      title: "Buy Price",
-      metric: marketInfo.quoteTokenSymbol,
-    },
-    //{ key: "orderLenderId", title: "orderLenderId" },
-    {
-      key: "deposits",
-      title: "Total Supply",
-      metric: marketInfo.quoteTokenSymbol,
-    },
-    { key: "lendingRate", title: "Net APY", metric: "%" },
-    { key: "utilizationRate", title: "Utilization", metric: "%" },
-    {
-      key: "mySupply",
-      title: "My Supply",
-      metric: marketInfo.quoteTokenSymbol,
-    },
-  ];
-
   const [metricsData, setMetricsData] = useState(
     getMetricsDataLendingWithdraw(marketInfo)
   );
@@ -69,34 +48,17 @@ const Withdraw = () => {
     (item) => item.orderLenderId !== undefined
   );
 
-  //const displayedData = showAll ? filteredData : filteredData.slice(0, 3);
+  // TODO
+  // besoin de s'occuper de la partie où le lender a de la supply en base token et non en quote token
+  // du coup il faut créer une nouvelle variable mySupplyInETH
+  filteredData.forEach((item) => {
+    if (parseFloat(item.borrows as string) !== 0) {
+      item.mySupplyInETH = item.mySupply; // Ajoute `mySupplyInETH` uniquement si `mySupply` est différent de 0
+    }
+  });
 
   let sortedData = [...filteredData];
   sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
-
-  const sellOrdersWithdrawClick = (id: number) => {
-    console.log(`Button clicked! ${id}`);
-  };
-
-  const sellOrdersDataColumnsConfig = [
-    { key: "sellPrice", title: "Sell Price" },
-    { key: "mySupply", title: "My Supply" },
-    {
-      key: "action",
-      title: "",
-      isButton: true,
-      onButtonClick: sellOrdersWithdrawClick,
-    },
-  ];
-
-  const sellOrdersData = [
-    {
-      id: 1,
-      sellPrice: "8,200 USDC",
-      mySupply: "3.3 WETH",
-      action: "Withdraw",
-    },
-  ];
 
   const updateButtonClickable = (quantity: number, price: string) => {
     const isClickable = quantity > 0 && price !== "";
@@ -155,7 +117,6 @@ const Withdraw = () => {
       <div className="flex mt-0 mb-15">
         <AnalyticsButtons
           title="Select a pool to withdraw"
-          columnsConfig={customDataColumnsConfig}
           data={sortedData}
           metrics={metricsData}
           isLoading={poolLoading}

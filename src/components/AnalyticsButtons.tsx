@@ -29,7 +29,7 @@ type RowData<T extends string | number> = Record<T, string | number> & {
 
 type AnalyticsButtonsProps<T extends string | number> = {
   title?: string;
-  columnsConfig: {
+  columnsConfig?: {
     key: T;
     title: string;
     metric?: string;
@@ -62,7 +62,7 @@ export default function AnalyticsButtons<T extends string | number>({
 }: AnalyticsButtonsProps<T>) {
   const [clickedButton, setClickedButton] = useState<number | null>(null);
 
-  const columns = columnsConfig.map((config) => config.key);
+  //deprecated, used for table I think: const columns = columnsConfig.map((config) => config.key);
 
   const { price, marketInfo } = useDataContext();
 
@@ -349,7 +349,7 @@ export default function AnalyticsButtons<T extends string | number>({
             <div
               className="flex"
               style={{
-                width: "350px",
+                width: "400px",
                 //height: "50px"
               }}
             >

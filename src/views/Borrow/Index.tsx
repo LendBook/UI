@@ -51,6 +51,7 @@ const Index = () => {
       ],
       unit: [marketInfo.baseTokenSymbol, "$"],
       fontSize: ["100%", "70%"],
+      valueColor: [theme.palette.common.black, theme.palette.secondary.main],
       tooltipText: "",
     },
     {
@@ -61,6 +62,7 @@ const Index = () => {
       ],
       unit: [marketInfo.baseTokenSymbol, "$"],
       fontSize: ["100%", "70%"],
+      valueColor: [theme.palette.common.black, theme.palette.secondary.main],
       tooltipText: "Your collateral still available",
     },
     {
@@ -71,6 +73,7 @@ const Index = () => {
       ],
       unit: [marketInfo.quoteTokenSymbol, "$"],
       fontSize: ["100%", "70%"],
+      valueColor: [theme.palette.common.black, theme.palette.secondary.main],
       tooltipText: "",
     },
   ];

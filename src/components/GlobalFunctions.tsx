@@ -19,6 +19,27 @@ export const formatNumber = (num: string | number): string => {
   }
 };
 
+export const formatNumberRoundedForK = (num: string | number): string => {
+  num = num ? num : 0;
+  if (num === "") {
+    return "";
+  } else if (num === "-") {
+    return "-";
+  }
+  if (typeof num === "string") {
+    num = parseFloat(num);
+  }
+  if (num >= 1000000000) {
+    return (num / 1000000000).toFixed(2) + "B";
+  } else if (num >= 1000000) {
+    return (num / 1000000).toFixed(2) + "M";
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(2) + "k";
+  } else {
+    return num.toFixed(2);
+  }
+};
+
 export const formatNumberPriceFig = (num: string | number): string => {
   num = num ? num : 0;
   if (num === "") {

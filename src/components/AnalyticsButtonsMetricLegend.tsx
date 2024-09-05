@@ -92,7 +92,16 @@ export const getMetricsDataLendingWithdraw = (marketInfo: MarketInfo) => [
   },
   {
     key: "mySupply",
-    title: "My supply",
+    title: `My supply (of ${marketInfo.quoteTokenSymbol})`,
+    value: "-",
+    unit: marketInfo.quoteTokenSymbol,
+    color: theme.palette.primary.main,
+    icon: <CropDinRoundedIcon fontSize="small" />,
+    tooltipText: "Your lending supply in the selected pool",
+  },
+  {
+    key: "mySupplyInETH",
+    title: `My supply (of ${marketInfo.baseTokenSymbol})`,
     value: "-",
     unit: marketInfo.quoteTokenSymbol,
     color: theme.palette.primary.main,
