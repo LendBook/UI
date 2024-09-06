@@ -35,6 +35,55 @@ interface DataProviderProps {
   walletAddress: string | undefined;
 }
 
+// Fonction pour regrouper et calculer les valeurs spécifiques des supply en base et en quote
+export const groupAndCalculate = (objects: ObjectWithId[]): ObjectWithId[] => {
+  // Utilisation d'un Map pour regrouper les objets par poolId
+  const groupedMap = new Map<string, ObjectWithId>();
+
+  objects.forEach((item) => {
+    const existing = groupedMap.get(item.poolId as string);
+
+    if (existing) {
+      // Mettre à jour l'existant avec les nouvelles règles
+      existing.mySupplyQuote = Math.max(
+        existing.mySupplyQuote as number,
+        item.mySupplyQuote as number
+      );
+      existing.mySupplyBase = Math.max(
+        existing.mySupplyBase as number,
+        item.mySupplyBase as number
+      );
+      existing.mySupplyCumulated =
+        existing.mySupplyQuote + existing.mySupplyBase;
+
+      // Ajouter les nouvelles valeurs pour orderLenderIdQuote et orderLenderIdBase
+      if ((item.mySupplyQuote as number) > 0) {
+        existing.orderLenderIdQuote = item.orderLenderId;
+      }
+      if ((item.mySupplyBase as number) > 0) {
+        existing.orderLenderIdBase = item.orderLenderId;
+      }
+    } else {
+      // Ajouter le nouvel élément au Map
+      item.mySupplyCumulated =
+        (item.mySupplyQuote as number) + (item.mySupplyBase as number); // Calcul initial
+
+      // Initialiser les valeurs pour orderLenderIdQuote et orderLenderIdBase
+      if ((item.mySupplyQuote as number) > 0) {
+        item.orderLenderIdQuote = item.orderLenderId;
+      }
+      if ((item.mySupplyBase as number) > 0) {
+        item.orderLenderIdBase = item.orderLenderId;
+      }
+
+      groupedMap.set(item.poolId as string, { ...item });
+    }
+  });
+
+  // Retourner les objets regroupés
+  return Array.from(groupedMap.values());
+};
+
 export const DataProvider: React.FC<DataProviderProps> = ({
   children,
   provider,
@@ -70,7 +119,18 @@ export const DataProvider: React.FC<DataProviderProps> = ({
     marketInfo,
   } = useFetchPools();
 
-  let orderMergedData = mergeObjects(poolData, userDeposits);
+  const userDepositsMergedQuoteAndBase = groupAndCalculate(userDeposits);
+
+  let orderMergedData = mergeObjects(poolData, userDepositsMergedQuoteAndBase);
+
+  orderMergedData.forEach((item) => {
+    item.mySupplyCumulated =
+      (item.mySupplyQuote as number) + (item.mySupplyBase as number) * price;
+    if (Number.isNaN(item.mySupplyCumulated)) {
+      item.mySupplyCumulated = 0;
+    }
+  });
+
   orderMergedData = mergeObjects(orderMergedData, userBorrows);
   //order the data based on buyPrice
   orderMergedData = orderMergedData.sort(

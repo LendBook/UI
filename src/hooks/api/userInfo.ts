@@ -15,7 +15,9 @@ export interface UserDepositOrdersData {
   orderLenderId: number;
   poolId: number;
   maker: string;
-  mySupply: number;
+  mySupplyQuote: number;
+  mySupplyBase: number;
+  mySupplyCumulated: number;
   [key: string]: string | number;
 }
 
@@ -145,13 +147,27 @@ export const useFetchUserInfo = (
             ethers.utils.formatUnits(orderObject[3], "ether")
           );
 
-          return {
-            id: depositOrdersId,
-            orderLenderId: depositOrdersId,
-            poolId: poolId,
-            maker: makerAddress,
-            mySupply: quantity,
-          };
+          if (poolId % 2 === 0) {
+            return {
+              id: depositOrdersId,
+              orderLenderId: depositOrdersId,
+              poolId: poolId,
+              maker: makerAddress,
+              mySupplyQuote: quantity,
+              mySupplyBase: 0,
+              mySupplyCumulated: 0,
+            };
+          } else {
+            return {
+              id: depositOrdersId,
+              orderLenderId: depositOrdersId,
+              poolId: poolId - 1,
+              maker: makerAddress,
+              mySupplyQuote: 0,
+              mySupplyBase: quantity,
+              mySupplyCumulated: 0,
+            };
+          }
         })
       );
       setUserDeposits(results);

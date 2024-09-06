@@ -69,6 +69,10 @@ const Supply = () => {
   let sortedData = [...displayedData];
   sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
 
+  // sortedData.forEach((item) => {
+  //   console.log("item.mySupplyCumulated", item.mySupplyCumulated);
+  // });
+
   const updateButtonClickable = (quantity: number, price: string) => {
     const isClickable = quantity > 0 && price !== "";
     setButtonClickable(isClickable);
@@ -144,7 +148,7 @@ const Supply = () => {
           metrics={metricsData}
           isLoading={poolLoading}
           onRowClick={handleRowClick}
-          userMetricBorder={"mySupply"}
+          userMetricBorder={"mySupplyCumulated"}
           userMetricBorderColor={theme.palette.primary.main}
         />
       </div>

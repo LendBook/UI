@@ -16,22 +16,33 @@ import {
 } from "../../components/AnalyticsButtonsMetricLegend";
 
 const Withdraw = () => {
-  const [withdrawAmountQuantity, setWithdrawAmountQuantity] =
-    useState<number>(0);
   const [buyPrice, setBuyPrice] = useState<string>("");
   const [poolId, setPoolId] = useState<string>("");
-  const [orderLenderId, setOrderLenderId] = useState<string>("");
-  const [buttonClickable, setButtonClickable] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
-  const [showAll, setShowAll] = useState<boolean>(false);
   const [clickedRowData, setClickedRowData] = useState<any>();
+  const [poolSelected, SetPoolSelected] = useState<string>("");
 
-  const [textAfterClick, setTextAfterClick] = useState<string>("");
-  const [textNotClickable, setTextNotClickable] = useState<string>(
+  const [orderLenderIdQuote, setOrderLenderIdQuote] = useState<string>("");
+  const [withdrawAmountQuantityQuote, setWithdrawAmountQuantityQuote] =
+    useState<number>(0);
+  const [buttonClickableQuote, setButtonClickableQuote] =
+    useState<boolean>(false);
+  const [textAfterClickQuote, setTextAfterClickQuote] = useState<string>("");
+  const [textNotClickableQuote, setTextNotClickableQuote] = useState<string>(
+    "Must enter an amount to withdraw"
+  );
+
+  const [orderLenderIdBase, setOrderLenderIdBase] = useState<string>("");
+  const [withdrawAmountQuantityBase, setWithdrawAmountQuantityBase] =
+    useState<number>(0);
+  const [buttonClickableBase, setButtonClickableBase] =
+    useState<boolean>(false);
+  const [textAfterClickBase, setTextAfterClickBase] = useState<string>("");
+  const [textNotClickableBase, setTextNotClickableBase] = useState<string>(
     "Must enter an amount to withdraw"
   );
 
   const {
+    price,
     poolLoading,
     orderMergedData,
     orderMergedDataUnderMarketPrice,
@@ -44,60 +55,44 @@ const Withdraw = () => {
     getMetricsDataLendingWithdraw(marketInfo)
   );
 
+  // const filteredData = orderMergedData.filter(
+  //   (item) => item.orderLenderId !== undefined
+  // );
   const filteredData = orderMergedData.filter(
-    (item) => item.orderLenderId !== undefined
+    (item) =>
+      item.mySupplyCumulated !== undefined &&
+      parseFloat(item.mySupplyCumulated as string) !== 0
   );
-
-  // TODO
-  // besoin de s'occuper de la partie où le lender a de la supply en base token et non en quote token
-  // du coup il faut créer une nouvelle variable mySupplyInETH
-  filteredData.forEach((item) => {
-    if (parseFloat(item.borrows as string) !== 0) {
-      item.mySupplyInETH = item.mySupply; // Ajoute `mySupplyInETH` uniquement si `mySupply` est différent de 0
-    }
-  });
 
   let sortedData = [...filteredData];
   sortedData.sort((a, b) => Number(a.buyPrice) - Number(b.buyPrice));
 
-  const updateButtonClickable = (quantity: number, price: string) => {
-    const isClickable = quantity > 0 && price !== "";
-    setButtonClickable(isClickable);
-    setTextAfterClick("");
-    if (quantity == 0) {
-      setTextNotClickable("Must enter an amount to withdraw");
-    } else if (price == "") {
-      setTextNotClickable("Must select a position");
-    }
-  };
-
-  const handleQuantityChange = (newQuantity: any) => {
-    setWithdrawAmountQuantity(newQuantity);
-    updateButtonClickable(newQuantity, buyPrice);
-  };
-
-  const handleRowClick = (rowData: any) => {
-    setClickedRowData(rowData);
-    const newBuyPrice = rowData.buyPrice;
-    setBuyPrice(newBuyPrice);
-    const newPoolId = rowData.poolId;
-    setPoolId(newPoolId);
-    const newOrderId = rowData.orderLenderId;
-    setOrderLenderId(newOrderId);
-    updateButtonClickable(withdrawAmountQuantity, newBuyPrice);
-  };
-
   const withdraw = useWithdraw();
 
-  const handleButtonClick = async () => {
+  const updateButtonClickableQuote = (quantity: number, price: string) => {
+    const isClickable = quantity > 0 && price !== "";
+    setButtonClickableQuote(isClickable);
+    setTextAfterClickQuote("");
+    if (quantity == 0) {
+      setTextNotClickableQuote("Must enter an amount to withdraw");
+    } else if (price == "") {
+      setTextNotClickableQuote("Must select a position");
+    }
+  };
+  const handleQuantityChangeQuote = (newQuantity: any) => {
+    setWithdrawAmountQuantityQuote(newQuantity);
+    updateButtonClickableQuote(newQuantity, buyPrice);
+  };
+  const handleButtonClickQuote = async () => {
     //setMessage("Button clicked!");
-    if (buttonClickable) {
-      setTextAfterClick("Transaction sent ...");
+    if (buttonClickableQuote) {
+      setTextAfterClickQuote("Transaction sent ...");
+      console.log("orderLenderIdQuote", orderLenderIdQuote);
       const result = await withdraw(
-        Number(orderLenderId),
-        String(withdrawAmountQuantity)
+        Number(orderLenderIdQuote),
+        String(withdrawAmountQuantityQuote)
       );
-      setTextAfterClick(result);
+      setTextAfterClickQuote(result);
       if (result == "Transaction successful!") {
         refetchData();
         // FIXEME j'appelle une deuxieme fois car ya un prblm et on ne recupere pas le nvx poolData
@@ -108,8 +103,67 @@ const Withdraw = () => {
     }
   };
 
-  const toggleShowAll = () => {
-    setShowAll(!showAll);
+  const updateButtonClickableBase = (quantity: number, price: string) => {
+    const isClickable = quantity > 0 && price !== "";
+    setButtonClickableBase(isClickable);
+    setTextAfterClickBase("");
+    if (quantity == 0) {
+      setTextNotClickableBase("Must enter an amount to withdraw");
+    } else if (price == "") {
+      setTextNotClickableBase("Must select a position");
+    }
+  };
+  const handleQuantityChangeBase = (newQuantity: any) => {
+    setWithdrawAmountQuantityBase(newQuantity);
+    updateButtonClickableBase(newQuantity, buyPrice);
+  };
+  const handleButtonClickBase = async () => {
+    //setMessage("Button clicked!");
+    if (buttonClickableBase) {
+      setTextAfterClickBase("Transaction sent ...");
+      console.log("orderLenderIdBase", orderLenderIdBase);
+      const result = await withdraw(
+        Number(orderLenderIdBase),
+        String(withdrawAmountQuantityBase)
+      );
+      setTextAfterClickBase(result);
+      if (result == "Transaction successful!") {
+        refetchData();
+        // FIXEME j'appelle une deuxieme fois car ya un prblm et on ne recupere pas le nvx poolData
+        // à cause de la mise a jour asynchrone il me semble et car ya pas de synchronisation entre poolData
+        // et les user data (userDeposits et userBorrows)
+        refetchData();
+      }
+    }
+  };
+
+  const handleRowClick = (rowData: any) => {
+    setClickedRowData(rowData);
+    const newBuyPrice = rowData.buyPrice;
+    setBuyPrice(newBuyPrice);
+    const newPoolId = rowData.poolId;
+    setPoolId(newPoolId);
+
+    // different conditions based on the lender supply (if it's in base token or quote token or both)
+    if (rowData.mySupplyQuote > 0 && rowData.mySupplyBase > 0) {
+      const newOrderIdQuote = rowData.orderLenderIdQuote;
+      setOrderLenderIdQuote(newOrderIdQuote);
+      updateButtonClickableQuote(withdrawAmountQuantityQuote, newBuyPrice);
+      const newOrderIdBase = rowData.orderLenderIdBase;
+      setOrderLenderIdBase(newOrderIdBase);
+      updateButtonClickableBase(withdrawAmountQuantityBase, newBuyPrice);
+      SetPoolSelected("quoteTokenAndBaseToken");
+    } else if (rowData.mySupplyQuote > 0) {
+      const newOrderIdQuote = rowData.orderLenderIdQuote;
+      setOrderLenderIdQuote(newOrderIdQuote);
+      updateButtonClickableQuote(withdrawAmountQuantityQuote, newBuyPrice);
+      SetPoolSelected("quoteToken");
+    } else if (rowData.mySupplyBase > 0) {
+      const newOrderIdBase = rowData.orderLenderIdBase;
+      setOrderLenderIdBase(newOrderIdBase);
+      updateButtonClickableBase(withdrawAmountQuantityBase, newBuyPrice);
+      SetPoolSelected("baseToken");
+    }
   };
 
   return (
@@ -121,51 +175,118 @@ const Withdraw = () => {
           metrics={metricsData}
           isLoading={poolLoading}
           onRowClick={handleRowClick}
-          userMetricBorder={"mySupply"}
+          userMetricBorder={"mySupplyCumulated"}
           userMetricBorderColor={theme.palette.primary.main}
         />
       </div>
-      {/* <div className="flex mt-10"></div> */}
-      <div className="flex mt-5">
-        <AmountCustom
-          title="Amount to withdraw"
-          tokenWalletBalance={clickedRowData ? clickedRowData.mySupply : 0}
-          selectedToken={marketInfo.quoteTokenSymbol}
-          ratioToUSD={1.01}
-          onQuantityChange={handleQuantityChange}
-        />
-      </div>
-      {/* <div className="flex mt-5">
-        <CustomTable
-          title="Select a lending position to withdraw"
-          columnsConfig={customDataColumnsConfig}
-          data={filteredData}
-          clickableRows={true}
-          onRowClick={handleRowClick}
-          isLoading={poolLoading}
-        />
-      </div>
-      <Button
-        onClick={toggleShowAll}
-        style={{
-          float: "right", // Aligner à droite
-          textTransform: "none",
-          color: theme.palette.text.primary,
-        }}
-      >
-        {showAll ? "show less" : "show more"}
-      </Button> */}
-      <div className="flex mt-10">
-        <CustomButton
-          clickable={buttonClickable}
-          handleClick={handleButtonClick}
-          textAfterClick={textAfterClick}
-          textClickable="Withdraw"
-          textNotClickable={textNotClickable}
-          buttonWidth={300}
-          borderRadius={50}
-        />
-      </div>
+      {poolSelected !== "" && (
+        <div>
+          {poolSelected === "quoteToken" && (
+            <>
+              <div className="flex mt-5">
+                <AmountCustom
+                  title={`Withdraw ${marketInfo.quoteTokenSymbol}`}
+                  tokenWalletBalance={
+                    clickedRowData ? clickedRowData.mySupplyQuote : 0
+                  }
+                  selectedToken={marketInfo.quoteTokenSymbol}
+                  ratioToUSD={1}
+                  onQuantityChange={handleQuantityChangeQuote}
+                />
+              </div>
+              <div className="flex mt-10">
+                <CustomButton
+                  clickable={buttonClickableQuote}
+                  handleClick={handleButtonClickQuote}
+                  textAfterClick={textAfterClickQuote}
+                  textClickable={`Withdraw ${marketInfo.quoteTokenSymbol}`}
+                  textNotClickable={textNotClickableQuote}
+                  buttonWidth={300}
+                  borderRadius={50}
+                />
+              </div>
+            </>
+          )}
+          {poolSelected === "baseToken" && (
+            <>
+              <div className="flex mt-5">
+                <AmountCustom
+                  title={`Withdraw ${marketInfo.baseTokenSymbol}`}
+                  tokenWalletBalance={
+                    clickedRowData ? clickedRowData.mySupplyBase : 0
+                  }
+                  selectedToken={marketInfo.baseTokenSymbol}
+                  ratioToUSD={price as number}
+                  onQuantityChange={handleQuantityChangeBase}
+                />
+              </div>
+              <div className="flex mt-10">
+                <CustomButton
+                  clickable={buttonClickableBase}
+                  handleClick={handleButtonClickBase}
+                  textAfterClick={textAfterClickBase}
+                  textClickable={`Withdraw ${marketInfo.baseTokenSymbol}`}
+                  textNotClickable={textNotClickableBase}
+                  buttonWidth={300}
+                  borderRadius={50}
+                />
+              </div>
+            </>
+          )}
+          {poolSelected === "quoteTokenAndBaseToken" && (
+            <div className="flex flex-start">
+              <div>
+                <div className="flex mt-5">
+                  <AmountCustom
+                    title={`Withdraw ${marketInfo.quoteTokenSymbol}`}
+                    tokenWalletBalance={
+                      clickedRowData ? clickedRowData.mySupplyQuote : 0
+                    }
+                    selectedToken={marketInfo.quoteTokenSymbol}
+                    ratioToUSD={1}
+                    onQuantityChange={handleQuantityChangeQuote}
+                  />
+                </div>
+                <div className="flex mt-10">
+                  <CustomButton
+                    clickable={buttonClickableQuote}
+                    handleClick={handleButtonClickQuote}
+                    textAfterClick={textAfterClickQuote}
+                    textClickable={`Withdraw ${marketInfo.quoteTokenSymbol}`}
+                    textNotClickable={textNotClickableQuote}
+                    buttonWidth={300}
+                    borderRadius={50}
+                  />
+                </div>
+              </div>
+              <div className="ml-20">
+                <div className="flex mt-5">
+                  <AmountCustom
+                    title={`Withdraw ${marketInfo.baseTokenSymbol}`}
+                    tokenWalletBalance={
+                      clickedRowData ? clickedRowData.mySupplyBase : 0
+                    }
+                    selectedToken={marketInfo.baseTokenSymbol}
+                    ratioToUSD={price as number}
+                    onQuantityChange={handleQuantityChangeBase}
+                  />
+                </div>
+                <div className="flex mt-10">
+                  <CustomButton
+                    clickable={buttonClickableBase}
+                    handleClick={handleButtonClickBase}
+                    textAfterClick={textAfterClickBase}
+                    textClickable={`Withdraw ${marketInfo.baseTokenSymbol}`}
+                    textNotClickable={textNotClickableBase}
+                    buttonWidth={300}
+                    borderRadius={50}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

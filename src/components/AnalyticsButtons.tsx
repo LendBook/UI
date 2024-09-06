@@ -20,7 +20,6 @@ import AnalyticButton from "./AnalyticButton";
 import MetricCustom from "./MetricCustom";
 import { userInfo } from "os";
 import { useDataContext } from "../context/DataContext";
-import { title } from "process";
 
 type RowData<T extends string | number> = Record<T, string | number> & {
   id: number;
@@ -40,8 +39,8 @@ type AnalyticsButtonsProps<T extends string | number> = {
   metrics: {
     key: string;
     title: string;
-    value: string;
-    unit: string;
+    value: string | string[];
+    unit: string | string[];
     color: string;
   }[];
   isLoading?: boolean;
@@ -84,8 +83,9 @@ export default function AnalyticsButtons<T extends string | number>({
     return {
       ...item, // Copie toutes les propriétés existantes
       totalDeposits: deposits,
-      lendRatio: lendRatio, //deposits / (deposits + borrows),
-      borrowRatio: borrows / deposits, //borrows / (deposits + borrows),
+      lendRatio: title == "Select a pool to withdraw" ? 0 : lendRatio, //for lend Withdraw, we do not want to show lend ratio and borrow ratio
+      borrowRatio:
+        title == "Select a pool to withdraw" ? 0 : borrows / deposits, //for lend Withdraw, we do not want to show lend ratio and borrow ratio
     };
   });
   const maxTotal = Math.max(
@@ -105,6 +105,15 @@ export default function AnalyticsButtons<T extends string | number>({
     const myQty = item[userMetricBorder] as number;
     let myQtyRatio = (myQty / maxMyQty) * 4; // 4px for the max border
 
+    if (title == "Select a pool to withdraw") {
+      //we only want to show "My Supply"
+      total_ratio = (myQty / maxMyQty) * 250;
+      if (total_ratio !== 0 && total_ratio < 20) {
+        // 20px is the minimum height of the box in the plot in order to be correctly visible
+        total_ratio = 20;
+      }
+    }
+
     return {
       ...item, // Copie toutes les propriétés existantes
       totalRatio: total_ratio,
@@ -118,20 +127,65 @@ export default function AnalyticsButtons<T extends string | number>({
   const [metricsData, setMetricsData] = useState(metrics);
 
   const [metricsDataClicked, setMetricsDataClicked] = useState(metricsData);
+
+  function updateMetrics(
+    prevMetricsData: {
+      key: string;
+      title: string;
+      value: string | string[];
+      unit: string | string[];
+      color: string;
+    }[],
+    row: RowData<T>
+  ) {
+    const keysToUpdate: { [key: string]: boolean } = {};
+    prevMetricsData.forEach((metric) => {
+      keysToUpdate[metric.key] = true;
+    });
+
+    return prevMetricsData.map((metric) => {
+      if (
+        keysToUpdate[metric.key] &&
+        metric.key === "mySupply" &&
+        row.hasOwnProperty("mySupplyQuote")
+      ) {
+        let value = [];
+        let unit = [];
+        let fontSize = [];
+        if (row?.["mySupplyQuote"] === 0) {
+          value = [row?.["mySupplyBase"].toString()];
+          unit = [marketInfo.baseTokenSymbol];
+          fontSize = ["100%"];
+        } else if (row?.["mySupplyBase"] === 0) {
+          value = [row?.["mySupplyQuote"].toString()];
+          unit = [marketInfo.quoteTokenSymbol];
+          fontSize = ["100%"];
+        } else {
+          value = [
+            row?.["mySupplyQuote"].toString(),
+            row?.["mySupplyBase"].toString(),
+          ];
+          unit = [marketInfo.quoteTokenSymbol, marketInfo.baseTokenSymbol];
+          fontSize = ["100%", "100%"];
+        }
+
+        return {
+          ...metric,
+          value,
+          unit,
+          fontSize,
+        };
+      } else if (keysToUpdate[metric.key] && row.hasOwnProperty(metric.key)) {
+        return { ...metric, value: row[metric.key].toString() };
+      }
+      return metric;
+    });
+  }
+
   const handleMouseEnter = (row: RowData<T>) => {
     setMetricsData((prevMetricsData) => {
-      // Obtenir toutes les clés uniques de prevMetricsData
-      const keysToUpdate: { [key: string]: boolean } = {};
-      prevMetricsData.forEach((metric) => {
-        keysToUpdate[metric.key] = true;
-      });
-
-      return prevMetricsData.map((metric) => {
-        if (keysToUpdate[metric.key] && row.hasOwnProperty(metric.key)) {
-          return { ...metric, value: row[metric.key].toString() };
-        }
-        return metric;
-      });
+      // Appelle de la fonction updateMetrics avec les bons paramètres
+      return updateMetrics(prevMetricsData, row);
     });
   };
 
@@ -147,18 +201,8 @@ export default function AnalyticsButtons<T extends string | number>({
     setClickedButton(poolIndex);
     console.log(data);
     setMetricsDataClicked((prevMetricsData) => {
-      // Obtenir toutes les clés uniques de prevMetricsData
-      const keysToUpdate: { [key: string]: boolean } = {};
-      prevMetricsData.forEach((metric) => {
-        keysToUpdate[metric.key] = true;
-      });
-
-      return prevMetricsData.map((metric) => {
-        if (keysToUpdate[metric.key] && row.hasOwnProperty(metric.key)) {
-          return { ...metric, value: row[metric.key].toString() };
-        }
-        return metric;
-      });
+      // Appelle de la fonction updateMetrics avec les bons paramètres
+      return updateMetrics(prevMetricsData, row);
     });
   };
 
@@ -288,7 +332,7 @@ export default function AnalyticsButtons<T extends string | number>({
                         )}
 
                         <AnalyticButton
-                          clickable={true} // Ajustez cette valeur selon vos besoins
+                          clickable={true}
                           clicked={poolIndex == clickedButton ? true : false}
                           buttonWidth={50}
                           buttonHeight={pool.totalRatio as number}

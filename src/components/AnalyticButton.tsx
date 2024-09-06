@@ -144,7 +144,9 @@ export default function AnalyticButton({
           > */}
 
           {/* </Box> */}
-          {lendAPY != 0 ? (
+
+          {/*Box pour mettre la valeur de lendAPY au dessus de la pool*/}
+          {/* {lendAPY != 0 ? (
             <Box
               sx={{
                 position: "absolute",
@@ -160,7 +162,7 @@ export default function AnalyticButton({
             </Box>
           ) : (
             ""
-          )}
+          )} */}
         </Button>
         <Box
           sx={{
