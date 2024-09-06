@@ -39,9 +39,10 @@ const Index = () => {
     },
     {
       title: "My total supply",
-      value: [userInfo.totalDepositsQuote],
-      unit: [marketInfo.quoteTokenSymbol],
-      fontSize: ["100%"],
+      //value: [userInfo.totalDepositsQuote],
+      value: [userInfo.totalSupplyQuote, userInfo.totalSupplyBase],
+      unit: [marketInfo.quoteTokenSymbol, marketInfo.baseTokenSymbol],
+      fontSize: ["100%", "100%"],
       color: theme.palette.primary.main,
       tooltipText: "The total supply linked to your wallet",
     },

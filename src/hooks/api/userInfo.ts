@@ -134,6 +134,9 @@ export const useFetchUserInfo = (
         depositOrdersIdResponse.data.getUserDepositIds.split(",");
       depositOrdersId_l = depositOrdersId_l.map(Number);
 
+      let _totalSupplyQuote = 0;
+      let _totalSupplyBase = 0;
+
       const results = await Promise.all(
         depositOrdersId_l.map(async (depositOrdersId: Number) => {
           const orderResponse = await axios.get(
@@ -148,6 +151,7 @@ export const useFetchUserInfo = (
           );
 
           if (poolId % 2 === 0) {
+            _totalSupplyQuote = _totalSupplyQuote + quantity;
             return {
               id: depositOrdersId,
               orderLenderId: depositOrdersId,
@@ -158,6 +162,7 @@ export const useFetchUserInfo = (
               mySupplyCumulated: 0,
             };
           } else {
+            _totalSupplyBase = _totalSupplyBase + quantity;
             return {
               id: depositOrdersId,
               orderLenderId: depositOrdersId,
@@ -171,6 +176,11 @@ export const useFetchUserInfo = (
         })
       );
       setUserDeposits(results);
+      setUserInfo((prevUserInfo) => ({
+        ...prevUserInfo,
+        totalSupplyQuote: _totalSupplyQuote,
+        totalSupplyBase: _totalSupplyBase,
+      }));
     } catch (err: any) {
       const errorMessage = `Failed to fetch user info: ${err.message}`;
       setError(errorMessage);
