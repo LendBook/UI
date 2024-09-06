@@ -187,7 +187,12 @@ const Withdraw = () => {
                 <AmountCustom
                   title={`Withdraw ${marketInfo.quoteTokenSymbol}`}
                   tokenWalletBalance={
-                    clickedRowData ? clickedRowData.mySupplyQuote : 0
+                    clickedRowData
+                      ? clickedRowData.availableSupplyToBorrow * 0.98 < //*0.98 is a buffer because we do not calculate interests in the dapp
+                        clickedRowData.mySupplyQuote
+                        ? clickedRowData.availableSupplyToBorrow * 0.98
+                        : clickedRowData.mySupplyQuote
+                      : 0
                   }
                   selectedToken={marketInfo.quoteTokenSymbol}
                   ratioToUSD={1}
@@ -240,7 +245,12 @@ const Withdraw = () => {
                   <AmountCustom
                     title={`Withdraw ${marketInfo.quoteTokenSymbol}`}
                     tokenWalletBalance={
-                      clickedRowData ? clickedRowData.mySupplyQuote : 0
+                      clickedRowData
+                        ? clickedRowData.availableSupplyToBorrow * 0.99 < //*0.99 is a buffer because we do not calculate interests in the dapp
+                          clickedRowData.mySupplyQuote
+                          ? clickedRowData.availableSupplyToBorrow * 0.99
+                          : clickedRowData.mySupplyQuote
+                        : 0
                     }
                     selectedToken={marketInfo.quoteTokenSymbol}
                     ratioToUSD={1}
