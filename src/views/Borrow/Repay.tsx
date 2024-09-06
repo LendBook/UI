@@ -61,8 +61,11 @@ const Repay = () => {
     getMetricsDataBorrowingRepay(marketInfo)
   );
 
+  // const filteredData = orderMergedData.filter(
+  //   (item) => item.orderBorrowerId !== undefined
+  // );
   const filteredData = orderMergedData.filter(
-    (item) => item.orderBorrowerId !== undefined
+    (item) => parseFloat(item.myBorrowingPositions as string) !== 0
   );
 
   const displayedData = showAll ? filteredData : filteredData.slice(0, 3);
@@ -155,7 +158,7 @@ const Repay = () => {
               : 0
           }
           selectedToken={marketInfo.quoteTokenSymbol}
-          ratioToUSD={1.01}
+          ratioToUSD={1}
           onQuantityChange={handleQuantityChange}
         />
       </div>

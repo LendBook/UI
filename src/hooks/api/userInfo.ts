@@ -15,7 +15,9 @@ export interface UserDepositOrdersData {
   orderLenderId: number;
   poolId: number;
   maker: string;
-  mySupply: number;
+  mySupplyQuote: number;
+  mySupplyBase: number;
+  mySupplyCumulated: number;
   [key: string]: string | number;
 }
 
@@ -132,6 +134,9 @@ export const useFetchUserInfo = (
         depositOrdersIdResponse.data.getUserDepositIds.split(",");
       depositOrdersId_l = depositOrdersId_l.map(Number);
 
+      let _totalSupplyQuote = 0;
+      let _totalSupplyBase = 0;
+
       const results = await Promise.all(
         depositOrdersId_l.map(async (depositOrdersId: Number) => {
           const orderResponse = await axios.get(
@@ -145,16 +150,37 @@ export const useFetchUserInfo = (
             ethers.utils.formatUnits(orderObject[3], "ether")
           );
 
-          return {
-            id: depositOrdersId,
-            orderLenderId: depositOrdersId,
-            poolId: poolId,
-            maker: makerAddress,
-            mySupply: quantity,
-          };
+          if (poolId % 2 === 0) {
+            _totalSupplyQuote = _totalSupplyQuote + quantity;
+            return {
+              id: depositOrdersId,
+              orderLenderId: depositOrdersId,
+              poolId: poolId,
+              maker: makerAddress,
+              mySupplyQuote: quantity,
+              mySupplyBase: 0,
+              mySupplyCumulated: 0,
+            };
+          } else {
+            _totalSupplyBase = _totalSupplyBase + quantity;
+            return {
+              id: depositOrdersId,
+              orderLenderId: depositOrdersId,
+              poolId: poolId - 1,
+              maker: makerAddress,
+              mySupplyQuote: 0,
+              mySupplyBase: quantity,
+              mySupplyCumulated: 0,
+            };
+          }
         })
       );
       setUserDeposits(results);
+      setUserInfo((prevUserInfo) => ({
+        ...prevUserInfo,
+        totalSupplyQuote: _totalSupplyQuote,
+        totalSupplyBase: _totalSupplyBase,
+      }));
     } catch (err: any) {
       const errorMessage = `Failed to fetch user info: ${err.message}`;
       setError(errorMessage);

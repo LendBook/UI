@@ -10,7 +10,7 @@ const CollateralDeposit = () => {
   const [buttonClickable, setButtonClickable] = useState<boolean>(false);
   const [textAfterClick, setTextAfterClick] = useState<string>("");
 
-  const { userInfo, refetchData, marketInfo } = useDataContext();
+  const { price, userInfo, refetchData, marketInfo } = useDataContext();
 
   const updateButtonClickable = (collateralQuantity: number) => {
     const isClickable = collateralQuantity > 0;
@@ -53,7 +53,7 @@ const CollateralDeposit = () => {
         title="Amount to deposit"
         tokenWalletBalance={userInfo.baseTokenBalance}
         selectedToken={marketInfo.baseTokenSymbol}
-        ratioToUSD={3010}
+        ratioToUSD={price as number}
         onQuantityChange={handleCollateralQuantityChange}
       />
       <div className="flex mt-5"></div>

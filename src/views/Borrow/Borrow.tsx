@@ -149,14 +149,14 @@ const Borrow = () => {
           title="Amount to borrow"
           tokenWalletBalance={
             clickedRowData
-              ? clickedRowData.availableSupplyToBorrow <
+              ? clickedRowData.availableSupplyToBorrow * 0.98 < //*0.98 is a buffer because we do not calculate interests in the dapp
                 userInfo.excessCollateral * clickedRowData.buyPrice
-                ? clickedRowData.availableSupplyToBorrow
+                ? clickedRowData.availableSupplyToBorrow * 0.98
                 : userInfo.excessCollateral * clickedRowData.buyPrice
               : 0
           }
           selectedToken={marketInfo.quoteTokenSymbol}
-          ratioToUSD={1.01}
+          ratioToUSD={1}
           onQuantityChange={handleQuantityChange}
         />
       </div>

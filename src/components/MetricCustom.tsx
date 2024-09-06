@@ -12,8 +12,7 @@ import {
   Container,
 } from "@mui/material";
 import theme from "../theme";
-import { title } from "process";
-import { formatNumber } from "./GlobalFunctions";
+import { formatNumber, formatNumberRoundedForK } from "./GlobalFunctions";
 import MarketComponent from "../components/MarketComponent";
 import { menu } from "@material-tailwind/react";
 import DivWithTooltip from "./DivWithTooltip";
@@ -114,6 +113,7 @@ export default function MetricCustom<T extends string>({
                       style={{
                         fontWeight: "bold",
                         fontSize: "90%",
+                        //whiteSpace: "nowrap",
                         color: (row["color" as keyof RowData<T>] as string)
                           ? (row["color" as keyof RowData<T>] as string)
                           : theme.palette.info.main,
@@ -135,24 +135,51 @@ export default function MetricCustom<T extends string>({
                   ) : Array.isArray(row["value" as keyof RowData<T>]) ? (
                     // Affichage si value est un tableau de chaînes
                     (row["value" as keyof RowData<T>] as string[]).map(
-                      (val, index) => (
-                        <div
-                          style={{
-                            fontSize:
-                              (row["fontSize" as keyof RowData<T>] as string[])[
-                                index
-                              ] || "100%",
-                          }}
-                          key={index}
-                        >
-                          {formatNumber(val)}{" "}
-                          {Array.isArray(row["unit" as keyof RowData<T>])
-                            ? (row["unit" as keyof RowData<T>] as string[])[
-                                index
-                              ] || ""
-                            : row["unit" as keyof RowData<T>]}
-                        </div>
-                      )
+                      (val, index) => {
+                        const unit = Array.isArray(
+                          row["unit" as keyof RowData<T>]
+                        )
+                          ? (row["unit" as keyof RowData<T>] as string[])[
+                              index
+                            ] || ""
+                          : row["unit" as keyof RowData<T>];
+
+                        // Déterminer la couleur de la valeur ou utiliser une couleur par défaut si valueColor est undefined
+                        const valueColor = Array.isArray(
+                          row["valueColor" as keyof RowData<T>]
+                        )
+                          ? (row["valueColor" as keyof RowData<T>] as string[])[
+                              index
+                            ] || theme.palette.common.black
+                          : theme.palette.common.black; // Couleur par défaut si row["valueColor"] est undefined ou non un tableau
+
+                        return (
+                          <div
+                            style={{
+                              fontSize:
+                                (
+                                  row[
+                                    "fontSize" as keyof RowData<T>
+                                  ] as string[]
+                                )[index] || "100%",
+                              color: valueColor,
+                              marginTop: unit === "$" ? "-6px" : "0px",
+                            }}
+                            key={index}
+                          >
+                            {unit === "$" ? (
+                              <>
+                                {unit}
+                                {formatNumberRoundedForK(val)}
+                              </>
+                            ) : (
+                              <>
+                                {formatNumber(val)} {unit}
+                              </>
+                            )}
+                          </div>
+                        );
+                      }
                     )
                   ) : (
                     // Affichage si value est une chaîne unique
