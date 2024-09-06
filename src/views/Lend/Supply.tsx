@@ -158,7 +158,7 @@ const Supply = () => {
           title="Amount to supply"
           tokenWalletBalance={userInfo.quoteTokenBalance}
           selectedToken={marketInfo.quoteTokenSymbol}
-          ratioToUSD={1.01}
+          ratioToUSD={1}
           onQuantityChange={handleQuantityChange}
         />
       </div>

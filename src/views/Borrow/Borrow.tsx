@@ -156,7 +156,7 @@ const Borrow = () => {
               : 0
           }
           selectedToken={marketInfo.quoteTokenSymbol}
-          ratioToUSD={1.01}
+          ratioToUSD={1}
           onQuantityChange={handleQuantityChange}
         />
       </div>
