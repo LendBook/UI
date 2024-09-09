@@ -30,7 +30,7 @@ export default function AmountCustom({
   title = "Collateral Amount",
   tokenWalletBalance = 0,
   selectedToken = "quoteToken",
-  ratioToUSD = 1.01,
+  ratioToUSD = 1,
   initialQuantity = "",
   onQuantityChange, // Fonction de gestion du changement de quantité passée en prop
 }: AmountCustomProps) {
@@ -78,6 +78,10 @@ export default function AmountCustom({
       if (e.target.value === "") {
         setQuantity(amount);
         setMessage(amount);
+
+        if (onQuantityChange) {
+          onQuantityChange(amount);
+        }
       } else {
         let inputValue = e.target.value;
         inputValue = inputValue.replace(/,/g, ".");
@@ -95,9 +99,23 @@ export default function AmountCustom({
         if (amount[0] === ".") amount = "0" + amount;
         setQuantity(amount);
         setMessage("$" + formatNumber(parseFloat(amount) * ratioToUSD));
-      }
-      if (onQuantityChange) {
-        onQuantityChange(amount);
+
+        if (onQuantityChange) {
+          onQuantityChange(amount);
+        }
+        // if (
+        //   parseFloat(amount) >= parseFloat(quantity) / 1.000001 &&
+        //   parseFloat(amount) <= parseFloat(quantity) * 1.000001
+        // ) {
+        //   //do nothing
+        // } else {
+        //   setQuantity(amount);
+        //   setMessage("$" + formatNumber(parseFloat(amount) * ratioToUSD));
+
+        //   if (onQuantityChange) {
+        //     onQuantityChange(amount);
+        //   }
+        // }
       }
     } catch (error) {
       console.log(error);

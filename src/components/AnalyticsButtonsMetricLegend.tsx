@@ -252,7 +252,7 @@ export const getMetricsDataBorrowingRepay = (marketInfo: MarketInfo) => [
   },
 ];
 
-export const getMetricsDataTrade = (marketInfo: MarketInfo) => [
+export const getMetricsDataTradeBaseToQuote = (marketInfo: MarketInfo) => [
   {
     key: "buyPrice",
     title: "Buy Price",
@@ -265,7 +265,26 @@ export const getMetricsDataTrade = (marketInfo: MarketInfo) => [
     key: "availableSupply",
     title: "Available supply for trading",
     value: "-",
-    unit: marketInfo.quoteTokenSymbol, // FIXEME need to changet the metric
+    unit: marketInfo.quoteTokenSymbol,
+    color: theme.palette.info.main,
+    tooltipText: "",
+  },
+];
+
+export const getMetricsDataTradeQuoteToBase = (marketInfo: MarketInfo) => [
+  {
+    key: "buyPrice",
+    title: "Buy Price",
+    value: "-",
+    unit: marketInfo.quoteTokenSymbol,
+    color: theme.palette.info.main,
+    tooltipText: "The buy price of the pool",
+  },
+  {
+    key: "pairedAvailableSupplyQuote",
+    title: "Available supply for trading",
+    value: "-",
+    unit: marketInfo.baseTokenSymbol,
     color: theme.palette.info.main,
     tooltipText: "",
   },

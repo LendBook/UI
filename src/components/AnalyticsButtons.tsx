@@ -47,6 +47,7 @@ type AnalyticsButtonsProps<T extends string | number> = {
   onRowClick?: (row: RowData<T>) => void;
   userMetricBorder: string;
   userMetricBorderColor: string;
+  specificMetric?: string;
 };
 
 export default function AnalyticsButtons<T extends string | number>({
@@ -58,6 +59,7 @@ export default function AnalyticsButtons<T extends string | number>({
   onRowClick,
   userMetricBorder,
   userMetricBorderColor,
+  specificMetric,
 }: AnalyticsButtonsProps<T>) {
   const [clickedButton, setClickedButton] = useState<number | null>(null);
 
@@ -83,9 +85,16 @@ export default function AnalyticsButtons<T extends string | number>({
     return {
       ...item, // Copie toutes les propriétés existantes
       totalDeposits: deposits,
-      lendRatio: title == "Select a pool to withdraw" ? 0 : lendRatio, //for lend Withdraw, we do not want to show lend ratio and borrow ratio
+      lendRatio:
+        title === "Select a pool to withdraw" ||
+        title === "Select a limit price to trade"
+          ? 0
+          : lendRatio, //for lend Withdraw, we do not want to show lend ratio and borrow ratio
       borrowRatio:
-        title == "Select a pool to withdraw" ? 0 : borrows / deposits, //for lend Withdraw, we do not want to show lend ratio and borrow ratio
+        title === "Select a pool to withdraw" ||
+        title === "Select a limit price to trade"
+          ? 0
+          : borrows / deposits, //for lend Withdraw, we do not want to show lend ratio and borrow ratio
     };
   });
   const maxTotal = Math.max(
@@ -108,6 +117,18 @@ export default function AnalyticsButtons<T extends string | number>({
     if (title == "Select a pool to withdraw") {
       //we only want to show "My Supply"
       total_ratio = (myQty / maxMyQty) * 250;
+      if (total_ratio !== 0 && total_ratio < 20) {
+        // 20px is the minimum height of the box in the plot in order to be correctly visible
+        total_ratio = 20;
+      }
+    }
+    if (title == "Select a limit price to trade" && specificMetric) {
+      const qty = item[specificMetric] as number;
+      const maxQty = Math.max(
+        ...updatedData.map((item) => item[specificMetric] as number)
+      );
+      //we only want to show "My Supply"
+      total_ratio = (qty / maxQty) * 250;
       if (total_ratio !== 0 && total_ratio < 20) {
         // 20px is the minimum height of the box in the plot in order to be correctly visible
         total_ratio = 20;

@@ -69,16 +69,31 @@ export default function TradeBox({
   ];
 
   const handleSellQuantityChange = (newQuantity: string) => {
+    console.log("sell change");
     setSellAmountQuantity(parseFloat(newQuantity));
-    const newBuyQty = parseFloat(newQuantity) * buyPrice;
-    setBuyAmountQuantity(newBuyQty);
+    let newBuyQty;
+    if (sellToken == "Base") {
+      newBuyQty = parseFloat(newQuantity) * buyPrice;
+      setBuyAmountQuantity(newBuyQty);
+    } else {
+      newBuyQty = parseFloat(newQuantity) / buyPrice;
+      setBuyAmountQuantity(newBuyQty);
+    }
     updateButtonClickable(parseFloat(newQuantity), newBuyQty);
   };
 
   const handleBuyQuantityChange = (newQuantity: string) => {
+    console.log("buy change");
+    console.log("buyPrice", buyPrice);
     setBuyAmountQuantity(parseFloat(newQuantity));
-    const newSellQty = parseFloat(newQuantity) / buyPrice;
-    setSellAmountQuantity(newSellQty);
+    let newSellQty;
+    if (sellToken == "Base") {
+      newSellQty = parseFloat(newQuantity) / buyPrice;
+      setSellAmountQuantity(newSellQty);
+    } else {
+      newSellQty = parseFloat(newQuantity) * buyPrice;
+      setSellAmountQuantity(newSellQty);
+    }
     updateButtonClickable(newSellQty, parseFloat(newQuantity));
   };
 
@@ -92,7 +107,7 @@ export default function TradeBox({
       if (sellToken == "Base") {
         setTextAfterClick("Transaction approval base sent ...");
         const resultApproval = await approveBaseToken(
-          String(sellAmountQuantity)
+          String(sellAmountQuantity * 1.000001) //FIXME buffer of *1.000001 because the buyprice is not the exact buy price
         );
         setTextAfterClick(resultApproval);
         setTextAfterClick("Transaction trade sent ...");
@@ -109,12 +124,12 @@ export default function TradeBox({
       } else if (sellToken == "Quote") {
         setTextAfterClick("Transaction approval quote sent ...");
         const resultApproval = await approveQuoteToken(
-          String(sellAmountQuantity)
+          String(sellAmountQuantity * 1.000001) //FIXME buffer of *1.000001 because the buyprice is not the exact buy price
         );
         setTextAfterClick(resultApproval);
         setTextAfterClick("Transaction trade sent ...");
         const result = await takeBaseTokens(
-          Number(poolId), //FIXEME tester pour voir si c'est pas Number(poolId)+1 qu'il faut mettre...
+          Number(poolId) + 1, //FIXEME tester pour voir si c'est pas Number(poolId)+1 qu'il faut mettre...
           String(buyAmountQuantity)
         );
         setTextAfterClick(result);

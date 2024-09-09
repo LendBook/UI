@@ -90,6 +90,22 @@ const Index = () => {
               borderRadius={50}
             />
           </div>
+
+          <div className="w-full flex mt-20">
+            <span
+              className="text-black font-bold"
+              //style={{ backgroundColor: theme.palette.primary.main }}
+            >
+              LendBook contract :{" "}
+              <a
+                href="https://sepolia.etherscan.io/address/0x5b0D0DDB7860eaEed42AE95b05A7d2df9877aD25"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                0x5b0D0DDB7860eaEed42AE95b05A7d2df9877aD25
+              </a>
+            </span>
+          </div>
         </div>
       </Card>
     </div>

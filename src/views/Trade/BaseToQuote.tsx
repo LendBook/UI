@@ -9,7 +9,7 @@ import { useDeposit } from "../../hooks/useDeposit";
 import { useApproveQuoteToken } from "../../hooks/useApproveQuoteToken";
 import TradeBox from "./TradeBox";
 import AnalyticsButtons from "../../components/AnalyticsButtons";
-import { getMetricsDataTrade } from "../../components/AnalyticsButtonsMetricLegend";
+import { getMetricsDataTradeBaseToQuote } from "../../components/AnalyticsButtonsMetricLegend";
 
 const BaseToQuote = () => {
   const [supplyAmountQuantity, setSupplyAmountQuantity] = useState<number>(0);
@@ -39,27 +39,27 @@ const BaseToQuote = () => {
     console.log(`Button clicked! ${id}`);
   };
 
-  const customDataColumnsConfig = [
-    {
-      key: "buyPrice",
-      title: "Limit Price",
-      metric: marketInfo.quoteTokenSymbol,
-    },
-    {
-      key: "availableSupply",
-      title: "Available supply for trading",
-      metric: marketInfo.quoteTokenSymbol,
-    },
-    {
-      key: "action",
-      title: "",
-      isButton: true,
-      onButtonClick: sellOrdersWithdrawClick,
-    },
-  ];
+  // const customDataColumnsConfig = [
+  //   {
+  //     key: "buyPrice",
+  //     title: "Limit Price",
+  //     metric: marketInfo.quoteTokenSymbol,
+  //   },
+  //   {
+  //     key: "availableSupply",
+  //     title: "Available supply for trading",
+  //     metric: marketInfo.quoteTokenSymbol,
+  //   },
+  //   {
+  //     key: "action",
+  //     title: "",
+  //     isButton: true,
+  //     onButtonClick: sellOrdersWithdrawClick,
+  //   },
+  // ];
 
   const [metricsData, setMetricsData] = useState(
-    getMetricsDataTrade(marketInfo)
+    getMetricsDataTradeBaseToQuote(marketInfo)
   );
 
   const filteredData = orderMergedData.filter(
@@ -136,13 +136,14 @@ const BaseToQuote = () => {
         <div className="flex justify-center mt-0 mb-15">
           <AnalyticsButtons
             title="Select a limit price to trade"
-            columnsConfig={customDataColumnsConfig}
+            //columnsConfig={customDataColumnsConfig}
             data={sortedData}
             metrics={metricsData}
             isLoading={poolLoading}
             onRowClick={handleRowClick}
             userMetricBorder={"mySupply"}
             userMetricBorderColor={theme.palette.primary.main}
+            specificMetric={"availableSupply"}
           />
         </div>
       ) : (
