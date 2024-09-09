@@ -246,6 +246,17 @@ export const useFetchPools = () => {
             ethers.utils.formatUnits(poolsData[1], "ether")
           );
 
+          const pairedPoolsResponse = await axios.get(
+            `${apiUrl}/api/v1/book/${bookAddress}/pools?poolId=${poolId + 1}`
+          );
+          const pairedPoolsData = pairedPoolsResponse.data.pools.split(",");
+          const pairedDepositsQuote = parseFloat(
+            ethers.utils.formatUnits(pairedPoolsData[0], "ether")
+          );
+          const pairedBorrowsQuote = parseFloat(
+            ethers.utils.formatUnits(pairedPoolsData[1], "ether")
+          );
+
           const viewLendingRateResponse = await axios.get(
             `${apiUrl}/api/v1/book/${bookAddress}/viewLendingRate?_poolId=${poolId}`
           );
@@ -320,6 +331,10 @@ export const useFetchPools = () => {
             borrows: borrows,
             availableSupply: deposits - borrows,
             availableSupplyToBorrow: poolAvailableAssets,
+            pairedDepositsQuote: pairedDepositsQuote,
+            pairedBorrowsQuote: pairedBorrowsQuote,
+            pairedAvailableSupplyQuote:
+              pairedDepositsQuote - pairedBorrowsQuote,
           };
         })
       );
