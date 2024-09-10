@@ -19,6 +19,7 @@ const AnalyticsPage = lazy(() => import("./views/Analytics/Index"));
 const Lend = lazy(() => import("./views/Lend/Index"));
 const Mint = lazy(() => import("./views/Mint/Index"));
 const UpdatePrice = lazy(() => import("./views/UpdatePrice/Index"));
+const Ecosystem = lazy(() => import("./views/Ecosystem/Index"));
 
 const App = () => {
   const { address: walletAddress } = useAccount();
@@ -91,6 +92,14 @@ const App = () => {
                 element={
                   <Suspense fallback={<Loading />}>
                     <UpdatePrice />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="ecosystem"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <Ecosystem />
                   </Suspense>
                 }
               />

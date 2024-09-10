@@ -20,7 +20,7 @@ const MENU_LINKS = [
   },
   {
     id: 4,
-    label: "Trade",
+    label: "(Trade)",
     to: "/trade",
     icon: <SwapHorizIcon fontSize="small" />,
   },
@@ -31,7 +31,8 @@ const MENU_LINKS = [
   //   icon: <AlignVerticalBottomIcon fontSize="small" />,
   // },
   { id: 6, label: "(Mint tokens)", to: "/mint" },
-  { id: 7, label: "(Change Price Feed)", to: "/updateprice" },
+  { id: 7, label: "Other links", to: "/ecosystem" },
+  //{ id: 7, label: "(Change Price Feed)", to: "/updateprice" },
 ];
 
 export default MENU_LINKS;

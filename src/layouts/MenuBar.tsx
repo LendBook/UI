@@ -1,18 +1,12 @@
 // MenuBar.tsx
-import { Link } from "react-router-dom";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
-import { Menu, Transition } from "@headlessui/react";
 import pairs from "../config/constants/pair.json";
 import MENU_LINKS from "../config/constants/menu";
-import { Icon } from "@iconify/react";
 import { useTheme } from "../context/ThemeContext";
 import { styled } from "@mui/material/styles";
-import { Box, Button, Paper } from "@mui/material";
 import StyledRouterButton from "../components/buttons/StyledRouterButton";
 import theme from "../theme";
-import { menu } from "@material-tailwind/react";
-import { inherits } from "util";
 import { formatNumber } from "../components/GlobalFunctions";
 import { useDataContext } from "../context/DataContext";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
