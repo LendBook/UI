@@ -29,7 +29,8 @@ export const getMetricsDataLending = (marketInfo: MarketInfo) => [
     valueColor: theme.palette.common.black,
     color: theme.palette.primary.main,
     icon: <SquareRoundedIcon fontSize="small" />,
-    tooltipText: "Sum of the lending supply in the selected pool",
+    tooltipText:
+      "Sum of the lending supply in the selected pool (represented by a green bar in each pool with supply)",
   },
   {
     key: "borrows",
@@ -40,7 +41,8 @@ export const getMetricsDataLending = (marketInfo: MarketInfo) => [
     valueColor: theme.palette.common.black,
     color: theme.palette.success.main,
     icon: <SquareRoundedIcon fontSize="small" />,
-    tooltipText: "Sum of the borrowing positions in the selected pool",
+    tooltipText:
+      "Sum of the borrowing positions in the selected pool (represented by a purple bar in each pool with loans)",
   },
   {
     key: "mySupply",
@@ -52,7 +54,7 @@ export const getMetricsDataLending = (marketInfo: MarketInfo) => [
     color: theme.palette.primary.main,
     icon: <CropDinRoundedIcon fontSize="small" />,
     tooltipText:
-      "Your lending supply in the selected pool (shown as a colored border for each pool having your supply)",
+      "Your lending supply in the selected pool (represented by a colored frame for each pool having your supply)",
   },
   {
     key: "lendingRate",
@@ -115,7 +117,7 @@ export const getMetricsDataLendingWithdraw = (marketInfo: MarketInfo) => [
     valueColor: theme.palette.common.black,
     icon: <CropDinRoundedIcon fontSize="small" />,
     tooltipText:
-      "Your lending supply in the selected pool (shown as a colored border for each pool having your supply)",
+      "Your lending supply in the selected pool (represented by a colored frame for each pool having your supply)",
   },
   // {
   //   key: "mySupplyInETH",
@@ -156,6 +158,7 @@ export const getMetricsDataBorrowing = (marketInfo: MarketInfo) => [
     value: "-",
     unit: marketInfo.quoteTokenSymbol,
     color: theme.palette.info.main,
+    tooltipText: "The buy price linked to the selected pool of orders",
   },
   {
     key: "deposits",
@@ -164,6 +167,8 @@ export const getMetricsDataBorrowing = (marketInfo: MarketInfo) => [
     unit: marketInfo.quoteTokenSymbol,
     color: theme.palette.primary.main,
     icon: <SquareRoundedIcon fontSize="small" />,
+    tooltipText:
+      "Sum of the lending supply in the selected pool (represented by a green bar in each pool with supply)",
   },
   {
     key: "borrows",
@@ -172,6 +177,8 @@ export const getMetricsDataBorrowing = (marketInfo: MarketInfo) => [
     unit: marketInfo.quoteTokenSymbol,
     color: theme.palette.success.main,
     icon: <SquareRoundedIcon fontSize="small" />,
+    tooltipText:
+      "Sum of the borrowing positions in the selected pool (represented by a purple bar in each pool with loans)",
   },
   {
     key: "myBorrowingPositions",
@@ -180,6 +187,8 @@ export const getMetricsDataBorrowing = (marketInfo: MarketInfo) => [
     unit: marketInfo.quoteTokenSymbol,
     color: theme.palette.success.main,
     icon: <CropDinRoundedIcon fontSize="small" />,
+    tooltipText:
+      "Your borrowing position in the selected pool (represented by a colored frame for each pool having your loan)",
   },
   {
     key: "borrowingRate",
@@ -187,6 +196,7 @@ export const getMetricsDataBorrowing = (marketInfo: MarketInfo) => [
     value: "-",
     unit: "%",
     color: theme.palette.info.main,
+    tooltipText: "The borrowing APY linked to the selected pool",
   },
   {
     key: "utilizationRate",
@@ -194,6 +204,7 @@ export const getMetricsDataBorrowing = (marketInfo: MarketInfo) => [
     value: "-",
     unit: "%",
     color: theme.palette.info.main,
+    tooltipText: "The utilization rate of the selected pool",
   },
   {
     key: "maxLTV",
@@ -201,6 +212,8 @@ export const getMetricsDataBorrowing = (marketInfo: MarketInfo) => [
     value: "-",
     unit: "%",
     color: theme.palette.info.main,
+    tooltipText:
+      "The maximum Loan-To-Value you can have if you borrow from the selected pool",
   },
 ];
 
@@ -211,6 +224,7 @@ export const getMetricsDataBorrowingRepay = (marketInfo: MarketInfo) => [
     value: "-",
     unit: marketInfo.quoteTokenSymbol,
     color: theme.palette.info.main,
+    tooltipText: "The buy price linked to the selected pool of orders",
   },
   {
     key: "deposits",
@@ -219,6 +233,8 @@ export const getMetricsDataBorrowingRepay = (marketInfo: MarketInfo) => [
     unit: marketInfo.quoteTokenSymbol,
     color: theme.palette.primary.main,
     icon: <SquareRoundedIcon fontSize="small" />,
+    tooltipText:
+      "Sum of the lending supply in the selected pool (represented by a green bar in each pool with supply)",
   },
   {
     key: "borrows",
@@ -227,6 +243,8 @@ export const getMetricsDataBorrowingRepay = (marketInfo: MarketInfo) => [
     unit: marketInfo.quoteTokenSymbol,
     color: theme.palette.success.main,
     icon: <SquareRoundedIcon fontSize="small" />,
+    tooltipText:
+      "Sum of the borrowing positions in the selected pool (represented by a purple bar in each pool with loans)",
   },
   {
     key: "myBorrowingPositions",
@@ -235,6 +253,8 @@ export const getMetricsDataBorrowingRepay = (marketInfo: MarketInfo) => [
     unit: marketInfo.quoteTokenSymbol,
     color: theme.palette.success.main,
     icon: <CropDinRoundedIcon fontSize="small" />,
+    tooltipText:
+      "Your borrowing position in the selected pool (represented by a colored frame for each pool having your loan)",
   },
   {
     key: "borrowingRate",
@@ -242,6 +262,7 @@ export const getMetricsDataBorrowingRepay = (marketInfo: MarketInfo) => [
     value: "-",
     unit: "%",
     color: theme.palette.info.main,
+    tooltipText: "The borrowing APY linked to the selected pool",
   },
   {
     key: "utilizationRate",
@@ -249,6 +270,7 @@ export const getMetricsDataBorrowingRepay = (marketInfo: MarketInfo) => [
     value: "-",
     unit: "%",
     color: theme.palette.info.main,
+    tooltipText: "The utilization rate of the selected pool",
   },
 ];
 

@@ -134,36 +134,39 @@ const Repay = () => {
 
   return (
     <div>
-      <div className="flex mt-0 mb-15">
-        <AnalyticsButtons
-          title="Select a pool to repay"
-          columnsConfig={customDataColumnsConfig}
-          data={sortedData}
-          metrics={metricsData}
-          isLoading={poolLoading}
-          onRowClick={handleRowClick}
-          userMetricBorder={"myBorrowingPositions"}
-          userMetricBorderColor={theme.palette.success.main}
-        />
-      </div>
+      {sortedData.length !== 0 ? (
+        <div>
+          <div className="flex mt-0 mb-15">
+            <AnalyticsButtons
+              title="Select a pool to repay"
+              columnsConfig={customDataColumnsConfig}
+              data={sortedData}
+              metrics={metricsData}
+              isLoading={poolLoading}
+              onRowClick={handleRowClick}
+              userMetricBorder={"myBorrowingPositions"}
+              userMetricBorderColor={theme.palette.success.main}
+            />
+          </div>
 
-      <div className="flex mt-5">
-        <AmountCustom
-          title="Amount to repay"
-          tokenWalletBalance={
-            clickedRowData
-              ? clickedRowData.myBorrowingPositions < userInfo.quoteTokenBalance
-                ? clickedRowData.myBorrowingPositions
-                : userInfo.quoteTokenBalance
-              : 0
-          }
-          selectedToken={marketInfo.quoteTokenSymbol}
-          ratioToUSD={1}
-          onQuantityChange={handleQuantityChange}
-        />
-      </div>
+          <div className="flex mt-5">
+            <AmountCustom
+              title="Amount to repay"
+              tokenWalletBalance={
+                clickedRowData
+                  ? clickedRowData.myBorrowingPositions <
+                    userInfo.quoteTokenBalance
+                    ? clickedRowData.myBorrowingPositions
+                    : userInfo.quoteTokenBalance
+                  : 0
+              }
+              selectedToken={marketInfo.quoteTokenSymbol}
+              ratioToUSD={1}
+              onQuantityChange={handleQuantityChange}
+            />
+          </div>
 
-      {/* <div className="flex mt-5">
+          {/* <div className="flex mt-5">
         <CustomTable
           title="Select a position to repay"
           columnsConfig={customDataColumnsConfig}
@@ -183,17 +186,23 @@ const Repay = () => {
       >
         {showAll ? "show less" : "show more"}
       </Button> */}
-      <div className="flex mt-10">
-        <CustomButton
-          clickable={buttonClickable}
-          handleClick={handleButtonClick}
-          textAfterClick={textAfterClick}
-          textClickable="Repay"
-          textNotClickable={textNotClickable}
-          buttonWidth={300}
-          borderRadius={50}
-        />
-      </div>
+          <div className="flex mt-10">
+            <CustomButton
+              clickable={buttonClickable}
+              handleClick={handleButtonClick}
+              textAfterClick={textAfterClick}
+              textClickable="Repay"
+              textNotClickable={textNotClickable}
+              buttonWidth={300}
+              borderRadius={50}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="flex mt-3 mb-5">
+          <span>You have no borrowing positions.</span>
+        </div>
+      )}
     </div>
   );
 };

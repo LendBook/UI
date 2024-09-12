@@ -110,10 +110,13 @@ const Markets = () => {
                 In LendBook, each market is isolated and collateral assets are
                 not lent out to borrowers.
                 <br></br>
+                <br></br>
                 <i>
                   <b>
-                    This is a demo dApp, so only one isolated market is
-                    available for the moment : lbWETH/lbUSDC.
+                    This is a demo dApp on Sepolia testnet, only one isolated
+                    market is available for testing : lbWETH/lbUSDC. First,
+                    please go to the "Mint tokens" section to mint some lbWETH
+                    and lbUSDC.
                   </b>
                 </i>
               </span>

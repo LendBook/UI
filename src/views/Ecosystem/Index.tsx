@@ -40,6 +40,21 @@ const Index = () => {
               className="text-black font-bold"
               //style={{ backgroundColor: theme.palette.primary.main }}
             >
+              LendBook Website :{" "}
+              <a
+                href="https://www.lendbook.org"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                https://www.lendbook.org
+              </a>
+            </span>
+          </div>
+          <div className="w-full flex mt-20">
+            <span
+              className="text-black font-bold"
+              //style={{ backgroundColor: theme.palette.primary.main }}
+            >
               LendBook contract :{" "}
               <a
                 href="https://sepolia.etherscan.io/address/0x5b0D0DDB7860eaEed42AE95b05A7d2df9877aD25"

@@ -141,7 +141,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({
     const buyPrice = item.buyPrice as number;
     return {
       ...item,
-      maxLTV: (buyPrice / price) * 100,
+      maxLTV: (buyPrice / price) * 96, //96% 0.96 is the liquidation LTV
     };
   });
 

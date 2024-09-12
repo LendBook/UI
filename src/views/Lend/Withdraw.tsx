@@ -168,17 +168,23 @@ const Withdraw = () => {
 
   return (
     <div>
-      <div className="flex mt-0 mb-15">
-        <AnalyticsButtons
-          title="Select a pool to withdraw"
-          data={sortedData}
-          metrics={metricsData}
-          isLoading={poolLoading}
-          onRowClick={handleRowClick}
-          userMetricBorder={"mySupplyCumulated"}
-          userMetricBorderColor={theme.palette.primary.main}
-        />
-      </div>
+      {sortedData.length !== 0 ? (
+        <div className="flex mt-0 mb-15">
+          <AnalyticsButtons
+            title="Select a pool to withdraw"
+            data={sortedData}
+            metrics={metricsData}
+            isLoading={poolLoading}
+            onRowClick={handleRowClick}
+            userMetricBorder={"mySupplyCumulated"}
+            userMetricBorderColor={theme.palette.primary.main}
+          />
+        </div>
+      ) : (
+        <div className="flex mt-3 mb-5">
+          <span>You have no supply to withdraw.</span>
+        </div>
+      )}
       {poolSelected !== "" && (
         <div>
           {poolSelected === "quoteToken" && (

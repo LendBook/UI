@@ -63,7 +63,8 @@ const Index = () => {
       unit: [marketInfo.baseTokenSymbol, "$"],
       fontSize: ["100%", "70%"],
       valueColor: [theme.palette.common.black, theme.palette.secondary.main],
-      tooltipText: "Your collateral still available",
+      tooltipText:
+        "Your collateral still available. If your free collateral reaches zero, your borrowing positions will be partly liquidated (see the interest-based liquidation section in the documentation).",
     },
     {
       title: "My total borrows",
