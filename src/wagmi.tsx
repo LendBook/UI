@@ -1,4 +1,4 @@
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import {
   arbitrum,
   base,
@@ -6,17 +6,17 @@ import {
   optimism,
   polygon,
   sepolia,
-} from 'wagmi/chains';
+} from "wagmi/chains";
 
 export const config = getDefaultConfig({
-  appName: 'lendbook_ui',
-  projectId: 'YOUR_PROJECT_ID',
+  appName: "lendbook_ui",
+  projectId: "YOUR_PROJECT_ID",
   chains: [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    base,
-    sepolia
+    // mainnet,
+    // polygon,
+    // optimism,
+    // arbitrum,
+    // base,
+    sepolia,
   ],
 });

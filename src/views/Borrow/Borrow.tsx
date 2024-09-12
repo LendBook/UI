@@ -150,9 +150,9 @@ const Borrow = () => {
           tokenWalletBalance={
             clickedRowData
               ? clickedRowData.availableSupplyToBorrow * 0.98 < //*0.98 is a buffer because we do not calculate interests in the dapp
-                userInfo.excessCollateral * clickedRowData.buyPrice
+                userInfo.excessCollateral * clickedRowData.buyPrice * 0.96 //*0.96 is the liquidation LTV
                 ? clickedRowData.availableSupplyToBorrow * 0.98
-                : userInfo.excessCollateral * clickedRowData.buyPrice
+                : userInfo.excessCollateral * clickedRowData.buyPrice * 0.96 //*0.96 is the liquidation LTV
               : 0
           }
           selectedToken={marketInfo.quoteTokenSymbol}

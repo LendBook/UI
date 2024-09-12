@@ -36,7 +36,7 @@ export default function Navbar() {
             </span>
           </div>
           <div className="flex items-center space-x-4">
-            <Switch
+            {/* <Switch
               checked={darkMode}
               onChange={toggleDarkMode}
               className={`${
@@ -49,7 +49,7 @@ export default function Navbar() {
                   darkMode ? "translate-x-6" : "translate-x-1"
                 } inline-block h-4 w-4 transform rounded-full bg-white transition`}
               />
-            </Switch>
+            </Switch> */}
             <ConnectButton />
           </div>
         </div>

@@ -96,7 +96,8 @@ export default function CustomTable<T extends string | number>({
   return (
     <Box sx={{ width: "100%" }}>
       <span
-        className="text-black font-bold"
+        className="flex  text-black font-bold "
+        style={{ fontSize: "140%" }}
         //style={{ backgroundColor: theme.palette.primary.main }}
       >
         {title}

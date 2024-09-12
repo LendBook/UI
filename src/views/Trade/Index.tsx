@@ -34,7 +34,22 @@ const Index = () => {
             <Typography variant="h3" color="black">
               Trade
             </Typography>
-
+            <div className="flex mb-5">
+              <span>
+                Takers can swap an asset for another asset if the market price
+                reaches the limit price of a pool-of-orders. Takers can take all
+                the non-borrowable liquidity in a pool. Takers are like
+                liquidators in other lending protocols. They are important
+                because they close borrowing positions.
+                <i>
+                  <b>
+                    <br></br>Once LendBook is mainnet, this page will be
+                    irrelevant. Indeed, these trades will be made by bots and
+                    through DEX aggregators.
+                  </b>
+                </i>
+              </span>
+            </div>
             <div className="flex mt-5"></div>
             <Paper
               elevation={0} //4
