@@ -206,18 +206,15 @@ export const useFetchUserInfo = (
       const results = await Promise.all(
         borrowsId_l.map(async (borrowsId: Number) => {
           const orderResponse = await axios.get(
-            `/api/v1/book/${bookAddress}/positions?positionId=${borrowsId}`
+            `${apiUrl}/api/v1/book/${bookAddress}/positions?positionId=${borrowsId}`
           );
 
-          console.log("orderResponse ", orderResponse);
           const orderObject = orderResponse.data.positions.split(",");
           const poolId = parseFloat(orderObject[0]);
           const borrowerAddress = orderObject[1];
           const quantity = parseFloat(
             ethers.utils.formatUnits(orderObject[2], "ether")
           );
-
-          console.log("myBorrowingPositions ", poolId, quantity);
 
           _totalBorrow = _totalBorrow + quantity;
 
@@ -247,22 +244,16 @@ export const useFetchUserInfo = (
     //console.log("yeuyeuh");
     if (walletAddress && provider) {
       fetchGlobalUserInfo(walletAddress).catch(console.error);
-      console.log("fetchDepositOrdersInfo tbd");
       fetchDepositOrdersInfo(walletAddress).catch(console.error);
-      console.log("fetchDepositOrdersInfo done");
       fetchBorrowsInfo(walletAddress).catch(console.error);
-      console.log("fetchBorrowsInfo tbd");
     }
   }, []);
 
   useEffect(() => {
     if (walletAddress && provider) {
       fetchGlobalUserInfo(walletAddress).catch(console.error);
-      console.log("useEffect fetchDepositOrdersInfo tbd");
       fetchDepositOrdersInfo(walletAddress).catch(console.error);
-      console.log("useEffect fetchDepositOrdersInfo done");
       fetchBorrowsInfo(walletAddress).catch(console.error);
-      console.log("useEffect fetchBorrowsInfo tbd");
     }
   }, [walletAddress, provider]);
 
