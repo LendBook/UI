@@ -244,16 +244,22 @@ export const useFetchUserInfo = (
     //console.log("yeuyeuh");
     if (walletAddress && provider) {
       fetchGlobalUserInfo(walletAddress).catch(console.error);
+      console.log("fetchDepositOrdersInfo tbd");
       fetchDepositOrdersInfo(walletAddress).catch(console.error);
+      console.log("fetchDepositOrdersInfo done");
       fetchBorrowsInfo(walletAddress).catch(console.error);
+      console.log("fetchBorrowsInfo tbd");
     }
   }, []);
 
   useEffect(() => {
     if (walletAddress && provider) {
       fetchGlobalUserInfo(walletAddress).catch(console.error);
+      console.log("useEffect fetchDepositOrdersInfo tbd");
       fetchDepositOrdersInfo(walletAddress).catch(console.error);
+      console.log("useEffect fetchDepositOrdersInfo done");
       fetchBorrowsInfo(walletAddress).catch(console.error);
+      console.log("useEffect fetchBorrowsInfo tbd");
     }
   }, [walletAddress, provider]);
 
