@@ -214,6 +214,8 @@ export const useFetchUserInfo = (
             ethers.utils.formatUnits(orderObject[2], "ether")
           );
 
+          console.log("myBorrowingPositions ", poolId, quantity);
+
           _totalBorrow = _totalBorrow + quantity;
 
           return {
