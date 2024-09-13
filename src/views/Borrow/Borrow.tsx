@@ -132,7 +132,8 @@ const Borrow = () => {
 
   return (
     <div>
-      <div className="flex mt-0 mb-15">
+      <span>You can borrow from up to 3 different pools at the same time.</span>
+      <div className="flex mt-2 mb-15">
         <AnalyticsButtons
           title="Select a pool to borrow"
           columnsConfig={customDataColumnsConfig}

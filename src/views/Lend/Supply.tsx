@@ -24,7 +24,7 @@ const Supply = () => {
 
   const [textAfterClick, setTextAfterClick] = useState<string>("");
   const [textNotClickable, setTextNotClickable] = useState<string>(
-    "Must enter an amount to borrow"
+    "Must enter an amount to supply (above 200 lbUSDC)"
   );
 
   const {
@@ -74,11 +74,11 @@ const Supply = () => {
   // });
 
   const updateButtonClickable = (quantity: number, price: string) => {
-    const isClickable = quantity > 0 && price !== "";
+    const isClickable = quantity > 200 && price !== "";
     setButtonClickable(isClickable);
     setTextAfterClick("");
-    if (quantity == 0) {
-      setTextNotClickable("Must enter an amount to supply");
+    if (quantity <= 200) {
+      setTextNotClickable("Must enter an amount to supply (above 200 lbUSDC)");
     } else if (price == "") {
       setTextNotClickable("Must select a buy price");
     }
@@ -140,7 +140,10 @@ const Supply = () => {
   return (
     <div>
       {/* <div className="flex justify-center mt-0 mb-15"> */}
-      <div className="flex mt-0 mb-15">
+      <span>
+        Your supply can be deposited in a maximum of six different pools.
+      </span>
+      <div className="flex mt-2 mb-15">
         <AnalyticsButtons
           title="Select a pool to supply"
           columnsConfig={customDataColumnsConfig}
