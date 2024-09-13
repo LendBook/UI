@@ -192,10 +192,12 @@ export const useFetchUserInfo = (
   const fetchBorrowsInfo = async (address: string) => {
     setLoading(true);
     try {
+      console.log("inside fetchBorrowsInfo");
       const borrowsIdResponse = await axios.get(
         `${apiUrl}/api/v1/book/${bookAddress}/getUserBorrowFromIds?_user=${address}`
       );
 
+      console.log("borrowsIdResponse", borrowsIdResponse);
       let borrowsId_l = borrowsIdResponse.data.getUserBorrowFromIds.split(",");
       borrowsId_l = borrowsId_l.map(Number);
 
@@ -207,6 +209,7 @@ export const useFetchUserInfo = (
             `/api/v1/book/${bookAddress}/positions?positionId=${borrowsId}`
           );
 
+          console.log("orderResponse ", orderResponse);
           const orderObject = orderResponse.data.positions.split(",");
           const poolId = parseFloat(orderObject[0]);
           const borrowerAddress = orderObject[1];
